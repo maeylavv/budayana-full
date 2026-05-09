@@ -30,12 +30,11 @@ export default function MultipleChoiceQuestion({ question, answersMapping = {}, 
 
             {isPicture && (
               <>
-                {emoji && (
-                  <span className='option-emoji'>{emoji}</span>
-                )}
-                {!emoji && image && (
+                {image ? (
                   <img src={image} alt={text} className='option-img' onError={e => e.target.style.display = 'none'} />
-                )}
+                ) : emoji ? (
+                  <span className='option-emoji'>{emoji}</span>
+                ) : null}
                 <span className='option-icon-label'>{text}</span>
               </>
             )}
