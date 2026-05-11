@@ -3,8 +3,12 @@ import { prismaAdapter } from "better-auth/adapters/prisma"
 import { openAPI, username } from "better-auth/plugins"
 import prisma from "../db"
 
+// All domains that are allowed to make cross-origin auth requests.
+// CORS_ORIGIN should be the production frontend URL (e.g. https://budayana-web.vercel.app)
+// CORS_ORIGIN_2 is optional for a second frontend (staging, preview, etc.)
 export const allowedOrigins = [
   process.env.CORS_ORIGIN || "",
+  process.env.CORS_ORIGIN_2 || "",
   ...Array.from({ length: 10 }, (_, i) => `http://localhost:${5170 + i}`),
 ].filter(Boolean)
 
@@ -12,6 +16,9 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
+  // BETTER_AUTH_URL must be set in production so better-auth knows its own
+  // public URL, which ensures cookies are issued with the correct domain/path.
+  baseURL: process.env.BETTER_AUTH_URL,
   basePath: "/api",
   plugins: [username(), openAPI()],
   user: {
@@ -47,11 +54,16 @@ export const auth = betterAuth({
       },
     },
   },
+  // trustedOrigins must exactly match the Origin header sent by the browser.
+  // For cross-domain setups (different Vercel projects) this is critical.
   trustedOrigins: allowedOrigins,
   emailAndPassword: {
     enabled: true,
   },
   advanced: {
+    // SameSite=None + Secure=true is REQUIRED for cross-domain cookies.
+    // Without this, browsers block the session cookie when frontend and
+    // backend are on different domains.
     defaultCookieAttributes: {
       sameSite: "none",
       secure: true,
