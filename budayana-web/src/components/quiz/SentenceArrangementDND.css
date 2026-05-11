@@ -40,9 +40,10 @@
 }
 
 .sa-drop-zone {
-  flex: 1 1 120px;
-  min-width: 100px;
-  height: 62px;
+  flex: 1 1 140px;
+  min-width: 120px;
+  min-height: 62px;
+  height: auto;
   border: 2.5px dashed #757373; /* grey dashed */
   border-radius: 14px;
   background-color: rgba(255, 255, 255, 0.45);
@@ -53,6 +54,7 @@
   position: relative;
   transition: border-color 0.2s, background-color 0.2s;
   box-sizing: border-box;
+  padding: 4px;
 }
 
 .sa-drop-zone.locked {
@@ -71,39 +73,43 @@
 
 /* ── Placed Chips (inside Drop Zones) ───────────────────── */
 .sa-placed-chip {
-  position: absolute;
-  inset: 0;
+  position: relative;
+  width: 100%;
+  min-height: 52px;
+  height: auto;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 12px;
   border: 2.5px solid transparent;
-  padding: 0 28px 0 10px;
+  padding: 8px 30px 8px 12px;
   box-sizing: border-box;
   transition: background-color 0.2s;
 }
 
 .sa-chip-text {
   font-family: 'Fredoka One', sans-serif;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
   color: #3a3060;
   text-align: center;
   pointer-events: none;
+  line-height: 1.2;
 }
 
 .sa-remove-btn {
   position: absolute;
-  top: 3px;
-  right: 4px;
+  top: 50%;
+  right: 6px;
+  transform: translateY(-50%);
   background: none;
   border: none;
   color: #e05050;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   font-weight: 900;
   cursor: pointer;
   line-height: 1;
-  padding: 2px 3px;
+  padding: 4px;
   border-radius: 50%;
   transition: background 0.15s;
 }
@@ -130,14 +136,14 @@
 
 /* ── Draggables (in pool) — equal size ──────────────────── */
 .sa-draggable {
-  width: 148px;          /* fixed equal width */
-  height: 52px;          /* fixed equal height */
-  flex: 0 0 148px;       /* don't grow or shrink */
-  padding: 0 12px;
+  width: 150px;
+  min-height: 52px;
+  height: auto;
+  flex: 0 0 150px;
+  padding: 8px 12px;
   border-radius: 14px;
-  border: none;
   font-family: 'Fredoka One', sans-serif;
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   font-weight: 700;
   color: #3a3060;
   display: flex;
@@ -150,6 +156,9 @@
   box-sizing: border-box;
   transition: transform 0.1s;
   text-align: center;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 .sa-draggable:active {
   cursor: grabbing;

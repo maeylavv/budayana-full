@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap');
+
 .quiz-detail-page {
   position: relative;
   width: 100vw;
@@ -7,7 +9,7 @@
   padding: 32px 24px;
   background-color: #fdf5e6; /* Soft yellow/beige matching design */
   box-sizing: border-box;
-  font-family: 'Fredoka One', sans-serif;
+  font-family: 'Fredoka', sans-serif;
   padding-bottom: 150px;
 }
 
@@ -40,8 +42,9 @@
 }
 
 .quiz-detail-title {
-  font-family: 'Fredoka One', sans-serif;
+  font-family: 'Fredoka', sans-serif;
   font-size: 2.2rem;
+  font-weight: 700;
   color: #8c603b;
   margin: 0;
   text-align: center;
@@ -73,7 +76,8 @@
 }
 
 .quiz-notif-text {
-  font-weight: 500;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
   color: #856f61; /* Soft brown/grey */
   font-size: 1.1rem;
   margin: 0;
@@ -118,15 +122,17 @@
 }
 
 .quiz-topic-info h3 {
-  font-family: 'Fredoka One', sans-serif;
+  font-family: 'Fredoka', sans-serif;
   font-size: 1.4rem;
+  font-weight: 600;
   color: #1a1a1a;
   margin: 0 0 4px 0;
 }
 
 .quiz-topic-info p {
+  font-family: 'Fredoka', sans-serif;
   color: #929292;
-  font-weight: 600;
+  font-weight: 500;
   margin: 0;
   font-size: 0.95rem;
 }
@@ -235,12 +241,14 @@
 .quiz-level-label {
   flex: 1;
   margin-left: 14px;
-  font-weight: 700;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
   font-size: 1.1rem;
   color: #2f2f2f;
 }
 .quiz-level-xp {
-  font-weight: 700;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 500;
   font-size: 1.1rem;
 }
 
