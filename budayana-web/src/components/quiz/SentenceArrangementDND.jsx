@@ -11,14 +11,19 @@ export default function SentenceArrangementDND({ question, answersMapping = {}, 
     const freshPlacements = answersMapping.placements || {};
     setPlacements(freshPlacements);
 
-    const computedLocked = [];
-    question.dropZones.forEach((z, idx) => {
-      if (freshPlacements[z.id] === question.correctOrder[idx]) {
-        computedLocked.push(z.id);
-      }
-    });
-    setLockedZones(computedLocked);
-  }, [question, answersMapping]);
+    const savedLocked = answersMapping.lockedZones || [];
+    if (hasAnsweredFully) {
+      setLockedZones(question.dropZones.map(z => z.id));
+    } else {
+      setLockedZones(savedLocked);
+    }
+  }, [question, answersMapping, hasAnsweredFully]);
+
+  useEffect(() => {
+    if (JSON.stringify(placements) !== JSON.stringify(answersMapping.placements || {})) {
+      onAnswer(placements, null, lockedZones);
+    }
+  }, [placements, onAnswer, answersMapping.placements, lockedZones]);
 
   const handleDragStart = (e, dragId) => {
     if (hasAnsweredFully) return;
@@ -87,8 +92,8 @@ export default function SentenceArrangementDND({ question, answersMapping = {}, 
     setPlacements(newPlacements);
     setLockedZones(newLocked);
 
-    const isAllCorrect = newLocked.length === question.dropZones.length;
-    onAnswer(newPlacements, isAllCorrect);
+    const isFullyCorrect = newLocked.length === question.dropZones.length;
+    onAnswer(newPlacements, isFullyCorrect, newLocked);
   };
 
   const placedDragIds = Object.values(placements);

@@ -14,6 +14,14 @@ export default function OpinionReasonQuestion({ question, answersMapping = {}, o
     setIsPeriksaClicked(answersMapping.isCorrect || false);
   }, [question, answersMapping]);
 
+  useEffect(() => {
+    const currentDraft = { opinion: selectedOpinion, reason: selectedReason };
+    const savedDraft = answersMapping.placements || {};
+    if (JSON.stringify(currentDraft) !== JSON.stringify(savedDraft)) {
+      onAnswer(currentDraft, null);
+    }
+  }, [selectedOpinion, selectedReason, onAnswer, answersMapping.placements]);
+
   const handleOpinionSelect = (id) => {
     if (hasAnsweredFully) return;
     setSelectedOpinion(id);

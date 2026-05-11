@@ -1,0 +1,134 @@
+.heart-empty-card {
+  background: #ffffff;
+  border-radius: 30px;
+  padding: 60px 30px 35px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border: 4px solid #51423c;
+  animation: heartPopupPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Fredoka', sans-serif;
+}
+
+@keyframes heartPopupPop {
+  0% { transform: scale(0.9) translateY(20px); opacity: 0; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.heart-mascot-wrapper {
+  position: absolute;
+  top: -110px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 140px;
+  z-index: 2;
+}
+
+.heart-mascot-img {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));
+}
+
+.heart-popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 30px;
+  margin-bottom: 15px;
+}
+
+.heart-icon {
+  font-size: 2rem;
+}
+
+.heart-popup-title {
+  margin: 0;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #51423c;
+}
+
+.hearts-row {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 25px;
+}
+
+.heart-gray {
+  font-size: 1.8rem;
+  opacity: 0.2;
+}
+
+.heart-message-box {
+  background: #fff8e1;
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 30px;
+  border: 3px solid #ffbe1a;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.heart-message-main {
+  margin: 0 0 8px;
+  font-size: 1.2rem;
+  color: #51423c;
+  font-weight: 700;
+}
+
+.heart-message-sub {
+  margin: 0;
+  font-size: 1rem;
+  color: #8c8c8c;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.heart-popup-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+}
+
+.heart-btn-retry, .heart-btn-back {
+  width: 100%;
+  padding: 16px 20px;
+  border-radius: 40px;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.heart-btn-retry {
+  background-color: #ffaa00;
+  color: #fff;
+  box-shadow: 0 5px 0px #d99100;
+}
+
+.heart-btn-retry:active {
+  transform: translateY(5px);
+  box-shadow: none;
+}
+
+.heart-btn-back {
+    background-color: transparent;
+    color: #23a0ba;
+    border: 3px solid #23a0ba;
+    box-shadow: none;
+}
+
+.heart-btn-back:hover {
+  background-color: #eeeeee;
+}

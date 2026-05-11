@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700;800&display=swap');
+
 .gameplay-page {
   position: relative;
   width: 100vw;
@@ -7,7 +9,7 @@
   padding: 32px 24px;
   background-color: #fdf5e6;
   box-sizing: border-box;
-  font-family: 'Fredoka One', sans-serif;
+  font-family: 'Fredoka', sans-serif;
   color: #5a5a5a;
 }
 
@@ -18,7 +20,7 @@
 
 .gameplay-level-subtitle {
   text-align: center;
-  font-family: 'Fredoka One', sans-serif;
+  font-family: 'Fredoka', sans-serif;
   font-weight: 700;
   font-size: 1.3rem;
   color: #a3a3a3;
@@ -88,7 +90,7 @@
   font-weight: 900;
   color: #ef4444;
   /* red */
-  font-family: 'Fredoka One', sans-serif;
+  font-family: 'Fredoka', sans-serif;
 }
 
 
@@ -136,6 +138,7 @@
   line-height: 1.6;
   color: #3b3b3b;
   text-align: center;
+  font-family: 'Fredoka', sans-serif;
   font-weight: 600;
   margin: 0;
   white-space: pre-line; /* Essential to cleanly format spaced paragraph mapping locally! */
@@ -152,9 +155,9 @@
 .quiz-action-btn {
   padding: 16px 40px;
   border-radius: 20px;
-  font-family: 'Fredoka One', sans-serif;
+  font-family: 'Fredoka', sans-serif;
   font-size: 1.4rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   border: none;
   transition: transform 0.2s ease, filter 0.2s;
@@ -255,6 +258,7 @@
   border: 4px solid #5a5a5a;
   border-radius: 18px;
   padding: 18px 20px;
+  font-family: 'Fredoka', sans-serif;
   font-size: 1.15rem;
   font-weight: 600;
   color: #3b3b3b;
@@ -373,7 +377,7 @@
 }
 
 .option-icon-label {
-  font-family: 'Fredoka One', sans-serif;
+  font-family: 'Fredoka', sans-serif;
   font-size: 1.1rem;
   font-weight: 700;
   color: #4a4a4a;
@@ -396,7 +400,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: 'Fredoka One', sans-serif;
+  font-family: 'Fredoka', sans-serif;
   font-size: 1.1rem;
   margin-right: 16px;
   flex-shrink: 0;
@@ -411,6 +415,7 @@
 }
 
 .option-text {
+  font-family: 'Fredoka', sans-serif;
   font-size: 1.1rem;
   font-weight: 600;
   color: #4a4a4a;
@@ -439,7 +444,7 @@
 .quiz-nav-btn {
   padding: 11px 22px;
   border-radius: 16px;
-  font-family: 'Fredoka One', sans-serif;
+  font-family: 'Fredoka', sans-serif;
   font-size: 1.05rem;
   font-weight: 700;
   cursor: pointer;
@@ -501,7 +506,7 @@
 }
 
 .feedback-title {
-  font-family: 'Fredoka One', sans-serif;
+  font-family: 'Fredoka', sans-serif;
   font-size: 1.1rem;
   font-weight: 700;
   color: #2d6a75;
@@ -516,7 +521,7 @@
   background-color: #f08543;
   color: #fff;
   border: none;
-  font-family: 'Fredoka One', sans-serif;
+  font-family: 'Fredoka', sans-serif;
   font-size: 1.5rem;
   font-weight: 700;
   cursor: pointer;
@@ -559,7 +564,7 @@
 }
 
 .quit-title {
-  font-family: 'Fredoka One', sans-serif;
+  font-family: 'Fredoka', sans-serif;
   font-size: 1.1rem;
   font-weight: 700;
   color: #2d6a75;
@@ -574,7 +579,7 @@
   background-color: #f08543;
   color: #fff;
   border: none;
-  font-family: 'Fredoka One', sans-serif;
+  font-family: 'Fredoka', sans-serif;
   font-size: 1.4rem;
   font-weight: 700;
   cursor: pointer;
@@ -588,7 +593,7 @@
 .btn-quit-link {
   background: none;
   border: none;
-  font-family: 'Fredoka One', sans-serif;
+  font-family: 'Fredoka', sans-serif;
   font-size: 1.2rem;
   font-weight: 700;
   color: #e05c2a;
@@ -598,6 +603,16 @@
 }
 .btn-quit-link:hover { text-decoration: underline; }
 
+
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
 
 /* Success Block Redesign */
 .popup-overlay.success {
@@ -630,7 +645,7 @@
 }
 
 .success-title {
-  font-family: 'Fredoka One', sans-serif;
+  font-family: 'Fredoka', sans-serif;
   font-weight: 800; /* was 700, bump to 800 */
   font-size: 2.2rem;
   color: #51423c;
@@ -638,9 +653,10 @@
 }
 
 .success-subtitle {
+  font-family: 'Fredoka', sans-serif;
   font-size: 1rem;
   color: #8c8c8c;
-  font-weight: 700;
+  font-weight: 500;
   margin-top: 0;
   margin-bottom: 30px;
 }
@@ -656,12 +672,15 @@
 .stat-box {
   flex: 1;
   min-width: 0;
+  min-height: 120px; /* Force consistent height for alignment */
   padding: 15px 10px;
-  border-radius: 15px;
+  border-radius: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  text-align: center;
+  box-sizing: border-box;
 }
 
 .xp-box {
@@ -670,16 +689,18 @@
 }
 .xp-box h2 {
   color: #ffa500;
-  font-family: 'Fredoka One', sans-serif;
+  font-family: 'Fredoka', sans-serif;
   font-weight: 700;
   font-size: 2rem;
   margin: 0 0 5px 0;
+  line-height: 1.1;
 }
 .xp-box p {
   color: #a4a4a4;
-  font-weight: 700;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 500;
   margin: 0;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
 }
 
 .time-box {
@@ -688,16 +709,18 @@
 }
 .time-box h2 {
   color: #23a0ba;
-  font-family: 'Fredoka One', sans-serif;
+  font-family: 'Fredoka', sans-serif;
   font-weight: 700;
-  font-size: 2rem;
+  font-size: 1.6rem; /* Adaptive sizing for potentially long time strings */
   margin: 0 0 5px 0;
+  line-height: 1.1;
 }
 .time-box p {
   color: #a4a4a4;
-  font-weight: 700;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 500;
   margin: 0;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
 }
 
 .score-box {
@@ -706,16 +729,18 @@
 }
 .score-box h2 {
   color: #e05fa3;
-  font-family: 'Fredoka One', sans-serif;
+  font-family: 'Fredoka', sans-serif;
   font-weight: 700;
   font-size: 2rem;
   margin: 0 0 5px 0;
+  line-height: 1.1;
 }
 .score-box p {
   color: #a4a4a4;
-  font-weight: 700;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 500;
   margin: 0;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
 }
 
 .success-actions {
@@ -731,7 +756,7 @@
   width: 100%;
   padding: 14px 20px;
   border-radius: 40px;
-  font-family: 'Fredoka One', sans-serif;
+  font-family: 'Fredoka', sans-serif;
   font-size: 1.15rem;
   font-weight: 700;
   cursor: pointer;

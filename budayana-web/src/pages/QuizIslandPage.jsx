@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { ChevronLeft, Lock, Play, Check, Star } from 'lucide-react';
+import { ChevronLeft, Lock, Play, Check, Star, Info, Lightbulb } from 'lucide-react';
 import './QuizIslandPage.css';
 
 // Static Data definitions
@@ -93,6 +93,12 @@ export default function QuizIslandPage() {
   };
   const emoji = islandEmojis[islandSlug] || '🌴';
 
+  const mascotByLevel = {
+    1: "/assets/budayana/islands/Buaya.png",
+    2: "/assets/budayana/islands/Monyet.png",
+    3: "/assets/budayana/islands/Harimau.png",
+  };
+
   return (
     <div className='quiz-detail-page'>
       {/* Header */}
@@ -109,9 +115,7 @@ export default function QuizIslandPage() {
 
       {/* Notification Banner */}
       <div className='quiz-notif-banner'>
-        <div className='quiz-notif-icon'>
-          ⭐
-        </div>
+        <div className='quiz-notif-icon'>💡</div>
         <p className='quiz-notif-text'>
           Mulai dari Level 1 dulu ya! Level selanjutnya akan terbuka setelah kamu menyelesaikan level sebelumnya.
         </p>
@@ -138,17 +142,17 @@ export default function QuizIslandPage() {
           <div className='quiz-welcome-popup' onClick={(e) => e.stopPropagation()} style={{maxWidth: '400px', backgroundColor: '#fdf5e6', border: '5px solid #51423c', borderRadius: '40px', padding: '40px 30px', position: 'relative', marginTop: '60px'}}>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               {/* Mascot positioned overflowing the top organically like the success views */}
-              <img src="/assets/budayana/islands/Buaya.png" style={{height: '150px', position: 'absolute', top: '-50px', objectFit: 'contain'}} alt="character" onError={e => e.target.style.display='none'} />
+              <img src={mascotByLevel[entryPopup.levelId]} style={{height: '165px', position: 'absolute', top: '-60px', objectFit: 'contain'}} alt="character" onError={e => e.target.style.display='none'} />
               
-              <h2 className='welcome-title' style={{fontSize: '2.2rem', textAlign: 'center', fontFamily: "'Fredoka', sans-serif", color: '#51423c', margin: '80px 0 5px 0', lineHeight: '1.2'}}>
+              <h2 className='welcome-title' style={{fontSize: '2.2rem', textAlign: 'center', fontFamily: "'Fredoka', sans-serif", fontWeight: 700, color: '#51423c', margin: '80px 0 5px 0', lineHeight: '1.2'}}>
                 {TOPICS.find(t => t.id === entryPopup.topicId)?.title || ''}
               </h2>
               
-              <p style={{fontFamily: 'Fredoka, sans-serif', fontSize: '1.1rem', fontWeight: '700', color: '#a4a4a4', margin: '0 0 25px 0'}}>
+              <p style={{fontFamily: 'Fredoka, sans-serif', fontSize: '1.1rem', fontWeight: '500', color: '#a4a4a4', margin: '0 0 25px 0'}}>
                 Level {entryPopup.levelId}
               </p>
               
-              <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px', backgroundColor: '#ffefcd', color: '#ffa500', padding: '10px 24px', borderRadius: '30px', border: '2px solid #ffbe1a', fontSize: '1.2rem', fontFamily: "'Fredoka', sans-serif", marginBottom: '30px', boxShadow: '0 2px 5px rgba(0,0,0,0.05)' }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px', backgroundColor: '#ffefcd', color: '#ffa500', padding: '10px 24px', borderRadius: '30px', border: '2px solid #ffbe1a', fontSize: '1.2rem', fontFamily: "'Fredoka', sans-serif", fontWeight: 500, marginBottom: '30px', boxShadow: '0 2px 5px rgba(0,0,0,0.05)' }}>
                 ⭐ +100 XP
               </div>
               

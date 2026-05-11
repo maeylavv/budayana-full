@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { QUIZ_DATA } from '../data/quizData';
 import QuestionRenderer from '../components/quiz/QuestionRenderer';
 import ProgressBar from '../components/quiz/ProgressBar';
+import HeartEmptyPopup from '../components/quiz/HeartEmptyPopup';
 import './QuizGameplayPage.css';
 
 export default function QuizGameplayPage() {
@@ -10,59 +11,104 @@ export default function QuizGameplayPage() {
   const { islandSlug, topicId, levelId } = useParams();
 
   // Define States first to map exactly against React's Hook hierarchy definitions natively
-  const [gameState, setGameState] = useState('literacy');
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [hearts, setHearts] = useState(5);
-  const [startTime, setStartTime] = useState(0);
-  const [endTime, setEndTime] = useState(0);
-  const [answers, setAnswers] = useState({}); // Stores user selection attempts locally
+  const STORAGE_KEY = `budayana_quiz_state_${islandSlug}_${topicId}_${levelId}`;
+
+  // Helper to load saved state synchronously
+  const getSavedValue = (key, defaultValue) => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return parsed[key] !== undefined ? parsed[key] : defaultValue;
+      }
+    } catch (e) {
+      console.error("Failed to load quiz state", e);
+    }
+    return defaultValue;
+  };
+
+  const [gameState, setGameState] = useState(() => getSavedValue('gameState', 'literacy'));
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(() => getSavedValue('currentQuestionIndex', 0));
+  const [hearts, setHearts] = useState(() => getSavedValue('hearts', 5));
+  const [startTime, setStartTime] = useState(() => getSavedValue('startTime', Date.now()));
+  const [endTime, setEndTime] = useState(() => getSavedValue('endTime', 0));
+  const [answers, setAnswers] = useState(() => getSavedValue('answers', {}));
   const [showQuitPopup, setShowQuitPopup] = useState(false);
-  const [wrongAttempts, setWrongAttempts] = useState(0); // Cumulative wrong answer counter for score
+  const [showHeartPopup, setShowHeartPopup] = useState(false);
+  const [wrongAttempts, setWrongAttempts] = useState(() => getSavedValue('wrongAttempts', 0));
   
+  // Save state whenever relevant values change
   useEffect(() => {
-    setStartTime(Date.now());
-  }, []);
+    const stateToSave = {
+      gameState,
+      currentQuestionIndex,
+      hearts,
+      startTime,
+      endTime,
+      answers,
+      wrongAttempts
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(stateToSave));
+  }, [STORAGE_KEY, gameState, currentQuestionIndex, hearts, startTime, endTime, answers, wrongAttempts]);
 
-  // Load quiz data safely
-  const quizConfig = QUIZ_DATA[islandSlug]?.[topicId]?.[levelId];
+  // Load quiz data safely with defensive checks
+  const quizConfig = QUIZ_DATA?.[islandSlug]?.[topicId]?.[levelId];
 
-  // Fallback if data is missing, guaranteeing UI protection independently from Hook bindings
-  if (!quizConfig) {
+  // Guard clause for missing configuration
+  if (!quizConfig || !quizConfig.questions || quizConfig.questions.length === 0) {
     return (
-      <div style={{ padding: '40px', textAlign: 'center', fontFamily: 'Fredoka One' }}>
-        <h2>Mohon maaf, konten kuis ini belum tersedia!</h2>
-        <button className='quiz-action-btn primary' onClick={() => navigate(-1)}>Kembali</button>
+      <div style={{ padding: '40px', textAlign: 'center', fontFamily: 'Fredoka One', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+        <h2 style={{ color: '#51423c' }}>Mohon maaf, konten kuis ini belum tersedia atau gagal dimuat!</h2>
+        <button className='quiz-action-btn primary' onClick={() => navigate(`/islands/${islandSlug}/quiz`)}>Kembali ke Topik</button>
       </div>
     );
   }
 
-  const { literacy, questions } = quizConfig;
-  const currentQuestion = questions[currentQuestionIndex];
+  const { literacy = {}, questions = [] } = quizConfig;
+
+  // Defensive check: ensure currentQuestionIndex is always within valid range
+  const safeQuestionIndex = Math.max(0, Math.min(currentQuestionIndex, questions.length - 1));
+  const currentQuestion = questions[safeQuestionIndex] || {};
 
   // Unified Handler
-  const handleUnifiedAnswer = (answerData, isCorrect) => {
+  const handleUnifiedAnswer = (answerData, isCorrect, lockedZones) => {
+    // DRAFT update (null means partial progress, don't trigger heart deduction or review state)
+    if (isCorrect === null) {
+      setAnswers(prev => ({
+        ...prev,
+        [safeQuestionIndex]: { 
+           ...(prev[safeQuestionIndex] || {}), 
+           placements: answerData,
+           lockedZones: lockedZones
+        }
+      }));
+      return;
+    }
+
     // Ignore double clicks if currently reviewing failure state unconditionally
     if (gameState === 'wrong') return;
   
-    const currentQAnswers = answers[currentQuestionIndex] || {};
+    const currentQAnswers = answers[safeQuestionIndex] || {};
 
     if (isCorrect) {
       setAnswers(prev => ({
         ...prev,
-        [currentQuestionIndex]: { 
+        [safeQuestionIndex]: { 
            ...currentQAnswers, 
            isCorrect: true, 
-           correctIndex: currentQuestion.type.includes('choice') || currentQuestion.type === 'picture_selection' ? answerData : undefined,
-           placements: (!currentQuestion.type.includes('choice') && currentQuestion.type !== 'picture_selection') ? answerData : undefined
+           correctIndex: currentQuestion?.type?.includes('choice') || currentQuestion?.type === 'picture_selection' ? answerData : undefined,
+           placements: (!currentQuestion?.type?.includes('choice') && currentQuestion?.type !== 'picture_selection') ? answerData : undefined,
+           lockedZones: lockedZones
         }
       }));
     } else {
       setAnswers(prev => ({
         ...prev,
-        [currentQuestionIndex]: { 
+        [safeQuestionIndex]: { 
            ...currentQAnswers, 
-           wrongIndices: currentQuestion.type.includes('choice') || currentQuestion.type === 'picture_selection' ? [...(currentQAnswers.wrongIndices || []), answerData] : undefined,
-           placements: (!currentQuestion.type.includes('choice') && currentQuestion.type !== 'picture_selection') ? answerData : currentQAnswers.placements
+           wrongIndices: currentQuestion?.type?.includes('choice') || currentQuestion?.type === 'picture_selection' ? [...(currentQAnswers.wrongIndices || []), answerData] : undefined,
+           placements: (!currentQuestion?.type?.includes('choice') && currentQuestion?.type !== 'picture_selection') ? answerData : currentQAnswers.placements,
+           lockedZones: lockedZones
         }
       }));
 
@@ -71,7 +117,7 @@ export default function QuizGameplayPage() {
       setHearts(curr => {
         const newHearts = curr - 1;
         if (newHearts <= 0) {
-          setGameState('game_over');
+          setShowHeartPopup(true);
         } else {
           setGameState('wrong');
         }
@@ -81,8 +127,8 @@ export default function QuizGameplayPage() {
   };
 
   const handleKembali = () => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(curr => curr - 1);
+    if (safeQuestionIndex > 0) {
+      setCurrentQuestionIndex(safeQuestionIndex - 1);
     } else {
       // On the first question, go back to literacy mode
       setGameState('literacy');
@@ -90,8 +136,8 @@ export default function QuizGameplayPage() {
   };
 
   const handleSelanjutnya = () => {
-    if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(curr => curr + 1);
+    if (safeQuestionIndex < questions.length - 1) {
+      setCurrentQuestionIndex(safeQuestionIndex + 1);
     } else {
       setEndTime(Date.now());
       setGameState('success');
@@ -103,9 +149,9 @@ export default function QuizGameplayPage() {
     // so the DragDropQuestion useEffect restores locked correct zones.
     setAnswers(prev => {
       const updated = { ...prev };
-      if (updated[currentQuestionIndex]) {
-        updated[currentQuestionIndex] = {
-          ...updated[currentQuestionIndex],
+      if (updated[safeQuestionIndex]) {
+        updated[safeQuestionIndex] = {
+          ...updated[safeQuestionIndex],
           wrongIndices: [],
           // Keep placements so DragDrop re-locks correct ones and removes wrong ones
         };
@@ -116,7 +162,20 @@ export default function QuizGameplayPage() {
   };
 
   const handleGameOverBack = () => {
+    localStorage.removeItem(STORAGE_KEY);
     navigate(`/islands/${islandSlug}/quiz`);
+  };
+
+  const handleResetLevel = () => {
+    localStorage.removeItem(STORAGE_KEY);
+    setGameState('literacy');
+    setCurrentQuestionIndex(0);
+    setHearts(5);
+    setStartTime(Date.now());
+    setEndTime(0);
+    setAnswers({});
+    setWrongAttempts(0);
+    setShowHeartPopup(false);
   };
 
   // Helper formatting for Results time
@@ -143,7 +202,7 @@ export default function QuizGameplayPage() {
     <div className='gameplay-page'>
       {/* Dynamic Header Tracker passed explicitly */}
       <ProgressBar 
-        currentQuestionIndex={currentQuestionIndex}
+        currentQuestionIndex={safeQuestionIndex}
         totalQuestions={questions.length}
         hearts={hearts}
         gameState={gameState}
@@ -192,7 +251,7 @@ export default function QuizGameplayPage() {
 
           <QuestionRenderer 
             question={currentQuestion}
-            answersMapping={answers[currentQuestionIndex] || {}}
+            answersMapping={answers[safeQuestionIndex] || {}}
             onAnswer={handleUnifiedAnswer}
           />
 
@@ -228,9 +287,9 @@ export default function QuizGameplayPage() {
             <button 
               className='quiz-nav-btn next-btn' 
               onClick={handleSelanjutnya}
-              disabled={answers[currentQuestionIndex]?.isCorrect !== true}
+              disabled={answers[safeQuestionIndex]?.isCorrect !== true}
             >
-              {currentQuestionIndex === questions.length - 1 ? 'Selesai \u2714' : 'Selanjutnya \u2192'}
+              {safeQuestionIndex === questions.length - 1 ? 'Selesai \u2714' : 'Selanjutnya \u2192'}
             </button>
           </div>
           {/* Persistent link to jump back to literacy from any question */}
@@ -258,25 +317,13 @@ export default function QuizGameplayPage() {
         </div>
       )}
 
-      {/* Game over overlay */}
-      {gameState === 'game_over' && (
-        <div className='popup-overlay' style={{ zIndex: 999 }}>
-          <div className='wrong-feedback-card'>
-            <img
-              src='/assets/budayana/islands/bocah flip.png'
-              alt='Game Over'
-              className='wrong-mascot-img'
-              onError={e => e.target.style.display = 'none'}
-            />
-            <p className='feedback-title'>
-              Uh oh... nyawa kamu habis!<br />Ayo coba lagi dari awal!
-            </p>
-            <button className='btn-retry-pill' onClick={handleGameOverBack}>
-              Kembali ke Topik
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Heart Empty supportive popup */}
+      <HeartEmptyPopup 
+        isOpen={showHeartPopup}
+        mascotSrc={mascotByLevel[levelId]}
+        onRetry={handleResetLevel}
+        onBack={handleGameOverBack}
+      />
 
       {/* Quit confirmation popup */}
       {showQuitPopup && (
@@ -294,7 +341,10 @@ export default function QuizGameplayPage() {
             <button className='btn-continue-pill' onClick={() => setShowQuitPopup(false)}>
               Lanjutkan Belajar
             </button>
-            <button className='btn-quit-link' onClick={() => navigate(`/islands/${islandSlug}/quiz`)}>
+            <button className='btn-quit-link' onClick={() => {
+              localStorage.removeItem(STORAGE_KEY);
+              navigate(`/islands/${islandSlug}/quiz`);
+            }}>
               Akhiri Sesi
             </button>
           </div>
@@ -340,10 +390,16 @@ export default function QuizGameplayPage() {
       </div>
 
       <div className='success-actions'>
-        <button className='btn-pill-primary' onClick={() => navigate(`/islands/${islandSlug}/quiz?completedTopic=${topicId}&completedLevel=${levelId}`)}>
+        <button className='btn-pill-primary' onClick={() => {
+          localStorage.removeItem(STORAGE_KEY);
+          navigate(`/islands/${islandSlug}/quiz?completedTopic=${topicId}&completedLevel=${levelId}`);
+        }}>
           ← Kembali ke Topik
         </button>
-        <button className='btn-pill-secondary' onClick={() => navigate('/quiz')}>
+        <button className='btn-pill-secondary' onClick={() => {
+          localStorage.removeItem(STORAGE_KEY);
+          navigate('/quiz');
+        }}>
           🗺️ Peta Pulau
         </button>
       </div>
