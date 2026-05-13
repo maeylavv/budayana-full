@@ -52,11 +52,17 @@ export default function Login() {
           window.location.href = "/home"
         } else {
           setVerifyingSession(false)
-          setShowCookiePopup(true)
+
+          setTimeout(() => {
+            setShowCookiePopup(true)
+          }, 100)
         }
       } catch (err) {
         setVerifyingSession(false)
-        setShowCookiePopup(true)
+
+        setTimeout(() => {
+          setShowCookiePopup(true)
+        }, 100)
       }
     },
     onError: (error) => {
@@ -155,12 +161,16 @@ export default function Login() {
 
       {/* Popup Deteksi Cookies Blocked */}
       <CookieBlockedPopup
-        isOpen={showCookiePopup}
-        onClose={() => setShowCookiePopup(false)}
-        onRetry={() => {
-          window.location.reload()
-        }}
-      />
+  isOpen={showCookiePopup}
+  onClose={() => {
+    localStorage.removeItem("ba_token")
+    localStorage.removeItem("ba_user_id")
+    setShowCookiePopup(false)
+  }}
+  onRetry={() => {
+    window.location.reload()
+  }}
+/>
     </div>
   )
 }
