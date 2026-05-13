@@ -49,31 +49,7 @@ export default function Login() {
         const session = await authClient.getSession()
 
         if (session?.data?.session) {
-          try {
-            const test = await fetch(
-              `${import.meta.env.VITE_API_URL}/api/progress/initialize`,
-              {
-                method: "POST",
-                credentials: "include",
-              }
-            )
-
-            if (test.ok) {
-              window.location.href = "/home"
-            } else {
-              setVerifyingSession(false)
-
-              setTimeout(() => {
-                setShowCookiePopup(true)
-              }, 100)
-            }
-          } catch {
-            setVerifyingSession(false)
-
-            setTimeout(() => {
-              setShowCookiePopup(true)
-            }, 100)
-          }
+          window.location.href = "/home"
         } else {
           setVerifyingSession(false)
 
@@ -185,16 +161,16 @@ export default function Login() {
 
       {/* Popup Deteksi Cookies Blocked */}
       <CookieBlockedPopup
-        isOpen={showCookiePopup}
-        onClose={() => {
-          localStorage.removeItem("ba_token")
-          localStorage.removeItem("ba_user_id")
-          setShowCookiePopup(false)
-        }}
-        onRetry={() => {
-          window.location.reload()
-        }}
-      />
+  isOpen={showCookiePopup}
+  onClose={() => {
+    localStorage.removeItem("ba_token")
+    localStorage.removeItem("ba_user_id")
+    setShowCookiePopup(false)
+  }}
+  onRetry={() => {
+    window.location.reload()
+  }}
+/>
     </div>
   )
 }
