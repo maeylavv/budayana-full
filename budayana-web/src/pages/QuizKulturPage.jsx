@@ -7,7 +7,12 @@ import { islands as staticIslands } from "../data/islands"
 
 export default function QuizKulturPage() {
   const navigate = useNavigate()
-  const [showWelcome, setShowWelcome] = useState(() => !sessionStorage.getItem('quizWelcomeShown'))
+  const [showWelcome, setShowWelcome] = useState(() => {
+    const lastSeen = localStorage.getItem('budayana_quiz_welcome_timestamp');
+    if (!lastSeen) return true;
+    const daysSince = (Date.now() - parseInt(lastSeen, 10)) / (1000 * 60 * 60 * 24);
+    return daysSince > 7;
+  });
   const [currentStep, setCurrentStep] = useState(1)
 
   // Use the static islands directly, assuming they are unlocked/open for now
@@ -47,7 +52,7 @@ export default function QuizKulturPage() {
       {/* WELCOME POPUP */}
       {showWelcome && (
         <div className='popup-overlay' onClick={() => {
-          sessionStorage.setItem('quizWelcomeShown', 'true')
+          localStorage.setItem('budayana_quiz_welcome_timestamp', Date.now().toString())
           setShowWelcome(false)
         }}>
           <div
@@ -85,7 +90,7 @@ export default function QuizKulturPage() {
                 if (currentStep < 3) {
                   setCurrentStep(prev => prev + 1)
                 } else {
-                  sessionStorage.setItem('quizWelcomeShown', 'true')
+                  localStorage.setItem('budayana_quiz_welcome_timestamp', Date.now().toString())
                   setShowWelcome(false)
                 }
               }}
