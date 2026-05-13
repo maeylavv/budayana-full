@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { ChevronLeft, Lock, Play, Check, Star, Info, Lightbulb } from 'lucide-react';
+import { authClient } from '../lib/auth-client';
 import './QuizIslandPage.css';
 
 // Static Data definitions
@@ -14,12 +15,15 @@ export default function QuizIslandPage() {
   const navigate = useNavigate();
   const { islandSlug } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
+  const { data: session } = authClient.useSession();
+  const userId = session?.user?.id || 'guest';
 
   const [entryPopup, setEntryPopup] = useState(null);
 
   // Initialize from Local Storage defensively
+  // Key is user-specific to prevent progress sharing between accounts.
   const [progress, setProgress] = useState(() => {
-    const saved = localStorage.getItem(`budayana_progress_${islandSlug}`);
+    const saved = localStorage.getItem(`budayana_progress_${userId}_${islandSlug}`);
     if (saved) {
       try {
         return JSON.parse(saved);
@@ -36,8 +40,8 @@ export default function QuizIslandPage() {
 
   // Sync to local storage continuously on any progress validation shift
   useEffect(() => {
-    localStorage.setItem(`budayana_progress_${islandSlug}`, JSON.stringify(progress));
-  }, [progress, islandSlug]);
+    localStorage.setItem(`budayana_progress_${userId}_${islandSlug}`, JSON.stringify(progress));
+  }, [progress, islandSlug, userId]);
 
   useEffect(() => {
     const completedTopic = searchParams.get('completedTopic');

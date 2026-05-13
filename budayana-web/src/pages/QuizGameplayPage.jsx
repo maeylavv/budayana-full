@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { QUIZ_DATA } from '../data/quizData';
+import { authClient } from '../lib/auth-client';
 import QuestionRenderer from '../components/quiz/QuestionRenderer';
 import ProgressBar from '../components/quiz/ProgressBar';
 import HeartEmptyPopup from '../components/quiz/HeartEmptyPopup';
@@ -9,9 +10,11 @@ import './QuizGameplayPage.css';
 export default function QuizGameplayPage() {
   const navigate = useNavigate();
   const { islandSlug, topicId, levelId } = useParams();
+  const { data: session } = authClient.useSession();
+  const userId = session?.user?.id || 'guest';
 
-  // Define States first to map exactly against React's Hook hierarchy definitions natively
-  const STORAGE_KEY = `budayana_quiz_state_${islandSlug}_${topicId}_${levelId}`;
+  // User-specific key prevents different accounts sharing the same resume state.
+  const STORAGE_KEY = `budayana_quiz_state_${userId}_${islandSlug}_${topicId}_${levelId}`;
 
   // Helper to load saved state synchronously
   const getSavedValue = (key, defaultValue) => {
@@ -250,6 +253,7 @@ export default function QuizGameplayPage() {
           </div>
 
           <QuestionRenderer 
+            key={safeQuestionIndex}
             question={currentQuestion}
             answersMapping={answers[safeQuestionIndex] || {}}
             onAnswer={handleUnifiedAnswer}
@@ -273,7 +277,7 @@ export default function QuizGameplayPage() {
                 border: 'none',
                 color: '#1b8599',
                 fontSize: '1rem',
-                fontFamily: "'Fredoka', sans-serif",
+                fontFamily: "'Fredoka One', 'Fredoka', sans-serif",
                 fontWeight: 600,
                 cursor: 'pointer',
                 textDecoration: 'underline',

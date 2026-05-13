@@ -14,13 +14,18 @@ export default function Sidebar() {
   const [popupMessage, setPopupMessage] = useState("")
 
   const handleLogout = async () => {
+    // Clear localStorage fallback tokens before signOut so ProtectedRoute
+    // doesn't treat a stale token as a valid session.
+    localStorage.removeItem("ba_token")
+    localStorage.removeItem("ba_user_id")
+
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
           navigate("/login")
         },
         onError: (error) => {
-          setPopupType("success")
+          setPopupType("error")
           setPopupMessage(error.error.message || "Error during logout.")
           setPopupOpen(true)
         },

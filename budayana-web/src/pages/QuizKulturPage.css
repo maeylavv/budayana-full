@@ -8,7 +8,7 @@
   z-index: 0;
   background: radial-gradient(circle at top, #e5f3ff, #9ed1ff);
   box-sizing: border-box;
-  font-family: 'Fredoka One', sans-serif;
+  font-family: 'Fredoka', sans-serif;
 }
 
 /* Header */
@@ -110,7 +110,7 @@
 }
 
 .welcome-title {
-  font-family: 'Fredoka One', sans-serif;
+  font-family: 'Fredoka', sans-serif;
   font-weight: 500;
   font-size: 2.8rem;
   color: #f77f00; /* vibrant orange matching image */
@@ -122,7 +122,7 @@
 }
 
 .welcome-subtitle {
-  font-family: 'Fredoka One', sans-serif;
+  font-family: 'Fredoka', sans-serif;
   font-size: 1.4rem;
   font-weight: 500;
   color: #6a5e58;
@@ -156,7 +156,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: 'Fredoka One', sans-serif;
+  font-family: 'Fredoka', sans-serif;
   font-size: 2.5rem;
   color: #ffffff;
   background-color: #ebdcd1; /* light inactive color */
@@ -167,7 +167,7 @@
 }
 
 .step-label {
-  font-family: 'Fredoka One', sans-serif;
+  font-family: 'Fredoka', sans-serif;
   font-weight: 700;
   font-size: 1.4rem;
   color: #887a71;
@@ -183,7 +183,7 @@
   border-radius: 15px;
   border: 4px solid #f77f00;
   background-color: #f77f00;
-  font-family: 'Fredoka One', sans-serif;
+  font-family: 'Fredoka', sans-serif;
   font-weight: 600;
   font-size: 1.6rem;
   color: #ffffff;
