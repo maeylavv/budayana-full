@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { useState } from "react"
 import { useMutation } from "@tanstack/react-query"
 import { authClient } from "../../lib/auth-client"
+import CookieBlockedPopup from "../../components/CookieBlockedPopup"
 
 export default function Login() {
   const navigate = useNavigate()
@@ -15,6 +16,10 @@ export default function Login() {
   const [username, setUsername] = useState("")
   const [passwordValue, setPasswordValue] = useState("")
   const [showPassword, setShowPassword] = useState(false)
+
+  // State deteksi cookies
+  const [showCookiePopup, setShowCookiePopup] = useState(false)
+  const [verifyingSession, setVerifyingSession] = useState(false)
 
   const loginMutation = useMutation({
     mutationFn: async ({ username, password }) => {
@@ -29,26 +34,33 @@ export default function Login() {
 
       return data
     },
-    onSuccess: () => {
-      // Preserve existing localStorage logic for compatibility
-      // if (data?.user) {
-      //   localStorage.setItem("userId", data.user.id)
-      //   localStorage.setItem("fullName", data.user.name)
-      // }
+    onSuccess: async (data) => {
+      setVerifyingSession(true)
 
-      // better-auth handles session token automatically, but if the app relies on this specific key:
-      // if (data?.session?.token) {
-      //   localStorage.setItem("token", data.session.token)
-      // }
+      if (data?.session?.token) {
+        localStorage.setItem("ba_token", data.session.token)
+      }
 
-      // TEMPORARY FIX: Set a local storage flag to bypass ProtectedRoute on localhost Cross-Origin issues
-      // localStorage.setItem("temp_dev_session", "true")
+      if (data?.user?.id) {
+        localStorage.setItem("ba_user_id", data.user.id)
+      }
 
-      alert("Login successful!")
-      window.location.href = "/home"
+      try {
+        const session = await authClient.getSession()
+
+        if (session?.data?.session) {
+          window.location.href = "/home"
+        } else {
+          setVerifyingSession(false)
+          setShowCookiePopup(true)
+        }
+      } catch (err) {
+        setVerifyingSession(false)
+        setShowCookiePopup(true)
+      }
     },
     onError: (error) => {
-      console.error(error)
+      setVerifyingSession(false)
       alert(error.message || "Error connecting to server")
     },
   })
@@ -118,9 +130,11 @@ export default function Login() {
             <button
               type='submit'
               className='register'
-              disabled={loginMutation.isPending}
+              disabled={loginMutation.isPending || verifyingSession}
             >
-              {loginMutation.isPending ? "Loading..." : "Mulai!"}
+              {loginMutation.isPending || verifyingSession
+                ? "Memverifikasi..."
+                : "Mulai!"}
             </button>
           </div>
         </form>
@@ -138,6 +152,15 @@ export default function Login() {
           <img className='harimau' src='/assets/budayana/islands/Harimau.png' />
         </div>
       </div>
+
+      {/* Popup Deteksi Cookies Blocked */}
+      <CookieBlockedPopup
+        isOpen={showCookiePopup}
+        onClose={() => setShowCookiePopup(false)}
+        onRetry={() => {
+          window.location.reload()
+        }}
+      />
     </div>
   )
 }
