@@ -1,16 +1,49 @@
+import { useState, useEffect } from "react"
 import { Navigate, Outlet, useLocation } from "react-router-dom"
 import { authClient } from "../../lib/auth-client"
+import CookieBlockedPopup from "../CookieBlockedPopup"
 
-/**
- * ProtectedRoute - Layout route that requires authenticated session
- * Redirects unauthenticated users to /login
- * Use as a pathless layout route to protect grouped routes
- */
 export default function ProtectedRoute() {
   const { data: session, isPending } = authClient.useSession()
   const location = useLocation()
+  const [showCookiePopup, setShowCookiePopup] = useState(false)
 
-  // Show loading state while checking session
+  const hasLocalToken = !!localStorage.getItem("ba_token")
+
+  useEffect(() => {
+    // Jika ada token lokal tapi sesi pengguna tetap kosong setelah pemuatan,
+    // berikan waktu ±2 detik sebelum menampilkan pop-up deteksi cookie.
+    if (!isPending && hasLocalToken && !session?.user) {
+      const timer = setTimeout(() => {
+        setShowCookiePopup(true)
+      }, 2000)
+
+      return () => clearTimeout(timer)
+    }
+  }, [isPending, hasLocalToken, session])
+
+  if (showCookiePopup) {
+    return (
+      <>
+        <div className='auth-loading'>
+          <span>Mendeteksi Sesi...</span>
+        </div>
+        <CookieBlockedPopup
+          isOpen={true}
+          onClose={() => {
+            localStorage.removeItem("ba_token")
+            localStorage.removeItem("ba_user_id")
+            setShowCookiePopup(false)
+            window.location.href = "/login"
+          }}
+          onRetry={() => {
+            window.location.reload()
+          }}
+        />
+      </>
+    )
+  }
+
   if (isPending) {
     return (
       <div className='auth-loading'>
@@ -19,11 +52,9 @@ export default function ProtectedRoute() {
     )
   }
 
-  // Temporary bypass for local development due to cross-origin cookie issues
-  // const tempSession = localStorage.getItem("temp_dev_session")
-
-  // Redirect to login if no session AND no temp session
-  if (!session?.user) {
+  if (!session?.user && !hasLocalToken) {
+    localStorage.removeItem("ba_token")
+    localStorage.removeItem("ba_user_id")
     return <Navigate to='/login' state={{ from: location }} replace />
   }
 
