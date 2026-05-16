@@ -32,6 +32,7 @@ import MonitoringGuruProfil from "./app/monitoring-guru/profil/page.jsx"
 import MonitoringOrtuDashboard from "./app/monitoring-ortu/page.jsx"
 import MonitoringOrtuProfil from "./app/monitoring-ortu/profil/page.jsx"
 import MonitoringOrtuProfilAnak from "./app/monitoring-ortu/profil-anak/page.jsx"
+import MonitoringOrtuProfilAnakDetail from "./app/monitoring-ortu/profil-anak/[studentId]/page.jsx"
 import MonitoringLogin from "./pages/monitoring/MonitoringLogin.jsx"
 
 const queryClient = new QueryClient()
@@ -60,6 +61,7 @@ export default function App() {
           
           <Route path='/monitoring-ortu/profil' element={<MonitoringOrtuProfil />} />
           <Route path='/monitoring-ortu/profil-anak' element={<MonitoringOrtuProfilAnak />} />
+          <Route path='/monitoring-ortu/profil-anak/:studentId' element={<MonitoringOrtuProfilAnakDetail />} />
           <Route path='/monitoring-ortu/hasil' element={<MonitoringOrtuDashboard />} />
           {/* ========================================
               PROTECTED ROUTES - Requires authentication

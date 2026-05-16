@@ -1,15 +1,32 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Search } from "lucide-react";
 import MonitoringSidebar from "../../../components/MonitoringSidebar";
-import { STUDENTS } from "../../../lib/dummyData";
+import { monitoringApi } from "../../../lib/api";
 import "../../../pages/Profile.css";
 import "../../../pages/Results.css";
 
 export default function MonitoringGuruProfilAnak() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [students, setStudents] = useState([]);
+  const [loading, setLoading] = useState(true);
   
-  const filteredStudents = STUDENTS.filter(student => 
+  useEffect(() => {
+    const fetchStudents = async () => {
+      try {
+        const data = await monitoringApi.listStudents();
+        console.log("Data from backend:", data);
+        setStudents(data);
+      } catch (err) {
+        console.error("Gagal mengambil daftar siswa:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStudents();
+  }, []);
+
+  const filteredStudents = students.filter(student => 
     student.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -34,25 +51,33 @@ export default function MonitoringGuruProfilAnak() {
             </div>
             
             <div className="history-table-container" style={{ height: 'auto', minHeight: '500px' }}>
-              <div className="history-header" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', backgroundColor: '#955C2E', color: 'white', padding: '16px 24px', alignItems: 'center' }}>
+              <div className="history-header" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', backgroundColor: '#955C2E', color: 'white', padding: '16px 24px', alignItems: 'center' }}>
                 <div style={{ paddingLeft: '24px' }}>Nama</div>
                 <div style={{ textAlign: 'center' }}>Username</div>
                 <div style={{ textAlign: 'center' }}>Kelas</div>
+                <div style={{ textAlign: 'center' }}>Label Kelas</div>
                 <div style={{ textAlign: 'center' }}>Aksi</div>
               </div>
               <div className="history-body" style={{ overflowY: 'auto' }}>
-                {filteredStudents.map((student) => (
-                  <div key={student.id} className="history-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', padding: '16px 24px', borderBottom: '2px solid #955C2E', alignItems: 'center', backgroundColor: '#FEF6DF' }}>
-                    <div style={{ fontWeight: '800', color: '#333' }}>{student.name}</div>
-                    <div style={{ textAlign: 'center', fontWeight: '800', color: '#333' }}>{student.username}</div>
-                    <div style={{ textAlign: 'center', fontWeight: '800', color: '#333' }}>{student.class}</div>
-                    <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        <Link to={`/monitoring-guru/profil-anak/${student.id}`} style={{ backgroundColor: '#f3a64c', color: 'white', padding: '10px 24px', borderRadius: '12px', textDecoration: 'none', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '1rem', border: 'none', cursor: 'pointer' }}>
-                            Lihat Profil <Search size={18} />
-                        </Link>
+                {loading ? (
+                   <div style={{ padding: '40px', textAlign: 'center', color: '#955C2E' }}>Memuat data siswa...</div>
+                ) : filteredStudents.length === 0 ? (
+                   <div style={{ padding: '40px', textAlign: 'center', color: '#955C2E' }}>Tidak ada siswa ditemukan.</div>
+                ) : (
+                  filteredStudents.map((student) => (
+                    <div key={student.id} className="history-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', padding: '16px 24px', borderBottom: '2px solid #955C2E', alignItems: 'center', backgroundColor: '#FEF6DF' }}>
+                      <div style={{ fontWeight: '800', color: '#333' }}>{student.name}</div>
+                      <div style={{ textAlign: 'center', fontWeight: '800', color: '#333' }}>{student.displayUsername || "-"}</div>
+                      <div style={{ textAlign: 'center', fontWeight: '800', color: '#333' }}>{student.grade}</div>
+                      <div style={{ textAlign: 'center', fontWeight: '800', color: '#333' }}>{student.classLabel || "-"}</div>
+                      <div style={{ display: 'flex', justifyContent: 'center' }}>
+                          <Link to={`/monitoring-guru/profil-anak/${student.id}`} style={{ backgroundColor: '#f3a64c', color: 'white', padding: '10px 24px', borderRadius: '12px', textDecoration: 'none', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '1rem', border: 'none', cursor: 'pointer' }}>
+                              Lihat Profil <Search size={18} />
+                          </Link>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
         </section>

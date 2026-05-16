@@ -1,25 +1,48 @@
 import { useState, useEffect } from "react";
 import MonitoringSidebar from "../../../components/MonitoringSidebar";
+import { authClient } from "../../../lib/auth-client";
 import "../../../pages/Profile.css";
 import "../../../pages/Results.css";
 
 export default function MonitoringOrtuProfil() {
   const [isEditing, setIsEditing] = useState(false);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
-    nama: "Rosidah",
-    namaAnak: "Muhammad Malik",
-    kelas: "4",
-    username: "Rosidah",
-    email: "Rosidah@gmail.com"
+    name: "",
+    username: "",
+    email: ""
   });
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    const fetchUser = async () => {
+      try {
+        const { data: session } = await authClient.getSession();
+        if (session?.user) {
+          setUser(session.user);
+          setFormData({
+            name: session.user.name || "",
+            username: session.user.username || session.user.displayUsername || "",
+            email: session.user.email || ""
+          });
+        }
+      } catch (err) {
+        console.error("Gagal mengambil data profil:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchUser();
   }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+  if (loading) {
+    return <div className="flex bg-[#FEF6DF] min-h-screen w-full items-center justify-center" style={{ fontFamily: "'Fredoka One', sans-serif" }}>Memuat profil...</div>;
+  }
 
   return (
     <div className="flex bg-[#FEF6DF] min-h-screen w-full" style={{ fontFamily: "'Fredoka One', sans-serif" }}>
@@ -27,14 +50,18 @@ export default function MonitoringOrtuProfil() {
       
       <main className="flex-1 p-10 box-border overflow-x-hidden">
         <section className="profile-top">
-          <div className="profile-avatar-circle" style={{ fontSize: '3rem', width: '120px', height: '120px', borderColor: '#7B4F2E', backgroundColor: '#F2E5D3' }}>
-            {/* Using an emoji or dummy image */}
-            👩
+          <div className="profile-avatar-circle" style={{ width: '120px', height: '120px', borderColor: '#7B4F2E', backgroundColor: '#F2E5D3', overflow: 'hidden' }}>
+            <img 
+              src="/monitoring/avatar-parent.png" 
+              alt="Avatar" 
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              onError={(e) => { e.target.src = "https://api.dicebear.com/7.x/adventurer/svg?seed=Rosidah"; }}
+            />
           </div>
           <div className="profile-top-text" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '8px' }}>
-            <h1 className="profile-name" style={{ color: '#7B4F2E', fontSize: '2.5rem', fontWeight: '800' }}>Rosidah</h1>
+            <h1 className="profile-name" style={{ color: '#7B4F2E', fontSize: '2.5rem', fontWeight: '800' }}>{formData.name}</h1>
             <div className="profile-grade-badge" style={{ backgroundColor: '#be94e3', color: 'white', fontSize: '1.2rem', padding: '6px 24px', borderRadius: '999px', fontWeight: 'bold', border: '2px solid #955C2E' }}>
-              Wali
+              Orang Tua
             </div>
           </div>
         </section>
@@ -45,15 +72,7 @@ export default function MonitoringOrtuProfil() {
           <section className="profile-form">
             <div className="profile-field" style={{ marginBottom: '24px' }}>
               <label style={{ color: '#955C2E', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '8px', display: 'block' }}>Nama</label>
-              <input name="nama" type="text" value={formData.nama} onChange={handleChange} readOnly={!isEditing} style={{ width: '100%', padding: '20px 24px', borderRadius: '16px', border: '2px solid #E8D9C0', fontSize: '1.25rem', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: '#ffffff' }} />
-            </div>
-            <div className="profile-field" style={{ marginBottom: '24px' }}>
-              <label style={{ color: '#955C2E', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '8px', display: 'block' }}>Nama Anak</label>
-              <input name="namaAnak" type="text" value={formData.namaAnak} onChange={handleChange} readOnly={!isEditing} style={{ width: '100%', padding: '20px 24px', borderRadius: '16px', border: '2px solid #E8D9C0', fontSize: '1.25rem', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: '#ffffff' }} />
-            </div>
-            <div className="profile-field" style={{ marginBottom: '24px' }}>
-              <label style={{ color: '#955C2E', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '8px', display: 'block' }}>Kelas Anak</label>
-              <input name="kelas" type="text" value={formData.kelas} onChange={handleChange} readOnly={!isEditing} style={{ width: '100%', padding: '20px 24px', borderRadius: '16px', border: '2px solid #E8D9C0', fontSize: '1.25rem', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: '#ffffff' }} />
+              <input name="name" type="text" value={formData.name} onChange={handleChange} readOnly={!isEditing} style={{ width: '100%', padding: '20px 24px', borderRadius: '16px', border: '2px solid #E8D9C0', fontSize: '1.25rem', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: '#ffffff' }} />
             </div>
             <div className="profile-field" style={{ marginBottom: '24px' }}>
               <label style={{ color: '#955C2E', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '8px', display: 'block' }}>Username</label>
