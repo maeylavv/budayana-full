@@ -1,0 +1,283 @@
+enum AttemptStageType {
+  PRE_TEST
+  STORY
+  POST_TEST
+}
+
+model StoryAttempt {
+  id                    String    @id @default(cuid())
+  userId                String
+  storyId               String
+  startedAt             DateTime  @default(now())
+  finishedAt            DateTime?
+  totalTimeSeconds      Int       @default(0)
+  totalXpGained         Int       @default(0)
+  preTestScore          Decimal?  @db.Decimal(5, 2)
+  postTestScore         Decimal?  @db.Decimal(5, 2)
+  correctInteractiveCnt Int?
+  wrongInteractiveCnt   Int?
+  essayAnswer           String?
+
+  user          User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  story         Story                @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  stageAttempts StageAttempt[]
+  questionLogs  QuestionAttemptLog[]
+
+  @@index([userId])
+  @@index([storyId])
+  @@map("story_attempts")
+}
+
+model StageAttempt {
+  id               String           @id @default(cuid())
+  attemptId        String
+  stageType        AttemptStageType
+  timeSpentSeconds Int              @default(0)
+  xpGained         Int              @default(0)
+  score            Decimal?         @db.Decimal(5, 2)
+
+  storyAttempt StoryAttempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+
+  @@index([attemptId])
+  @@map("stage_attempts")
+}
+
+model QuestionAttemptLog {
+  id             String   @id @default(cuid())
+  attemptId      String
+  questionId     String
+  userAnswerText String?
+  isCorrect      Boolean?
+  attemptCount   Int      @default(1)
+  answeredAt     DateTime @default(now())
+
+  storyAttempt StoryAttempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  question     Question     @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@index([attemptId])
+  @@index([questionId])
+  @@map("question_attempts_logs")
+}
+
+model User {
+  id              String    @id
+  role            String    @default("STUDENT")
+  name            String
+  email           String
+  emailVerified   Boolean   @default(false)
+  image           String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  username        String?
+  displayUsername String?
+  grade           Int
+  classLabel      String?
+  guardianEmail   String?
+  totalXp         Int?      @default(0)
+  sessions        Session[]
+  accounts        Account[]
+
+  // Gamification relations
+  userProgress  UserProgress[]
+  storyAttempts StoryAttempt[]
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+model Island {
+  id              String  @id @default(cuid())
+  islandName      String
+  slug            String  @unique
+  unlockOrder     Int
+  isLockedDefault Boolean @default(true)
+
+  stories      Story[]
+  userProgress UserProgress[]
+
+  @@map("islands")
+}
+
+model UserProgress {
+  id          String  @id @default(cuid())
+  userId      String
+  islandId    String
+  isUnlocked  Boolean @default(false)
+  isCompleted Boolean @default(false)
+  cycleCount  Int     @default(0)
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  island Island @relation(fields: [islandId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([islandId])
+  @@map("user_progress")
+}
+
+enum StageType {
+  PRE_TEST
+  POST_TEST
+  INTERACTIVE
+}
+
+enum QuestionType {
+  MCQ
+  TRUE_FALSE
+  DRAG_DROP
+  ESSAY
+}
+
+model Question {
+  id           String       @id @default(cuid())
+  storyId      String
+  stageType    StageType
+  questionType QuestionType
+  questionText String
+  xpValue      Int          @default(0)
+  metadata     Json?
+
+  story             Story                @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  answerOptions     AnswerOption[]
+  interactiveSlides InteractiveSlide[]
+  attemptLogs       QuestionAttemptLog[]
+
+  @@index([storyId])
+  @@map("questions")
+}
+
+model AnswerOption {
+  id         String  @id @default(cuid())
+  questionId String
+  optionText String
+  isCorrect  Boolean @default(false)
+
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@index([questionId])
+  @@map("answer_option")
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["prismaSchemaFolder"]
+  output          = "../generated"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum StoryType {
+  STATIC
+  INTERACTIVE
+}
+
+enum SlideType {
+  COVER
+  CONTENT
+  IMAGE
+  GAME
+  ESSAY
+  ENDING
+}
+
+model Story {
+  id              String    @id @default(cuid())
+  islandId        String
+  title           String
+  subtitle        String?
+  coverImage      String?
+  backgroundImage String?
+  storyType       StoryType
+  order           Int       @default(0)
+
+  island            Island             @relation(fields: [islandId], references: [id], onDelete: Cascade)
+  staticSlides      StaticSlide[]
+  interactiveSlides InteractiveSlide[]
+  questions         Question[]
+  storyAttempts     StoryAttempt[]
+
+  @@index([islandId])
+  @@map("stories")
+}
+
+// Static Story/Read mode
+model StaticSlide {
+  id          String    @id @default(cuid())
+  storyId     String
+  slideNumber Int
+  slideType   SlideType
+  imageUrl    String?
+  contentText String?
+
+  story Story @relation(fields: [storyId], references: [id], onDelete: Cascade)
+
+  @@index([storyId])
+  @@map("static_slide")
+}
+
+// Interactive Story/Game mode
+model InteractiveSlide {
+  id          String    @id @default(cuid())
+  storyId     String
+  questionId  String?
+  slideNumber Int
+  slideType   SlideType
+  imageUrl    String?
+  contentText String?
+
+  story    Story     @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  question Question? @relation(fields: [questionId], references: [id], onDelete: SetNull)
+
+  @@index([storyId])
+  @@index([questionId])
+  @@map("interactive_slide")
+}
