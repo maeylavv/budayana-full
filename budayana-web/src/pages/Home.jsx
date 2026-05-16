@@ -161,9 +161,7 @@ export default function Home() {
       return {
         ...staticIsland, // includes id, slug, name, etc.
         // If progress exists, use it. Else use static defaults.
-        isUnlocked: progressItem
-          ? progressItem.isUnlocked
-          : !staticIsland.isLockedDefault,
+        isUnlocked: true,
         isCompleted: progressItem ? progressItem.isCompleted : false,
         apiIslandId: progressItem ? progressItem.islandId : null,
       }
@@ -358,14 +356,7 @@ function IslandPopup({ activeIsland, onClose }) {
   // Helper to get stage status from the new unlock logic
   const getStageStatusFromUnlock = (stageId) => {
     const status = storyUnlockStatus[stageId]
-    if (!status) return "locked"
-    if (status.isFinished) return "completed"
-    if (status.isUnlocked) {
-      // If started but not finished, it's resume
-      if (status.isStarted) return "resume"
-      return "unlocked"
-    }
-    return "locked"
+    return "unlocked"
   }
 
   // Count unlocked stages for progress dots (shows how far user has reached)

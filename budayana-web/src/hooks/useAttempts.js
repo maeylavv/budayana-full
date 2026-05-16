@@ -141,17 +141,7 @@ export function getStoryUnlockStatus(stories, attempts) {
     // Check if story has any attempt (started)
     const isStarted = attempts?.some((a) => String(a.storyId) === String(story.id))
 
-    // First story is always unlocked
-    if (index === 0) {
-      statusMap[story.id] = { isUnlocked: true, isFinished, isStarted }
-      return
-    }
-
-    // Check if previous story is finished
-    const previousStory = sortedStories[index - 1]
-    const previousFinished = isStoryFinished(attempts, previousStory.id)
-
-    statusMap[story.id] = { isUnlocked: previousFinished, isFinished, isStarted }
+    statusMap[story.id] = { isUnlocked: true, isFinished, isStarted }
   })
 
   return statusMap

@@ -25,6 +25,7 @@ export default function SignIn() {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [grade, setGrade] = useState("")
+  const [classLabel, setClassLabel] = useState("")
   const [username, setUsername] = useState("")
   const [guardianEmail, setGuardianEmail] = useState("")
 
@@ -40,6 +41,7 @@ export default function SignIn() {
           name: formData.name,
           username: formData.username,
           grade: formData.grade,
+          classLabel: formData.classLabel,
           guardianEmail: formData.guardianEmail,
         },
         {
@@ -90,6 +92,7 @@ export default function SignIn() {
       email: email,
       name: name,
       grade: Number(grade),
+      classLabel: classLabel,
       username: username,
       password: passwordValue,
       guardianEmail: guardianEmail,
@@ -151,6 +154,18 @@ export default function SignIn() {
               required
               value={grade}
               onChange={(e) => setGrade(e.target.value)}
+            />
+          </div>
+          
+          <div className='field'>
+            <label htmlFor='classLabel'>Label Kelas</label>
+            <input
+              type='text'
+              id='classLabel'
+              placeholder='Label Kelas Kamu (contoh : A)'
+              required
+              value={classLabel}
+              onChange={(e) => setClassLabel(e.target.value)}
             />
           </div>
 

@@ -9,6 +9,7 @@ import { questionRoutes } from "./questions"
 import { attemptRoutes } from "./attempts"
 import { progressRoutes } from "./progress"
 import { statisticsRoutes } from "./statistics"
+import { monitoringRoutes } from "./monitoring"
 
 export const apiRoutes = new Elysia({ prefix: "/api" })
   // Public routes
@@ -20,6 +21,7 @@ export const apiRoutes = new Elysia({ prefix: "/api" })
   .use(attemptRoutes)
   .use(progressRoutes)
   .use(statisticsRoutes)
+  .use(monitoringRoutes)
 
 // Re-export individual routes for testing
 export {
@@ -29,4 +31,5 @@ export {
   attemptRoutes,
   progressRoutes,
   statisticsRoutes,
+  monitoringRoutes,
 }

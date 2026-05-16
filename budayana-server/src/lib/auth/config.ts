@@ -27,17 +27,30 @@ export const auth = betterAuth({
 
   user: {
     additionalFields: {
+      role: {
+        type: "string",
+        input: true,
+        required: false,
+        defaultValue: "STUDENT",
+        fieldName: "role",
+      },
       grade: {
         type: "number",
         input: true,
         required: true,
         fieldName: "grade",
       },
+      classLabel: {
+        type: "string",
+        input: true,
+        required: false,
+        fieldName: "classLabel",
+      },
 
       guardianEmail: {
         type: "string",
         input: true,
-        required: true,
+        required: false,
         fieldName: "guardianEmail",
       },
 

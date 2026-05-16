@@ -1,28 +1,57 @@
-import { useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import MonitoringSidebar from "../../../../components/MonitoringSidebar";
-import { STUDENTS } from "../../../../lib/dummyData";
+import { monitoringApi } from "../../../../lib/api";
 import "../../../../pages/Profile.css";
 import "../../../../pages/Results.css";
 
 export default function MonitoringGuruProfilAnakDetail() {
   const { studentId } = useParams();
   const navigate = useNavigate();
-  const student = STUDENTS.find((s) => s.id === studentId);
-
+  const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   
-  // Dummy form state
   const [formData, setFormData] = useState({
-    nama: student ? student.name : "",
-    kelas: student ? student.class : "",
-    username: student ? student.username : "",
+    nama: "",
+    kelas: "",
+    username: "",
     password: "*****",
-    emailWali: "Rosidah@gmail.com"
+    emailWali: ""
   });
 
-  if (!student) {
+  const [originalData, setOriginalData] = useState(null);
+
+  useEffect(() => {
+    const fetchStudent = async () => {
+      try {
+        const data = await monitoringApi.getStudent(studentId);
+        setOriginalData(data);
+        setFormData({
+          nama: data.name,
+          kelas: data.grade.toString(),
+          username: data.username || "",
+          password: "*****",
+          emailWali: data.guardianEmail || ""
+        });
+      } catch (err) {
+        console.error("Gagal mengambil detail siswa:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStudent();
+  }, [studentId]);
+
+  if (loading) {
+    return (
+      <div className="flex bg-[#FEF6DF] min-h-screen w-full items-center justify-center">
+        <p>Memuat data siswa...</p>
+      </div>
+    );
+  }
+
+  if (!originalData) {
     return (
       <div className="flex bg-[#FEF6DF] min-h-screen w-full" style={{ fontFamily: "'Fredoka One', sans-serif" }}>
         <MonitoringSidebar role="guru" />
@@ -38,19 +67,38 @@ export default function MonitoringGuruProfilAnakDetail() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSave = () => {
-    // In a real app, send data to backend
-    setIsEditing(false);
+  const handleSave = async () => {
+    try {
+        await monitoringApi.updateStudent(studentId, {
+            name: formData.nama,
+            grade: parseInt(formData.kelas),
+            username: formData.username,
+            guardianEmail: formData.emailWali
+        });
+        setIsEditing(false);
+    } catch (err) {
+        alert("Gagal memperbarui data siswa");
+    }
+  };
+
+  const handleDelete = async () => {
+    if (window.confirm("Apakah Anda yakin ingin menghapus akun siswa ini?")) {
+        try {
+            await monitoringApi.deleteStudent(studentId);
+            navigate('/monitoring-guru/profil-anak');
+        } catch (err) {
+            alert("Gagal menghapus akun siswa");
+        }
+    }
   };
 
   const handleCancel = () => {
-    // Reset form data to original dummy
     setFormData({
-      nama: student.name,
-      kelas: student.class,
-      username: student.username,
+      nama: originalData.name,
+      kelas: originalData.grade.toString(),
+      username: originalData.username || "",
       password: "*****",
-      emailWali: "Rosidah@gmail.com"
+      emailWali: originalData.guardianEmail || ""
     });
     setIsEditing(false);
   };
@@ -70,12 +118,12 @@ export default function MonitoringGuruProfilAnakDetail() {
 
           <section className="profile-top" style={{ marginLeft: '60px', marginTop: '-10px' }}>
             <div className="profile-avatar-circle" style={{ fontSize: '3rem', width: '120px', height: '120px', borderColor: '#7B4F2E', backgroundColor: '#F2E5D3' }}>
-              {student.avatar}
+              👤
             </div>
             <div className="profile-top-text" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '8px' }}>
-              <h1 className="profile-name" style={{ color: '#7B4F2E', fontSize: '2.5rem', fontWeight: '800' }}>{student.name}</h1>
+              <h1 className="profile-name" style={{ color: '#7B4F2E', fontSize: '2.5rem', fontWeight: '800' }}>{formData.nama}</h1>
               <div className="profile-grade-badge" style={{ backgroundColor: '#f3a64c', color: 'white', fontSize: '1.2rem', padding: '6px 24px', borderRadius: '999px', fontWeight: 'bold' }}>
-                Kelas {student.class}
+                Kelas {formData.kelas}
               </div>
             </div>
           </section>
@@ -93,7 +141,7 @@ export default function MonitoringGuruProfilAnakDetail() {
                 value={formData.nama} 
                 onChange={handleChange}
                 readOnly={!isEditing} 
-                style={{ width: '100%', padding: '16px 20px', borderRadius: '16px', border: '2px solid #E8D9C0', fontSize: '1.1rem', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: '#ffffff' }} 
+                style={{ width: '100%', padding: '16px 20px', borderRadius: '16px', border: '2px solid #E8D9C0', fontSize: '1.1rem', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: isEditing ? '#ffffff' : '#f0f0f0' }} 
               />
             </div>
             <div className="profile-field" style={{ marginBottom: '24px' }}>
@@ -104,7 +152,7 @@ export default function MonitoringGuruProfilAnakDetail() {
                 value={formData.kelas} 
                 onChange={handleChange}
                 readOnly={!isEditing} 
-                style={{ width: '100%', padding: '16px 20px', borderRadius: '16px', border: '2px solid #E8D9C0', fontSize: '1.1rem', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: '#ffffff' }} 
+                style={{ width: '100%', padding: '16px 20px', borderRadius: '16px', border: '2px solid #E8D9C0', fontSize: '1.1rem', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: isEditing ? '#ffffff' : '#f0f0f0' }} 
               />
             </div>
             <div className="profile-field" style={{ marginBottom: '24px' }}>
@@ -115,7 +163,7 @@ export default function MonitoringGuruProfilAnakDetail() {
                 value={formData.username} 
                 onChange={handleChange}
                 readOnly={!isEditing} 
-                style={{ width: '100%', padding: '16px 20px', borderRadius: '16px', border: '2px solid #E8D9C0', fontSize: '1.1rem', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: '#ffffff' }} 
+                style={{ width: '100%', padding: '16px 20px', borderRadius: '16px', border: '2px solid #E8D9C0', fontSize: '1.1rem', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: isEditing ? '#ffffff' : '#f0f0f0' }} 
               />
             </div>
             <div className="profile-field" style={{ marginBottom: '24px' }}>
@@ -124,9 +172,8 @@ export default function MonitoringGuruProfilAnakDetail() {
                 type="text" 
                 name="password"
                 value={formData.password} 
-                onChange={handleChange}
-                readOnly={!isEditing} 
-                style={{ width: '100%', padding: '16px 20px', borderRadius: '16px', border: '2px solid #E8D9C0', fontSize: '1.1rem', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: '#ffffff' }} 
+                readOnly 
+                style={{ width: '100%', padding: '16px 20px', borderRadius: '16px', border: '2px solid #E8D9C0', fontSize: '1.1rem', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: '#f0f0f0' }} 
               />
             </div>
             <div className="profile-field" style={{ marginBottom: '24px' }}>
@@ -137,14 +184,14 @@ export default function MonitoringGuruProfilAnakDetail() {
                 value={formData.emailWali} 
                 onChange={handleChange}
                 readOnly={!isEditing} 
-                style={{ width: '100%', padding: '16px 20px', borderRadius: '16px', border: '2px solid #E8D9C0', fontSize: '1.1rem', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: '#ffffff' }} 
+                style={{ width: '100%', padding: '16px 20px', borderRadius: '16px', border: '2px solid #E8D9C0', fontSize: '1.1rem', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: isEditing ? '#ffffff' : '#f0f0f0' }} 
               />
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '20px', marginTop: '40px' }}>
               {!isEditing ? (
                 <>
-                  <button style={{ backgroundColor: '#c53030', color: 'white', padding: '12px 30px', borderRadius: '999px', fontSize: '1.1rem', fontWeight: 'bold', border: 'none', cursor: 'pointer' }}>
+                  <button onClick={handleDelete} style={{ backgroundColor: '#c53030', color: 'white', padding: '12px 30px', borderRadius: '999px', fontSize: '1.1rem', fontWeight: 'bold', border: 'none', cursor: 'pointer' }}>
                     Hapus Akun
                   </button>
                   <button onClick={() => setIsEditing(true)} style={{ backgroundColor: '#955C2E', color: 'white', padding: '12px 30px', borderRadius: '999px', fontSize: '1.1rem', fontWeight: 'bold', border: 'none', cursor: 'pointer' }}>

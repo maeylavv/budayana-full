@@ -24,6 +24,11 @@ export default function Profile() {
           </div>
 
           <div className='profile-field'>
+            <label>Label Kelas</label>
+            <input type='text' value={user.classLabel || ""} readOnly />
+          </div>
+
+          <div className='profile-field'>
             <label>Username</label>
             <input type='text' value={user.username || ""} readOnly />
           </div>
@@ -39,7 +44,7 @@ export default function Profile() {
             <label>Email Wali</label>
             <input
               type='text'
-              value={user.guardian_email || user.email || ""}
+              value={user.guardianEmail || user.email || ""}
               readOnly
             />
           </div>

@@ -226,3 +226,43 @@ export const statisticsApi = {
    */
   get: () => apiRequest("/statistics/"),
 }
+
+/**
+ * API methods for Monitoring (Teacher/Parent)
+ */
+export const monitoringApi = {
+  /**
+   * Get students of the teacher's grade
+   * @returns {Promise<Array>}
+   */
+  listStudents: () => apiRequest("/monitoring/students"),
+
+  /**
+   * Get student details by ID
+   * @param {string} id
+   * @returns {Promise<object>}
+   */
+  getStudent: (id) => apiRequest(`/monitoring/students/${id}`),
+
+  /**
+   * Update student details
+   * @param {string} id
+   * @param {object} data
+   * @returns {Promise<object>}
+   */
+  updateStudent: (id, data) =>
+    apiRequest(`/monitoring/students/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    }),
+
+  /**
+   * Delete student account
+   * @param {string} id
+   * @returns {Promise<object>}
+   */
+  deleteStudent: (id) =>
+    apiRequest(`/monitoring/students/${id}`, {
+      method: "DELETE",
+    }),
+}

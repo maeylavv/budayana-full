@@ -137,6 +137,7 @@ export const UserScalarFieldEnum = {
   username: 'username',
   displayUsername: 'displayUsername',
   grade: 'grade',
+  classLabel: 'classLabel',
   guardianEmail: 'guardianEmail',
   totalXp: 'totalXp'
 } as const
