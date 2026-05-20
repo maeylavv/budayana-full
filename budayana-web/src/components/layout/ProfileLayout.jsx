@@ -48,7 +48,7 @@ export default function ProfileLayout() {
 
           <div className='profile-top-text'>
             <h1 className='profile-name'>{user.name}</h1>
-            <div className='profile-grade-badge'>Kelas {user.grade || "-"}</div>
+            <div className='profile-grade-badge'>Kelas {user.grade || "-"}{user.classLabel ? user.classLabel.toUpperCase() : ""}</div>
           </div>
         </section>
 

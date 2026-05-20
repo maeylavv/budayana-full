@@ -17,7 +17,7 @@ import MapUI from "../components/MapUI"
 // Helper to see if we need special slug handling
 function getIslandSlug(name) {
   const lower = name.toLowerCase()
-  if (lower === "nusa tenggara") return "nusa"
+  if (lower === "nusa tenggara") return "nusa-tenggara"
   return lower
 }
 
@@ -214,10 +214,6 @@ export default function Home() {
 
         <div className='gameName'>
           <img src='/assets/budayana/islands/Game Name.png' alt='Budayana' />
-        </div>
-
-        <div className='completedStories'>
-          <h1>Tahap Selesai: {progressData?.completedStory}</h1>
         </div>
 
         <div className='profile' onClick={goToProfile}>

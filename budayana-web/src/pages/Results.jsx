@@ -1,5 +1,6 @@
 
 import { useEffect, useState } from "react"
+import { ExternalLink, X } from "lucide-react"
 import { useResults } from "../hooks/useResults"
 import { islands } from "../data/islands"
 import { islandsApi } from "../lib/api"
@@ -9,6 +10,8 @@ import "./Results.css"
 export default function Results() {
   const { stats, attempts, isLoading } = useResults()
   const [storyIslandMap, setStoryIslandMap] = useState({})
+  const [selectedEssay, setSelectedEssay] = useState(null)
+  const [activeTab, setActiveTab] = useState("ceritaRakyat")
 
 
   // Fetch all islands to build a StoryID -> IslandName map
@@ -25,7 +28,7 @@ export default function Results() {
         results.forEach((islandData) => {
           if (islandData && islandData.stories) {
             islandData.stories.forEach((story) => {
-              newMap[story.id] = islandData.name
+              newMap[story.id] = islandData.islandName
             })
           }
         })
@@ -43,11 +46,10 @@ export default function Results() {
   const formatDate = (dateString) => {
     if (!dateString) return "-"
     const date = new Date(dateString)
-    return date.toLocaleDateString("id-ID", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    })
+    const day = String(date.getDate()).padStart(2, "0")
+    const month = String(date.getMonth() + 1).padStart(2, "0")
+    const year = date.getFullYear()
+    return `${day}-${month}-${year}`
   }
 
 
@@ -141,14 +143,32 @@ export default function Results() {
 
   return (
     <div className='results-container'>
-      {/* Statistics Section */}
-      <section>
-        <h2 className='results-section-title'>Statistik</h2>
-        <div className='stats-grid'>
-          <div className='stat-card green'>
-            <div className='stat-value'>{stats?.storiesCompleted || 0}</div>
-            <div className='stat-label'>Tahap Selesai</div>
-          </div>
+      {/* Tabs */}
+      <div className='flex items-center gap-2 md:gap-4 mb-4 pb-4 border-b-2 border-[#d3cbb8]'>
+        <button 
+          onClick={() => setActiveTab("ceritaRakyat")}
+          className={`px-4 py-1.5 md:px-6 md:py-2 rounded-xl font-bold text-lg md:text-xl transition-colors ${activeTab === "ceritaRakyat" ? "bg-[#955c2e] text-white" : "text-[#955c2e] hover:bg-[#955c2e]/10"}`}
+        >
+          Cerita Rakyat
+        </button>
+        <button 
+          onClick={() => setActiveTab("quizBudaya")}
+          className={`px-4 py-1.5 md:px-6 md:py-2 rounded-xl font-bold text-lg md:text-xl transition-colors ${activeTab === "quizBudaya" ? "bg-[#955c2e] text-white" : "text-[#955c2e] hover:bg-[#955c2e]/10"}`}
+        >
+          Quiz Budaya
+        </button>
+      </div>
+
+      {activeTab === "ceritaRakyat" ? (
+        <>
+          {/* Statistics Section */}
+          <section>
+            <h2 className='results-section-title'>Statistik</h2>
+            <div className='stats-grid'>
+              <div className='stat-card green'>
+                <div className='stat-value'>{stats?.storiesCompleted || 0}</div>
+                <div className='stat-label'>Tahap Selesai</div>
+              </div>
           <div className='stat-card purple'>
             <div className='stat-value'>{stats?.totalXp || 0}</div>
             <div className='stat-label'>Total XP</div>
@@ -182,12 +202,13 @@ export default function Results() {
         <h2 className='results-section-title'>Riwayat Skor</h2>
         <div className='history-table-container'>
           <div className='history-header'>
-            <div>Cerita</div>
+            <div>Tahap</div>
             <div>Pre-test</div>
             <div>Post-test</div>
             <div>XP</div>
             <div>Tanggal</div>
             <div>Waktu</div>
+            <div>Esai</div>
           </div>
           <div className='history-body'>
             {(() => {
@@ -221,8 +242,9 @@ export default function Results() {
                 )
               }
 
+              const sortedAttempts = [...filteredAttempts].sort((a, b) => new Date(b.finishedAt) - new Date(a.finishedAt))
 
-              return filteredAttempts.map((attempt) => {
+              return sortedAttempts.map((attempt) => {
                 const displayTitle = getDisplayTitle(attempt)
                 const isTest =
                   displayTitle.toLowerCase().includes("pre-test") ||
@@ -259,6 +281,10 @@ export default function Results() {
                 }
 
 
+                const isInteractiveStory = ["sumatra", "sulawesi", "bali", "nusa-tenggara", "nusa tenggara", "jawa"].some(i => displayTitle.toLowerCase().includes(i.replace("-", " "))) && !isTest;
+                const essayLog = attempt.questionLogs?.find(log => log.question?.questionType === "ESSAY" || log.userAnswerText);
+                const hasEssay = isInteractiveStory && (attempt.essayAnswer || essayLog?.userAnswerText);
+
                 return (
                   <div key={attempt.id} className='history-row'>
                     <div>{displayTitle}</div>
@@ -273,8 +299,31 @@ export default function Results() {
                         : "-"}
                     </div>
                     <div>{displayXp}</div>
-                    <div>{formatDate(attempt.startedAt)}</div>
+                    <div>{formatDate(attempt.finishedAt)}</div>
                     <div>{formatDuration(duration)}</div>
+                    <div>
+                      {hasEssay ? (
+                        <button 
+                          className='essay-icon-btn' 
+                          onClick={() => {
+                            let rawTitle = attempt.story?.title || "Cerita"
+                            if (rawTitle.toLowerCase().startsWith("cerita ")) {
+                               rawTitle = rawTitle.substring(7)
+                            }
+                            if (rawTitle.toLowerCase().endsWith(" sumatra") || rawTitle.toLowerCase().endsWith(" sulawesi") || rawTitle.toLowerCase().endsWith(" bali") || rawTitle.toLowerCase().endsWith(" jawa") || rawTitle.toLowerCase().endsWith(" nusa tenggara")) {
+                              const islandIndex = rawTitle.lastIndexOf(" ");
+                              rawTitle = rawTitle.substring(0, islandIndex);
+                            }
+                            setSelectedEssay({ 
+                              title: rawTitle, 
+                              text: attempt.essayAnswer || essayLog?.userAnswerText 
+                            })
+                          }}
+                        >
+                          <img src="/assets/budayana/islands/open.png" alt="Buka Esai" className="w-6 h-6 object-contain" />
+                        </button>
+                      ) : ""}
+                    </div>
                   </div>
                 )
               })
@@ -282,6 +331,32 @@ export default function Results() {
           </div>
         </div>
       </section>
+
+      {/* Essay Modal */}
+      {selectedEssay && (
+        <div className='essay-modal-overlay' onClick={() => setSelectedEssay(null)}>
+          <div className='essay-modal-container' onClick={(e) => e.stopPropagation()}>
+            <div className='essay-modal-header'>
+              <div className='essay-modal-title-wrapper'>
+                <h3 className='essay-modal-title'>{selectedEssay.title}</h3>
+              </div>
+              <button className='essay-modal-close' onClick={() => setSelectedEssay(null)}>
+                <X size={24} color="#ffffff" />
+              </button>
+              <p className='essay-modal-question'>Apa pesan moral yang bisa di ambil dari cerita tersebut?</p>
+            </div>
+            <div className='essay-modal-body'>
+              <p className='essay-modal-text'>{selectedEssay.text}</p>
+            </div>
+          </div>
+        </div>
+      )}
+        </>
+      ) : (
+        <div className="flex justify-center items-center h-64 border-4 border-dashed border-[#d3cbb8] rounded-3xl mt-8">
+          <p className="text-2xl font-bold text-[#955c2e]">Tunggu Fitur Quiz Budaya ya!</p>
+        </div>
+      )}
     </div>
   )
 }

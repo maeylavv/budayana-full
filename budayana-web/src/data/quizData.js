@@ -6566,7 +6566,7 @@ export const QUIZ_DATA = {
       }
     }
   },
-  "nusa": {
+  "nusa-tenggara": {
     "rumah": {
       "1": {
         "literacy": {

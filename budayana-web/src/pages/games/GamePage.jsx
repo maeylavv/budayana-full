@@ -295,6 +295,20 @@ export default function GamePage() {
               setPendingLogs(data.questionLogs)
             }
           }
+          
+          if (data.essayAnswer) {
+            // Restore essay answer (currently only sumatra uses this ID, but could be dynamic later)
+            const essayId = islandSlug === "sumatra" ? "sumatra_essay_1" : `${islandSlug}_essay_1`;
+            setAnswers(prev => ({
+              ...prev,
+              [essayId]: {
+                textValue: data.essayAnswer,
+                isCorrect: true,
+                choiceIndex: -1,
+                pending: false
+              }
+            }))
+          }
 
           // Restore drag-drop order from localStorage
           const storedDragDrop = loadDragDropFromStorage(data.id)
@@ -642,7 +656,7 @@ export default function GamePage() {
   // Renders an image slide (e.g., IMAGE slideType from interactiveSlides)
   const renderImagePage = (pageData) => (
     <div className='w-full max-w-4xl mx-auto px-2'>
-      <div className='bg-white rounded-[30px] shadow-xl border-[3px] border-[#2c2c2c] overflow-hidden'>
+      <div className='overflow-hidden'>
         {pageData.imageUrl ? (
           <img
             src={pageData.imageUrl}
@@ -934,13 +948,10 @@ export default function GamePage() {
 
     const handleEssayBlur = () => {
       if (textValue.trim().length > 0 && attemptId) {
-        addQuestionLog.mutate({
+        updateAttempt.mutate({
           attemptId,
-          logData: {
-            questionId: question.id,
-            userAnswerText: textValue,
-            attemptCount: 1,
-            selectedOptionId: null, // No option ID for essay
+          data: {
+            essayAnswer: textValue,
           },
         })
       }

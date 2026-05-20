@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo, useRef } from "react"
 import { useParams, useNavigate, useSearchParams } from "react-router-dom"
 import { ArrowLeft, ArrowRight, Clock } from "lucide-react"
 import { getIslandBySlug } from "../../data/islands"
+import { questions as staticQuestions } from "../../data/questions"
 import {
   useStartAttempt,
   useAddStage,
@@ -47,15 +48,26 @@ export default function TestPage({ testType = "pre" }) {
   const questions = useMemo(() => {
     if (!questionsData?.items) return []
 
-    return questionsData.items.map((q) => ({
-      id: q.id,
-      question: q.questionText,
-      options: q.answerOptions?.map((opt) => opt.optionText) || [],
-      optionIds: q.answerOptions?.map((opt) => opt.id) || [], // Keep option IDs for logging
-      correctAnswer: q.answerOptions?.findIndex((opt) => opt.isCorrect) ?? -1,
-      xpValue: q.xpValue || 0,
-    }))
-  }, [questionsData])
+    const islandKey = islandSlug ? islandSlug.replace("-", " ") : ""
+    const islandStaticQuestions = staticQuestions[islandKey] || staticQuestions[islandSlug] || []
+
+    return questionsData.items
+      .map((q) => ({
+        id: q.id,
+        question: q.questionText,
+        options: q.answerOptions?.map((opt) => opt.optionText) || [],
+        optionIds: q.answerOptions?.map((opt) => opt.id) || [], // Keep option IDs for logging
+        correctAnswer: q.answerOptions?.findIndex((opt) => opt.isCorrect) ?? -1,
+        xpValue: q.xpValue || 0,
+      }))
+      .sort((a, b) => {
+        const indexA = islandStaticQuestions.findIndex(sq => sq.question === a.question)
+        const indexB = islandStaticQuestions.findIndex(sq => sq.question === b.question)
+        const sortA = indexA !== -1 ? indexA : 999
+        const sortB = indexB !== -1 ? indexB : 999
+        return sortA - sortB
+      })
+  }, [questionsData, islandSlug])
 
   // API hooks
   const startAttempt = useStartAttempt()
