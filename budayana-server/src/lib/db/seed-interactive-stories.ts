@@ -1,3 +1,4 @@
+import { t } from "elysia"
 import prisma from "./index"
 import {
   StoryType,
@@ -33,13 +34,13 @@ interface InteractiveStoryData {
 
 const interactiveStoryData: Record<string, InteractiveStoryData> = {
   sulawesi: {
-    title: "Nenek Pakande",
+    title: "Cerita Nenek Pakande",
     storyImageMap: {
-      1: "/assets/budayana/islands/cerita sulawesi 1.png",
-      3: "/assets/budayana/islands/cerita sulawesi 22.png",
-      5: "/assets/budayana/islands/cerita sulawesi 3.png",
-      7: "/assets/budayana/islands/cerita sulawesi 4 (1).png",
-      9: "/assets/budayana/islands/cerita sulawesi 5.png",
+      1: "/assets/budayana/islands/sulawesi 1.png",
+      3: "/assets/budayana/islands/sulawesi 2.png",
+      5: "/assets/budayana/islands/sulawesi 3.png",
+      7: "/assets/budayana/islands/sulawesi 4.png",
+      9: "/assets/budayana/islands/sulawesi 5.png",
     },
     questions: [
       {
@@ -111,14 +112,93 @@ const interactiveStoryData: Record<string, InteractiveStoryData> = {
     ],
   },
 
-  sumatra: {
-    title: "Malin Kundang",
+  bali: {
+    title: "Cerita Bawang dan Kesuna",
     storyImageMap: {
-      1: "/assets/budayana/islands/cerita 1 malin (1).png",
-      3: "/assets/budayana/islands/cerita 2 malin (2).png",
-      5: "/assets/budayana/islands/cerita 3 malin (1).png",
-      7: "/assets/budayana/islands/cerita 5 malin (2).png",
-      9: "/assets/budayana/islands/cerita 6 malin (3).png",
+      1: "/assets/budayana/islands/bali 1.png",
+      3: "/assets/budayana/islands/bali 2.png",
+      5: "/assets/budayana/islands/bali 3.png",
+      7: "/assets/budayana/islands/bali 4.png",
+      9: "/assets/budayana/islands/bali 5.png",
+    },
+    questions: [
+      {
+        slideNumber: 2,
+        questionType: QuestionType.MCQ,
+        questionText: "Apa yang dilakukan Kesuna saat orang tua pergi ke sawah?",
+        options: [
+          { text: "Mengerjakan semua pekerjaan rumah sendirian", isCorrect: true },
+          { text: "Bermain di luar rumah", isCorrect: false },
+          { text: "Tidur di rumah seharian", isCorrect: false },
+          { text: "Pergi ke hutan", isCorrect: false },
+        ],
+      },
+      {
+        slideNumber: 4,
+        questionType: QuestionType.TRUE_FALSE,
+        questionText:
+          "Apakah ayah percaya cerita Bawang dan mengusir Kesuna dari rumah?",
+        options: [
+          { text: "Benar", isCorrect: true },
+          { text: "Salah", isCorrect: false },
+        ],
+      },
+      {
+        slideNumber: 6,
+        questionType: QuestionType.MCQ,
+        questionText: "Apa yang terjadi saat burung mematuk tubuh Kesuna?",
+        options: [
+          { text: "Muncul perhiasan emas dari bekas patukan", isCorrect: true },
+          { text: "Kesuna merasa kesakitan", isCorrect: false },
+          { text: "Burung itu membawa terbang Kesuna", isCorrect: false },
+          { text: "Kesuna berubah menjadi burung", isCorrect: false },
+        ],
+      },
+      {
+        slideNumber: 8,
+        questionType: QuestionType.MCQ,
+        questionText: "Apa yang terjadi saat burung mematuk tubuh Bawang?",
+        options: [
+          { text: "Bawang mendapat lebih banyak emas", isCorrect: false },
+          { text: "Bawang berubah menjadi burung", isCorrect: false },
+          { text: "Tubuh Bawang terluka dan tidak mendapat emas", isCorrect: true },
+          { text: "Bawang bisa terbang seperti burung", isCorrect: false },
+        ],
+      },
+      {
+        slideNumber: 10,
+        questionType: QuestionType.DRAG_DROP,
+        questionText:
+          "Urutkan kejadian apa saja yang terjadi pada cerita nenek Pakande!",
+        metadata: {
+          items: [
+            { id: "report", label: "Bawang melapor ke orang tua tentang Kesuna" },
+            { id: "chores", label: "Kesuna mengerjakan pekerjaan rumah sendirian" },
+            { id: "hurt", label: "Bawang terluka akibat patukan burung" },
+            { id: "forest", label: "Kesuna pergi ke hutan sambil menangis" },
+            { id: "gold", label: "Kesuna mendapat perhiasan dari patukan burung" },
+          ],
+          correctOrder: ["chores", "report", "forest", "gold", "hurt"],
+        },
+      },
+      {
+        slideNumber: 11,
+        questionType: QuestionType.ESSAY,
+        questionText:
+          "Apa pesan moral yang bisa di ambil dari cerita tersebut?",
+        isBonus: true,
+      },
+    ],
+  },
+
+  sumatra: {
+    title: "Cerita Malin Kundang",
+    storyImageMap: {
+      1: "/assets/budayana/islands/sumatra 1.png",
+      3: "/assets/budayana/islands/sumatra 2.png",
+      5: "/assets/budayana/islands/sumatra 3.png",
+      7: "/assets/budayana/islands/sumatra 4.png",
+      9: "/assets/budayana/islands/sumatra 5.png",
     },
     questions: [
       {
@@ -127,7 +207,7 @@ const interactiveStoryData: Record<string, InteractiveStoryData> = {
         questionText: "Apa yang sedang malin lakukan?",
         options: [
           { text: "Membantu Ibunya", isCorrect: true },
-          { text: "Menjemur Baju", isCorrect: false },
+          { text: "Berlari di pantai", isCorrect: false },
           { text: "Memancing", isCorrect: false },
           { text: "Tiduran", isCorrect: false },
         ],
@@ -146,7 +226,7 @@ const interactiveStoryData: Record<string, InteractiveStoryData> = {
         questionType: QuestionType.MCQ,
         questionText: "Siapa yang menghampiri malin di pelabuhan?",
         options: [
-          { text: "Bapaknya", isCorrect: false },
+          { text: "Ayahnya", isCorrect: false },
           { text: "Temannya", isCorrect: false },
           { text: "Ibunya", isCorrect: true },
           { text: "Tetangganya", isCorrect: false },
@@ -158,7 +238,7 @@ const interactiveStoryData: Record<string, InteractiveStoryData> = {
         questionText: "Kenapa ibu malin menangis?",
         options: [
           { text: "Kaki sang ibu terinjak", isCorrect: false },
-          { text: "Malin tidak menganggap ibu", isCorrect: true },
+          { text: "Malin tidak menganggap ibunya", isCorrect: true },
           { text: "Malin memeluk sang ibu", isCorrect: false },
           { text: "Ibu tersandung ikan di pasar", isCorrect: false },
         ],
@@ -178,6 +258,82 @@ const interactiveStoryData: Record<string, InteractiveStoryData> = {
           ],
           correctOrder: ["leave", "miss", "ship", "deny", "stone"],
         },
+      },
+    ],
+  },
+
+  "nusa tenggara": {
+    title: "Cerita Watu Maladong",
+    storyImageMap: {
+      1: "/assets/budayana/islands/nusa tenggara 1.png",
+      3: "/assets/budayana/islands/nusa tenggara 2.png",
+      5: "/assets/budayana/islands/nusa tenggara 3.png",
+      7: "/assets/budayana/islands/nusa tenggara 4.png",
+      9: "/assets/budayana/islands/nusa tenggara 5.png",
+    },
+    questions: [
+      {
+        slideNumber: 2,
+        questionType: QuestionType.MCQ,
+        questionText: "Apa yang ditemukan petani di kebunnya pada pagi hari?",
+        options: [
+          { text: "Kebunnya rusak karena babi hutan", isCorrect: true },
+          { text: "Kebunnya penuh dengan bunga", isCorrect: false },
+          { text: "Ada orang asing di kebunnya", isCorrect: false },
+          { text: "Tanamannya tumbuh subur", isCorrect: false },
+        ],
+      },
+      {
+        slideNumber: 4,
+        questionType: QuestionType.TRUE_FALSE,
+        questionText: "Apakah siluman penyu membawa petani ke pulau seberang?",
+        options: [
+          { text: "Benar", isCorrect: true },
+          { text: "Salah", isCorrect: false },
+        ],
+      },
+      {
+        slideNumber: 6,
+        questionType: QuestionType.MCQ,
+        questionText: "Apa yang diberikan nenek tua kepada petani?",
+        options: [
+          { text: "Ramuan dan pesan untuk meminta tombak serta Watu Maladong", isCorrect: true },
+          { text: "Makanan dan minuman untuk mengobati luka", isCorrect: false },
+          { text: "Pakaian dan senjata baru", isCorrect: false },
+          { text: "Peta menuju desa kepala desa", isCorrect: false },
+        ],
+      },
+      {
+        slideNumber: 8,
+        questionType: QuestionType.MCQ,
+        questionText: "Bagaimana petani mengalahkan kepala desa?",
+        options: [
+          { text: "Dengan mengangkat tombak hingga petir menyambar", isCorrect: true },
+          { text: "Dengan meminum ramuan nenek", isCorrect: false },
+          { text: "Dengan memanggil siluman penyu", isCorrect: false },
+          { text: "Dengan melempar batu sakti", isCorrect: false },
+        ],
+      },
+      {
+        slideNumber: 10,
+        questionType: QuestionType.DRAG_DROP,
+        questionText: "Urutkan kejadian apa saja yang terjadi pada cerita Watu Maladong!",
+        metadata: {
+          items: [
+            { id: "water", label: "Mata air muncul dari batu sakti" },
+            { id: "turtle", label: "Petani naik punggung siluman penyu" },
+            { id: "farm", label: "Kebun petani dirusak babi hutan" },
+            { id: "fight", label: "Petani bertarung dengan kepala desa" },
+            { id: "grandma", label: "Petani bertemu dengan Nenek tua" },
+          ],
+          correctOrder: ["farm", "turtle", "grandma", "fight", "water"],
+        },
+      },
+      {
+        slideNumber: 11,
+        questionType: QuestionType.ESSAY,
+        questionText: "Menurutmu, mengapa petani menyembunyikan Watu Maladong agar tidak disalahgunakan?",
+        isBonus: true,
       },
     ],
   },
