@@ -85,8 +85,22 @@ export async function getAttempts(
           story: {
             select: {
               title: true,
+              island: {
+                select: {
+                  islandName: true
+                }
+              }
             },
           },
+          questionLogs: {
+            include: {
+              question: {
+                select: {
+                  questionType: true
+                }
+              }
+            }
+          }
         },
       }),
     pagination,
