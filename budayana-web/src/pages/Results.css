@@ -91,8 +91,8 @@
   background-color: #955c2e;
   color: #ffffff;
   display: grid;
-  /* Columns: Story (flex), Pre, Post, XP, Date, Time */
-  grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr 1fr;
+  /* Columns: Tahap (flex), Pre, Post, XP, Date, Time, Esai */
+  grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr 1fr 1fr;
   padding: 16px 24px;
   font-weight: 600;
   font-size: 1rem;
@@ -122,7 +122,7 @@
 
 .history-row {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr 1fr;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr 1fr 1fr;
   padding: 16px 24px;
   border-bottom: 2px solid #ecdac4;
   align-items: center;
@@ -159,18 +159,18 @@
     padding: 12px;
     gap: 8px;
     /* Adjust columns for mobile */
-    grid-template-columns: 2fr 1fr 1fr 0.8fr 1.8fr;
+    grid-template-columns: 2fr 1fr 1fr 0.8fr 1.8fr 1fr;
   }
 
   /* Hide Time on very small screens? Or XP? */
-  .history-header > div:last-child,
-  .history-row > div:last-child {
+  .history-header > div:nth-last-child(2),
+  .history-row > div:nth-last-child(2) {
     display: none; /* Hide Time column on mobile */
   }
 
   .history-header,
   .history-row {
-    grid-template-columns: 2fr 1fr 1fr 1fr 2fr;
+    grid-template-columns: 2fr 1fr 1fr 1fr 2fr 1fr;
   }
 }
 
@@ -178,4 +178,126 @@
   .stats-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* Essay Button */
+.essay-icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+}
+
+.essay-icon-btn:hover {
+  transform: scale(1.1);
+}
+
+/* Essay Modal */
+.essay-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.essay-modal-container {
+  background-color: #ffffff;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin-top: 40px; /* Space for the overlapping badge */
+}
+
+.essay-modal-header {
+  background-color: #955c2e;
+  padding: 40px 30px 30px 30px;
+  position: relative;
+  text-align: center;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+.essay-modal-title-wrapper {
+  background-color: #fffaf0;
+  border-radius: 12px;
+  padding: 10px 24px;
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 2px solid #955c2e; /* Optional if the design needs it, let's omit or keep light */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+}
+
+.essay-modal-title {
+  color: #955c2e;
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  font-family: 'Fredoka One', sans-serif;
+}
+
+.essay-modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: 2px solid white;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.2s;
+}
+
+.essay-modal-close:hover {
+  transform: scale(1.1);
+}
+
+.essay-modal-question {
+  color: #ffffff;
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.essay-modal-body {
+  padding: 40px 30px;
+  background-color: #ffffff;
+  text-align: center;
+  min-height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.essay-modal-text {
+  color: #000000;
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin: 0;
+  line-height: 1.5;
+  font-family: 'Fredoka One', sans-serif;
 }

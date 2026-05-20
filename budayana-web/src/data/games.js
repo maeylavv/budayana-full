@@ -4,15 +4,15 @@
  */
 export const games = {
   sulawesi: {
-    title: "Nenek Pakande",
+    title: "CeritaNenek Pakande",
     totalXp: 100,
     xpPerQuestion: 20,
     storyImageMap: {
-      1: "/assets/budayana/islands/cerita sulawesi 1.png",
-      3: "/assets/budayana/islands/cerita sulawesi 22.png",
-      5: "/assets/budayana/islands/cerita sulawesi 3.png",
-      7: "/assets/budayana/islands/cerita sulawesi 4 (1).png",
-      9: "/assets/budayana/islands/cerita sulawesi 5.png",
+      1: "/assets/budayana/islands/sulawesi 1.png",
+      3: "/assets/budayana/islands/sulawesi 2.png",
+      5: "/assets/budayana/islands/sulawesi 3.png",
+      7: "/assets/budayana/islands/sulawesi 4.png",
+      9: "/assets/budayana/islands/sulawesi 5.png",
     },
     questionImageMap: {
       2: "/assets/budayana/islands/pertanyaan 2 sulawesi.png",
@@ -73,15 +73,15 @@ export const games = {
   },
 
   sumatra: {
-    title: "Malin Kundang",
+    title: "Cerita Malin Kundang",
     totalXp: 100,
     xpPerQuestion: 20,
     storyImageMap: {
-      1: "/assets/budayana/islands/cerita 1 malin (1).png",
-      3: "/assets/budayana/islands/cerita 2 malin (2).png",
-      5: "/assets/budayana/islands/cerita 3 malin (1).png",
-      7: "/assets/budayana/islands/cerita 5 malin (2).png",
-      9: "/assets/budayana/islands/cerita 6 malin (3).png",
+      1: "/assets/budayana/islands/sumatra 1.png",
+      3: "/assets/budayana/islands/sumatra 2.png",
+      5: "/assets/budayana/islands/sumatra 3.png",
+      7: "/assets/budayana/islands/sumatra 4.png",
+      9: "/assets/budayana/islands/sumatra 5.png",
     },
     questionImageMap: {
       2: "/assets/budayana/islands/pertanyaan 1 malin.png",
@@ -139,6 +139,28 @@ export const games = {
         correctOrder: ["leave", "miss", "ship", "deny", "stone"],
       },
     ],
+  },
+
+  "nusa-tenggara": {
+    questionImageMap: {
+      2: "/assets/budayana/islands/pertanyaan 2 nusa tenggara.png",
+      4: "/assets/budayana/islands/pertanyaan 4 nusa tenggara.png",
+      6: "/assets/budayana/islands/pertanyaan 6 nusa tenggara.png",
+      8: "/assets/budayana/islands/pertanyaan 8 nusa tenggara.png",
+      10: "/assets/budayana/islands/pertanyaan 10 nusa tenggara.png",
+      bonus: "/assets/budayana/islands/pertanyaan bonus nusa tenggara.png",
+    },
+  },
+
+  bali: {
+    questionImageMap: {
+      2: "/assets/budayana/islands/pertanyaan 2 bali.png",
+      4: "/assets/budayana/islands/pertanyaan 4 bali.png",
+      6: "/assets/budayana/islands/pertanyaan 6 bali.png",
+      8: "/assets/budayana/islands/pertanyaan 8 bali.png",
+      10: "/assets/budayana/islands/pertanyaan 10 bali.png",
+      bonus: "/assets/budayana/islands/pertanyaan bonus bali.png",
+    },
   },
 }
 

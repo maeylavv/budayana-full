@@ -74,7 +74,8 @@ export default function StoryPage() {
 
   // Get total pages from staticSlides
   const totalPages = story?.staticSlides?.length || 0
-  const xpPerPage = totalPages > 0 ? 100 / totalPages : 0
+  // xpPerPage should calculate xp based on totalPages minus 1 (cover page)
+  const xpPerPage = totalPages > 1 ? 100 / (totalPages - 1) : 0
 
   // Convert array to Set for efficient lookups
   const pagesRead = useMemo(() => new Set(pagesReadArray), [pagesReadArray])
@@ -223,7 +224,7 @@ export default function StoryPage() {
       const b = $(currentBook)
       b.turn({
         width: 1100,
-        height: 700,
+        height: 650,
         autoCenter: true,
         gradients: true,
         acceleration: true,
@@ -453,7 +454,7 @@ export default function StoryPage() {
       </div>
 
       {/* Header */}
-      <div className='w-full max-w-[95%] md:max-w-[92%] lg:max-w-350 grid grid-cols-3 items-center mb-4 relative z-30'>
+      <div className='w-full max-w-[95%] md:max-w-[92%] lg:max-w-[1100px] grid grid-cols-3 items-center absolute top-6 z-30 px-4'>
         <div className='flex justify-start'>
           <button
             onClick={() => setShowExitWarning(true)}
@@ -497,8 +498,8 @@ export default function StoryPage() {
 
       {/* Flipbook container */}
       <div
-        className='flex items-center justify-center relative transform-gpu transition-transform duration-300 origin-top'
-        style={{ transform: `scale(${scale})`, width: 1100, height: 700 }}
+        className='flex items-center justify-center relative transform-gpu transition-transform duration-300 origin-top mt-24 md:mt-28'
+        style={{ transform: `scale(${scale})`, width: 1100, height: 650 }}
       >
         <div id='book' ref={bookRef} className='flipbook shadow-2xl'>
           {story.staticSlides.map((slide, idx) => {
@@ -532,7 +533,7 @@ export default function StoryPage() {
                         />
                       </div>
                     )}
-                    <div className='text-lg leading-relaxed text-center text-[#2c2c2c] font-serif px-4'>
+                    <div className='text-3xl font-medium leading-relaxed text-justify text-[#2c2c2c] font-serif px-4 whitespace-pre-wrap'>
                       {slide.contentText}
                     </div>
                     <div className='page-number'>{idx + 1}</div>
