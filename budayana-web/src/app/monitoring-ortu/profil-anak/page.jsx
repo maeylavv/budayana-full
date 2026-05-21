@@ -70,7 +70,7 @@ export default function MonitoringOrtuProfilAnak() {
                       <div style={{ textAlign: 'center', fontWeight: '800', color: '#333' }}>{child.grade}</div>
                       <div style={{ textAlign: 'center', fontWeight: '800', color: '#333' }}>{child.classLabel || "-"}</div>
                       <div style={{ display: 'flex', justifyContent: 'center' }}>
-                          <Link to={`/monitoring-ortu/profil-anak/${child.id}`} style={{ backgroundColor: '#f3a64c', color: 'white', padding: '10px 24px', borderRadius: '12px', textDecoration: 'none', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '1rem', border: 'none', cursor: 'pointer' }}>
+                          <Link to={`/monitoring-ortu/profil-anak/${child.id}`} className="no-wrap-btn" style={{ backgroundColor: '#f3a64c', color: 'white', padding: '10px 24px', borderRadius: '12px', textDecoration: 'none', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '1rem', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
                               Lihat Profil <Search size={18} />
                           </Link>
                       </div>

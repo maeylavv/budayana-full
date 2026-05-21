@@ -23,10 +23,10 @@ export default function MonitoringGuruProfil() {
   useEffect(() => {
     if (session?.user) {
       setFormData({
-        nama: session.user.name || "",
-        kelas: session.user.grade?.toString() || "",
-        username: session.user.username || "",
-        email: session.user.email || ""
+        nama: session.user.name ?? "",
+        kelas: session.user.grade?.toString() ?? "",
+        username: session.user.username ?? "",
+        email: session.user.email ?? ""
       });
     }
   }, [session]);
@@ -37,10 +37,15 @@ export default function MonitoringGuruProfil() {
 
   const handleUpdate = async () => {
      if (isEditing) {
+        const parsedGrade = parseInt(formData.kelas, 10);
+        if (isNaN(parsedGrade) || parsedGrade < 1 || parsedGrade > 6) {
+            alert("Tingkat kelas guru harus berupa angka antara 1 sampai 6.");
+            return;
+        }
         try {
             await authClient.updateUser({
                 name: formData.nama,
-                grade: parseInt(formData.kelas),
+                grade: parsedGrade,
                 username: formData.username
             });
             setIsEditing(false);
@@ -69,12 +74,12 @@ export default function MonitoringGuruProfil() {
       
       <main className="flex-1 p-10 box-border overflow-x-hidden">
         <section className="profile-top">
-          <div className="profile-avatar-circle" style={{ fontSize: '3rem', width: '120px', height: '120px', borderColor: '#7B4F2E', backgroundColor: '#F2E5D3' }}>
+          <div className="profile-avatar-circle" style={{ fontSize: '3rem', borderColor: '#7B4F2E', backgroundColor: '#F2E5D3' }}>
             👩‍🏫
           </div>
-          <div className="profile-top-text" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '8px' }}>
-            <h1 className="profile-name" style={{ color: '#7B4F2E', fontSize: '2.5rem', fontWeight: '800' }}>{formData.nama}</h1>
-            <div className="profile-grade-badge" style={{ backgroundColor: '#5CDCB3', border: '3px solid #4FBA95', color: 'white', fontSize: '1.2rem', padding: '6px 24px', borderRadius: '999px', fontWeight: 'bold' }}>
+          <div className="profile-top-text">
+            <h1 className="profile-name" style={{ color: '#7B4F2E', fontWeight: '800' }}>{formData.nama}</h1>
+            <div className="profile-grade-badge" style={{ backgroundColor: '#5CDCB3', borderColor: '#4FBA95', color: 'white' }}>
               Guru
             </div>
           </div>
@@ -82,26 +87,26 @@ export default function MonitoringGuruProfil() {
 
         <hr className="profile-divider" style={{ borderTop: '2px solid #E8D9C0', margin: '30px 0' }} />
 
-        <div className="form_profile" style={{ width: '100%' }}>
+        <div className="form_profile">
           <section className="profile-form">
             <div className="profile-field" style={{ marginBottom: '24px' }}>
               <label style={{ color: '#955C2E', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '8px', display: 'block' }}>Nama</label>
-              <input name="nama" type="text" value={formData.nama} onChange={handleChange} readOnly={!isEditing} style={{ width: '100%', padding: '20px 24px', borderRadius: '16px', border: '2px solid #E8D9C0', fontSize: '1.25rem', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: isEditing ? '#ffffff' : '#f0f0f0' }} />
+              <input name="nama" type="text" value={formData.nama} onChange={handleChange} readOnly={!isEditing} style={{ border: '2px solid #E8D9C0', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: isEditing ? '#ffffff' : '#f0f0f0' }} />
             </div>
             <div className="profile-field" style={{ marginBottom: '24px' }}>
               <label style={{ color: '#955C2E', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '8px', display: 'block' }}>Guru Kelas</label>
-              <input name="kelas" type="text" value={formData.kelas} onChange={handleChange} readOnly={!isEditing} style={{ width: '100%', padding: '20px 24px', borderRadius: '16px', border: '2px solid #E8D9C0', fontSize: '1.25rem', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: isEditing ? '#ffffff' : '#f0f0f0' }} />
+              <input name="kelas" type="text" value={formData.kelas} onChange={handleChange} readOnly={!isEditing} style={{ border: '2px solid #E8D9C0', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: isEditing ? '#ffffff' : '#f0f0f0' }} />
             </div>
             <div className="profile-field" style={{ marginBottom: '24px' }}>
               <label style={{ color: '#955C2E', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '8px', display: 'block' }}>Username</label>
-              <input name="username" type="text" value={formData.username} onChange={handleChange} readOnly={!isEditing} style={{ width: '100%', padding: '20px 24px', borderRadius: '16px', border: '2px solid #E8D9C0', fontSize: '1.25rem', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: isEditing ? '#ffffff' : '#f0f0f0' }} />
+              <input name="username" type="text" value={formData.username} onChange={handleChange} readOnly={!isEditing} style={{ border: '2px solid #E8D9C0', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: isEditing ? '#ffffff' : '#f0f0f0' }} />
             </div>
             <div className="profile-field" style={{ marginBottom: '24px' }}>
               <label style={{ color: '#955C2E', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '8px', display: 'block' }}>Email</label>
-              <input name="email" type="text" value={formData.email} readOnly style={{ width: '100%', padding: '20px 24px', borderRadius: '16px', border: '2px solid #E8D9C0', fontSize: '1.25rem', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: '#f0f0f0' }} />
+              <input name="email" type="text" value={formData.email} readOnly style={{ border: '2px solid #E8D9C0', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: '#f0f0f0' }} />
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '20px', marginTop: '40px' }}>
+            <div className="profile-btn-container">
               <button 
                 onClick={handleLogout}
                 style={{ backgroundColor: '#c53030', color: 'white', padding: '12px 30px', borderRadius: '999px', fontSize: '1.1rem', fontWeight: 'bold', border: 'none', cursor: 'pointer' }}>

@@ -16,7 +16,7 @@
     "ba:gen": "npx @better-auth/cli generate --config ./src/lib/auth/config.ts --output ./src/lib/db/prisma/auth.prisma",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "bun run --watch src/index.ts",
-    "build": "tsdown src/index.ts --format esm --out-dir api"
+    "build": "prisma generate && tsdown src/index.ts --format esm --out-dir api"
   },
   "dependencies": {
     "@elysiajs/cors": "^1.4.0",

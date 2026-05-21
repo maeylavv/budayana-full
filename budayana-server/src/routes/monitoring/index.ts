@@ -4,7 +4,9 @@ import * as monitoringService from "./service"
 import { 
   UpdateStudentSchema, 
   StudentResponseSchema, 
-  StudentListResponseSchema 
+  StudentListResponseSchema,
+  ClassSummaryResponseSchema,
+  StudentAnalyticsResponseSchema
 } from "./schema"
 import { ErrorResponseSchema, SuccessResponseSchema } from "../../lib/utils/schemas"
 
@@ -35,7 +37,7 @@ export const monitoringRoutes = new Elysia({ prefix: "/monitoring" })
    */
   .get(
     "/students",
-    async ({ user, set }) => {
+    async ({ user, query, set }) => {
       if (!user) {
         console.log("[Monitoring] No user session found")
         set.status = 401
@@ -45,14 +47,16 @@ export const monitoringRoutes = new Elysia({ prefix: "/monitoring" })
       console.log(`[Monitoring] Request from User: ${user.email}, Role: ${user.role}`)
       
       let students: any[] = []
+      const classLabel = query.classLabel
+      const search = query.search
       
       if (user.role === "TEACHER") {
         const targetGrade = Number(user.grade)
-        console.log(`[Monitoring] Fetching students for grade: ${targetGrade}`)
-        students = await monitoringService.getStudentsByGrade(targetGrade)
+        console.log(`[Monitoring] Fetching students for grade: ${targetGrade}, classLabel: ${classLabel}, search: ${search}`)
+        students = await monitoringService.getStudentsByGrade(targetGrade, classLabel, search)
       } else if (user.role === "PARENT") {
-        console.log(`[Monitoring] Fetching children for parent: ${user.email}`)
-        students = await monitoringService.getStudentsByGuardianEmail(user.email)
+        console.log(`[Monitoring] Fetching children for parent: ${user.email}, search: ${search}`)
+        students = await monitoringService.getStudentsByGuardianEmail(user.email, search)
       } else if (user.role === "ADMIN") {
         // Admins can see everyone? Or we can restrict. For now let's just return empty or all.
         students = []
@@ -66,6 +70,10 @@ export const monitoringRoutes = new Elysia({ prefix: "/monitoring" })
         tags: ["Monitoring"],
         summary: "List students in my grade",
       },
+      query: t.Object({
+        classLabel: t.Optional(t.String()),
+        search: t.Optional(t.String()),
+      }),
       response: {
         200: StudentListResponseSchema,
         401: ErrorResponseSchema,
@@ -200,5 +208,102 @@ export const monitoringRoutes = new Elysia({ prefix: "/monitoring" })
         403: ErrorResponseSchema,
         404: ErrorResponseSchema,
       },
+    }
+  )
+  /**
+   * GET /api/monitoring/analytics/class-summary - Get class summary analytics (TEACHER only)
+   */
+  .get(
+    "/analytics/class-summary",
+    async ({ user, query, set }) => {
+      if (!user) {
+        set.status = 401
+        return { error: "Unauthorized", code: "UNAUTHORIZED" }
+      }
+
+      if (user.role !== "TEACHER") {
+        set.status = 403
+        return { error: "Forbidden", code: "FORBIDDEN" }
+      }
+
+      const targetGrade = Number(user.grade)
+      const classLabel = query.classLabel
+      
+      const summary = await monitoringService.getClassSummary(targetGrade, classLabel)
+      return summary
+    },
+    {
+      detail: {
+        tags: ["Monitoring Analytics"],
+        summary: "Get class-wide aggregated analytics",
+      },
+      query: t.Object({
+        classLabel: t.Optional(t.String())
+      }),
+      response: {
+        200: ClassSummaryResponseSchema,
+        401: ErrorResponseSchema,
+        403: ErrorResponseSchema
+      }
+    }
+  )
+  /**
+   * GET /api/monitoring/analytics/student/:studentId - Get student detailed analytics (TEACHER & PARENT)
+   */
+  .get(
+    "/analytics/student/:studentId",
+    async ({ params, user, set }) => {
+      if (!user) {
+        set.status = 401
+        return { error: "Unauthorized", code: "UNAUTHORIZED" }
+      }
+
+      const studentId = params.studentId
+
+      // Retrieve student to check ownership
+      const student = await monitoringService.getStudentById(studentId)
+      if (!student) {
+        set.status = 404
+        return { error: "Student not found", code: "NOT_FOUND" }
+      }
+
+      // Isolation check
+      if (user.role === "TEACHER") {
+        if (Number(student.grade) !== Number(user.grade)) {
+          set.status = 403
+          return { error: "Forbidden", code: "FORBIDDEN" }
+        }
+      } else if (user.role === "PARENT") {
+        const parentEmail = user.email?.toLowerCase()
+        const studentGuardianEmail = student.guardianEmail?.toLowerCase()
+        if (studentGuardianEmail !== parentEmail) {
+          set.status = 403
+          return { error: "Forbidden", code: "FORBIDDEN" }
+        }
+      } else if (user.role !== "ADMIN") {
+        set.status = 403
+        return { error: "Forbidden", code: "FORBIDDEN" }
+      }
+
+      try {
+        const analytics = await monitoringService.getStudentAnalytics(studentId)
+        return analytics
+      } catch (err: any) {
+        set.status = 500
+        return { error: err.message || "Internal Server Error", code: "INTERNAL_ERROR" }
+      }
+    },
+    {
+      params: t.Object({ studentId: t.String() }),
+      detail: {
+        tags: ["Monitoring Analytics"],
+        summary: "Get detailed student-specific analytics and historic charts",
+      },
+      response: {
+        200: StudentAnalyticsResponseSchema,
+        401: ErrorResponseSchema,
+        403: ErrorResponseSchema,
+        404: ErrorResponseSchema
+      }
     }
   )
