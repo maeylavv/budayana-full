@@ -84,7 +84,8 @@
   background-color: #fffaf0;
   display: flex;
   flex-direction: column;
-  height: 500px; /* Fixed height for scroll */
+  height: 500px;
+  /* Fixed height for scroll */
 }
 
 .history-header {
@@ -163,9 +164,10 @@
   }
 
   /* Hide Time on very small screens? Or XP? */
-  .history-header > div:nth-last-child(2),
-  .history-row > div:nth-last-child(2) {
-    display: none; /* Hide Time column on mobile */
+  .history-header>div:nth-last-child(2),
+  .history-row>div:nth-last-child(2) {
+    display: none;
+    /* Hide Time column on mobile */
   }
 
   .history-header,
@@ -219,7 +221,8 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  margin-top: 40px; /* Space for the overlapping badge */
+  margin-top: 40px;
+  /* Space for the overlapping badge */
 }
 
 .essay-modal-header {
@@ -239,7 +242,8 @@
   top: -24px;
   left: 50%;
   transform: translateX(-50%);
-  border: 2px solid #955c2e; /* Optional if the design needs it, let's omit or keep light */
+  border: 2px solid #955c2e;
+  /* Optional if the design needs it, let's omit or keep light */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   white-space: nowrap;
 }

@@ -1,50 +1,167 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Search } from "lucide-react";
 import MonitoringSidebar from "../../components/MonitoringSidebar";
-import { STUDENTS } from "../../lib/dummyData";
+import { monitoringApi } from "../../lib/api";
 import {
   PieChart, Pie, Cell,
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
-  LineChart, Line
+  AreaChart, Area
 } from 'recharts';
 import "../../pages/Profile.css";
 import "../../pages/Results.css";
 
-// Dummy Data for Charts
-const donutData = [
-  { name: 'Aktif', value: 85, color: '#4CAF50' },
-  { name: 'Tidak Aktif', value: 15, color: '#F44336' }
-];
-
-const bloomData = [
-  { name: 'Ingatan', nilai: 85 },
-  { name: 'Analisis', nilai: 70 },
-  { name: 'Pendapat', nilai: 60 },
-];
-
-const islandCompletionData = [
-  { name: 'Sumatra', rate: 90 },
-  { name: 'Jawa', rate: 85 },
-  { name: 'Kalimantan', rate: 60 },
-  { name: 'Sulawesi', rate: 45 },
-  { name: 'Papua', rate: 30 }
-];
-
-const timeAnalysisData = [
-  { name: 'Mon', time: 120 },
-  { name: 'Tue', time: 150 },
-  { name: 'Wed', time: 180 },
-  { name: 'Thu', time: 140 },
-  { name: 'Fri', time: 200 }
-];
-
 export default function MonitoringGuruDashboard() {
   const [searchQuery, setSearchQuery] = useState("");
-  
-  const filteredStudents = STUDENTS.filter(student => 
-    student.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [students, setStudents] = useState([]);
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [tableLoading, setTableLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [selectedClass, setSelectedClass] = useState("");
+
+  const [classSummary, setClassSummary] = useState({
+    averageImprovement: 0,
+    activeStudents: 0,
+    inactiveStudents: 0,
+    islandExploration: [],
+    literacyLevels: [],
+    timeAnalysis: []
+  });
+  const [summaryLoading, setSummaryLoading] = useState(true);
+
+  // Debounce search query
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(searchQuery);
+    }, 400);
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchQuery]);
+
+  // Fetch students with class filter and debounced search
+  useEffect(() => {
+    const controller = new AbortController();
+    let active = true;
+
+    const fetchStudents = async () => {
+      try {
+        setTableLoading(true);
+        const data = await monitoringApi.listStudents(selectedClass, debouncedSearch, {
+          signal: controller.signal
+        });
+        if (active) {
+          setStudents(data || []);
+          setError(null);
+        }
+      } catch (err) {
+        if (err.name === "AbortError" || err.message?.toLowerCase().includes("abort")) {
+          return;
+        }
+        console.error("Gagal memuat siswa:", err);
+        if (active) {
+          setError(err.message || "Gagal memuat data siswa");
+        }
+      } finally {
+        if (active) {
+          setTableLoading(false);
+          setInitialLoading(false);
+        }
+      }
+    };
+    fetchStudents();
+
+    return () => {
+      active = false;
+      controller.abort();
+    };
+  }, [selectedClass, debouncedSearch]);
+
+  // Fetch class summary
+  useEffect(() => {
+    const controller = new AbortController();
+    let active = true;
+
+    const fetchSummary = async () => {
+      try {
+        setSummaryLoading(true);
+        const data = await monitoringApi.getClassSummary(selectedClass, {
+          signal: controller.signal
+        });
+        if (active && data) {
+          setClassSummary({
+            averageImprovement: Number(data.averageImprovement) || 0,
+            activeStudents: Number(data.activeStudents) || 0,
+            inactiveStudents: Number(data.inactiveStudents) || 0,
+            islandExploration: Array.isArray(data.islandExploration) ? data.islandExploration : [],
+            literacyLevels: Array.isArray(data.literacyLevels) ? data.literacyLevels : [],
+            timeAnalysis: Array.isArray(data.timeAnalysis) ? data.timeAnalysis : []
+          });
+        }
+      } catch (err) {
+        if (err.name === "AbortError" || err.message?.toLowerCase().includes("abort")) {
+          return;
+        }
+        console.error("Gagal memuat ringkasan kelas:", err);
+      } finally {
+        if (active) {
+          setSummaryLoading(false);
+        }
+      }
+    };
+    fetchSummary();
+
+    return () => {
+      active = false;
+      controller.abort();
+    };
+  }, [selectedClass]);
+
+  if (initialLoading || summaryLoading) {
+    if (error) {
+      return (
+        <div className="flex bg-[#FEF6DF] min-h-screen w-full" style={{ fontFamily: "'Fredoka One', sans-serif" }}>
+          <MonitoringSidebar role="guru" />
+          <main className="flex-1 p-10 box-border overflow-x-hidden">
+            <div style={{ marginBottom: '30px' }}>
+                <h1 className="results-section-title" style={{ fontSize: '2rem', marginBottom: '4px' }}>Ringkasan Hasil Siswa</h1>
+                <hr className="profile-divider" style={{ borderTop: '2px solid #E8D9C0', marginTop: '10px' }} />
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '400px', backgroundColor: 'white', border: '2px solid #F44336', borderRadius: '16px', gap: '16px', padding: '20px' }}>
+              <p style={{ color: '#F44336', fontSize: '1.2rem', fontWeight: 'bold', textAlign: 'center' }}>⚠️ Gagal memuat data: {error}</p>
+              <button onClick={() => window.location.reload()} style={{ backgroundColor: '#955C2E', color: 'white', padding: '10px 20px', borderRadius: '12px', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}>Coba Lagi</button>
+            </div>
+          </main>
+        </div>
+      );
+    }
+
+    return (
+      <div className="flex bg-[#FEF6DF] min-h-screen w-full" style={{ fontFamily: "'Fredoka One', sans-serif" }}>
+        <MonitoringSidebar role="guru" />
+        <main className="flex-1 p-10 box-border overflow-x-hidden">
+          <div style={{ marginBottom: '30px' }}>
+              <h1 className="results-section-title" style={{ fontSize: '2rem', marginBottom: '4px' }}>Ringkasan Hasil Siswa</h1>
+              <hr className="profile-divider" style={{ borderTop: '2px solid #E8D9C0', marginTop: '10px' }} />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '400px', backgroundColor: 'white', border: '2px dashed #955C2E', borderRadius: '16px', gap: '16px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+              <div style={{ width: '48px', height: '48px', border: '4px solid #f3a64c', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+              <p style={{ color: '#955C2E', fontSize: '1.2rem', fontWeight: 'bold' }}>Memuat data siswa...</p>
+            </div>
+          </div>
+        </main>
+        <style>{`
+          @keyframes spin {
+            to { transform: rotate(360deg); }
+          }
+        `}</style>
+      </div>
+    );
+  }
+
+  const filteredStudents = students;
 
   return (
     <div className="flex bg-[#FEF6DF] min-h-screen w-full" style={{ fontFamily: "'Fredoka One', sans-serif" }}>
@@ -57,131 +174,224 @@ export default function MonitoringGuruDashboard() {
         </div>
 
         <section>
-            <h2 className="results-section-title" style={{ fontSize: '1.2rem', marginBottom: '20px' }}>Statistik Kelas</h2>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
+              <h2 className="results-section-title" style={{ fontSize: '1.2rem', margin: 0 }}>Statistik Kelas</h2>
+              <select
+                value={selectedClass}
+                onChange={(e) => setSelectedClass(e.target.value)}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '999px',
+                  border: '2px solid #955C2E',
+                  backgroundColor: 'white',
+                  color: '#5C3A1E',
+                  fontFamily: "'Fredoka One', sans-serif",
+                  fontWeight: 'bold',
+                  outline: 'none',
+                  cursor: 'pointer',
+                  fontSize: '1rem'
+                }}
+              >
+                <option value="">Semua Kelas</option>
+                <option value="A">Kelas A</option>
+                <option value="B">Kelas B</option>
+                <option value="C">Kelas C</option>
+              </select>
+            </div>
             
             {/* Top 3 Charts */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '20px' }}>
+            <div className="charts-grid-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '20px' }}>
               {/* Gauge (using Pie half) */}
               <div style={{ border: '2px solid #955C2E', borderRadius: '16px', padding: '20px', backgroundColor: 'white' }}>
                 <h3 style={{ color: '#955C2E', fontWeight: 'bold', marginBottom: '10px' }}>Rata-rata Kenaikan</h3>
-                <div style={{ height: '200px' }}>
+                <div className="chart-wrapper-200">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
-                      <Pie data={[{ value: 75 }, { value: 25 }]} cx="50%" cy="85%" startAngle={180} endAngle={0} innerRadius={90} outerRadius={120} dataKey="value">
+                      <Pie 
+                        data={[
+                          { value: classSummary.averageImprovement }, 
+                          { value: Math.max(0, 100 - classSummary.averageImprovement) }
+                        ]} 
+                        cx="50%" 
+                        cy="85%" 
+                        startAngle={180} 
+                        endAngle={0} 
+                        innerRadius={90} 
+                        outerRadius={120} 
+                        dataKey="value"
+                      >
                         <Cell fill="#4CAF50" />
                         <Cell fill="#E0E0E0" />
                       </Pie>
-                      <Tooltip />
+                      <Tooltip formatter={(value) => [`${value}%`, 'Kenaikan']} />
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
-                <p style={{ textAlign: 'center', fontSize: '1.5rem', fontWeight: 'bold', color: '#4CAF50', marginTop: '-30px' }}>75%</p>
+                <p style={{ textAlign: 'center', fontSize: '1.5rem', fontWeight: 'bold', color: '#4CAF50', marginTop: '-30px' }}>
+                  {classSummary.averageImprovement}%
+                </p>
               </div>
 
               {/* Donut Chart */}
               <div style={{ border: '2px solid #955C2E', borderRadius: '16px', padding: '20px', backgroundColor: 'white' }}>
                 <h3 style={{ color: '#955C2E', fontWeight: 'bold', marginBottom: '10px' }}>Siswa Aktif vs Tidak</h3>
-                <div style={{ height: '200px' }}>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie data={donutData} cx="50%" cy="50%" innerRadius={60} outerRadius={80} dataKey="value">
-                        {donutData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
-                        ))}
-                      </Pie>
-                      <Tooltip />
-                    </PieChart>
-                  </ResponsiveContainer>
+                <div className="chart-wrapper-200" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  {classSummary.activeStudents > 0 || classSummary.inactiveStudents > 0 ? (
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie 
+                          data={[
+                            { name: "Aktif", value: classSummary.activeStudents, color: "#4CAF50" },
+                            { name: "Tidak Aktif", value: classSummary.inactiveStudents, color: "#F44336" }
+                          ]} 
+                          cx="50%" 
+                          cy="50%" 
+                          innerRadius={60} 
+                          outerRadius={80} 
+                          dataKey="value"
+                        >
+                          <Cell fill="#4CAF50" />
+                          <Cell fill="#F44336" />
+                        </Pie>
+                        <Tooltip />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <div style={{ color: '#955C2E', fontSize: '1rem', fontWeight: 'bold' }}>Belum ada data keaktifan</div>
+                  )}
                 </div>
               </div>
 
               {/* Bar Chart Rata-rata Kelas per Level Bloom */}
               <div style={{ border: '2px solid #955C2E', borderRadius: '16px', padding: '20px', backgroundColor: 'white' }}>
                 <h3 style={{ color: '#955C2E', fontWeight: 'bold', marginBottom: '10px' }}>Rata-rata Kelas per Level</h3>
-                <div style={{ height: '200px' }}>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={bloomData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
-                      <XAxis dataKey="name" tick={{ fontSize: 11 }} />
-                      <YAxis domain={[0, 100]} tickFormatter={(v) => `${v}%`} tick={{ fontSize: 11 }} width={38} />
-                      <Tooltip formatter={(value) => [`${value}%`, 'Rata-rata']} />
-                      <Bar dataKey="nilai" fill="#955C2E" radius={[4, 4, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
+                <div className="chart-wrapper-200" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  {classSummary.literacyLevels && classSummary.literacyLevels.length > 0 ? (
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={classSummary.literacyLevels} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                        <XAxis dataKey="name" tick={{ fontSize: 10 }} />
+                        <YAxis domain={[0, 100]} tickFormatter={(v) => `${v}%`} tick={{ fontSize: 10 }} width={38} />
+                        <Tooltip formatter={(value) => [`${value}%`, 'Rata-rata']} />
+                        <Bar dataKey="nilai" fill="#955C2E" radius={[4, 4, 0, 0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <div style={{ color: '#955C2E', fontSize: '1rem', fontWeight: 'bold' }}>Belum ada data level</div>
+                  )}
                 </div>
               </div>
             </div>
 
             {/* Bottom 2 Charts */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
+            <div className="charts-grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
               {/* Island Completion Rate */}
               <div style={{ border: '2px solid #955C2E', borderRadius: '16px', padding: '20px', backgroundColor: 'white' }}>
-                <h3 style={{ color: '#955C2E', fontWeight: 'bold', marginBottom: '10px' }}>Island Completion Rate</h3>
-                <div style={{ height: '250px' }}>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={islandCompletionData} layout="vertical">
-                      <XAxis type="number" />
-                      <YAxis dataKey="name" type="category" width={80} tick={{ fontSize: 12 }} />
-                      <Tooltip />
-                      <Bar dataKey="rate" fill="#f3a64c" radius={[0, 4, 4, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
+                <h3 style={{ color: '#955C2E', fontWeight: 'bold', marginBottom: '10px' }}>Eksplorasi Budaya per Pulau</h3>
+                <div className="chart-wrapper-responsive" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  {classSummary.islandExploration && classSummary.islandExploration.length > 0 ? (
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={classSummary.islandExploration} layout="vertical">
+                        <XAxis type="number" domain={[0, 100]} tickFormatter={(v) => `${v}%`} tick={{ fontSize: 10 }} />
+                        <YAxis dataKey="name" type="category" width={80} tick={{ fontSize: 10 }} />
+                        <Tooltip formatter={(value) => [`${value}%`, 'Keaktifan']} />
+                        <Bar dataKey="rate" fill="#f3a64c" radius={[0, 4, 4, 0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <div style={{ color: '#955C2E', fontSize: '1rem', fontWeight: 'bold' }}>Belum ada data eksplorasi pulau</div>
+                  )}
                 </div>
               </div>
 
-              {/* Analisis Waktu (Line Chart proxy for Histogram) */}
+              {/* Analisis Waktu (Area Chart) */}
               <div style={{ border: '2px solid #955C2E', borderRadius: '16px', padding: '20px', backgroundColor: 'white' }}>
                 <h3 style={{ color: '#955C2E', fontWeight: 'bold', marginBottom: '10px' }}>Analisis Waktu</h3>
-                <div style={{ height: '250px' }}>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={timeAnalysisData}>
-                      <XAxis dataKey="name" />
-                      <YAxis />
-                      <Tooltip />
-                      <Line type="monotone" dataKey="time" stroke="#955C2E" strokeWidth={3} />
-                    </LineChart>
-                  </ResponsiveContainer>
+                <div className="chart-wrapper-responsive" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  {classSummary.timeAnalysis && classSummary.timeAnalysis.length > 0 ? (
+                    <ResponsiveContainer width="100%" height="100%">
+                      <AreaChart data={classSummary.timeAnalysis}>
+                        <XAxis dataKey="name" tick={{ fontSize: 10 }} />
+                        <YAxis tickFormatter={(v) => `${v} m`} tick={{ fontSize: 10 }} />
+                        <Tooltip formatter={(value) => [`${value} menit`, 'Durasi Belajar']} />
+                        <Area type="monotone" dataKey="time" stroke="#955C2E" fill="#E8D9C0" strokeWidth={3} />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <div style={{ color: '#955C2E', fontSize: '1rem', fontWeight: 'bold' }}>Belum ada data waktu belajar</div>
+                  )}
                 </div>
               </div>
             </div>
         </section>
 
         <section style={{ marginTop: '40px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
               <h2 className="results-section-title" style={{ fontSize: '1.2rem', margin: 0 }}>Tabel Siswa</h2>
-              <div style={{ position: 'relative', width: '250px' }}>
-                <input 
-                  type="text" 
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Cari..." 
-                  style={{ width: '100%', padding: '8px 16px', borderRadius: '999px', border: '2px solid #955C2E', outline: 'none', fontFamily: "'Fredoka One', sans-serif", color: '#5C3A1E' }}
-                />
-                <Search style={{ position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)', color: '#955C2E' }} size={18} />
+              <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+                <div style={{ position: 'relative', width: '250px' }}>
+                  <input 
+                    type="text" 
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Cari..." 
+                    style={{ width: '100%', padding: '8px 16px', borderRadius: '999px', border: '2px solid #955C2E', outline: 'none', fontFamily: "'Fredoka One', sans-serif", color: '#5C3A1E' }}
+                  />
+                  <Search style={{ position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)', color: '#955C2E' }} size={18} />
+                </div>
               </div>
             </div>
             
             <div className="history-table-container" style={{ display: 'flex', flexDirection: 'column', height: '500px' }}>
-              <div className="history-header" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', backgroundColor: '#955C2E', color: 'white', padding: '16px 24px', alignItems: 'center' }}>
+              <div className="history-header" style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr 1.5fr 1.5fr 1.2fr', backgroundColor: '#955C2E', color: 'white', padding: '16px 24px', alignItems: 'center' }}>
                 <div style={{ paddingLeft: '24px' }}>Nama</div>
                 <div style={{ textAlign: 'center' }}>Kelas</div>
                 <div style={{ textAlign: 'center' }}>Total XP</div>
-                <div style={{ textAlign: 'center' }}>Rata-rata Peningkatan Belajar</div>
+                <div style={{ textAlign: 'center' }}>Peningkatan Cerita</div>
+                <div style={{ textAlign: 'center' }}>Literasi Budaya</div>
                 <div style={{ textAlign: 'center' }}>Aksi</div>
               </div>
               <div className="history-body" style={{ overflowY: 'auto', flex: 1 }}>
-                {filteredStudents.map((student) => (
-                  <div key={student.id} className="history-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', padding: '16px 24px', borderBottom: '2px solid #955C2E', alignItems: 'center', backgroundColor: '#FEF6DF' }}>
-                    <div style={{ fontWeight: '800', color: '#333' }}>{student.name}</div>
-                    <div style={{ textAlign: 'center', fontWeight: '800', color: '#333' }}>{student.class}</div>
-                    <div style={{ textAlign: 'center', fontWeight: '800', color: '#333' }}>{student.totalXP}</div>
-                    <div style={{ textAlign: 'center', fontWeight: '800', color: '#333' }}>75%</div>
-                    <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        <Link to={`/monitoring-guru/hasil/${student.id}`} style={{ backgroundColor: '#f3a64c', color: 'white', padding: '10px 16px', borderRadius: '12px', textDecoration: 'none', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '1rem', border: 'none', cursor: 'pointer' }}>
-                            Lihat Dashboard <Search size={16} />
-                        </Link>
-                    </div>
+                {tableLoading ? (
+                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '200px', color: '#955C2E', fontSize: '1.2rem', fontWeight: 'bold', backgroundColor: '#FEF6DF' }}>
+                    Memuat data siswa...
                   </div>
-                ))}
+                ) : error ? (
+                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '200px', color: '#F44336', fontSize: '1.2rem', fontWeight: 'bold', backgroundColor: '#FEF6DF' }}>
+                    ⚠️ Gagal memuat data: {error}
+                  </div>
+                ) : filteredStudents.length === 0 ? (
+                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '200px', color: '#955C2E', fontSize: '1.2rem', fontWeight: 'bold', backgroundColor: '#FEF6DF' }}>
+                    {debouncedSearch ? "Tidak ada siswa ditemukan." : "Belum ada siswa di kelas ini."}
+                  </div>
+                ) : (
+                  filteredStudents.map((student) => {
+                    const studentClass = student.class || (student.grade && student.classLabel ? `${student.grade}${student.classLabel}` : (student.grade ?? "-"));
+                    const totalXp = student.totalXp ?? student.totalXP ?? 0;
+                    
+                    const learningImprovement = student.learningImprovement !== undefined && student.learningImprovement !== null 
+                      ? (Number(student.learningImprovement) > 0 ? `+${student.learningImprovement}` : `${student.learningImprovement}`) 
+                      : "0";
+                    
+                    const averageLiteracyScore = student.averageLiteracyScore !== undefined && student.averageLiteracyScore !== null 
+                      ? `${student.averageLiteracyScore}%` 
+                      : "0%";
+
+                    return (
+                      <div key={student.id} className="history-row" style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr 1.5fr 1.5fr 1.2fr', padding: '16px 24px', borderBottom: '2px solid #955C2E', alignItems: 'center', backgroundColor: '#FEF6DF' }}>
+                        <div style={{ fontWeight: '800', color: '#333' }}>{student.name}</div>
+                        <div style={{ textAlign: 'center', fontWeight: '800', color: '#333' }}>{studentClass}</div>
+                        <div style={{ textAlign: 'center', fontWeight: '800', color: '#333' }}>{totalXp}</div>
+                        <div style={{ textAlign: 'center', fontWeight: '800', color: '#333' }}>{learningImprovement}</div>
+                        <div style={{ textAlign: 'center', fontWeight: '800', color: '#333' }}>{averageLiteracyScore}</div>
+                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                            <Link to={`/monitoring-guru/hasil/${student.id}`} className="no-wrap-btn" style={{ backgroundColor: '#f3a64c', color: 'white', padding: '10px 16px', borderRadius: '12px', textDecoration: 'none', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '1rem', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+                                Lihat Dashboard <Search size={16} />
+                            </Link>
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
               </div>
             </div>
         </section>
