@@ -135,8 +135,11 @@ export default function StoryPage() {
   }, [xp, pagesReadArray])
 
   // Start Attempt
+  const startAttemptRef = useRef(false)
+
   useEffect(() => {
-    if (storyId && !attemptId && story?.storyType === "STATIC") {
+    if (storyId && !attemptId && story?.storyType === "STATIC" && !startAttemptRef.current) {
+      startAttemptRef.current = true
       startAttempt.mutate(storyId, {
         onSuccess: (data) => {
           setAttemptId(data.id)
@@ -149,7 +152,10 @@ export default function StoryPage() {
             setTimeElapsed(data.totalTimeSeconds)
           }
         },
-        onError: (err) => console.error("Failed to start attempt", err),
+        onError: (err) => {
+          console.error("Failed to start attempt", err)
+          startAttemptRef.current = false // Reset on error so it can retry
+        },
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -293,11 +299,10 @@ export default function StoryPage() {
           },
         })
 
-        // Update Attempt (Finish)
+        // Update Attempt (Save progression, do NOT set finishedAt)
         await updateAttempt.mutateAsync({
           attemptId,
           data: {
-            finishedAt: new Date().toISOString(),
             totalTimeSeconds: timeElapsed,
           },
         })

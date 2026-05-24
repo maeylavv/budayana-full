@@ -21,10 +21,17 @@ export default function GuestRoute() {
 
   // const tempSession = localStorage.getItem("temp_dev_session")
 
-  // Redirect authenticated users to their intended destination or home
+  // Redirect authenticated users to their intended destination or role-based home
   if (session?.user) {
-    const from = location.state?.from?.pathname || "/home"
-    return <Navigate to={from} replace />
+    const role = session.user.role
+    if (role === "TEACHER") {
+      return <Navigate to='/monitoring-guru/profil' replace />
+    } else if (role === "PARENT") {
+      return <Navigate to='/monitoring-ortu/profil' replace />
+    } else {
+      const from = location.state?.from?.pathname || "/home"
+      return <Navigate to={from} replace />
+    }
   }
 
   return <Outlet />

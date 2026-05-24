@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { authClient } from "../../lib/auth-client";
 import "../../pages/auth/Sign_Up.css"; // Reuse the sign-up styling
+import PortalRedirectPopup from "../../components/PortalRedirectPopup";
 
 export default function MonitoringLogin({ role }) {
   const navigate = useNavigate();
@@ -9,6 +10,14 @@ export default function MonitoringLogin({ role }) {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // State for portal redirect popup
+  const [showRedirectPopup, setShowRedirectPopup] = useState(false);
+  const [redirectPopupConfig, setRedirectPopupConfig] = useState({
+    message: "",
+    targetPath: "",
+    targetLabel: ""
+  });
 
   const [formData, setFormData] = useState({
     name: "",
@@ -44,6 +53,40 @@ export default function MonitoringLogin({ role }) {
 
         if (authError) throw new Error(authError.message || "Gagal masuk");
 
+        // Extremely robust session retrieval to fetch DB-mapped custom fields like 'role'
+        let userRole = data?.user?.role;
+        if (!userRole) {
+          try {
+            const session = await authClient.getSession();
+            userRole = session?.data?.user?.role;
+          } catch (e) {
+            console.error("Gagal mengambil session role:", e);
+          }
+        }
+
+        const expectedRole = isGuru ? "TEACHER" : "PARENT";
+
+        if (!userRole || userRole !== expectedRole) {
+          setLoading(false);
+          try {
+            await authClient.signOut();
+          } catch (e) {
+            console.error("Gagal logout otomatis:", e);
+          }
+          localStorage.removeItem("ba_token");
+          localStorage.removeItem("ba_user_id");
+
+          setShowRedirectPopup(true);
+          return;
+        }
+
+        if (data?.session?.token) {
+          localStorage.setItem("ba_token", data.session.token);
+        }
+        if (data?.user?.id) {
+          localStorage.setItem("ba_user_id", data.user.id);
+        }
+
         // Redirect based on role
         if (isGuru) navigate("/monitoring-guru/profil");
         else navigate("/monitoring-ortu/profil");
@@ -61,6 +104,13 @@ export default function MonitoringLogin({ role }) {
         });
 
         if (authError) throw new Error(authError.message || "Gagal mendaftar");
+
+        if (data?.session?.token) {
+          localStorage.setItem("ba_token", data.session.token);
+        }
+        if (data?.user?.id) {
+          localStorage.setItem("ba_user_id", data.user.id);
+        }
 
         if (isGuru) navigate("/monitoring-guru/profil");
         else navigate("/monitoring-ortu/profil");
@@ -170,6 +220,12 @@ export default function MonitoringLogin({ role }) {
           </div>
         </div>
       </div>
+
+      <PortalRedirectPopup
+        open={showRedirectPopup}
+        currentPortal={isGuru ? "teacher" : "parent"}
+        onClose={() => setShowRedirectPopup(false)}
+      />
     </div>
   );
 }

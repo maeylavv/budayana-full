@@ -430,7 +430,7 @@
 .stage-lock-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(226, 226, 226, 0.6);
+  background: rgba(237, 237, 237, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -442,7 +442,7 @@
 }
 
 .stage-lock-icon {
-  width: 70px;
+  width: 30px;
   /* adjust until it matches your mockup */
   height: auto;
 }

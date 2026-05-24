@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 // Components
 import BackgroundMusic from "./components/BackgroundMusic.jsx"
 import ScrollToTop from "./components/ScrollToTop.jsx"
-import ProtectedRoute from "./components/auth/ProtectedRoute.jsx"
+import ProtectedRoute, { TeacherProtectedRoute, ParentProtectedRoute } from "./components/auth/ProtectedRoute.jsx"
 import GuestRoute from "./components/auth/GuestRoute.jsx"
 
 // Core pages
@@ -53,16 +53,22 @@ export default function App() {
           <Route path='/' element={<Landing />} />
           <Route path='/monitoring-login-guru' element={<MonitoringLogin role="guru" />} />
           <Route path='/monitoring-login-ortu' element={<MonitoringLogin role="ortu" />} />
-          <Route path='/monitoring-guru/profil' element={<MonitoringGuruProfil />} />
-          <Route path='/monitoring-guru/profil-anak' element={<MonitoringGuruProfilAnak />} />
-          <Route path='/monitoring-guru/profil-anak/:studentId' element={<MonitoringGuruProfilAnakDetail />} />
-          <Route path='/monitoring-guru/hasil' element={<MonitoringGuruDashboard />} />
-          <Route path='/monitoring-guru/hasil/:studentId' element={<StudentProfile />} />
+          {/* Teacher Protected Routes */}
+          <Route element={<TeacherProtectedRoute />}>
+            <Route path='/monitoring-guru/profil' element={<MonitoringGuruProfil />} />
+            <Route path='/monitoring-guru/profil-anak' element={<MonitoringGuruProfilAnak />} />
+            <Route path='/monitoring-guru/profil-anak/:studentId' element={<MonitoringGuruProfilAnakDetail />} />
+            <Route path='/monitoring-guru/hasil' element={<MonitoringGuruDashboard />} />
+            <Route path='/monitoring-guru/hasil/:studentId' element={<StudentProfile />} />
+          </Route>
           
-          <Route path='/monitoring-ortu/profil' element={<MonitoringOrtuProfil />} />
-          <Route path='/monitoring-ortu/profil-anak' element={<MonitoringOrtuProfilAnak />} />
-          <Route path='/monitoring-ortu/profil-anak/:studentId' element={<MonitoringOrtuProfilAnakDetail />} />
-          <Route path='/monitoring-ortu/hasil' element={<MonitoringOrtuDashboard />} />
+          {/* Parent Protected Routes */}
+          <Route element={<ParentProtectedRoute />}>
+            <Route path='/monitoring-ortu/profil' element={<MonitoringOrtuProfil />} />
+            <Route path='/monitoring-ortu/profil-anak' element={<MonitoringOrtuProfilAnak />} />
+            <Route path='/monitoring-ortu/profil-anak/:studentId' element={<MonitoringOrtuProfilAnakDetail />} />
+            <Route path='/monitoring-ortu/hasil' element={<MonitoringOrtuDashboard />} />
+          </Route>
           {/* ========================================
               PROTECTED ROUTES - Requires authentication
               ======================================== */}

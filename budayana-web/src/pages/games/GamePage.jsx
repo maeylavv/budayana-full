@@ -273,8 +273,11 @@ export default function GamePage() {
   }
 
   // Start Attempt
+  const startAttemptRef = useRef(false)
+
   useEffect(() => {
-    if (storyId && !attemptId && story?.storyType === "INTERACTIVE") {
+    if (storyId && !attemptId && story?.storyType === "INTERACTIVE" && !startAttemptRef.current) {
+      startAttemptRef.current = true
       startAttempt.mutate(storyId, {
         onSuccess: (data) => {
           setAttemptId(data.id)
@@ -297,7 +300,7 @@ export default function GamePage() {
           }
           
           if (data.essayAnswer) {
-            // Restore essay answer (currently only sumatra uses this ID, but could be dynamic later)
+            // Restore essay answer (currently only Sumatra uses this ID, but could be dynamic later)
             const essayId = islandSlug === "sumatra" ? "sumatra_essay_1" : `${islandSlug}_essay_1`;
             setAnswers(prev => ({
               ...prev,
@@ -316,7 +319,10 @@ export default function GamePage() {
             setDragDropOrder(storedDragDrop)
           }
         },
-        onError: (err) => console.error("Failed to start attempt", err),
+        onError: (err) => {
+          console.error("Failed to start attempt", err)
+          startAttemptRef.current = false // Reset on error so it can retry
+        },
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -501,11 +507,10 @@ export default function GamePage() {
           },
         })
 
-        // Update Attempt (Finish)
+        // Update Attempt (Save progression, do NOT set finishedAt)
         await updateAttempt.mutateAsync({
           attemptId,
           data: {
-            finishedAt: new Date().toISOString(),
             totalTimeSeconds: timeElapsed,
             totalXpGained: xpGained,
           },

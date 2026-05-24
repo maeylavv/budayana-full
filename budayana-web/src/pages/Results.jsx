@@ -95,39 +95,12 @@ export default function Results() {
 
 
   const getDisplayTitle = (attempt) => {
-    const rawTitle = attempt.story?.title || "Unknown Story"
-    const lowerTitle = rawTitle.toLowerCase()
-
-    // Debug log
-    console.log("Story data:", {
-      title: rawTitle,
-      island: attempt.story?.island,
-      storyId: attempt.storyId || attempt.story?.id
-    })
-
-    // Get island name from API data 
-    let islandName = ""
-    if (attempt.story?.island?.islandName) {
-      islandName = attempt.story.island.islandName
-    } else {
-      // Fallback to map if island data not in attempt
-      islandName = getIslandName(attempt)
+    let rawTitle = attempt.story?.title || "Unknown Story"
+    if (rawTitle.toLowerCase().startsWith("cerita ")) {
+      rawTitle = rawTitle.substring(7)
     }
-
-    console.log("Final island name:", islandName) // Debug
-
-    const suffix = islandName ? ` ${islandName}` : ""
-
-    if (lowerTitle.includes("pre-test")) {
-      return `Pre-Test${suffix}`
-    } else if (lowerTitle.includes("post-test")) {
-      return `Post-Test${suffix}`
-    } else {
-      if (islandName && lowerTitle.includes(islandName.toLowerCase())) {
-        return rawTitle
-      }
-      return `${rawTitle}${suffix}`
-    }
+    let islandName = attempt.story?.island?.islandName || getIslandName(attempt)
+    return `Cerita ${rawTitle} ${islandName}`
   }
 
 
@@ -167,7 +140,7 @@ export default function Results() {
             <div className='stats-grid'>
               <div className='stat-card green'>
                 <div className='stat-value'>{stats?.storiesCompleted || 0}</div>
-                <div className='stat-label'>Tahap Selesai</div>
+                <div className='stat-label'>Cerita Rakyat Selesai</div>
               </div>
           <div className='stat-card purple'>
             <div className='stat-value'>{stats?.totalXp || 0}</div>
@@ -181,7 +154,7 @@ export default function Results() {
                   : "0"}%
               </p>
             </div>
-            <div className='stat-label'>Rata-rata Pre Test</div>
+            <div className='stat-label'>Rata-rata Pre-Test</div>
           </div>
           <div className='stat-card orange'>
             <div className='stat-value'>
@@ -191,7 +164,7 @@ export default function Results() {
                   : "0"}%
               </p>
             </div>
-            <div className='stat-label'>Rata-rata Post Test</div>
+            <div className='stat-label'>Rata-rata Post-Test</div>
           </div>
         </div>
       </section>
@@ -199,10 +172,10 @@ export default function Results() {
 
       {/* History Section */}
       <section>
-        <h2 className='results-section-title'>Riwayat Skor</h2>
+        <h2 className='results-section-title'>Riwayat Pengerjaan</h2>
         <div className='history-table-container'>
           <div className='history-header'>
-            <div>Tahap</div>
+            <div>Cerita</div>
             <div>Pre-test</div>
             <div>Post-test</div>
             <div>XP</div>
@@ -246,10 +219,7 @@ export default function Results() {
 
               return sortedAttempts.map((attempt) => {
                 const displayTitle = getDisplayTitle(attempt)
-                const isTest =
-                  displayTitle.toLowerCase().includes("pre-test") ||
-                  displayTitle.toLowerCase().includes("post-test")
-
+                const isTest = false // Not a separate test attempt anymore, it's a unified cycle
 
                 // Display XP
                 let displayXp = attempt.totalXpGained || 0
@@ -258,16 +228,10 @@ export default function Results() {
                 }
 
                 // If XP is still 0, default to 100 only for STATIC stories (or untyped stories that aren't tests)
-                // Games (INTERACTIVE) should show 0 if score is 0
-                const isStaticStory = attempt.story?.storyType === "STATIC" || (!attempt.story?.storyType && !isTest)
+                const isStaticStory = attempt.story?.storyType === "STATIC" || (!attempt.story?.storyType)
 
                 if (displayXp === 0 && isStaticStory) {
                   displayXp = 100;
-                }
-
-                // Per user request, Tests (Pre/Post) should NOT award XP.
-                if (isTest) {
-                  displayXp = 0;
                 }
 
                 // Calculate duration
@@ -280,8 +244,7 @@ export default function Results() {
                   }
                 }
 
-
-                const isInteractiveStory = ["sumatra", "sulawesi", "bali", "nusa-tenggara", "nusa tenggara", "jawa"].some(i => displayTitle.toLowerCase().includes(i.replace("-", " "))) && !isTest;
+                const isInteractiveStory = ["sumatra", "sulawesi", "bali"].some(i => displayTitle.toLowerCase().includes(i));
                 const essayLog = attempt.questionLogs?.find(log => log.question?.questionType === "ESSAY" || log.userAnswerText);
                 const hasEssay = isInteractiveStory && (attempt.essayAnswer || essayLog?.userAnswerText);
 
@@ -289,12 +252,12 @@ export default function Results() {
                   <div key={attempt.id} className='history-row'>
                     <div>{displayTitle}</div>
                     <div>
-                      {isTest && attempt.preTestScore !== null
+                      {attempt.preTestScore !== null
                         ? Math.round(attempt.preTestScore)
                         : "-"}
                     </div>
                     <div>
-                      {isTest && attempt.postTestScore !== null
+                      {attempt.postTestScore !== null
                         ? Math.round(attempt.postTestScore)
                         : "-"}
                     </div>
@@ -310,7 +273,7 @@ export default function Results() {
                             if (rawTitle.toLowerCase().startsWith("cerita ")) {
                                rawTitle = rawTitle.substring(7)
                             }
-                            if (rawTitle.toLowerCase().endsWith(" sumatra") || rawTitle.toLowerCase().endsWith(" sulawesi") || rawTitle.toLowerCase().endsWith(" bali") || rawTitle.toLowerCase().endsWith(" jawa") || rawTitle.toLowerCase().endsWith(" nusa tenggara")) {
+                            if (rawTitle.toLowerCase().endsWith(" sumatra") || rawTitle.toLowerCase().endsWith(" sulawesi") || rawTitle.toLowerCase().endsWith(" bali")) {
                               const islandIndex = rawTitle.lastIndexOf(" ");
                               rawTitle = rawTitle.substring(0, islandIndex);
                             }
