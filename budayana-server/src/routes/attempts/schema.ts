@@ -111,4 +111,4 @@ export const AttemptQuerySchema = t.Composite([
 ])
 
 // Paginated response
-export const PaginatedAttemptsSchema = createPaginatedSchema(StoryAttemptSchema)
+export const PaginatedAttemptsSchema = createPaginatedSchema(StoryAttemptWithDetailsSchema)

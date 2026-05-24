@@ -36,21 +36,15 @@ export async function getUserProgress(
 
   const where = combineWhereClauses({ userId }, filterClause)
 
-  // Get the count of distinct completed stories
-  const completedStories = await prisma.storyAttempt.findMany({
+  // Get the count of completed cycles
+  const completedStory = await prisma.storyAttempt.count({
     where: {
       userId,
       finishedAt: {
         not: null,
       },
     },
-    select: {
-      storyId: true,
-    },
-    distinct: ["storyId"],
   })
-
-  const completedStory = completedStories.length
 
   const paginatedResult = await paginatedQuery(
     (options) =>
