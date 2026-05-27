@@ -1,6 +1,6 @@
 import "./Log_in.css"
 import { useNavigate } from "react-router-dom"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useMutation } from "@tanstack/react-query"
 import { authClient } from "../../lib/auth-client"
 import CookieBlockedPopup from "../../components/CookieBlockedPopup"
@@ -21,6 +21,19 @@ export default function Login() {
   // State deteksi cookies
   const [showCookiePopup, setShowCookiePopup] = useState(false)
   const [verifyingSession, setVerifyingSession] = useState(false)
+  const [loginError, setLoginError] = useState("")
+
+  // Monitor active session for PARENT or TEACHER mismatch and clear it immediately
+  const { data: session } = authClient.useSession()
+
+  // Read stored mismatch info and check session for PARENT or TEACHER roles to trigger popup on mount
+  useEffect(() => {
+    const trigger = sessionStorage.getItem("portal_mismatch_popup_trigger")
+    if (trigger === "true") {
+      setShowRedirectPopup(true)
+    }
+  }, [])
+
 
   // State for portal redirect popup
   const [showRedirectPopup, setShowRedirectPopup] = useState(false)
@@ -43,7 +56,7 @@ export default function Login() {
 
       return data
     },
-    onSuccess: async (data) => {
+    onSuccess: async (data, variables) => {
       setVerifyingSession(true)
 
       let role = data?.user?.role;
@@ -56,24 +69,20 @@ export default function Login() {
         }
       }
 
-      if (!role || role !== "STUDENT") {
+      if (role && role !== "STUDENT") {
         setVerifyingSession(false);
-        try {
-          await authClient.signOut();
-        } catch (e) {
-          console.error("Gagal logout otomatis:", e);
-        }
+        authClient.signOut().catch(() => {});
         localStorage.removeItem("ba_token");
         localStorage.removeItem("ba_user_id");
 
-        setShowRedirectPopup(true);
+        sessionStorage.setItem("portal_mismatch_popup_trigger", "true")
+        window.location.reload()
         return;
       }
 
       if (data?.session?.token) {
         localStorage.setItem("ba_token", data.session.token)
       }
-
       if (data?.user?.id) {
         localStorage.setItem("ba_user_id", data.user.id)
       }
@@ -82,17 +91,27 @@ export default function Login() {
         const session = await authClient.getSession()
 
         if (session?.data?.session) {
+          const userRole = session.data.user?.role || "STUDENT"
+
+          if (userRole !== "STUDENT") {
+            setVerifyingSession(false)
+            authClient.signOut().catch(() => {});
+            localStorage.removeItem("ba_token")
+            localStorage.removeItem("ba_user_id")
+            sessionStorage.setItem("portal_mismatch_popup_trigger", "true")
+            window.location.reload()
+            return
+          }
+
           window.location.href = "/home"
         } else {
           setVerifyingSession(false)
-
           setTimeout(() => {
             setShowCookiePopup(true)
           }, 100)
         }
       } catch (err) {
         setVerifyingSession(false)
-
         setTimeout(() => {
           setShowCookiePopup(true)
         }, 100)
@@ -100,7 +119,11 @@ export default function Login() {
     },
     onError: (error) => {
       setVerifyingSession(false)
-      alert(error.message || "Error connecting to server")
+      let msg = error.message || "Terjadi kesalahan koneksi ke server."
+      if (msg.toLowerCase().includes("credential") || msg.toLowerCase().includes("invalid") || msg.toLowerCase().includes("password") || msg.toLowerCase().includes("username")) {
+        msg = "Username atau password salah"
+      }
+      setLoginError(msg)
     },
   })
 
@@ -111,22 +134,29 @@ export default function Login() {
 
   return (
     <div className='signin_page'>
+      <button className='back_button' onClick={() => navigate("/")}>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+        Kembali
+      </button>
+
       <div className='redirect'>
         <p>Belum punya akun?</p>
-
+ 
         <div className='redi_button'>
           <button className='to_sign' onClick={goToSignin}>
             Daftar Akun
           </button>
         </div>
       </div>
-
+ 
       <div className='header_form'>
         <h1>Selamat Datang di</h1>
         <img src='/assets/budayana/islands/Game Name.png' alt='Budayana' />
         <h2>Masukan akunmu dulu yuk!</h2>
       </div>
-
+ 
       <div className='login_form'>
         <form onSubmit={handleSubmit}>
           <div className='field'>
@@ -137,10 +167,13 @@ export default function Login() {
               placeholder='Username Kamu'
               required
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => {
+                setUsername(e.target.value)
+                setLoginError("")
+              }}
             />
           </div>
-
+ 
           <div className='field'>
             <label htmlFor='password'>Password</label>
             <div className='password-wrapper'>
@@ -151,7 +184,10 @@ export default function Login() {
                 required
                 minLength='6'
                 value={passwordValue}
-                onChange={(e) => setPasswordValue(e.target.value)}
+                onChange={(e) => {
+                  setPasswordValue(e.target.value)
+                  setLoginError("")
+                }}
               />
               {passwordValue && (
                 <button
@@ -163,8 +199,13 @@ export default function Login() {
                 </button>
               )}
             </div>
+            {loginError && (
+              <div style={{ marginTop: '8px' }}>
+                <span className="inline-error" style={{ whiteSpace: 'pre-line' }}>⚠️ {loginError}</span>
+              </div>
+            )}
           </div>
-
+ 
           <div className='submit'>
             <button
               type='submit'
@@ -207,7 +248,10 @@ export default function Login() {
       <PortalRedirectPopup
         open={showRedirectPopup}
         currentPortal="student"
-        onClose={() => setShowRedirectPopup(false)}
+        onClose={() => {
+          sessionStorage.removeItem("portal_mismatch_popup_trigger")
+          setShowRedirectPopup(false)
+        }}
       />
     </div>
   )

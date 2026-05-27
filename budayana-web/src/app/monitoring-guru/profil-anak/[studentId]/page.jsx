@@ -108,26 +108,27 @@ export default function MonitoringGuruProfilAnakDetail() {
       <MonitoringSidebar role="guru" />
       
       <main className="flex-1 p-10 box-border overflow-x-hidden">
-        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-          <button 
-            onClick={() => navigate('/monitoring-guru/profil-anak')} 
-            style={{ position: 'absolute', left: 0, top: 0, backgroundColor: 'transparent', border: '2px solid #7B4F2E', borderRadius: '50%', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#7B4F2E' }}
-          >
-            <ChevronLeft size={24} />
-          </button>
-
-          <section className="profile-top" style={{ marginLeft: '60px', marginTop: '-10px' }}>
-            <div className="profile-avatar-circle" style={{ fontSize: '3rem', width: '120px', height: '120px', borderColor: '#7B4F2E', backgroundColor: '#F2E5D3' }}>
-              👤
-            </div>
-            <div className="profile-top-text" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '8px' }}>
-              <h1 className="profile-name" style={{ color: '#7B4F2E', fontSize: '2.5rem', fontWeight: '800' }}>{formData.nama}</h1>
-              <div className="profile-grade-badge" style={{ backgroundColor: '#f3a64c', color: 'white', fontSize: '1.2rem', padding: '6px 24px', borderRadius: '999px', fontWeight: 'bold' }}>
+        <section className="profile-top">
+          <div className="profile-avatar-circle" style={{ fontSize: '3rem', width: '120px', height: '120px', borderColor: '#7B4F2E', backgroundColor: '#F2E5D3' }}>
+            👤
+          </div>
+          <div className="profile-top-text">
+            <h1 className="profile-name" style={{ color: '#7B4F2E', fontWeight: '800', margin: 0 }}>{formData.nama}</h1>
+            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '12px' }}>
+              <div className="profile-grade-badge student-badge-btn" style={{ backgroundColor: '#f3a64c', color: 'white' }}>
                 Kelas {formData.kelas}
               </div>
+              <button 
+                onClick={() => navigate('/monitoring-guru/profil-anak')} 
+                className="no-wrap-btn student-badge-btn"
+                style={{ backgroundColor: '#955C2E', color: 'white', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', textDecoration: 'none' }}
+              >
+                <ChevronLeft size={16} />
+                Kembali
+              </button>
             </div>
-          </section>
-        </div>
+          </div>
+        </section>
 
         <hr className="profile-divider" style={{ borderTop: '2px solid #E8D9C0', margin: '30px 0' }} />
 
@@ -141,7 +142,7 @@ export default function MonitoringGuruProfilAnakDetail() {
                 value={formData.nama} 
                 onChange={handleChange}
                 readOnly={!isEditing} 
-                style={{ width: '100%', padding: '16px 20px', borderRadius: '16px', border: '2px solid #E8D9C0', fontSize: '1.1rem', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: isEditing ? '#ffffff' : '#f0f0f0' }} 
+                style={{ border: '2px solid #E8D9C0', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: isEditing ? '#ffffff' : '#f0f0f0' }} 
               />
             </div>
             <div className="profile-field" style={{ marginBottom: '24px' }}>
@@ -152,7 +153,7 @@ export default function MonitoringGuruProfilAnakDetail() {
                 value={formData.kelas} 
                 onChange={handleChange}
                 readOnly={!isEditing} 
-                style={{ width: '100%', padding: '16px 20px', borderRadius: '16px', border: '2px solid #E8D9C0', fontSize: '1.1rem', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: isEditing ? '#ffffff' : '#f0f0f0' }} 
+                style={{ border: '2px solid #E8D9C0', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: isEditing ? '#ffffff' : '#f0f0f0' }} 
               />
             </div>
             <div className="profile-field" style={{ marginBottom: '24px' }}>
@@ -163,7 +164,7 @@ export default function MonitoringGuruProfilAnakDetail() {
                 value={formData.username} 
                 onChange={handleChange}
                 readOnly={!isEditing} 
-                style={{ width: '100%', padding: '16px 20px', borderRadius: '16px', border: '2px solid #E8D9C0', fontSize: '1.1rem', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: isEditing ? '#ffffff' : '#f0f0f0' }} 
+                style={{ border: '2px solid #E8D9C0', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: isEditing ? '#ffffff' : '#f0f0f0' }} 
               />
             </div>
             <div className="profile-field" style={{ marginBottom: '24px' }}>
@@ -173,7 +174,7 @@ export default function MonitoringGuruProfilAnakDetail() {
                 name="password"
                 value={formData.password} 
                 readOnly 
-                style={{ width: '100%', padding: '16px 20px', borderRadius: '16px', border: '2px solid #E8D9C0', fontSize: '1.1rem', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: '#f0f0f0' }} 
+                style={{ border: '2px solid #E8D9C0', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: '#f0f0f0' }} 
               />
             </div>
             <div className="profile-field" style={{ marginBottom: '24px' }}>
@@ -184,11 +185,11 @@ export default function MonitoringGuruProfilAnakDetail() {
                 value={formData.emailWali} 
                 onChange={handleChange}
                 readOnly={!isEditing} 
-                style={{ width: '100%', padding: '16px 20px', borderRadius: '16px', border: '2px solid #E8D9C0', fontSize: '1.1rem', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: isEditing ? '#ffffff' : '#f0f0f0' }} 
+                style={{ border: '2px solid #E8D9C0', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: isEditing ? '#ffffff' : '#f0f0f0' }} 
               />
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '20px', marginTop: '40px' }}>
+            <div className="profile-btn-container">
               {!isEditing ? (
                 <>
                   <button onClick={handleDelete} style={{ backgroundColor: '#c53030', color: 'white', padding: '12px 30px', borderRadius: '999px', fontSize: '1.1rem', fontWeight: 'bold', border: 'none', cursor: 'pointer' }}>

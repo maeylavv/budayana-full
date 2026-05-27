@@ -48,13 +48,16 @@ export default function App() {
         <Routes>
 
           {/* ========================================
-              PUBLIC LANDING PAGE
+              PUBLIC LANDING & LOGIN PAGES
               ======================================== */}
           <Route path='/' element={<Landing />} />
           <Route path='/monitoring-login-guru' element={<MonitoringLogin role="guru" />} />
           <Route path='/monitoring-login-ortu' element={<MonitoringLogin role="ortu" />} />
-          {/* Teacher Protected Routes */}
-          <Route element={<TeacherProtectedRoute />}>
+
+          {/* ========================================
+              TEACHER PROTECTED ROUTES
+              ======================================== */}
+          <Route element={<ProtectedRoute allowedRoles={["TEACHER"]} />}>
             <Route path='/monitoring-guru/profil' element={<MonitoringGuruProfil />} />
             <Route path='/monitoring-guru/profil-anak' element={<MonitoringGuruProfilAnak />} />
             <Route path='/monitoring-guru/profil-anak/:studentId' element={<MonitoringGuruProfilAnakDetail />} />
@@ -62,17 +65,20 @@ export default function App() {
             <Route path='/monitoring-guru/hasil/:studentId' element={<StudentProfile />} />
           </Route>
           
-          {/* Parent Protected Routes */}
-          <Route element={<ParentProtectedRoute />}>
+          {/* ========================================
+              PARENT PROTECTED ROUTES
+              ======================================== */}
+          <Route element={<ProtectedRoute allowedRoles={["PARENT"]} />}>
             <Route path='/monitoring-ortu/profil' element={<MonitoringOrtuProfil />} />
             <Route path='/monitoring-ortu/profil-anak' element={<MonitoringOrtuProfilAnak />} />
             <Route path='/monitoring-ortu/profil-anak/:studentId' element={<MonitoringOrtuProfilAnakDetail />} />
             <Route path='/monitoring-ortu/hasil' element={<MonitoringOrtuDashboard />} />
           </Route>
+
           {/* ========================================
-              PROTECTED ROUTES - Requires authentication
+              STUDENT PROTECTED ROUTES
               ======================================== */}
-          <Route element={<ProtectedRoute />}>
+          <Route element={<ProtectedRoute allowedRoles={["STUDENT"]} />}>
             {/* Home */}
             <Route path='home' element={<Home />} />
 

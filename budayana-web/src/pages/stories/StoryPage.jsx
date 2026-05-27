@@ -139,9 +139,11 @@ export default function StoryPage() {
 
   useEffect(() => {
     if (storyId && !attemptId && story?.storyType === "STATIC" && !startAttemptRef.current) {
+      console.log(`[StoryPage] Initiating startAttempt mutate for storyId: ${storyId}`);
       startAttemptRef.current = true
       startAttempt.mutate(storyId, {
         onSuccess: (data) => {
+          console.log(`[StoryPage] startAttempt onSuccess resolved. attemptId: ${data.id}, totalTimeSeconds: ${data.totalTimeSeconds}`);
           setAttemptId(data.id)
           setAttemptStartedAt(data.startedAt)
 
@@ -150,10 +152,15 @@ export default function StoryPage() {
             const savedDuration = data.totalTimeSeconds * 1000
             startTimeRef.current = Date.now() - savedDuration
             setTimeElapsed(data.totalTimeSeconds)
+            console.log(`[StoryPage] Resumed timer with saved duration: ${data.totalTimeSeconds} seconds`);
+          } else {
+            startTimeRef.current = Date.now()
+            setTimeElapsed(0)
+            console.log(`[StoryPage] Initialized new attempt timer at 0`);
           }
         },
         onError: (err) => {
-          console.error("Failed to start attempt", err)
+          console.error("[StoryPage] Failed to start attempt:", err)
           startAttemptRef.current = false // Reset on error so it can retry
         },
       })
@@ -162,18 +169,10 @@ export default function StoryPage() {
   }, [storyId, attemptId, story])
 
   // Timer Logic
-  // Timer Logic
   const startTimeRef = useRef(null)
 
   useEffect(() => {
-    // Initialize start time when story is loaded
-    if (story && !startTimeRef.current) {
-      startTimeRef.current = Date.now()
-    }
-  }, [story])
-
-  useEffect(() => {
-    if (!timerRunning || !story) return
+    if (!timerRunning || !story || !attemptId) return
 
     if (!startTimeRef.current) {
       startTimeRef.current = Date.now()
@@ -191,7 +190,7 @@ export default function StoryPage() {
     calculateElapsed()
     const t = setInterval(calculateElapsed, 1000)
     return () => clearInterval(t)
-  }, [timerRunning, story])
+  }, [timerRunning, story, attemptId])
 
   // Handle window resize for responsiveness
   useEffect(() => {
@@ -560,8 +559,7 @@ export default function StoryPage() {
               className='w-32 mx-auto mb-4'
             />
             <p className='text-xl font-bold text-[#2c2c2c] leading-relaxed mb-6'>
-              Jangan pergi dulu! Progresmu di tahap ini akan hilang kalau kamu
-              berhenti sekarang.
+              Kamu yakin mau keluar?
             </p>
             <button
               onClick={() => setShowExitWarning(false)}

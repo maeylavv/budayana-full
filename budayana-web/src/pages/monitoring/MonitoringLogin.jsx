@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { authClient } from "../../lib/auth-client";
 import "../../pages/auth/Sign_Up.css"; // Reuse the sign-up styling
@@ -6,10 +6,14 @@ import PortalRedirectPopup from "../../components/PortalRedirectPopup";
 
 export default function MonitoringLogin({ role }) {
   const navigate = useNavigate();
-  const [isLoginMode, setIsLoginMode] = useState(false);
+  const [isLoginMode, setIsLoginMode] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Monitor active session for role mismatch on mount and clear it immediately
+  const { data: session } = authClient.useSession();
+  const isGuru = role === "guru";
 
   // State for portal redirect popup
   const [showRedirectPopup, setShowRedirectPopup] = useState(false);
@@ -19,6 +23,14 @@ export default function MonitoringLogin({ role }) {
     targetLabel: ""
   });
 
+  useEffect(() => {
+    const trigger = sessionStorage.getItem("portal_mismatch_popup_trigger");
+    if (trigger === "true") {
+      setShowRedirectPopup(true);
+    }
+  }, []);
+
+
   const [formData, setFormData] = useState({
     name: "",
     username: "",
@@ -27,9 +39,6 @@ export default function MonitoringLogin({ role }) {
     grade: "",
     namaAnak: "", // For parent portal
   });
-
-  const isGuru = role === "guru";
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
@@ -53,33 +62,7 @@ export default function MonitoringLogin({ role }) {
 
         if (authError) throw new Error(authError.message || "Gagal masuk");
 
-        // Extremely robust session retrieval to fetch DB-mapped custom fields like 'role'
-        let userRole = data?.user?.role;
-        if (!userRole) {
-          try {
-            const session = await authClient.getSession();
-            userRole = session?.data?.user?.role;
-          } catch (e) {
-            console.error("Gagal mengambil session role:", e);
-          }
-        }
-
-        const expectedRole = isGuru ? "TEACHER" : "PARENT";
-
-        if (!userRole || userRole !== expectedRole) {
-          setLoading(false);
-          try {
-            await authClient.signOut();
-          } catch (e) {
-            console.error("Gagal logout otomatis:", e);
-          }
-          localStorage.removeItem("ba_token");
-          localStorage.removeItem("ba_user_id");
-
-          setShowRedirectPopup(true);
-          return;
-        }
-
+        // 1. Temporarily store credentials so the subsequent getSession call works with the new token
         if (data?.session?.token) {
           localStorage.setItem("ba_token", data.session.token);
         }
@@ -87,24 +70,51 @@ export default function MonitoringLogin({ role }) {
           localStorage.setItem("ba_user_id", data.user.id);
         }
 
-        // Redirect based on role
-        if (isGuru) navigate("/monitoring-guru/profil");
-        else navigate("/monitoring-ortu/profil");
+        // 2. Retrieve official server-validated session to get real-time role information
+        const sessionResponse = await authClient.getSession();
+        const sessionUser = sessionResponse?.data?.user;
+        const userRole = sessionUser?.role || "STUDENT";
+        const isExpectedRole = isGuru ? userRole === "TEACHER" : userRole === "PARENT";
+
+        if (!isExpectedRole) {
+          authClient.signOut().catch(() => {});
+          localStorage.removeItem("ba_token");
+          localStorage.removeItem("ba_user_id");
+          
+          setLoading(false);
+          sessionStorage.setItem("portal_mismatch_popup_trigger", "true");
+          window.location.reload();
+          return;
+        }
+
+        if (userRole === "TEACHER") {
+          window.location.href = "/monitoring-guru/profil";
+        } else {
+          window.location.href = "/monitoring-ortu/profil";
+        }
       } else {
         // Signup logic
-        const { data, error: authError } = await authClient.signUp.email({
+        const signUpPayload = {
           email: formData.email,
           password: formData.password,
           name: formData.name,
           username: formData.username,
-          grade: parseInt(formData.grade) || 0,
           role: isGuru ? "TEACHER" : "PARENT",
-          classLabel: "-", // Provide a default value to avoid 'required' errors if any
-          guardianEmail: "-", // Provide a default value to avoid 'required' errors if any
-        });
+        };
+
+        if (isGuru) {
+          const parsedGrade = parseInt(formData.grade, 10);
+          if (isNaN(parsedGrade) || parsedGrade < 1 || parsedGrade > 6) {
+            throw new Error("Tingkat kelas guru harus berupa angka antara 1 sampai 6.");
+          }
+          signUpPayload.grade = parsedGrade;
+        }
+
+        const { data, error: authError } = await authClient.signUp.email(signUpPayload);
 
         if (authError) throw new Error(authError.message || "Gagal mendaftar");
 
+        // 1. Temporarily store credentials so the subsequent getSession call works with the new token
         if (data?.session?.token) {
           localStorage.setItem("ba_token", data.session.token);
         }
@@ -112,11 +122,35 @@ export default function MonitoringLogin({ role }) {
           localStorage.setItem("ba_user_id", data.user.id);
         }
 
-        if (isGuru) navigate("/monitoring-guru/profil");
-        else navigate("/monitoring-ortu/profil");
+        // 2. Retrieve official server-validated session to get real-time role information
+        const sessionResponse = await authClient.getSession();
+        const sessionUser = sessionResponse?.data?.user;
+        const userRole = sessionUser?.role || (isGuru ? "TEACHER" : "PARENT");
+        const isExpectedRole = isGuru ? userRole === "TEACHER" : userRole === "PARENT";
+
+        if (!isExpectedRole) {
+          authClient.signOut().catch(() => {});
+          localStorage.removeItem("ba_token");
+          localStorage.removeItem("ba_user_id");
+          
+          setLoading(false);
+          sessionStorage.setItem("portal_mismatch_popup_trigger", "true");
+          window.location.reload();
+          return;
+        }
+
+        if (userRole === "TEACHER") {
+          window.location.href = "/monitoring-guru/profil";
+        } else {
+          window.location.href = "/monitoring-ortu/profil";
+        }
       }
     } catch (err) {
-      setError(err.message);
+      let msg = err.message || "Terjadi kesalahan.";
+      if (msg.toLowerCase().includes("credential") || msg.toLowerCase().includes("invalid") || msg.toLowerCase().includes("password") || msg.toLowerCase().includes("username")) {
+        msg = "Username, email atau password salah";
+      }
+      setError(msg);
     } finally {
       setLoading(false);
     }
@@ -124,6 +158,13 @@ export default function MonitoringLogin({ role }) {
 
   return (
     <div className='signin_page'>
+      <button className='back_button' onClick={() => navigate("/")}>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+        Kembali
+      </button>
+
       <div className='redirect'>
         <p>{isLoginMode ? "Belum punya akun?" : "Sudah punya akun?"}</p>
         <div className='redi_button'>
@@ -142,8 +183,14 @@ export default function MonitoringLogin({ role }) {
         </p>
       </div>
 
-      <div className='signin_form'>
-        {error && <p style={{ color: 'red', textAlign: 'center', marginBottom: '10px', fontWeight: 'bold', fontFamily: 'Fredoka One' }}>{error}</p>}
+      <div className='signin_form' style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        {error && (
+          <div style={{ display: 'flex', justifyContent: 'center', width: '100%', marginBottom: '15px' }}>
+            <div className="inline-error">
+              <span>⚠️ {error}</span>
+            </div>
+          </div>
+        )}
         <form onSubmit={handleSubmit}>
           {!isLoginMode && (
             <div className='field'>
@@ -167,13 +214,13 @@ export default function MonitoringLogin({ role }) {
           )}
 
           <div className='field'>
-            <label htmlFor='email'>{isGuru ? "Email" : "Email Orang Tua"}</label>
+            <label htmlFor='email'>{isGuru ? "Email/Username Guru" : "Email/Username Orang Tua"}</label>
             <input 
               type='text' 
               id='email' 
               placeholder={isLoginMode 
-                ? 'emailkamu@gmail.com / username_kamu' 
-                : (isGuru ? 'emailkamu@gmail.com' : 'Pastikan email orang tua sama dengan akun anak')} 
+                ? 'email@gmail.com / username_kamu' 
+                : (isGuru ? 'email@gmail.com' : 'Pastikan email orang tua sama dengan akun anak')} 
               value={formData.email} 
               onChange={handleChange} 
               required 
@@ -183,7 +230,7 @@ export default function MonitoringLogin({ role }) {
           <div className='field'>
             <label htmlFor='password'>Password</label>
             <div className='password-wrapper' style={{ position: 'relative' }}>
-              <input type={showPassword ? "text" : "password"} id='password' placeholder='Password Kamu (8+ Karakter)' value={formData.password} onChange={handleChange} required />
+              <input type={showPassword ? "text" : "password"} id='password' placeholder='Password Kamu (6+ Karakter)' value={formData.password} onChange={handleChange} required />
               {formData.password && (
                 <button
                   type='button'
@@ -224,7 +271,10 @@ export default function MonitoringLogin({ role }) {
       <PortalRedirectPopup
         open={showRedirectPopup}
         currentPortal={isGuru ? "teacher" : "parent"}
-        onClose={() => setShowRedirectPopup(false)}
+        onClose={() => {
+          sessionStorage.removeItem("portal_mismatch_popup_trigger");
+          setShowRedirectPopup(false);
+        }}
       />
     </div>
   );

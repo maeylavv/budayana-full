@@ -28,79 +28,104 @@ export default function SignIn() {
   const [classLabel, setClassLabel] = useState("")
   const [username, setUsername] = useState("")
   const [guardianEmail, setGuardianEmail] = useState("")
+  const [fieldErrors, setFieldErrors] = useState({})
 
   // Progress initialization hook
   const initializeProgress = useInitializeProgress()
 
   const registerMutation = useMutation({
     mutationFn: async (formData) => {
-      const { data, error } = await authClient.signUp.email(
-        {
-          email: formData.email,
-          password: formData.password,
-          name: formData.name,
-          username: formData.username,
-          grade: formData.grade,
-          classLabel: formData.classLabel,
-          guardianEmail: formData.guardianEmail,
-        },
-        {
-          onSuccess: async () => {
-            try {
-              await initializeProgress.mutateAsync()
-
-              // Directly redirect to home instead of forcing logout
-              // await authClient.signOut() 
-
-            } catch (e) {
-              console.warn("Progress initialization failed:", e)
-            } finally {
-              // TEMPORARY FIX: Set a local storage flag to bypass ProtectedRoute on localhost Cross-Origin issues
-              // localStorage.setItem("temp_dev_session", "true")
-
-              setPopupType("success")
-              setPopupMessage("Pendaftaran berhasil! Selamat datang.")
-              setPopupOpen(true)
-            }
-          },
-          onError: () => {
-            setPopupType("error")
-            let msg = error.message || "Terjadi kesalahan koneksi ke server."
-
-            // Check for duplicate/conflict errors
-            const lowerMsg = msg.toLowerCase()
-            if (lowerMsg.includes("email") && (lowerMsg.includes("already") || lowerMsg.includes("exist") || lowerMsg.includes("use"))) {
-              msg = "Email ini sudah digunakan. Mohon gunakan email lain."
-            }
-
-            setPopupMessage(msg)
-            setPopupOpen(true)
-          },
-        }
-      )
+      const { data, error } = await authClient.signUp.email({
+        email: formData.email,
+        password: formData.password,
+        name: formData.name,
+        username: formData.username,
+        grade: formData.grade,
+        classLabel: formData.classLabel,
+        guardianEmail: formData.guardianEmail,
+      })
 
       if (error) {
         throw new Error(error.message || "Pendaftaran gagal, coba lagi ya.")
       }
       return data
     },
+    onSuccess: async (data) => {
+      try {
+        await initializeProgress.mutateAsync()
+      } catch (e) {
+        console.warn("Progress initialization failed:", e)
+      } finally {
+        setPopupType("success")
+        setPopupMessage("Pendaftaran berhasil! Selamat datang.")
+        setPopupOpen(true)
+      }
+    },
+    onError: (error) => {
+      setPopupType("error")
+      let msg = error.message || "Terjadi kesalahan koneksi ke server."
+      const lowerMsg = msg.toLowerCase()
+      const errors = {}
+
+      if (lowerMsg.includes("email") && (lowerMsg.includes("already") || lowerMsg.includes("exist") || lowerMsg.includes("use"))) {
+        errors.email = "Email ini sudah digunakan. Mohon gunakan email lain."
+      } else if (lowerMsg.includes("username") && (lowerMsg.includes("already") || lowerMsg.includes("exist") || lowerMsg.includes("use") || lowerMsg.includes("taken"))) {
+        errors.username = "Username sudah digunakan"
+      } else {
+        setPopupMessage(msg)
+        setPopupOpen(true)
+      }
+
+      setFieldErrors(errors)
+    },
   })
 
   const handleSubmit = (e) => {
     e.preventDefault()
+
+    const parsedGrade = parseInt(grade, 10);
+    if (isNaN(parsedGrade) || parsedGrade < 1 || parsedGrade > 6) {
+      setPopupType("error")
+      setPopupMessage("Tingkat kelas siswa harus berupa angka antara 1 sampai 6.")
+      setPopupOpen(true)
+      return;
+    }
+
+    if (!classLabel || !classLabel.trim()) {
+      setPopupType("error")
+      setPopupMessage("Label kelas wajib diisi.")
+      setPopupOpen(true)
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!guardianEmail || !emailRegex.test(guardianEmail.trim())) {
+      setPopupType("error")
+      setPopupMessage("Email wali yang Anda masukkan tidak valid.")
+      setPopupOpen(true)
+      return;
+    }
+
     registerMutation.mutate({
       email: email,
       name: name,
-      grade: Number(grade),
-      classLabel: classLabel,
+      grade: parsedGrade,
+      classLabel: classLabel.trim(),
       username: username,
       password: passwordValue,
-      guardianEmail: guardianEmail,
+      guardianEmail: guardianEmail.trim(),
     })
   }
 
   return (
     <div className='signin_page'>
+      <button className='back_button' onClick={() => navigate("/")}>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+        Kembali
+      </button>
+
       <div className='redirect'>
         <p>Sudah punya akun?</p>
 
@@ -141,8 +166,18 @@ export default function SignIn() {
               placeholder='Email Kamu'
               required
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value)
+                if (fieldErrors.email) {
+                  setFieldErrors(prev => ({ ...prev, email: "" }))
+                }
+              }}
             />
+            {fieldErrors.email && (
+              <div style={{ marginTop: '4px' }}>
+                <span className="inline-error">⚠️ {fieldErrors.email}</span>
+              </div>
+            )}
           </div>
 
           <div className='field'>
@@ -177,8 +212,18 @@ export default function SignIn() {
               placeholder='Username Kamu'
               required
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => {
+                setUsername(e.target.value)
+                if (fieldErrors.username) {
+                  setFieldErrors(prev => ({ ...prev, username: "" }))
+                }
+              }}
             />
+            {fieldErrors.username && (
+              <div style={{ marginTop: '4px' }}>
+                <span className="inline-error">⚠️ {fieldErrors.username}</span>
+              </div>
+            )}
           </div>
 
           <div className='field'>

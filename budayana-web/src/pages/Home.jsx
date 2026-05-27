@@ -155,6 +155,7 @@ export default function Home() {
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const [activeIsland, setActiveIsland] = useState(null)
+  const [lockedIslandWarning, setLockedIslandWarning] = useState(null)
 
   // Fetch user's progress from API
   const { data: progressData, isLoading: isProgressLoading } = useMyProgress()
@@ -172,16 +173,43 @@ export default function Home() {
       })
     }
 
-    // Merge static islands with progress data
-    return staticIslands.map((staticIsland) => {
+    // First map the staticIslands with their isCompleted status from progressData
+    const mappedIslands = staticIslands.map((staticIsland) => {
       const progressItem = progressMap.get(staticIsland.slug)
-
       return {
-        ...staticIsland, // includes id, slug, name, etc.
-        // If progress exists, use it. Else use static defaults.
-        isUnlocked: true,
+        ...staticIsland,
         isCompleted: progressItem ? progressItem.isCompleted : false,
         apiIslandId: progressItem ? progressItem.islandId : null,
+      }
+    })
+
+    // Sort by unlockOrder to compute isUnlocked sequentially
+    const sortedIslands = [...mappedIslands].sort((a, b) => a.unlockOrder - b.unlockOrder)
+
+    // Compute isUnlocked dynamically based on previous island completion
+    const processedIslands = sortedIslands.map((island, idx) => {
+      let isUnlocked = false
+      if (island.unlockOrder === 1) {
+        // First island (Sumatra) is unlocked by default
+        isUnlocked = true
+      } else {
+        const prevIsland = sortedIslands[idx - 1]
+        isUnlocked = prevIsland ? prevIsland.isCompleted : false
+      }
+
+      return {
+        ...island,
+        isUnlocked,
+      }
+    })
+
+    // Map back to original staticIslands order to maintain MapUI layout positions
+    return staticIslands.map((staticIsland) => {
+      return processedIslands.find((i) => i.id === staticIsland.id) || {
+        ...staticIsland,
+        isUnlocked: false,
+        isCompleted: false,
+        apiIslandId: null,
       }
     })
   }, [progressData])
@@ -204,6 +232,17 @@ export default function Home() {
 
   // Handle island popup open/close with URL sync
   const handleOpenIsland = (island) => {
+    if (!island.isUnlocked) {
+      // Find the previous island in the sorted sequence
+      const sorted = [...allIslands].sort((a, b) => a.unlockOrder - b.unlockOrder)
+      const clickedIdx = sorted.findIndex((i) => i.id === island.id)
+      const prevIsland = clickedIdx > 0 ? sorted[clickedIdx - 1] : null
+      
+      if (prevIsland) {
+        setLockedIslandWarning(prevIsland.name)
+      }
+      return
+    }
     setActiveIsland(island)
     setSearchParams({ island: island.slug }, { replace: true })
   }
@@ -270,6 +309,35 @@ export default function Home() {
       {activeIsland && (
         <IslandPopup activeIsland={activeIsland} onClose={handleCloseIsland} />
       )}
+
+      {/* LOCKED ISLAND WARNING POPUP */}
+      {lockedIslandWarning && (
+        <div className='popup-overlay' style={{ zIndex: 2000 }}>
+          <div className='popup popup-locked' style={{ position: 'relative', border: '3px solid #955c2e', backgroundColor: '#fff4d6', padding: '40px', borderRadius: '32px', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '420px', maxWidth: '90vw' }}>
+            <button className='popup-close' onClick={() => setLockedIslandWarning(null)} style={{ position: 'absolute', top: '15px', right: '15px', border: 'none', background: 'transparent' }}>
+              <img 
+                src='/assets/budayana/islands/close button.png' 
+                alt='close' 
+                style={{ width: '40px', height: '40px' }} 
+              />
+            </button>
+            <div className='lockedpopup' style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <img
+                src='/assets/budayana/islands/bocah.png'
+                className='notif-kid'
+                alt='Explorer'
+                style={{ width: '130px', height: 'auto', marginBottom: '10px' }}
+              />
+              <p className='locked-msg' style={{ color: '#5c3a1e', textAlign: 'center', fontSize: '18px', margin: '15px 0', lineHeight: '1.5', fontFamily: "'Fredoka One', sans-serif" }}>
+                Mohon selesaikan semua tahapan di {lockedIslandWarning} terlebih dahulu!
+              </p>
+              <button className='ok-btn' onClick={() => setLockedIslandWarning(null)}>
+                Oke!
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -291,6 +359,7 @@ function IslandPopup({ activeIsland, onClose }) {
   const { data: _cyclesData } = useIslandCycles(activeIsland.apiIslandId)
 
   const [lockedStageWarning, setLockedStageWarning] = useState(null)
+  const [completedStageWarning, setCompletedStageWarning] = useState(false)
 
   const handleStageClick = (stage, status, index) => {
     if (status === "locked") {
@@ -304,6 +373,11 @@ function IslandPopup({ activeIsland, onClose }) {
           setLockedStageWarning(2)
         }
       }
+      return
+    }
+
+    if (status === "completed") {
+      setCompletedStageWarning(true)
       return
     }
 
@@ -504,24 +578,57 @@ function IslandPopup({ activeIsland, onClose }) {
             {/* LOCKED STAGE WARNING POPUP */}
             {lockedStageWarning && (
               <div className='popup-overlay' style={{ zIndex: 1000 }}>
-                <div className='popup popup-locked' style={{ position: 'relative', border: '3px solid #955c2e', backgroundColor: '#fff4d6', padding: '40px', borderRadius: '32px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                  <button 
-                    className='popup-close' 
-                    onClick={() => setLockedStageWarning(null)}
-                    style={{ border: '2px solid #955c2e', borderRadius: '999px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#955c2e', fontWeight: 'bold' }}
-                  >
-                    ×
+                <div className='popup popup-locked' style={{ position: 'relative', border: '3px solid #955c2e', backgroundColor: '#fff4d6', padding: '40px', borderRadius: '32px', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '420px', maxWidth: '90vw' }}>
+                  <button className='popup-close' onClick={() => setLockedStageWarning(null)} style={{ position: 'absolute', top: '15px', right: '15px', border: 'none', background: 'transparent' }}>
+                    <img 
+                      src='/assets/budayana/islands/close button.png' 
+                      alt='close' 
+                      style={{ width: '40px', height: '40px' }} 
+                    />
                   </button>
-                  <div className='lockedpopup'>
+                  <div className='lockedpopup' style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <img
                       src='/assets/budayana/islands/bocah flip.png'
                       className='notif-kid'
                       alt='Explorer'
+                      style={{ width: '130px', height: 'auto', marginBottom: '10px' }}
                     />
-                    <p className='locked-msg' style={{ color: '#5c3a1e' }}>
+                    <p className='locked-msg' style={{ color: '#5c3a1e', textAlign: 'center', fontSize: '18px', margin: '15px 0', lineHeight: '1.5', fontFamily: "'Fredoka One', sans-serif" }}>
                       Mohon selesaikan Tahap {lockedStageWarning} terlebih dahulu!
                     </p>
                     <button className='ok-btn' onClick={() => setLockedStageWarning(null)}>
+                      Oke!
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* COMPLETED STAGE WARNING POPUP */}
+            {completedStageWarning && (
+              <div className='popup-overlay' style={{ zIndex: 1000 }}>
+                <div className='popup popup-locked' style={{ position: 'relative', border: '3px solid #955c2e', backgroundColor: '#fff4d6', padding: '40px', borderRadius: '32px', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '420px', maxWidth: '90vw' }}>
+                  <button className='popup-close' onClick={() => setCompletedStageWarning(false)} style={{ position: 'absolute', top: '15px', right: '15px', border: 'none', background: 'transparent' }}>
+                    <img 
+                      src='/assets/budayana/islands/close button.png' 
+                      alt='close' 
+                      style={{ width: '40px', height: '40px' }} 
+                    />
+                  </button>
+                  <div className='lockedpopup' style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <img
+                      src='/assets/budayana/islands/bocah.png'
+                      className='notif-kid'
+                      alt='Explorer'
+                      style={{ width: '130px', height: 'auto', marginBottom: '10px' }}
+                    />
+                    <p className='locked-msg' style={{ color: '#5c3a1e', textAlign: 'center', fontSize: '18px', margin: '15px 0', lineHeight: '1.5', fontFamily: "'Fredoka One', sans-serif" }}>
+                      Tahap ini sudah selesai!<br />
+                      Waktunya melangkah maju ke<br />
+                      tahap selanjutnya.<br />
+                      Semangat!
+                    </p>
+                    <button className='ok-btn' onClick={() => setCompletedStageWarning(false)}>
                       Oke!
                     </button>
                   </div>

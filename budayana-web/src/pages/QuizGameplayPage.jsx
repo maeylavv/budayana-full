@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { QUIZ_DATA } from '../data/quizData';
 import { authClient } from '../lib/auth-client';
+import { quizAttemptsApi } from '../lib/api';
 import QuestionRenderer from '../components/quiz/QuestionRenderer';
 import ProgressBar from '../components/quiz/ProgressBar';
 import HeartEmptyPopup from '../components/quiz/HeartEmptyPopup';
@@ -39,6 +40,8 @@ export default function QuizGameplayPage() {
   const [showQuitPopup, setShowQuitPopup] = useState(false);
   const [showHeartPopup, setShowHeartPopup] = useState(false);
   const [wrongAttempts, setWrongAttempts] = useState(() => getSavedValue('wrongAttempts', 0));
+  // Track if attempt has been submitted to prevent double-submit on re-render
+  const attemptSubmittedRef = useRef(false);
   
   // Save state whenever relevant values change
   useEffect(() => {
@@ -142,8 +145,32 @@ export default function QuizGameplayPage() {
     if (safeQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(safeQuestionIndex + 1);
     } else {
-      setEndTime(Date.now());
+      const now = Date.now();
+      setEndTime(now);
       setGameState('success');
+      // Submit attempt to API (only once per session)
+      if (!attemptSubmittedRef.current) {
+        attemptSubmittedRef.current = true;
+        const durationSeconds = Math.floor((now - startTime) / 1000);
+        const finalScore = Math.max(0, questions.length - wrongAttempts);
+        const finalXP = questions.reduce((acc, q) => acc + q.xp, 0);
+        quizAttemptsApi
+          .submit({
+            islandSlug,
+            topicSlug: topicId,
+            levelId: parseInt(levelId, 10),
+            totalTimeSeconds: durationSeconds,
+            xpGained: finalXP,
+            score: finalScore,
+            totalQuestions: questions.length,
+            wrongAttempts,
+            heartsLeft: hearts,
+          })
+          .catch((err) => {
+            // Non-blocking: log error but don't interrupt user flow
+            console.error('[Quiz] Failed to submit attempt:', err);
+          });
+      }
     }
   };
 
@@ -340,7 +367,7 @@ export default function QuizGameplayPage() {
               onError={e => e.target.style.display = 'none'}
             />
             <p className='quit-title'>
-              Jangan pergi dulu! Progresmu di tahap ini<br />akan hilang kalau kamu berhenti sekarang.
+              Kamu yakin mau keluar?
             </p>
             <button className='btn-continue-pill' onClick={() => setShowQuitPopup(false)}>
               Lanjutkan Belajar
