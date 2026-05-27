@@ -92,16 +92,23 @@ export default function MonitoringLogin({ role }) {
         else navigate("/monitoring-ortu/profil");
       } else {
         // Signup logic
-        const { data, error: authError } = await authClient.signUp.email({
+        const signUpPayload = {
           email: formData.email,
           password: formData.password,
           name: formData.name,
           username: formData.username,
-          grade: parseInt(formData.grade) || 0,
           role: isGuru ? "TEACHER" : "PARENT",
-          classLabel: "-", // Provide a default value to avoid 'required' errors if any
-          guardianEmail: "-", // Provide a default value to avoid 'required' errors if any
-        });
+        };
+
+        if (isGuru) {
+          const parsedGrade = parseInt(formData.grade, 10);
+          if (isNaN(parsedGrade) || parsedGrade < 1 || parsedGrade > 6) {
+            throw new Error("Tingkat kelas guru harus berupa angka antara 1 sampai 6.");
+          }
+          signUpPayload.grade = parsedGrade;
+        }
+
+        const { data, error: authError } = await authClient.signUp.email(signUpPayload);
 
         if (authError) throw new Error(authError.message || "Gagal mendaftar");
 
@@ -116,7 +123,11 @@ export default function MonitoringLogin({ role }) {
         else navigate("/monitoring-ortu/profil");
       }
     } catch (err) {
-      setError(err.message);
+      let msg = err.message || "Terjadi kesalahan.";
+      if (msg.toLowerCase().includes("credential") || msg.toLowerCase().includes("invalid") || msg.toLowerCase().includes("password") || msg.toLowerCase().includes("username")) {
+        msg = "Username, email atau password salah";
+      }
+      setError(msg);
     } finally {
       setLoading(false);
     }
@@ -142,8 +153,14 @@ export default function MonitoringLogin({ role }) {
         </p>
       </div>
 
-      <div className='signin_form'>
-        {error && <p style={{ color: 'red', textAlign: 'center', marginBottom: '10px', fontWeight: 'bold', fontFamily: 'Fredoka One' }}>{error}</p>}
+      <div className='signin_form' style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        {error && (
+          <div style={{ display: 'flex', justifyContent: 'center', width: '100%', marginBottom: '15px' }}>
+            <div className="inline-error">
+              <span>⚠️ {error}</span>
+            </div>
+          </div>
+        )}
         <form onSubmit={handleSubmit}>
           {!isLoginMode && (
             <div className='field'>

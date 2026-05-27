@@ -392,3 +392,33 @@ input::placeholder {
     font-size: 1.8rem;
   }
 }
+
+.inline-error {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #c53030;
+  font-family: 'Fredoka One', sans-serif;
+  font-size: 0.95rem;
+  margin-top: 6px;
+  padding: 8px 14px;
+  background-color: #fff5f5;
+  border: 1.5px solid #feb2b2;
+  border-radius: 10px;
+  width: fit-content;
+  max-width: 100%;
+  box-sizing: border-box;
+  box-shadow: 0 2px 4px rgba(197, 48, 48, 0.05);
+  animation: fadeInError 0.25s ease-out;
+}
+
+@keyframes fadeInError {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

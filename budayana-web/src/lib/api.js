@@ -228,14 +228,70 @@ export const statisticsApi = {
 }
 
 /**
+ * API methods for Quiz Attempts (Quiz Budaya)
+ */
+export const quizAttemptsApi = {
+  /**
+   * Submit a completed quiz level attempt
+   * @param {object} data - { islandSlug, topicSlug, levelId, totalTimeSeconds, xpGained, score, totalQuestions, wrongAttempts, heartsLeft }
+   * @returns {Promise<object>}
+   */
+  submit: (data) =>
+    apiRequest("/quiz-attempts", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  /**
+   * Get paginated quiz attempt history for the current user
+   * @param {object} params - Query parameters (limit, sortBy, sortOrder, islandSlug, topicSlug, levelId, completed)
+   * @returns {Promise<{items: Array, nextCursor: string|null, hasMore: boolean}>}
+   */
+  list: (params = {}) => {
+    const queryString = new URLSearchParams(
+      Object.entries(params).filter(
+        (entry) => entry[1] !== undefined && entry[1] !== null && entry[1] !== ""
+      )
+    ).toString()
+    return apiRequest(`/quiz-attempts${queryString ? `?${queryString}` : ""}`)
+  },
+}
+
+/**
+ * API methods for Quiz Statistics (Quiz Budaya)
+ */
+export const quizStatisticsApi = {
+  /**
+   * Get aggregated quiz statistics for the current user
+   * @returns {Promise<{levelsCompleted, totalXpFromQuiz, averageScore, islandsFullyCompleted, currentBadge, islandExploration}>}
+   */
+  get: () => apiRequest("/quiz-statistics/"),
+}
+
+/**
  * API methods for Monitoring (Teacher/Parent)
  */
 export const monitoringApi = {
-  /**
-   * Get students of the teacher's grade
-   * @returns {Promise<Array>}
-   */
-  listStudents: () => apiRequest("/monitoring/students"),
+  listStudents: (classLabel, search, options = {}) => {
+    const params = new URLSearchParams();
+    if (classLabel) params.append("classLabel", classLabel);
+    if (search) params.append("search", search);
+    const queryString = params.toString();
+    const url = queryString ? `/monitoring/students?${queryString}` : "/monitoring/students";
+    return apiRequest(url, options);
+  },
+
+  getClassSummary: (classLabel, options = {}) => {
+    const params = new URLSearchParams();
+    if (classLabel) params.append("classLabel", classLabel);
+    const queryString = params.toString();
+    const url = queryString ? `/monitoring/analytics/class-summary?${queryString}` : "/monitoring/analytics/class-summary";
+    return apiRequest(url, options);
+  },
+
+  getStudentAnalytics: (studentId, options = {}) => {
+    return apiRequest(`/monitoring/analytics/student/${studentId}`, options);
+  },
 
   /**
    * Get student details by ID

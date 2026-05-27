@@ -3,7 +3,7 @@ import { Navigate, Outlet, useLocation } from "react-router-dom"
 import { authClient } from "../../lib/auth-client"
 import CookieBlockedPopup from "../CookieBlockedPopup"
 
-export default function ProtectedRoute() {
+export default function ProtectedRoute({ allowedRoles = ["STUDENT"] }) {
   const { data: session, isPending } = authClient.useSession()
   const location = useLocation()
   const [showCookiePopup, setShowCookiePopup] = useState(false)
@@ -52,9 +52,17 @@ export default function ProtectedRoute() {
     )
   }
 
-  if (!session?.user && !hasLocalToken) {
+  // 1. If not authenticated, redirect to designated portal's login page
+  if (!session?.user) {
     localStorage.removeItem("ba_token")
     localStorage.removeItem("ba_user_id")
+    
+    const path = location.pathname
+    if (path.startsWith("/monitoring-guru")) {
+      return <Navigate to='/monitoring-login-guru' replace />
+    } else if (path.startsWith("/monitoring-ortu")) {
+      return <Navigate to='/monitoring-login-ortu' replace />
+    }
     return <Navigate to='/login' state={{ from: location }} replace />
   }
 
