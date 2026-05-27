@@ -1,6 +1,16 @@
 import prisma from "../../lib/db"
 
 /**
+ * Helper function to calculate Normalized Gain (N-Gain)
+ */
+const calculateNGain = (pre: number, post: number): number => {
+  if (pre >= 100) {
+    return post >= 100 ? 100 : 0;
+  }
+  return ((post - pre) / (100 - pre)) * 100;
+};
+
+/**
  * Get students filtered by grade
  */
 export const getStudentsByGrade = async (grade: number, classLabel?: string, search?: string) => {
@@ -74,7 +84,7 @@ export const getStudentsByGrade = async (grade: number, classLabel?: string, sea
     let sumImp = 0;
     let countImp = 0;
     for (const sa of s.storyAttempts) {
-      sumImp += (Number(sa.postTestScore) - Number(sa.preTestScore));
+      sumImp += calculateNGain(Number(sa.preTestScore), Number(sa.postTestScore));
       countImp++;
     }
     const learningImprovement = countImp > 0 ? Math.round(sumImp / countImp) : 0;
@@ -204,7 +214,7 @@ export const getStudentsByGuardianEmail = async (email: string, search?: string)
     let sumImp = 0;
     let countImp = 0;
     for (const sa of s.storyAttempts) {
-      sumImp += (Number(sa.postTestScore) - Number(sa.preTestScore));
+      sumImp += calculateNGain(Number(sa.preTestScore), Number(sa.postTestScore));
       countImp++;
     }
     const learningImprovement = countImp > 0 ? Math.round(sumImp / countImp) : 0;
@@ -382,7 +392,7 @@ export const getClassSummary = async (grade: number, classLabel?: string) => {
   }
 
   // 2. Calculate averageImprovement across class
-  // AVG(postTestScore - preTestScore)
+  // AVG(g_individual) using N-Gain helper
   let sumClassImprovement = 0;
   let countClassImprovement = 0;
 
@@ -390,7 +400,7 @@ export const getClassSummary = async (grade: number, classLabel?: string) => {
     for (const attempt of s.storyAttempts) {
       const post = Number(attempt.postTestScore);
       const pre = Number(attempt.preTestScore);
-      sumClassImprovement += (post - pre);
+      sumClassImprovement += calculateNGain(pre, post);
       countClassImprovement++;
     }
   }
@@ -417,7 +427,11 @@ export const getClassSummary = async (grade: number, classLabel?: string) => {
             }
           : {})
       },
-      startedAt: { gte: sevenDaysAgo }
+      startedAt: { gte: sevenDaysAgo },
+      OR: [
+        { totalTimeSeconds: { gt: 0 } },
+        { totalXpGained: { gt: 0 } }
+      ]
     },
     select: {
       userId: true
@@ -438,7 +452,11 @@ export const getClassSummary = async (grade: number, classLabel?: string) => {
             }
           : {})
       },
-      startedAt: { gte: sevenDaysAgo }
+      startedAt: { gte: sevenDaysAgo },
+      OR: [
+        { totalTimeSeconds: { gt: 0 } },
+        { xpGained: { gt: 0 } }
+      ]
     },
     select: {
       userId: true
@@ -453,8 +471,8 @@ export const getClassSummary = async (grade: number, classLabel?: string) => {
   const activeStudents = activeUserIds.size;
   const inactiveStudents = Math.max(0, totalStudents - activeStudents);
 
-  // 4. Island Exploration rates
-  const storyAttemptsAll = await prisma.storyAttempt.findMany({
+  // 4. Island Exploration rates (completion rate per island)
+  const completedStoryAttemptsAll = await prisma.storyAttempt.findMany({
     where: {
       user: {
         role: "STUDENT",
@@ -467,7 +485,8 @@ export const getClassSummary = async (grade: number, classLabel?: string) => {
               }
             }
           : {})
-      }
+      },
+      finishedAt: { not: null }
     },
     select: {
       userId: true,
@@ -484,7 +503,7 @@ export const getClassSummary = async (grade: number, classLabel?: string) => {
     }
   });
 
-  const quizAttemptsAll = await prisma.quizAttempt.findMany({
+  const completedQuizAttemptsAll = await prisma.quizAttempt.findMany({
     where: {
       user: {
         role: "STUDENT",
@@ -497,7 +516,8 @@ export const getClassSummary = async (grade: number, classLabel?: string) => {
               }
             }
           : {})
-      }
+      },
+      completed: true
     },
     select: {
       userId: true,
@@ -509,38 +529,38 @@ export const getClassSummary = async (grade: number, classLabel?: string) => {
     orderBy: { unlockOrder: "asc" }
   });
 
-  const islandParticipants = new Map<string, Set<string>>();
+  const islandStoryCompletions = new Map<string, Set<string>>();
+  const islandQuizCompletions = new Map<string, Set<string>>();
 
   // Initialize all known islands
   for (const isl of dbIslands) {
-    islandParticipants.set(isl.slug.toLowerCase().trim(), new Set<string>());
+    const slug = isl.slug.toLowerCase().trim();
+    islandStoryCompletions.set(slug, new Set<string>());
+    islandQuizCompletions.set(slug, new Set<string>());
   }
 
   for (const slug of standardSlugs) {
-    if (!islandParticipants.has(slug)) {
-      islandParticipants.set(slug, new Set<string>());
+    if (!islandStoryCompletions.has(slug)) {
+      islandStoryCompletions.set(slug, new Set<string>());
+    }
+    if (!islandQuizCompletions.has(slug)) {
+      islandQuizCompletions.set(slug, new Set<string>());
     }
   }
 
-  // Process story attempts
-  for (const sa of storyAttemptsAll) {
+  // Process story completions
+  for (const sa of completedStoryAttemptsAll) {
     if (sa.story?.island?.slug) {
       const slug = sa.story.island.slug.toLowerCase().trim();
-      if (!islandParticipants.has(slug)) {
-        islandParticipants.set(slug, new Set<string>());
-      }
-      islandParticipants.get(slug)!.add(sa.userId);
+      islandStoryCompletions.get(slug)?.add(sa.userId);
     }
   }
 
-  // Process quiz attempts
-  for (const qa of quizAttemptsAll) {
+  // Process quiz completions
+  for (const qa of completedQuizAttemptsAll) {
     if (qa.islandSlug) {
       const slug = qa.islandSlug.toLowerCase().trim();
-      if (!islandParticipants.has(slug)) {
-        islandParticipants.set(slug, new Set<string>());
-      }
-      islandParticipants.get(slug)!.add(qa.userId);
+      islandQuizCompletions.get(slug)?.add(qa.userId);
     }
   }
 
@@ -550,8 +570,11 @@ export const getClassSummary = async (grade: number, classLabel?: string) => {
   for (const isl of dbIslands) {
     const slug = isl.slug.toLowerCase().trim();
     processedSlugs.add(slug);
-    const participants = islandParticipants.get(slug) || new Set<string>();
-    const rate = Math.round((participants.size / totalStudents) * 100);
+    const storyUsers = islandStoryCompletions.get(slug) || new Set<string>();
+    const quizUsers = islandQuizCompletions.get(slug) || new Set<string>();
+    const rate = totalStudents > 0
+      ? Math.round(((storyUsers.size + quizUsers.size) / (totalStudents * 2)) * 100)
+      : 0;
     islandExploration.push({
       name: getIslandDisplayName(slug, isl.islandName),
       rate
@@ -560,8 +583,11 @@ export const getClassSummary = async (grade: number, classLabel?: string) => {
 
   for (const slug of standardSlugs) {
     if (!processedSlugs.has(slug)) {
-      const participants = islandParticipants.get(slug) || new Set<string>();
-      const rate = Math.round((participants.size / totalStudents) * 100);
+      const storyUsers = islandStoryCompletions.get(slug) || new Set<string>();
+      const quizUsers = islandQuizCompletions.get(slug) || new Set<string>();
+      const rate = totalStudents > 0
+        ? Math.round(((storyUsers.size + quizUsers.size) / (totalStudents * 2)) * 100)
+        : 0;
       islandExploration.push({
         name: getIslandDisplayName(slug),
         rate
@@ -703,7 +729,7 @@ export const getClassSummary = async (grade: number, classLabel?: string) => {
     let sumImp = 0;
     let countImp = 0;
     for (const sa of s.storyAttempts) {
-      sumImp += (Number(sa.postTestScore) - Number(sa.preTestScore));
+      sumImp += calculateNGain(Number(sa.preTestScore), Number(sa.postTestScore));
       countImp++;
     }
     const learningImprovement = countImp > 0 ? Math.round(sumImp / countImp) : 0;
@@ -750,7 +776,8 @@ export const getStudentAnalytics = async (studentId: string) => {
             include: {
               island: true
             }
-          }
+          },
+          stageAttempts: true
         }
       },
       quizAttempts: {
@@ -781,33 +808,59 @@ export const getStudentAnalytics = async (studentId: string) => {
   
   // Stats
   const completedStories = studentStories.filter(sa => sa.finishedAt !== null);
-  const storiesCompleted = new Set(completedStories.map(s => s.storyId)).size;
-  const totalStoryXp = studentStories.reduce((acc, sa) => acc + (sa.totalXpGained || 0), 0);
+  const storiesCompleted = completedStories.length;
 
-  const preTestAttempts = studentStories.filter(sa => sa.preTestScore !== null);
+  const calculateStoryAttemptXp = (sa: any): number => {
+    let xp = sa.totalXpGained || 0;
+    if (xp === 0 && sa.stageAttempts && sa.stageAttempts.length > 0) {
+      xp = sa.stageAttempts.reduce((sum: number, st: any) => sum + (st.xpGained || 0), 0);
+    }
+    const isStatic = sa.story?.storyType === "STATIC" || (!sa.story?.storyType);
+    if (xp === 0 && isStatic) {
+      xp = 100;
+    }
+    return xp;
+  };
+
+  const deriveDisplayTitle = (sa: any): string => {
+    let rawTitle = sa.story?.title || "Cerita Rakyat";
+    if (rawTitle.toLowerCase().startsWith("cerita ")) {
+      rawTitle = rawTitle.substring(7);
+    }
+    const islandName = sa.story?.island?.islandName || "";
+    return `Cerita ${rawTitle} ${islandName}`.trim();
+  };
+
+  const totalStoryXp = completedStories.reduce((acc, sa) => acc + calculateStoryAttemptXp(sa), 0);
+
+  const preTestAttempts = completedStories.filter(sa => sa.preTestScore !== null);
   const averagePreTest = preTestAttempts.length > 0 
     ? Math.round(preTestAttempts.reduce((acc, sa) => acc + Number(sa.preTestScore), 0) / preTestAttempts.length) 
     : 0;
 
-  const postTestAttempts = studentStories.filter(sa => sa.postTestScore !== null);
+  const postTestAttempts = completedStories.filter(sa => sa.postTestScore !== null);
   const averagePostTest = postTestAttempts.length > 0 
     ? Math.round(postTestAttempts.reduce((acc, sa) => acc + Number(sa.postTestScore), 0) / postTestAttempts.length) 
     : 0;
 
-  // Improvement Gauge: AVG(postTestScore - preTestScore) for attempts with both scores
-  const bothScoresAttempts = studentStories.filter(sa => sa.preTestScore !== null && sa.postTestScore !== null);
+  // Improvement Gauge: AVG(g_individual) using N-Gain formula on completed attempts only
+  const bothScoresAttempts = completedStories.filter(sa => sa.preTestScore !== null && sa.postTestScore !== null);
+  let totalNGain = 0;
+  for (const sa of bothScoresAttempts) {
+    totalNGain += calculateNGain(Number(sa.preTestScore), Number(sa.postTestScore));
+  }
   const averageImprovement = bothScoresAttempts.length > 0
-    ? Math.round(bothScoresAttempts.reduce((acc, sa) => acc + (Number(sa.postTestScore) - Number(sa.preTestScore)), 0) / bothScoresAttempts.length)
+    ? Math.round(totalNGain / bothScoresAttempts.length)
     : 0;
 
   const improvementGauge = [
     { name: "Kenaikan", value: averageImprovement },
-    { name: "Sisa", value: 100 - averageImprovement }
+    { name: "Sisa", value: Math.max(0, 100 - averageImprovement) }
   ];
 
-  // Story Interest (attempts count per story title)
+  // Story Interest (attempts count per story title, based on completed stories)
   const storyCountsMap = new Map<string, number>();
-  for (const sa of studentStories) {
+  for (const sa of completedStories) {
     if (sa.story?.title) {
       storyCountsMap.set(sa.story.title, (storyCountsMap.get(sa.story.title) || 0) + 1);
     }
@@ -817,12 +870,12 @@ export const getStudentAnalytics = async (studentId: string) => {
     count
   }));
 
-  // Story History
-  const storyHistory = studentStories.map(sa => ({
-    storyTitle: sa.story?.title || "Cerita Rakyat",
-    preTestScore: sa.preTestScore !== null ? Number(sa.preTestScore) : 0,
-    postTestScore: sa.postTestScore !== null ? Number(sa.postTestScore) : 0,
-    xp: sa.totalXpGained || 0,
+  // Story History (completed stories only, with correct XP, titles, and nullable pre/post scores)
+  const storyHistory = completedStories.map(sa => ({
+    storyTitle: deriveDisplayTitle(sa),
+    preTestScore: sa.preTestScore !== null ? Math.round(Number(sa.preTestScore)) : null,
+    postTestScore: sa.postTestScore !== null ? Math.round(Number(sa.postTestScore)) : null,
+    xp: calculateStoryAttemptXp(sa),
     date: sa.finishedAt ? formatDate(sa.finishedAt) : formatDate(sa.startedAt),
     time: formatDuration(sa.totalTimeSeconds),
     essay: sa.essayAnswer || null,

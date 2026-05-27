@@ -241,6 +241,25 @@ exports.Prisma.AnswerOptionScalarFieldEnum = {
   isCorrect: 'isCorrect'
 };
 
+exports.Prisma.QuizAttemptScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  islandSlug: 'islandSlug',
+  topicSlug: 'topicSlug',
+  levelId: 'levelId',
+  quizType: 'quizType',
+  startedAt: 'startedAt',
+  finishedAt: 'finishedAt',
+  completed: 'completed',
+  totalTimeSeconds: 'totalTimeSeconds',
+  xpGained: 'xpGained',
+  score: 'score',
+  totalQuestions: 'totalQuestions',
+  percentageScore: 'percentageScore',
+  wrongAttempts: 'wrongAttempts',
+  heartsLeft: 'heartsLeft'
+};
+
 exports.Prisma.StoryScalarFieldEnum = {
   id: 'id',
   islandId: 'islandId',
@@ -341,6 +360,7 @@ exports.Prisma.ModelName = {
   UserProgress: 'UserProgress',
   Question: 'Question',
   AnswerOption: 'AnswerOption',
+  QuizAttempt: 'QuizAttempt',
   Story: 'Story',
   StaticSlide: 'StaticSlide',
   InteractiveSlide: 'InteractiveSlide'

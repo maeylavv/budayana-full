@@ -15,6 +15,22 @@ const app = new Elysia()
       credentials: true,
     })
   )
+  .onError(({ error, set }) => {
+    console.error("Elysia caught error:", error)
+    
+    // Safely normalise invalid status codes to prevent RangeError crashes in Bun
+    const statusNum = typeof set.status === "number" ? set.status : parseInt(String(set.status || ""), 10)
+    if (isNaN(statusNum) || statusNum < 100 || statusNum > 599) {
+      set.status = 500
+    }
+    
+    const errMsg = error && typeof error === "object" && "message" in error ? String((error as any).message) : String(error)
+    
+    return {
+      error: errMsg || "Internal Server Error",
+      code: "INTERNAL_SERVER_ERROR",
+    }
+  })
   .mount("/auth", auth.handler)
   .use(
     openapi({
