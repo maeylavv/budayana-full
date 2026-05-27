@@ -113,7 +113,7 @@ export const attemptRoutes = new Elysia({ prefix: "/attempts" })
         summary: "Get attempt by ID",
       },
       response: {
-        200: StoryAttemptWithDetailsSchema, // Assuming this is the correct schema for detailed attempt
+        200: StoryAttemptSchema, // Assuming this is the correct schema for detailed attempt
         401: ErrorResponseSchema,
         403: ErrorResponseSchema,
         404: ErrorResponseSchema,
@@ -179,7 +179,7 @@ export const attemptRoutes = new Elysia({ prefix: "/attempts" })
         summary: "Update attempt",
       },
       response: {
-        200: StoryAttemptWithDetailsSchema,
+        200: StoryAttemptSchema,
         401: ErrorResponseSchema,
         404: ErrorResponseSchema,
       },
