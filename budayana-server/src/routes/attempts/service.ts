@@ -171,8 +171,8 @@ export async function createAttempt(userId: string, storyId: string) {
   attemptCreationLocks.set(lockKey, lockPromise)
 
   try {
-    // Wait for the previous request in the chain to finish
-    await existingPromise
+    // Wait for the previous request in the chain to finish, regardless of success or failure
+    await existingPromise.catch(() => {})
 
     // Check for existing unfinished attempts (defensively check for duplicates)
     const existingAttempts = await prisma.storyAttempt.findMany({
@@ -329,11 +329,20 @@ export async function createStageAttempt(
     })
 
     if (logs.length > 0) {
-      const correctCount = logs.filter((log) => log.isCorrect).length
+      // Filter to only the latest log entry per unique questionId to prevent duplicate/navigation logs from distorting the score
+      const latestLogsMap = new Map<string, typeof logs[0]>();
+      for (const log of logs) {
+        const existing = latestLogsMap.get(log.questionId);
+        if (!existing || new Date(log.answeredAt) > new Date(existing.answeredAt)) {
+          latestLogsMap.set(log.questionId, log);
+        }
+      }
+      const uniqueLogs = Array.from(latestLogsMap.values());
+      const correctCount = uniqueLogs.filter((log) => log.isCorrect).length;
       // Simple percentage score: (correct / total) * 100
-      calculatedScore = (correctCount / logs.length) * 100
+      calculatedScore = (correctCount / uniqueLogs.length) * 100;
     } else {
-      calculatedScore = 0
+      calculatedScore = 0;
     }
   }
 
@@ -512,44 +521,21 @@ async function checkCycleCompletion(
   userId: string,
   islandId: string
 ): Promise<boolean> {
-  // Get all stories in the island with their content
   const stories = await prisma.story.findMany({
     where: { islandId },
-    include: {
-      staticSlides: { take: 1 },
-      interactiveSlides: { take: 1 },
-    },
   })
 
-  // Filter trackable stories
-  const trackableStoryIds = stories
-    .filter((story) => {
-      // Only track stories that have actual content (slides)
-      // This prevents empty "ghost" stories or placeholder pre/post tests from blocking cycle completion
-      const hasContent =
-        (story.storyType === "STATIC" && story.staticSlides.length > 0) ||
-        (story.storyType === "INTERACTIVE" &&
-          story.interactiveSlides.length > 0)
+  const storyIds = stories.map((s) => s.id)
 
-      return hasContent
-    })
-    .map((s) => s.id)
+  if (storyIds.length === 0) return false
 
-  if (trackableStoryIds.length === 0) return false
-
-  // Check if each trackable story has a finished attempt
-  // Use findMany with distinct to ensure we count unique stories, not just total attempts
-  const finishedAttempts = await prisma.storyAttempt.findMany({
+  const finishedAttemptCount = await prisma.storyAttempt.count({
     where: {
       userId,
-      storyId: { in: trackableStoryIds },
+      storyId: { in: storyIds },
       finishedAt: { not: null },
     },
-    select: {
-      storyId: true,
-    },
-    distinct: ["storyId"],
   })
 
-  return finishedAttempts.length >= trackableStoryIds.length
+  return finishedAttemptCount > 0
 }

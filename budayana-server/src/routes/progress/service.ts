@@ -26,6 +26,41 @@ export async function getUserProgress(
   pagination: PaginationParams,
   filters: ProgressFilters = {}
 ): Promise<PaginatedResult<UserProgress> & { completedStory: number }> {
+  // Auto-sync/repair completed status for all progress records of this user
+  try {
+    const userProgressRecords = await prisma.userProgress.findMany({
+      where: { userId },
+      include: { island: { include: { stories: true } } }
+    })
+
+    for (const record of userProgressRecords) {
+      const storyIds = record.island.stories.map(s => s.id)
+      if (storyIds.length > 0) {
+        const finishedAttemptsCount = await prisma.storyAttempt.count({
+          where: {
+            userId,
+            storyId: { in: storyIds },
+            finishedAt: { not: null }
+          }
+        })
+
+        if (finishedAttemptsCount > 0) {
+          if (!record.isCompleted || record.cycleCount !== finishedAttemptsCount) {
+            await prisma.userProgress.update({
+              where: { id: record.id },
+              data: {
+                isCompleted: true,
+                cycleCount: finishedAttemptsCount
+              }
+            })
+          }
+        }
+      }
+    }
+  } catch (error) {
+    console.error("[AUTO-SYNC] Failed to sync user progress:", error)
+  }
+
   const filterClause = buildWhereClause(
     {
       isUnlocked: filters.isUnlocked,
