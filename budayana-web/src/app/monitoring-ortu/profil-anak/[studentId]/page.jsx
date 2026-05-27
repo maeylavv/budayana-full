@@ -72,15 +72,17 @@ export default function MonitoringOrtuProfilAnakDetail() {
         <section className="profile-top">
           <div className="profile-avatar-circle" style={{ width: '120px', height: '120px', borderColor: '#7B4F2E', backgroundColor: '#F2E5D3', overflow: 'hidden' }}>
              <img 
-              src="https://api.dicebear.com/7.x/adventurer/svg?seed={student.name}" 
+              src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${student.name}`} 
               alt="Avatar" 
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
           </div>
-          <div className="profile-top-text" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '8px' }}>
-            <h1 className="profile-name" style={{ color: '#7B4F2E', fontSize: '2.5rem', fontWeight: '800' }}>{student.name}</h1>
-            <div className="profile-grade-badge" style={{ backgroundColor: '#f3a64c', color: 'white', fontSize: '1.2rem', padding: '6px 24px', borderRadius: '999px', fontWeight: 'bold' }}>
-              Kelas {student.grade}{student.classLabel}
+          <div className="profile-top-text">
+            <h1 className="profile-name" style={{ color: '#7B4F2E', fontWeight: '800', margin: 0 }}>{student.name}</h1>
+            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '12px' }}>
+              <div className="profile-grade-badge student-badge-btn" style={{ backgroundColor: '#f3a64c', color: 'white' }}>
+                Kelas {student.grade}{student.classLabel}
+              </div>
             </div>
           </div>
         </section>
@@ -91,32 +93,32 @@ export default function MonitoringOrtuProfilAnakDetail() {
           <section className="profile-form">
             <div className="profile-field" style={{ marginBottom: '24px' }}>
               <label style={{ color: '#955C2E', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '8px', display: 'block' }}>Nama</label>
-              <input name="name" type="text" value={formData.name} onChange={handleChange} readOnly={!isEditing} style={{ width: '100%', padding: '20px 24px', borderRadius: '16px', border: '2px solid #E8D9C0', fontSize: '1.25rem', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: '#ffffff' }} />
+              <input name="name" type="text" value={formData.name} onChange={handleChange} readOnly style={{ border: '2px solid #E8D9C0', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: '#f0f0f0' }} />
             </div>
             
             <div className="profile-field" style={{ marginBottom: '24px' }}>
               <label style={{ color: '#955C2E', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '8px', display: 'block' }}>Kelas</label>
-              <input name="grade" type="text" value={formData.grade} onChange={handleChange} readOnly={!isEditing} style={{ width: '100%', padding: '20px 24px', borderRadius: '16px', border: '2px solid #E8D9C0', fontSize: '1.25rem', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: '#ffffff' }} />
+              <input name="grade" type="text" value={formData.grade} onChange={handleChange} readOnly style={{ border: '2px solid #E8D9C0', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: '#f0f0f0' }} />
             </div>
 
             <div className="profile-field" style={{ marginBottom: '24px' }}>
               <label style={{ color: '#955C2E', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '8px', display: 'block' }}>Label Kelas</label>
-              <input name="classLabel" type="text" value={formData.classLabel} onChange={handleChange} readOnly={!isEditing} style={{ width: '100%', padding: '20px 24px', borderRadius: '16px', border: '2px solid #E8D9C0', fontSize: '1.25rem', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: '#ffffff' }} />
+              <input name="classLabel" type="text" value={formData.classLabel} onChange={handleChange} readOnly style={{ border: '2px solid #E8D9C0', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: '#f0f0f0' }} />
             </div>
 
             <div className="profile-field" style={{ marginBottom: '24px' }}>
               <label style={{ color: '#955C2E', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '8px', display: 'block' }}>Username</label>
-              <input name="username" type="text" value={formData.username} onChange={handleChange} readOnly={!isEditing} style={{ width: '100%', padding: '20px 24px', borderRadius: '16px', border: '2px solid #E8D9C0', fontSize: '1.25rem', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: '#ffffff' }} />
+              <input name="username" type="text" value={formData.username} onChange={handleChange} readOnly style={{ border: '2px solid #E8D9C0', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: '#f0f0f0' }} />
             </div>
 
             <div className="profile-field" style={{ marginBottom: '24px' }}>
               <label style={{ color: '#955C2E', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '8px', display: 'block' }}>Password</label>
-              <input name="password" type="text" value={formData.password} onChange={handleChange} readOnly={!isEditing} style={{ width: '100%', padding: '20px 24px', borderRadius: '16px', border: '2px solid #E8D9C0', fontSize: '1.25rem', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: '#ffffff' }} />
+              <input name="password" type="text" value={formData.password} onChange={handleChange} readOnly style={{ border: '2px solid #E8D9C0', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: '#f0f0f0' }} />
             </div>
 
             <div className="profile-field" style={{ marginBottom: '24px' }}>
               <label style={{ color: '#955C2E', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '8px', display: 'block' }}>Email Orang Tua</label>
-              <input name="guardianEmail" type="text" value={formData.guardianEmail} readOnly style={{ width: '100%', padding: '20px 24px', borderRadius: '16px', border: '2px solid #E8D9C0', fontSize: '1.25rem', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: '#ffffff' }} />
+              <input name="guardianEmail" type="text" value={formData.guardianEmail} readOnly style={{ border: '2px solid #E8D9C0', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: '#f0f0f0' }} />
             </div>
           </section>
         </div>

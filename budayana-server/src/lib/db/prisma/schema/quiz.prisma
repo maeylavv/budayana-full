@@ -1,0 +1,36 @@
+model QuizAttempt {
+  id               String    @id @default(cuid())
+
+  userId           String
+
+  islandSlug       String
+  topicSlug        String
+  levelId          Int
+
+  quizType         String    @default("culture")
+
+  startedAt        DateTime  @default(now())
+  finishedAt       DateTime?
+
+  completed        Boolean   @default(false)
+
+  totalTimeSeconds Int       @default(0)
+
+  xpGained         Int       @default(0)
+
+  score            Int       @default(0)
+  totalQuestions   Int       @default(0)
+
+  percentageScore  Float     @default(0)
+
+  wrongAttempts    Int       @default(0)
+  heartsLeft       Int       @default(5)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([userId, islandSlug])
+  @@index([userId, topicSlug])
+
+  @@map("quiz_attempts")
+}
