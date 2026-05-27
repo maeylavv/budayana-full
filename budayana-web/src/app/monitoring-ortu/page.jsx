@@ -1,106 +1,187 @@
+import { useState, useEffect } from "react";
 import MonitoringSidebar from "../../components/MonitoringSidebar";
-import ScoreTable from "../../components/ScoreTable";
-import { PARENT_STUDENT } from "../../lib/dummyData";
-import {
-  Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer,
-  BarChart, Bar, XAxis, YAxis, Tooltip, Legend
-} from 'recharts';
+import StudentAnalyticsDashboard from "../../components/StudentAnalyticsDashboard";
+import { monitoringApi } from "../../lib/api";
 import "../../pages/Profile.css";
 import "../../pages/Results.css";
 
-// Data dinormalisasi ke persentase (0-100%)
-const radarData = [
-  { subject: 'Ingatan (L1)', Student: 80, Target: 60, fullMark: 100 },
-  { subject: 'Analisis (L2)', Student: 75, Target: 60, fullMark: 100 },
-  { subject: 'Pendapat (L3)', Student: 66, Target: 60, fullMark: 100 },
-];
-
-const barData = [
-  { name: 'Makanan', 'Skor Siswa': 85, 'Rata-rata Kelas': 75 },
-  { name: 'Rumah Adat', 'Skor Siswa': 90, 'Rata-rata Kelas': 80 },
-  { name: 'Tarian', 'Skor Siswa': 70, 'Rata-rata Kelas': 65 },
-];
-
 export default function MonitoringOrtuDashboard() {
-  const student = PARENT_STUDENT;
+  const [students, setStudents] = useState([]);
+  const [selectedStudentId, setSelectedStudentId] = useState("");
+  const [studentAnalytics, setStudentAnalytics] = useState(null);
+  const [loadingList, setLoadingList] = useState(true);
+  const [loadingAnalytics, setLoadingAnalytics] = useState(false);
+  const [error, setError] = useState(null);
+
+  // Fetch children list
+  useEffect(() => {
+    const fetchStudents = async () => {
+      try {
+        setLoadingList(true);
+        const data = await monitoringApi.listStudents();
+        setStudents(data || []);
+        if (data && data.length > 0) {
+          setSelectedStudentId(data[0].id);
+        } else {
+          setLoadingList(false);
+        }
+      } catch (err) {
+        console.error("Gagal memuat data anak:", err);
+        setError(err.message || "Gagal memuat data anak");
+        setLoadingList(false);
+      }
+    };
+    fetchStudents();
+  }, []);
+
+  // Fetch student detailed analytics
+  useEffect(() => {
+    if (!selectedStudentId) return;
+
+    const controller = new AbortController();
+    let active = true;
+
+    const fetchAnalytics = async () => {
+      try {
+        setLoadingAnalytics(true);
+        const data = await monitoringApi.getStudentAnalytics(selectedStudentId, {
+          signal: controller.signal
+        });
+        if (active && data) {
+          setStudentAnalytics(data);
+          setError(null);
+        }
+      } catch (err) {
+        if (err.name === "AbortError" || err.message?.toLowerCase().includes("abort")) {
+          return;
+        }
+        console.error("Gagal memuat analitik anak:", err);
+        if (active) {
+          setError(err.message || "Gagal memuat analitik anak");
+        }
+      } finally {
+        if (active) {
+          setLoadingAnalytics(false);
+          setLoadingList(false);
+        }
+      }
+    };
+
+    fetchAnalytics();
+
+    return () => {
+      active = false;
+      controller.abort();
+    };
+  }, [selectedStudentId]);
+
+  const isLoading = loadingList || (loadingAnalytics && !studentAnalytics?.studentInfo?.name);
+
+  if (isLoading) {
+    return (
+      <div className="flex bg-[#FEF6DF] min-h-screen w-full" style={{ fontFamily: "'Fredoka One', sans-serif" }}>
+        <MonitoringSidebar role="ortu" />
+        <main className="flex-1 p-10 box-border overflow-x-hidden">
+          <div style={{ marginBottom: '30px' }}>
+              <h1 className="results-section-title" style={{ fontSize: '2rem', marginBottom: '4px' }}>Dashboard Orang Tua</h1>
+              <hr className="profile-divider" style={{ borderTop: '2px solid #E8D9C0', marginTop: '10px' }} />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '400px', backgroundColor: 'white', border: '2px dashed #955C2E', borderRadius: '16px', gap: '16px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+              <div style={{ width: '48px', height: '48px', border: '4px solid #f3a64c', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+              <p style={{ color: '#955C2E', fontSize: '1.2rem', fontWeight: 'bold' }}>Memuat data anak...</p>
+            </div>
+          </div>
+        </main>
+        <style>{`
+          @keyframes spin {
+            to { transform: rotate(360deg); }
+          }
+        `}</style>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex bg-[#FEF6DF] min-h-screen w-full" style={{ fontFamily: "'Fredoka One', sans-serif" }}>
+        <MonitoringSidebar role="ortu" />
+        <main className="flex-1 p-10 box-border overflow-x-hidden">
+          <div style={{ marginBottom: '30px' }}>
+              <h1 className="results-section-title" style={{ fontSize: '2rem', marginBottom: '4px' }}>Dashboard Orang Tua</h1>
+              <hr className="profile-divider" style={{ borderTop: '2px solid #E8D9C0', marginTop: '10px' }} />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '400px', backgroundColor: 'white', border: '2px solid #F44336', borderRadius: '16px', gap: '16px', padding: '20px' }}>
+            <p style={{ color: '#F44336', fontSize: '1.2rem', fontWeight: 'bold', textAlign: 'center' }}>⚠️ Gagal memuat data: {error}</p>
+            <button onClick={() => window.location.reload()} style={{ backgroundColor: '#955C2E', color: 'white', padding: '10px 20px', borderRadius: '12px', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}>Coba Lagi</button>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  if (students.length === 0) {
+    return (
+      <div className="flex bg-[#FEF6DF] min-h-screen w-full" style={{ fontFamily: "'Fredoka One', sans-serif" }}>
+        <MonitoringSidebar role="ortu" />
+        <main className="flex-1 p-10 box-border overflow-x-hidden">
+          <div style={{ marginBottom: '30px' }}>
+              <h1 className="results-section-title" style={{ fontSize: '2rem', marginBottom: '4px' }}>Dashboard Orang Tua</h1>
+              <hr className="profile-divider" style={{ borderTop: '2px solid #E8D9C0', marginTop: '10px' }} />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '400px', backgroundColor: 'white', border: '2px dashed #955C2E', borderRadius: '16px', gap: '16px', padding: '20px' }}>
+            <p style={{ color: '#955C2E', fontSize: '1.2rem', fontWeight: 'bold', textAlign: 'center' }}>Belum ada data anak yang terhubung.</p>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  const childSelector = (
+    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px' }}>
+      {students.length > 1 && (
+        <>
+          <label htmlFor="child-select" style={{ color: '#7B4F2E', fontWeight: 'bold', fontSize: '1rem' }}>Pilih Anak:</label>
+          <select
+            id="child-select"
+            value={selectedStudentId}
+            onChange={(e) => setSelectedStudentId(e.target.value)}
+            style={{
+              padding: '6px 12px',
+              borderRadius: '12px',
+              border: '2px solid #7B4F2E',
+              backgroundColor: 'white',
+              color: '#7B4F2E',
+              fontFamily: "'Fredoka One', sans-serif",
+              fontWeight: 'bold',
+              outline: 'none',
+              cursor: 'pointer',
+              fontSize: '0.9rem'
+            }}
+          >
+            {students.map(s => (
+              <option key={s.id} value={s.id}>{s.name}</option>
+            ))}
+          </select>
+        </>
+      )}
+      {loadingAnalytics && (
+        <span style={{ color: '#955C2E', fontSize: '0.9rem', fontWeight: 'bold', marginLeft: '8px' }}>Mengambil data terbaru...</span>
+      )}
+    </div>
+  );
 
   return (
     <div className="flex bg-[#FEF6DF] min-h-screen w-full" style={{ fontFamily: "'Fredoka One', sans-serif" }}>
       <MonitoringSidebar role="ortu" />
       
       <main className="flex-1 p-10 box-border overflow-x-hidden">
-        <section className="profile-top">
-          <div className="profile-avatar-circle" style={{ fontSize: '3rem', width: '120px', height: '120px', borderColor: '#7B4F2E', backgroundColor: '#e2cfab', padding: 0, overflow: 'hidden' }}>
-            <img src="/assets/budayana/islands/Bocah1 1.png" alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-          </div>
-          <div className="profile-top-text" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '8px' }}>
-            <h1 className="profile-name" style={{ color: '#7B4F2E', fontSize: '2.5rem', fontWeight: '800' }}>{student.name}</h1>
-            <div className="profile-grade-badge" style={{ backgroundColor: '#f3a64c', color: 'white', fontSize: '1.2rem', padding: '6px 24px', borderRadius: '999px', fontWeight: 'bold' }}>
-              Kelas {student.class}
-            </div>
-          </div>
-        </section>
-
-        <section style={{ marginTop: '30px' }}>
-          <h2 className="results-section-title" style={{ fontSize: '1.2rem', marginBottom: '10px' }}>Statistik</h2>
-          <div className="stats-grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
-            <div className="stat-card green" style={{ border: 'none', borderRadius: '24px' }}>
-              <div className="stat-value">4/8</div>
-              <div className="stat-label">Cerita Selesai</div>
-            </div>
-            <div className="stat-card purple" style={{ border: 'none', borderRadius: '24px' }}>
-              <div className="stat-value">{student.totalXP}</div>
-              <div className="stat-label">Total XP</div>
-            </div>
-            <div className="stat-card pink" style={{ border: 'none', borderRadius: '24px' }}>
-              <div className="stat-value" style={{ fontSize: '1.5rem' }}>🏆 {student.title}</div>
-              <div className="stat-label">Gelar Saat Ini</div>
-            </div>
-            <div className="stat-card orange" style={{ border: 'none', borderRadius: '24px' }}>
-              <div className="stat-value">{student.averageScore}%</div>
-              <div className="stat-label">Rata-rata<br/>Nilai Quiz</div>
-            </div>
-          </div>
-        </section>
-
-        <section style={{ marginTop: '30px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-          <div style={{ border: '3px solid #955C2E', borderRadius: '16px', padding: '20px', backgroundColor: 'white' }}>
-            <h3 style={{ color: '#955C2E', fontWeight: 'bold', marginBottom: '20px' }}>Analisis Level Literasi Siswa</h3>
-            <div style={{ height: '300px' }}>
-              <ResponsiveContainer width="100%" height="100%">
-                <RadarChart cx="50%" cy="50%" outerRadius="70%" data={radarData}>
-                  <PolarGrid />
-                  <PolarAngleAxis dataKey="subject" tick={{ fontSize: 10 }} />
-                  <PolarRadiusAxis angle={30} domain={[0, 100]} />
-                  <Radar name="Target/Rata-rata" dataKey="Target" stroke="#B0BEC5" fill="#CFD8DC" fillOpacity={0.6} />
-                  <Radar name="Siswa" dataKey="Student" stroke="#4CAF50" fill="#4CAF50" fillOpacity={0.6} />
-                  <Legend />
-                </RadarChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-
-          <div style={{ border: '3px solid #955C2E', borderRadius: '16px', padding: '20px', backgroundColor: 'white' }}>
-            <h3 style={{ color: '#955C2E', fontWeight: 'bold', marginBottom: '20px' }}>Minat Budaya Terbesar</h3>
-            <div style={{ height: '300px' }}>
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={barData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                  <XAxis dataKey="name" tick={{ fontSize: 12 }} />
-                  <YAxis tick={{ fontSize: 12 }} domain={[0, 100]} />
-                  <Tooltip />
-                  <Legend iconType="circle" wrapperStyle={{ fontSize: '12px' }} />
-                  <Bar dataKey="Skor Siswa" fill="#f3a64c" />
-                  <Bar dataKey="Rata-rata Kelas" fill="#955C2E" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-        </section>
-
-        <section style={{ marginTop: '40px' }}>
-          <h2 className="results-section-title" style={{ fontSize: '1.2rem', marginBottom: '10px' }}>Riwayat Pengerjaan</h2>
-          <ScoreTable history={student?.scoreHistory || []} />
-        </section>
+        {studentAnalytics && (
+          <StudentAnalyticsDashboard
+            studentAnalytics={studentAnalytics}
+            childSelector={childSelector}
+          />
+        )}
       </main>
     </div>
   );

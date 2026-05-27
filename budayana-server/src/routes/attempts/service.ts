@@ -35,20 +35,15 @@ function toNumber(val: any): number | null {
 
 // Helper to transform attempt result
 function transformAttempt(
-  attempt: any
+  attempt: StoryAttempt & { story?: { title: string } }
 ) {
   return {
     ...attempt,
     preTestScore: toNumber(attempt.preTestScore),
     postTestScore: toNumber(attempt.postTestScore),
     story: attempt.story,
-    stageAttempts: attempt.stageAttempts?.map((stage: any) => ({
-      ...stage,
-      score: toNumber(stage.score),
-    })),
   }
 }
-
 
 /**
  * Get paginated list of story attempts
@@ -97,7 +92,6 @@ export async function getAttempts(
               }
             },
           },
-          stageAttempts: true,
           questionLogs: {
             include: {
               question: {
@@ -150,8 +144,6 @@ export async function getAttemptById(id: string) {
   }
 }
 
-const attemptCreationLocks = new Map<string, Promise<any>>()
-
 /**
  * Create a new story attempt or resume an existing unfinished one
  */
@@ -187,44 +179,25 @@ export async function createAttempt(userId: string, storyId: string) {
           orderBy: { answeredAt: "asc" },
         },
       },
-    })
+    },
+  })
 
-    if (existingAttempts.length > 0) {
-      const active = existingAttempts[0]
-
-      // If duplicates exist, keep the oldest one and delete the duplicate attempts to prevent data corruption
-      if (existingAttempts.length > 1) {
-        const idsToDelete = existingAttempts.slice(1).map((a) => a.id)
-        await prisma.storyAttempt.deleteMany({
-          where: { id: { in: idsToDelete } },
-        })
-        console.log(
-          `[CLEANUP] Deleted ${idsToDelete.length} duplicate active attempts for user ${userId}, story ${storyId}`
-        )
-      }
-
-      return {
-        ...transformAttempt(active),
-        questionLogs: active.questionLogs,
-      }
-    }
-
-    const attempt = await prisma.storyAttempt.create({
-      data: {
-        userId,
-        storyId,
-      },
-    })
+  if (existingAttempt) {
     return {
-      ...transformAttempt(attempt),
-      questionLogs: [],
+      ...transformAttempt(existingAttempt),
+      questionLogs: existingAttempt.questionLogs,
     }
-  } finally {
-    // Clear lock only if it hasn't been overwritten by a newer request
-    if (attemptCreationLocks.get(lockKey) === lockPromise) {
-      attemptCreationLocks.delete(lockKey)
-    }
-    resolveLock()
+  }
+
+  const attempt = await prisma.storyAttempt.create({
+    data: {
+      userId,
+      storyId,
+    },
+  })
+  return {
+    ...transformAttempt(attempt),
+    questionLogs: [],
   }
 }
 
