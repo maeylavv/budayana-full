@@ -38,6 +38,7 @@ export const auth = betterAuth({
         type: "number",
         input: true,
         required: false,
+        defaultValue: 0,
         fieldName: "grade",
       },
       classLabel: {
