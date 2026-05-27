@@ -21,13 +21,14 @@ export default function GuestRoute() {
 
   // const tempSession = localStorage.getItem("temp_dev_session")
 
-  // Redirect authenticated STUDENT users to their portal home.
-  // We do NOT redirect PARENT or TEACHER roles in GuestRoute, so they can
-  // stay on the /login guest page and view the role mismatch error.
+  // Redirect authenticated users to their intended destination or role-based home
   if (session?.user) {
-    const userRole = session.user.role || ""
-    
-    if (userRole === "STUDENT") {
+    const role = session.user.role
+    if (role === "TEACHER") {
+      return <Navigate to='/monitoring-guru/profil' replace />
+    } else if (role === "PARENT") {
+      return <Navigate to='/monitoring-ortu/profil' replace />
+    } else {
       const from = location.state?.from?.pathname || "/home"
       return <Navigate to={from} replace />
     }

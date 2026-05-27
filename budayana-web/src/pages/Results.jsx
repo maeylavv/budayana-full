@@ -87,28 +87,12 @@ export default function Results() {
 
 
   const getDisplayTitle = (attempt) => {
-    const rawTitle = attempt.story?.title || "Unknown Story"
-    const lowerTitle = rawTitle.toLowerCase()
-
-    let islandName = ""
-    if (attempt.story?.island?.islandName) {
-      islandName = attempt.story.island.islandName
-    } else {
-      islandName = getIslandName(attempt)
+    let rawTitle = attempt.story?.title || "Unknown Story"
+    if (rawTitle.toLowerCase().startsWith("cerita ")) {
+      rawTitle = rawTitle.substring(7)
     }
-
-    const suffix = islandName ? ` ${islandName}` : ""
-
-    if (lowerTitle.includes("pre-test")) {
-      return `Pre-Test${suffix}`
-    } else if (lowerTitle.includes("post-test")) {
-      return `Post-Test${suffix}`
-    } else {
-      if (islandName && lowerTitle.includes(islandName.toLowerCase())) {
-        return rawTitle
-      }
-      return `${rawTitle}${suffix}`
-    }
+    let islandName = attempt.story?.island?.islandName || getIslandName(attempt)
+    return `Cerita ${rawTitle} ${islandName}`
   }
 
 
@@ -155,34 +139,66 @@ export default function Results() {
             <div className='stats-grid'>
               <div className='stat-card green'>
                 <div className='stat-value'>{stats?.storiesCompleted || 0}</div>
-                <div className='stat-label'>Tahap Selesai</div>
+                <div className='stat-label'>Cerita Rakyat Selesai</div>
               </div>
-              <div className='stat-card purple'>
-                <div className='stat-value'>{stats?.totalXp || 0}</div>
-                <div className='stat-label'>Total XP</div>
-              </div>
-              <div className='stat-card pink'>
-                <div className='stat-value'>
-                  <p>
-                    {stats?.averagePreTestScore !== undefined
-                      ? Math.round(stats.averagePreTestScore)
-                      : "0"}%
-                  </p>
-                </div>
-                <div className='stat-label'>Rata-rata Pre Test</div>
-              </div>
-              <div className='stat-card orange'>
-                <div className='stat-value'>
-                  <p>
-                    {stats?.averagePostTestScore !== undefined
-                      ? Math.round(stats.averagePostTestScore)
-                      : "0"}%
-                  </p>
-                </div>
-                <div className='stat-label'>Rata-rata Post Test</div>
-              </div>
+          <div className='stat-card purple'>
+            <div className='stat-value'>{stats?.totalXp || 0}</div>
+            <div className='stat-label'>Total XP</div>
+          </div>
+          <div className='stat-card pink'>
+            <div className='stat-value'>
+              <p>
+                {stats?.averagePreTestScore !== undefined
+                  ? Math.round(stats.averagePreTestScore)
+                  : "0"}%
+              </p>
             </div>
-          </section>
+            <div className='stat-label'>Rata-rata Pre-Test</div>
+          </div>
+          <div className='stat-card orange'>
+            <div className='stat-value'>
+              <p>
+                {stats?.averagePostTestScore !== undefined
+                  ? Math.round(stats.averagePostTestScore)
+                  : "0"}%
+              </p>
+            </div>
+            <div className='stat-label'>Rata-rata Post-Test</div>
+          </div>
+        </div>
+      </section>
+
+
+      {/* History Section */}
+      <section>
+        <h2 className='results-section-title'>Riwayat Pengerjaan</h2>
+        <div className='history-table-container'>
+          <div className='history-header'>
+            <div>Cerita</div>
+            <div>Pre-test</div>
+            <div>Post-test</div>
+            <div>XP</div>
+            <div>Tanggal</div>
+            <div>Waktu</div>
+            <div>Esai</div>
+          </div>
+          <div className='history-body'>
+            {(() => {
+              // Filter attempts to show only valid completed ones
+              const filteredAttempts = attempts.filter((attempt) => {
+                // Must be finished
+                if (!attempt.finishedAt) return false
+
+
+                const title = (attempt.story?.title || "").toLowerCase()
+
+
+                // For Pre-test, must have a score
+                if (title.includes("pre-test")) return attempt.preTestScore !== null
+
+
+                // For Post-test, must have a score
+                if (title.includes("post-test")) return attempt.postTestScore !== null
 
           {/* History Section */}
           <section>
@@ -392,7 +408,83 @@ export default function Results() {
               <div className='history-body'>
                 {quizAttempts.length === 0 ? (
                   <div className='empty-message'>
-                    Belum ada riwayat Quiz Budaya. Ayo mulai petualanganmu! 🗺️
+                    Belum ada riwayat permainan.
+                  </div>
+                )
+              }
+
+              const sortedAttempts = [...filteredAttempts].sort((a, b) => new Date(b.finishedAt) - new Date(a.finishedAt))
+
+              return sortedAttempts.map((attempt) => {
+                const displayTitle = getDisplayTitle(attempt)
+                const isTest = false // Not a separate test attempt anymore, it's a unified cycle
+
+                // Display XP
+                let displayXp = attempt.totalXpGained || 0
+                if (displayXp === 0 && attempt.stages && attempt.stages.length > 0) {
+                  displayXp = attempt.stages.reduce((sum, s) => sum + (s.xpGained || 0), 0)
+                }
+
+                // If XP is still 0, default to 100 only for STATIC stories (or untyped stories that aren't tests)
+                const isStaticStory = attempt.story?.storyType === "STATIC" || (!attempt.story?.storyType)
+
+                if (displayXp === 0 && isStaticStory) {
+                  displayXp = 100;
+                }
+
+                // Calculate duration
+                let duration = attempt.totalTimeSeconds
+                if (duration === undefined || duration === null) {
+                  if (attempt.finishedAt && attempt.startedAt) {
+                    duration = (new Date(attempt.finishedAt) - new Date(attempt.startedAt)) / 1000
+                  } else {
+                    duration = 0
+                  }
+                }
+
+                const isInteractiveStory = ["sumatra", "sulawesi", "bali"].some(i => displayTitle.toLowerCase().includes(i));
+                const essayLog = attempt.questionLogs?.find(log => log.question?.questionType === "ESSAY" || log.userAnswerText);
+                const hasEssay = isInteractiveStory && (attempt.essayAnswer || essayLog?.userAnswerText);
+
+                return (
+                  <div key={attempt.id} className='history-row'>
+                    <div>{displayTitle}</div>
+                    <div>
+                      {attempt.preTestScore !== null
+                        ? Math.round(attempt.preTestScore)
+                        : "-"}
+                    </div>
+                    <div>
+                      {attempt.postTestScore !== null
+                        ? Math.round(attempt.postTestScore)
+                        : "-"}
+                    </div>
+                    <div>{displayXp}</div>
+                    <div>{formatDate(attempt.finishedAt)}</div>
+                    <div>{formatDuration(duration)}</div>
+                    <div>
+                      {hasEssay ? (
+                        <button 
+                          className='essay-icon-btn' 
+                          onClick={() => {
+                            let rawTitle = attempt.story?.title || "Cerita"
+                            if (rawTitle.toLowerCase().startsWith("cerita ")) {
+                               rawTitle = rawTitle.substring(7)
+                            }
+                            if (rawTitle.toLowerCase().endsWith(" sumatra") || rawTitle.toLowerCase().endsWith(" sulawesi") || rawTitle.toLowerCase().endsWith(" bali")) {
+                              const islandIndex = rawTitle.lastIndexOf(" ");
+                              rawTitle = rawTitle.substring(0, islandIndex);
+                            }
+                            setSelectedEssay({ 
+                              title: rawTitle, 
+                              text: attempt.essayAnswer || essayLog?.userAnswerText 
+                            })
+                          }}
+                        >
+                          <img src="/assets/budayana/islands/open.png" alt="Buka Esai" className="w-6 h-6 object-contain" />
+                        </button>
+                      ) : ""}
+                    </div>
                   </div>
                 ) : (
                   [...quizAttempts]

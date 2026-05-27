@@ -75,6 +75,7 @@ export function useAddStage() {
       attemptsApi.addStage(attemptId, stageData),
     onSuccess: (result, { attemptId }) => {
       queryClient.invalidateQueries({ queryKey: attemptKeys.detail(attemptId) })
+      queryClient.invalidateQueries({ queryKey: attemptKeys.all })
     },
   })
 }

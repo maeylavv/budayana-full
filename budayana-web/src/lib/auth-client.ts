@@ -16,5 +16,15 @@ export const authClient = createAuthClient({
     // session cookie back on cross-origin requests.
     credentials: "include",
   },
+  user: {
+    additionalFields: {
+      role: {
+        type: "string",
+      },
+      grade: {
+        type: "number",
+      },
+    },
+  },
 })
 

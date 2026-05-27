@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { useMutation } from "@tanstack/react-query"
 import { authClient } from "../../lib/auth-client"
 import CookieBlockedPopup from "../../components/CookieBlockedPopup"
+import PortalRedirectPopup from "../../components/PortalRedirectPopup"
 
 export default function Login() {
   const navigate = useNavigate()
@@ -73,6 +74,14 @@ export default function Login() {
     }
   }, [session])
 
+  // State for portal redirect popup
+  const [showRedirectPopup, setShowRedirectPopup] = useState(false)
+  const [redirectPopupConfig, setRedirectPopupConfig] = useState({
+    message: "",
+    targetPath: "",
+    targetLabel: ""
+  })
+
   const loginMutation = useMutation({
     mutationFn: async ({ username, password }) => {
       const { data, error } = await authClient.signIn.username({
@@ -89,7 +98,30 @@ export default function Login() {
     onSuccess: async (data, variables) => {
       setVerifyingSession(true)
 
-      // 1. Temporarily store credentials so the subsequent getSession call works with the new token
+      let role = data?.user?.role;
+      if (!role) {
+        try {
+          const session = await authClient.getSession();
+          role = session?.data?.user?.role;
+        } catch (e) {
+          console.error("Gagal mengambil session role:", e);
+        }
+      }
+
+      if (!role || role !== "STUDENT") {
+        setVerifyingSession(false);
+        try {
+          await authClient.signOut();
+        } catch (e) {
+          console.error("Gagal logout otomatis:", e);
+        }
+        localStorage.removeItem("ba_token");
+        localStorage.removeItem("ba_user_id");
+
+        setShowRedirectPopup(true);
+        return;
+      }
+
       if (data?.session?.token) {
         localStorage.setItem("ba_token", data.session.token)
       }
@@ -234,18 +266,23 @@ export default function Login() {
         </div>
       </div>
 
-      {/* Popup Deteksi Cookies Blocked */}
       <CookieBlockedPopup
-  isOpen={showCookiePopup}
-  onClose={() => {
-    localStorage.removeItem("ba_token")
-    localStorage.removeItem("ba_user_id")
-    setShowCookiePopup(false)
-  }}
-  onRetry={() => {
-    window.location.reload()
-  }}
-/>
+        isOpen={showCookiePopup}
+        onClose={() => {
+          localStorage.removeItem("ba_token")
+          localStorage.removeItem("ba_user_id")
+          setShowCookiePopup(false)
+        }}
+        onRetry={() => {
+          window.location.reload()
+        }}
+      />
+
+      <PortalRedirectPopup
+        open={showRedirectPopup}
+        currentPortal="student"
+        onClose={() => setShowRedirectPopup(false)}
+      />
     </div>
   )
 }
