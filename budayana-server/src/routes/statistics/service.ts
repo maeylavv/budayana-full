@@ -12,8 +12,9 @@ export async function getStatistics(userId: string) {
       select: { totalXp: true },
     }),
 
-    // 2. Get Stories Completed (Total cycles completed)
-    prisma.storyAttempt.count({
+    // 2. Get Stories Completed (Distinct stories finished)
+    prisma.storyAttempt.groupBy({
+      by: ["storyId"],
       where: {
         userId,
         finishedAt: { not: null },
@@ -40,7 +41,7 @@ export async function getStatistics(userId: string) {
   }
 
   return {
-    storiesCompleted: storiesCompletedCount,
+    storiesCompleted: storiesCompletedCount.length,
     totalXp: user?.totalXp ?? 0,
     averagePreTestScore: Math.round(toNumber(scores._avg.preTestScore)),
     averagePostTestScore: Math.round(toNumber(scores._avg.postTestScore)),
