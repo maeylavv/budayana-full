@@ -273,10 +273,15 @@ export default function GamePage() {
   }
 
   // Start Attempt
+  const startAttemptRef = useRef(false)
+
   useEffect(() => {
-    if (storyId && !attemptId && story?.storyType === "INTERACTIVE") {
+    if (storyId && !attemptId && story?.storyType === "INTERACTIVE" && !startAttemptRef.current) {
+      console.log(`[GamePage] Initiating startAttempt mutate for storyId: ${storyId}`);
+      startAttemptRef.current = true
       startAttempt.mutate(storyId, {
         onSuccess: (data) => {
+          console.log(`[GamePage] startAttempt onSuccess resolved. attemptId: ${data.id}, totalTimeSeconds: ${data.totalTimeSeconds}`);
           setAttemptId(data.id)
           setAttemptStartedAt(data.startedAt)
 
@@ -285,6 +290,11 @@ export default function GamePage() {
             const savedDuration = data.totalTimeSeconds * 1000
             startTimeRef.current = Date.now() - savedDuration
             setTimeElapsed(data.totalTimeSeconds)
+            console.log(`[GamePage] Resumed timer with saved duration: ${data.totalTimeSeconds} seconds`);
+          } else {
+            startTimeRef.current = Date.now()
+            setTimeElapsed(0)
+            console.log(`[GamePage] Initialized new attempt timer at 0`);
           }
           // Restore previous answers from questionLogs if they exist
           if (data.questionLogs && data.questionLogs.length > 0) {
@@ -297,7 +307,7 @@ export default function GamePage() {
           }
           
           if (data.essayAnswer) {
-            // Restore essay answer (currently only sumatra uses this ID, but could be dynamic later)
+            // Restore essay answer (currently only Sumatra uses this ID, but could be dynamic later)
             const essayId = islandSlug === "sumatra" ? "sumatra_essay_1" : `${islandSlug}_essay_1`;
             setAnswers(prev => ({
               ...prev,
@@ -316,7 +326,10 @@ export default function GamePage() {
             setDragDropOrder(storedDragDrop)
           }
         },
-        onError: (err) => console.error("Failed to start attempt", err),
+        onError: (err) => {
+          console.error("[GamePage] Failed to start attempt:", err)
+          startAttemptRef.current = false // Reset on error so it can retry
+        },
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -332,18 +345,10 @@ export default function GamePage() {
   }, [pages, pendingLogs])
 
   // Timer Logic
-  // Timer Logic
   const startTimeRef = useRef(null)
 
   useEffect(() => {
-    // Initialize start time when story is loaded and timer hasn't started yet
-    if (story && !startTimeRef.current && !isResultsPage) {
-      startTimeRef.current = Date.now()
-    }
-  }, [story, isResultsPage])
-
-  useEffect(() => {
-    if (!timerRunning || !story || isResultsPage) return
+    if (!timerRunning || !story || isResultsPage || !attemptId) return
 
     // Ensure we have a start time
     if (!startTimeRef.current) {
@@ -362,7 +367,7 @@ export default function GamePage() {
     calculateElapsed()
     const t = setInterval(calculateElapsed, 1000)
     return () => clearInterval(t)
-  }, [timerRunning, story, isResultsPage])
+  }, [timerRunning, story, isResultsPage, attemptId])
   // Persist drag-drop order to localStorage on every change
   useEffect(() => {
     if (attemptId && Object.keys(dragDropOrder).length > 0) {
@@ -501,11 +506,10 @@ export default function GamePage() {
           },
         })
 
-        // Update Attempt (Finish)
+        // Update Attempt (Save progression, do NOT set finishedAt)
         await updateAttempt.mutateAsync({
           attemptId,
           data: {
-            finishedAt: new Date().toISOString(),
             totalTimeSeconds: timeElapsed,
             totalXpGained: xpGained,
           },
@@ -1159,7 +1163,7 @@ export default function GamePage() {
             className='mx-auto mb-4 max-w-[140px] md:max-w-[180px] rounded-md'
           />
           <p className='text-lg font-semibold text-[#2f2f2f] mb-4'>
-            Jangan pergi dulu! Progresmu di tahap ini akan hilang kalau kamu berhenti sekarang.
+            Kamu yakin mau keluar?
           </p>
           <button
             onClick={() => setShowExitWarning(false)}

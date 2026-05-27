@@ -367,7 +367,7 @@ export default function QuizGameplayPage() {
               onError={e => e.target.style.display = 'none'}
             />
             <p className='quit-title'>
-              Jangan pergi dulu! Progresmu di tahap ini<br />akan hilang kalau kamu berhenti sekarang.
+              Kamu yakin mau keluar?
             </p>
             <button className='btn-continue-pill' onClick={() => setShowQuitPopup(false)}>
               Lanjutkan Belajar

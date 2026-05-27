@@ -162,6 +162,10 @@ export default function MonitoringGuruDashboard() {
   }
 
   const filteredStudents = students;
+  const donutData = [
+    { name: "Aktif", value: classSummary.activeStudents, color: "#4CAF50" },
+    { name: "Tidak Aktif", value: classSummary.inactiveStudents, color: "#F44336" }
+  ];
 
   return (
     <div className="flex bg-[#FEF6DF] min-h-screen w-full" style={{ fontFamily: "'Fredoka One', sans-serif" }}>
@@ -205,31 +209,52 @@ export default function MonitoringGuruDashboard() {
               <div style={{ border: '2px solid #955C2E', borderRadius: '16px', padding: '20px', backgroundColor: 'white' }}>
                 <h3 style={{ color: '#955C2E', fontWeight: 'bold', marginBottom: '10px' }}>Rata-rata Kenaikan</h3>
                 <div className="chart-wrapper-200">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie 
-                        data={[
-                          { value: classSummary.averageImprovement }, 
-                          { value: Math.max(0, 100 - classSummary.averageImprovement) }
-                        ]} 
-                        cx="50%" 
-                        cy="85%" 
-                        startAngle={180} 
-                        endAngle={0} 
-                        innerRadius={90} 
-                        outerRadius={120} 
-                        dataKey="value"
-                      >
-                        <Cell fill="#4CAF50" />
-                        <Cell fill="#E0E0E0" />
-                      </Pie>
-                      <Tooltip formatter={(value) => [`${value}%`, 'Kenaikan']} />
-                    </PieChart>
-                  </ResponsiveContainer>
+                  {(() => {
+                    const classImpVal = classSummary.averageImprovement;
+                    
+                    // Colors: <=30 red (#F44336), 31-70 yellow (#FFC107), >70 green (#4CAF50)
+                    let classColor = "#4CAF50";
+                    if (classImpVal <= 30) {
+                      classColor = "#F44336";
+                    } else if (classImpVal <= 70) {
+                      classColor = "#FFC107";
+                    } else {
+                      classColor = "#4CAF50";
+                    }
+                    
+                    const prefix = classImpVal > 0 ? "+" : "";
+                    const formattedText = `${prefix}${classImpVal}%`;
+                    
+                    return (
+                      <>
+                        <ResponsiveContainer width="100%" height="100%">
+                          <PieChart>
+                            <Pie 
+                              data={[
+                                { name: "Kenaikan", value: Math.abs(classImpVal) }, 
+                                { name: "Sisa", value: Math.max(0, 100 - Math.abs(classImpVal)) }
+                              ]} 
+                              cx="50%" 
+                              cy="85%" 
+                              startAngle={180} 
+                              endAngle={0} 
+                              innerRadius={90} 
+                              outerRadius={120} 
+                              dataKey="value"
+                            >
+                              <Cell fill={classColor} />
+                              <Cell fill="#E0E0E0" />
+                            </Pie>
+                            <Tooltip formatter={(value, name) => [`${value}%`, name]} />
+                          </PieChart>
+                        </ResponsiveContainer>
+                        <p style={{ textAlign: 'center', fontSize: '1.5rem', fontWeight: 'bold', color: classColor, marginTop: '-30px' }}>
+                          {formattedText}
+                        </p>
+                      </>
+                    );
+                  })()}
                 </div>
-                <p style={{ textAlign: 'center', fontSize: '1.5rem', fontWeight: 'bold', color: '#4CAF50', marginTop: '-30px' }}>
-                  {classSummary.averageImprovement}%
-                </p>
               </div>
 
               {/* Donut Chart */}
@@ -240,20 +265,18 @@ export default function MonitoringGuruDashboard() {
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
                         <Pie 
-                          data={[
-                            { name: "Aktif", value: classSummary.activeStudents, color: "#4CAF50" },
-                            { name: "Tidak Aktif", value: classSummary.inactiveStudents, color: "#F44336" }
-                          ]} 
+                          data={donutData} 
                           cx="50%" 
                           cy="50%" 
                           innerRadius={60} 
                           outerRadius={80} 
                           dataKey="value"
                         >
-                          <Cell fill="#4CAF50" />
-                          <Cell fill="#F44336" />
+                          {donutData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.color} />
+                          ))}
                         </Pie>
-                        <Tooltip />
+                        <Tooltip formatter={(value) => [`${value} Siswa`]} />
                       </PieChart>
                     </ResponsiveContainer>
                   ) : (
@@ -262,7 +285,7 @@ export default function MonitoringGuruDashboard() {
                 </div>
               </div>
 
-              {/* Bar Chart Rata-rata Kelas per Level Bloom */}
+              {/* Bar Chart Rata-rata Kelas per Level Bloom (LOGIC UNCHANGED) */}
               <div style={{ border: '2px solid #955C2E', borderRadius: '16px', padding: '20px', backgroundColor: 'white' }}>
                 <h3 style={{ color: '#955C2E', fontWeight: 'bold', marginBottom: '10px' }}>Rata-rata Kelas per Level</h3>
                 <div className="chart-wrapper-200" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -284,21 +307,21 @@ export default function MonitoringGuruDashboard() {
 
             {/* Bottom 2 Charts */}
             <div className="charts-grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
-              {/* Island Completion Rate */}
+              {/* Island Completion Rate (FIXED TO VERTIKAL BAR BASED ON MOCKUP) */}
               <div style={{ border: '2px solid #955C2E', borderRadius: '16px', padding: '20px', backgroundColor: 'white' }}>
-                <h3 style={{ color: '#955C2E', fontWeight: 'bold', marginBottom: '10px' }}>Eksplorasi Budaya per Pulau</h3>
+                <h3 style={{ color: '#955C2E', fontWeight: 'bold', marginBottom: '10px' }}>Tingkat Penyelesaian Pulau</h3>
                 <div className="chart-wrapper-responsive" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   {classSummary.islandExploration && classSummary.islandExploration.length > 0 ? (
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={classSummary.islandExploration} layout="vertical">
-                        <XAxis type="number" domain={[0, 100]} tickFormatter={(v) => `${v}%`} tick={{ fontSize: 10 }} />
-                        <YAxis dataKey="name" type="category" width={80} tick={{ fontSize: 10 }} />
-                        <Tooltip formatter={(value) => [`${value}%`, 'Keaktifan']} />
-                        <Bar dataKey="rate" fill="#f3a64c" radius={[0, 4, 4, 0]} />
+                      <BarChart data={classSummary.islandExploration} margin={{ top: 10, right: 10, left: 0, bottom: 5 }}>
+                        <XAxis dataKey="name" tick={{ fontSize: 10 }} />
+                        <YAxis domain={[0, 100]} tickFormatter={(v) => `${v}%`} tick={{ fontSize: 10 }} width={38} />
+                        <Tooltip formatter={(value) => [`${value}%`, 'Penyelesaian']} />
+                        <Bar dataKey="rate" fill="#f3a64c" radius={[4, 4, 0, 0]} />
                       </BarChart>
                     </ResponsiveContainer>
                   ) : (
-                    <div style={{ color: '#955C2E', fontSize: '1rem', fontWeight: 'bold' }}>Belum ada data eksplorasi pulau</div>
+                    <div style={{ color: '#955C2E', fontSize: '1rem', fontWeight: 'bold' }}>Belum ada data tingkat penyelesaian</div>
                   )}
                 </div>
               </div>
@@ -309,9 +332,9 @@ export default function MonitoringGuruDashboard() {
                 <div className="chart-wrapper-responsive" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   {classSummary.timeAnalysis && classSummary.timeAnalysis.length > 0 ? (
                     <ResponsiveContainer width="100%" height="100%">
-                      <AreaChart data={classSummary.timeAnalysis}>
+                      <AreaChart data={classSummary.timeAnalysis} margin={{ top: 10, right: 10, left: 0, bottom: 5 }}>
                         <XAxis dataKey="name" tick={{ fontSize: 10 }} />
-                        <YAxis tickFormatter={(v) => `${v} m`} tick={{ fontSize: 10 }} />
+                        <YAxis tickFormatter={(v) => `${v} m`} tick={{ fontSize: 10 }} width={35} />
                         <Tooltip formatter={(value) => [`${value} menit`, 'Durasi Belajar']} />
                         <Area type="monotone" dataKey="time" stroke="#955C2E" fill="#E8D9C0" strokeWidth={3} />
                       </AreaChart>
@@ -369,8 +392,8 @@ export default function MonitoringGuruDashboard() {
                     const totalXp = student.totalXp ?? student.totalXP ?? 0;
                     
                     const learningImprovement = student.learningImprovement !== undefined && student.learningImprovement !== null 
-                      ? (Number(student.learningImprovement) > 0 ? `+${student.learningImprovement}` : `${student.learningImprovement}`) 
-                      : "0";
+                      ? (Number(student.learningImprovement) > 0 ? `+${student.learningImprovement}%` : `${student.learningImprovement}%`) 
+                      : "0%";
                     
                     const averageLiteracyScore = student.averageLiteracyScore !== undefined && student.averageLiteracyScore !== null 
                       ? `${student.averageLiteracyScore}%` 

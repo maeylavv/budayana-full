@@ -85,3 +85,72 @@ export default function ProtectedRoute({ allowedRoles = ["STUDENT"] }) {
 
   return <Outlet />
 }
+
+export function TeacherProtectedRoute() {
+  const { data: session, isPending } = authClient.useSession()
+  const location = useLocation()
+  const hasLocalToken = !!localStorage.getItem("ba_token")
+
+  if (isPending) {
+    return (
+      <div className='auth-loading'>
+        <span>Loading...</span>
+      </div>
+    )
+  }
+
+  if (!session?.user && !hasLocalToken) {
+    localStorage.removeItem("ba_token")
+    localStorage.removeItem("ba_user_id")
+    return <Navigate to='/monitoring-login-guru' state={{ from: location }} replace />
+  }
+
+  if (session?.user) {
+    const role = session.user.role
+    if (!role || role !== "TEACHER") {
+      if (role === "STUDENT") {
+        return <Navigate to='/home' replace />
+      } else if (role === "PARENT") {
+        return <Navigate to='/monitoring-ortu/profil' replace />
+      }
+      return <Navigate to='/monitoring-login-guru' replace />
+    }
+  }
+
+  return <Outlet />
+}
+
+export function ParentProtectedRoute() {
+  const { data: session, isPending } = authClient.useSession()
+  const location = useLocation()
+  const hasLocalToken = !!localStorage.getItem("ba_token")
+
+  if (isPending) {
+    return (
+      <div className='auth-loading'>
+        <span>Loading...</span>
+      </div>
+    )
+  }
+
+  if (!session?.user && !hasLocalToken) {
+    localStorage.removeItem("ba_token")
+    localStorage.removeItem("ba_user_id")
+    return <Navigate to='/monitoring-login-ortu' state={{ from: location }} replace />
+  }
+
+  if (session?.user) {
+    const role = session.user.role
+    if (!role || role !== "PARENT") {
+      if (role === "STUDENT") {
+        return <Navigate to='/home' replace />
+      } else if (role === "TEACHER") {
+        return <Navigate to='/monitoring-guru/profil' replace />
+      }
+      return <Navigate to='/monitoring-login-ortu' replace />
+    }
+  }
+
+  return <Outlet />
+}
+
