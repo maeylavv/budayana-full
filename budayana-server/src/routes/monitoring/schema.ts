@@ -91,8 +91,8 @@ export const StudentAnalyticsResponseSchema = t.Object({
     history: t.Array(
       t.Object({
         storyTitle: t.String(),
-        preTestScore: t.Number(),
-        postTestScore: t.Number(),
+        preTestScore: t.Nullable(t.Number()),
+        postTestScore: t.Nullable(t.Number()),
         xp: t.Number(),
         date: t.String(),
         time: t.String(),
