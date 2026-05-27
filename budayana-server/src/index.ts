@@ -9,7 +9,7 @@ import { OpenAPI } from "./lib/auth/config"
 const app = new Elysia()
   .use(
     cors({
-      origin: allowedOrigins,
+      origin: true,
       methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
       allowedHeaders: ["Content-Type", "Authorization"],
       credentials: true,
