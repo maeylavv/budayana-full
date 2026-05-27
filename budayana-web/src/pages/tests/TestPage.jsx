@@ -10,6 +10,7 @@ import {
   useUpdateAttempt,
 } from "../../hooks/useAttempts"
 import { useQuestions } from "../../hooks/useQuestions"
+import { useIsland } from "../../hooks/useIslands"
 
 /**
  * Unified Test Page Component
@@ -20,15 +21,25 @@ export default function TestPage({ testType = "pre" }) {
   const { islandSlug, storyId } = useParams()
   const navigate = useNavigate()
 
+  // Get island data (for display purposes)
+  const island = getIslandBySlug(islandSlug)
+
+  const { data: islandDetails } = useIsland(islandSlug)
+
+  const mainStoryId = useMemo(() => {
+    if (!islandDetails?.stories || !island?.storyTitle) return null
+    const mainStory = islandDetails.stories.find(
+      (s) => s.title.toLowerCase() === island.storyTitle.toLowerCase()
+    )
+    return mainStory?.id
+  }, [islandDetails, island])
+
   // Use searchParams to track current page (1-indexed in URL, 0-indexed internally)
   const [searchParams, setSearchParams] = useSearchParams({ page: "1" })
   const currentQuestion = Math.max(
     0,
     parseInt(searchParams.get("page") || "1", 10) - 1
   )
-
-  // Get island data (for display purposes)
-  const island = getIslandBySlug(islandSlug)
 
   // Determine stage type for API
   const stageType = testType === "pre" ? "PRE_TEST" : "POST_TEST"
@@ -102,6 +113,7 @@ export default function TestPage({ testType = "pre" }) {
   // Timer - calculates elapsed time from attempt's startedAt timestamp
   // Timer Logic
   const startTimeRef = useRef(null)
+  const startAttemptRef = useRef(false)
 
   useEffect(() => {
     // Initialize start time when questions are loaded
@@ -133,13 +145,13 @@ export default function TestPage({ testType = "pre" }) {
     return () => clearInterval(timer)
   }, [showResults, questions])
 
-  // Start attempt when page loads and storyId is available
+  // Start attempt when page loads and mainStoryId is available
   // Skip if we're in result mode (user is viewing results, not taking test)
   useEffect(() => {
     if (isResultMode) return // Don't start attempt in result mode
 
-    if (storyId && !attemptId) {
-      startAttempt.mutate(storyId, {
+    if (mainStoryId && !attemptId && !startAttempt.isPending && !startAttempt.isSuccess) {
+      startAttempt.mutate(mainStoryId, {
         onSuccess: (data) => {
           setAttemptId(data.id)
           setAttemptStartedAt(data.startedAt) // Capture startedAt from API response
@@ -168,8 +180,7 @@ export default function TestPage({ testType = "pre" }) {
         },
       })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [storyId, attemptId, isResultMode])
+  }, [mainStoryId, attemptId, isResultMode, startAttempt.isPending, startAttempt.isSuccess, questions.length])
 
   // Prevent back navigation when showing results
   // If user presses back, redirect to home instead of returning to questions
@@ -279,15 +290,31 @@ export default function TestPage({ testType = "pre" }) {
   // Helper to log current question answer to API and update correctness
   const logCurrentAnswer = async () => {
     const selectedIndex = answers[currentQuestion]
-    if (selectedIndex === undefined || !attemptId) return
+    console.log("[TestPage] logCurrentAnswer called. answers =", answers, "currentQuestion =", currentQuestion, "attemptId =", attemptId)
+    
+    if (selectedIndex === undefined) {
+      console.warn("[TestPage] No answer selected for question index", currentQuestion)
+      return
+    }
+    if (!attemptId) {
+      console.warn("[TestPage] Attempt ID is missing/null, cannot log answer yet.")
+      return
+    }
 
     const currentQ = questions[currentQuestion]
-    if (!currentQ) return
+    if (!currentQ) {
+      console.error("[TestPage] Question not found at index", currentQuestion)
+      return
+    }
 
     const selectedOptionId = currentQ.optionIds[selectedIndex]
-    if (!selectedOptionId) return
+    if (!selectedOptionId) {
+      console.error("[TestPage] Option ID not found for selected index", selectedIndex)
+      return
+    }
 
     try {
+      console.log("[TestPage] Sending log request for Question:", currentQ.id, "Option:", selectedOptionId)
       const response = await addQuestionLog.mutateAsync({
         attemptId,
         logData: {
@@ -297,6 +324,8 @@ export default function TestPage({ testType = "pre" }) {
         },
       })
 
+      console.log("[TestPage] Log response success:", response)
+
       // Update correctness state based on API response
       if (response && typeof response.isCorrect === 'boolean') {
         setCorrectness(prev => ({
@@ -305,7 +334,7 @@ export default function TestPage({ testType = "pre" }) {
         }))
       }
     } catch (error) {
-      console.error("Failed to log answer:", error)
+      console.error("[TestPage] Failed to log answer:", error)
     }
   }
 
@@ -317,29 +346,13 @@ export default function TestPage({ testType = "pre" }) {
     // Log and verify the last question's answer before finishing
     await logCurrentAnswer()
 
-    // Count correct answers using the verified correctness state
-    let correct = 0
-    questions.forEach((q, i) => {
-      if (correctness[i] === true) {
-        correct++
-      } else if (correctness[i] === undefined) {
-        if (answers[i] === q.correctAnswer && q.correctAnswer !== -1) correct++
-      }
-    })
-
-    setCorrectCount(correct)
-
-    // Set initial local score
-    const localScore = Math.round((correct / questions.length) * 100)
-    setScore(localScore)
-
     // Update URL to result mode 
     setSearchParams({ result: "true" }, { replace: true })
 
     if (attemptId) {
       try {
         // 1. Add stage completion record
-        await addStage.mutateAsync({
+        const stageResult = await addStage.mutateAsync({
           attemptId,
           stageData: {
             stageType: stageType,
@@ -348,19 +361,46 @@ export default function TestPage({ testType = "pre" }) {
           },
         })
 
-        // 2. Mark attempt as finished
+        const finalScore = stageResult.score ?? 0
+        setScore(finalScore)
+
+        // 2. Mark attempt as finished (Only for post-test, pre-test remains active)
+        const updateData = {
+          totalTimeSeconds: timeElapsed,
+        }
+        if (testType === "post") {
+          updateData.finishedAt = new Date().toISOString()
+        }
         await updateAttempt.mutateAsync({
           attemptId,
-          data: {
-            finishedAt: new Date().toISOString(),
-            totalTimeSeconds: timeElapsed,
-            totalXpGained: 0,
-            [testType === "pre" ? "preTestScore" : "postTestScore"]: localScore,
-          },
+          data: updateData,
         })
       } catch (error) {
         console.error("Failed to save finish data:", error)
+        // Fallback local score calculation
+        let correct = 0
+        questions.forEach((q, i) => {
+          if (correctness[i] === true) {
+            correct++
+          } else if (correctness[i] === undefined) {
+            if (answers[i] === q.correctAnswer && q.correctAnswer !== -1) correct++
+          }
+        })
+        const localScore = Math.round((correct / questions.length) * 100)
+        setScore(localScore)
       }
+    } else {
+      // Fallback score calculation if attemptId doesn't exist
+      let correct = 0
+      questions.forEach((q, i) => {
+        if (correctness[i] === true) {
+          correct++
+        } else if (correctness[i] === undefined) {
+          if (answers[i] === q.correctAnswer && q.correctAnswer !== -1) correct++
+        }
+      })
+      const localScore = Math.round((correct / questions.length) * 100)
+      setScore(localScore)
     }
 
     setIsSubmitting(false)
@@ -416,22 +456,76 @@ export default function TestPage({ testType = "pre" }) {
     )
   }
 
+  // Handle missing main story configuration error
+  const isIslandLoaded = !!islandDetails
+  const isMainStoryMissing = isIslandLoaded && !mainStoryId
+
+  if (isMainStoryMissing && !showResults) {
+    return (
+      <div className='min-h-screen bg-[#fdf4d7] flex items-center justify-center'>
+        <div className='text-center px-4'>
+          <h1 className='text-2xl font-bold text-[#e64c45] mb-4'>
+            Konten cerita tidak ditemukan
+          </h1>
+          <p className='text-[#2c2c2c] mb-6'>
+            Tidak dapat menemukan materi cerita untuk pulau ini ("{island?.storyTitle || ''}").
+          </p>
+          <button
+            onClick={() => navigate("/home")}
+            className='bg-[#F7885E] text-white px-6 py-2 rounded-full font-semibold shadow-md transition hover:bg-[#e4764c]'
+          >
+            Kembali ke Beranda
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // Handle start attempt error state
+  if (startAttempt.isError && !showResults) {
+    return (
+      <div className='min-h-screen bg-[#fdf4d7] flex items-center justify-center'>
+        <div className='text-center px-4'>
+          <h1 className='text-2xl font-bold text-[#e64c45] mb-4'>
+            Gagal memulai sesi belajar
+          </h1>
+          <p className='text-[#2c2c2c] mb-6'>
+            {startAttempt.error?.message || "Terjadi kesalahan koneksi. Silakan coba lagi."}
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            className='bg-[#F7885E] text-white px-6 py-2 rounded-full font-semibold shadow-md transition hover:bg-[#e4764c]'
+          >
+            Coba Lagi
+          </button>
+        </div>
+      </div>
+    )
+  }
+
   // Handle loading state
-  if (isQuestionsLoading) {
+  const isIslandLoading = !islandDetails
+  const isAttemptLoading = !attemptId && !showResults
+
+  if ((isQuestionsLoading || isIslandLoading || isAttemptLoading) && !showResults) {
     return (
       <div className='min-h-screen bg-[#fdf4d7] flex items-center justify-center'>
         <div className='text-center'>
           <div className='animate-spin rounded-full h-16 w-16 border-b-4 border-[#0e7794] mx-auto mb-4'></div>
           <p className='text-xl font-semibold text-[#2c2c2c]'>
-            Memuat pertanyaan...
+            {isIslandLoading
+              ? "Memuat data pulau..."
+              : isQuestionsLoading
+              ? "Memuat pertanyaan..."
+              : "Menyiapkan sesi belajar..."}
           </p>
         </div>
       </div>
     )
   }
 
-  // Handle error state
-  if (questionsError) {
+  // Handle error state for questions fetch
+  if (questionsError && !showResults) {
     return (
       <div className='min-h-screen bg-[#fdf4d7] flex items-center justify-center'>
         <div className='text-center'>

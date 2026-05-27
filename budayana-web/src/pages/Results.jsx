@@ -87,28 +87,12 @@ export default function Results() {
 
 
   const getDisplayTitle = (attempt) => {
-    const rawTitle = attempt.story?.title || "Unknown Story"
-    const lowerTitle = rawTitle.toLowerCase()
-
-    let islandName = ""
-    if (attempt.story?.island?.islandName) {
-      islandName = attempt.story.island.islandName
-    } else {
-      islandName = getIslandName(attempt)
+    let rawTitle = attempt.story?.title || "Unknown Story"
+    if (rawTitle.toLowerCase().startsWith("cerita ")) {
+      rawTitle = rawTitle.substring(7)
     }
-
-    const suffix = islandName ? ` ${islandName}` : ""
-
-    if (lowerTitle.includes("pre-test")) {
-      return `Pre-Test${suffix}`
-    } else if (lowerTitle.includes("post-test")) {
-      return `Post-Test${suffix}`
-    } else {
-      if (islandName && lowerTitle.includes(islandName.toLowerCase())) {
-        return rawTitle
-      }
-      return `${rawTitle}${suffix}`
-    }
+    let islandName = attempt.story?.island?.islandName || getIslandName(attempt)
+    return `Cerita ${rawTitle} ${islandName}`
   }
 
 
@@ -155,7 +139,7 @@ export default function Results() {
             <div className='stats-grid'>
               <div className='stat-card green'>
                 <div className='stat-value'>{stats?.storiesCompleted || 0}</div>
-                <div className='stat-label'>Tahap Selesai</div>
+                <div className='stat-label'>Cerita Rakyat Selesai</div>
               </div>
               <div className='stat-card purple'>
                 <div className='stat-value'>{stats?.totalXp || 0}</div>
@@ -242,8 +226,8 @@ export default function Results() {
                       }
                     }
 
-                    const isInteractiveStory = ["sumatra", "sulawesi", "bali", "nusa-tenggara", "nusa tenggara", "jawa"].some(
-                      i => displayTitle.toLowerCase().includes(i.replace("-", " "))
+                    const isInteractiveStory = ["sumatra", "sulawesi", "bali", "maluku"].some(
+                      i => displayTitle.toLowerCase().includes(i)
                     ) && !isTest
                     const essayLog = attempt.questionLogs?.find(
                       log => log.question?.questionType === "ESSAY" || log.userAnswerText
@@ -254,12 +238,12 @@ export default function Results() {
                       <div key={attempt.id} className='history-row'>
                         <div>{displayTitle}</div>
                         <div>
-                          {isTest && attempt.preTestScore !== null
+                          {attempt.preTestScore !== null
                             ? Math.round(attempt.preTestScore)
                             : "-"}
                         </div>
                         <div>
-                          {isTest && attempt.postTestScore !== null
+                          {attempt.postTestScore !== null
                             ? Math.round(attempt.postTestScore)
                             : "-"}
                         </div>
@@ -279,8 +263,7 @@ export default function Results() {
                                   rawTitle.toLowerCase().endsWith(" sumatra") ||
                                   rawTitle.toLowerCase().endsWith(" sulawesi") ||
                                   rawTitle.toLowerCase().endsWith(" bali") ||
-                                  rawTitle.toLowerCase().endsWith(" jawa") ||
-                                  rawTitle.toLowerCase().endsWith(" nusa tenggara")
+                                  rawTitle.toLowerCase().endsWith(" maluku")
                                 ) {
                                   const islandIndex = rawTitle.lastIndexOf(" ")
                                   rawTitle = rawTitle.substring(0, islandIndex)

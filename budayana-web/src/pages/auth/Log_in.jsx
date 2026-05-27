@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { useMutation } from "@tanstack/react-query"
 import { authClient } from "../../lib/auth-client"
 import CookieBlockedPopup from "../../components/CookieBlockedPopup"
+import PortalRedirectPopup from "../../components/PortalRedirectPopup"
 
 export default function Login() {
   const navigate = useNavigate()
@@ -25,53 +26,22 @@ export default function Login() {
   // Monitor active session for PARENT or TEACHER mismatch and clear it immediately
   const { data: session } = authClient.useSession()
 
-  // Read stored mismatch error and username on mount
+  // Read stored mismatch info and check session for PARENT or TEACHER roles to trigger popup on mount
   useEffect(() => {
-    const storedError = sessionStorage.getItem("student_portal_mismatch_error")
-    if (storedError) {
-      setLoginError(storedError)
-      sessionStorage.removeItem("student_portal_mismatch_error")
-    }
-    const storedUsername = sessionStorage.getItem("student_portal_mismatch_username")
-    if (storedUsername) {
-      setUsername(storedUsername)
-      sessionStorage.removeItem("student_portal_mismatch_username")
+    const trigger = sessionStorage.getItem("portal_mismatch_popup_trigger")
+    if (trigger === "true") {
+      setShowRedirectPopup(true)
     }
   }, [])
 
-  const handleRoleMismatch = async (role, currentUsername) => {
-    let errorMsg = "Akun ini bukan akun Siswa."
-    if (role === "PARENT") {
-      errorMsg = "Akun ini bukan akun Siswa.\nSilakan masuk melalui portal Orang Tua."
-    } else if (role === "TEACHER") {
-      errorMsg = "Akun ini bukan akun Siswa.\nSilakan masuk melalui portal Guru."
-    }
 
-    // Save to sessionStorage to survive GuestRoute unmount/remount
-    sessionStorage.setItem("student_portal_mismatch_error", errorMsg)
-    if (currentUsername) {
-      sessionStorage.setItem("student_portal_mismatch_username", currentUsername)
-    }
-
-    try {
-      await authClient.signOut()
-    } catch (e) {
-      console.error("SignOut during mismatch cleanup failed:", e)
-    }
-    localStorage.removeItem("ba_token")
-    localStorage.removeItem("ba_user_id")
-    setVerifyingSession(false)
-    setLoginError(errorMsg)
-  }
-
-  useEffect(() => {
-    if (session?.user) {
-      const role = session.user.role || ""
-      if (role === "PARENT" || role === "TEACHER") {
-        handleRoleMismatch(role, username)
-      }
-    }
-  }, [session])
+  // State for portal redirect popup
+  const [showRedirectPopup, setShowRedirectPopup] = useState(false)
+  const [redirectPopupConfig, setRedirectPopupConfig] = useState({
+    message: "",
+    targetPath: "",
+    targetLabel: ""
+  })
 
   const loginMutation = useMutation({
     mutationFn: async ({ username, password }) => {
@@ -89,7 +59,27 @@ export default function Login() {
     onSuccess: async (data, variables) => {
       setVerifyingSession(true)
 
-      // 1. Temporarily store credentials so the subsequent getSession call works with the new token
+      let role = data?.user?.role;
+      if (!role) {
+        try {
+          const session = await authClient.getSession();
+          role = session?.data?.user?.role;
+        } catch (e) {
+          console.error("Gagal mengambil session role:", e);
+        }
+      }
+
+      if (role && role !== "STUDENT") {
+        setVerifyingSession(false);
+        authClient.signOut().catch(() => {});
+        localStorage.removeItem("ba_token");
+        localStorage.removeItem("ba_user_id");
+
+        sessionStorage.setItem("portal_mismatch_popup_trigger", "true")
+        window.location.reload()
+        return;
+      }
+
       if (data?.session?.token) {
         localStorage.setItem("ba_token", data.session.token)
       }
@@ -98,19 +88,21 @@ export default function Login() {
       }
 
       try {
-        // 2. Retrieve official server-validated session to get real-time role information
         const session = await authClient.getSession()
 
         if (session?.data?.session) {
           const userRole = session.data.user?.role || "STUDENT"
 
-          // 3. Strict STUDENT-only role validation
           if (userRole !== "STUDENT") {
-            await handleRoleMismatch(userRole, variables.username)
+            setVerifyingSession(false)
+            authClient.signOut().catch(() => {});
+            localStorage.removeItem("ba_token")
+            localStorage.removeItem("ba_user_id")
+            sessionStorage.setItem("portal_mismatch_popup_trigger", "true")
+            window.location.reload()
             return
           }
 
-          // 4. Successful match, redirect to home
           window.location.href = "/home"
         } else {
           setVerifyingSession(false)
@@ -142,6 +134,13 @@ export default function Login() {
 
   return (
     <div className='signin_page'>
+      <button className='back_button' onClick={() => navigate("/")}>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+        Kembali
+      </button>
+
       <div className='redirect'>
         <p>Belum punya akun?</p>
  
@@ -234,18 +233,26 @@ export default function Login() {
         </div>
       </div>
 
-      {/* Popup Deteksi Cookies Blocked */}
       <CookieBlockedPopup
-  isOpen={showCookiePopup}
-  onClose={() => {
-    localStorage.removeItem("ba_token")
-    localStorage.removeItem("ba_user_id")
-    setShowCookiePopup(false)
-  }}
-  onRetry={() => {
-    window.location.reload()
-  }}
-/>
+        isOpen={showCookiePopup}
+        onClose={() => {
+          localStorage.removeItem("ba_token")
+          localStorage.removeItem("ba_user_id")
+          setShowCookiePopup(false)
+        }}
+        onRetry={() => {
+          window.location.reload()
+        }}
+      />
+
+      <PortalRedirectPopup
+        open={showRedirectPopup}
+        currentPortal="student"
+        onClose={() => {
+          sessionStorage.removeItem("portal_mismatch_popup_trigger")
+          setShowRedirectPopup(false)
+        }}
+      />
     </div>
   )
 }

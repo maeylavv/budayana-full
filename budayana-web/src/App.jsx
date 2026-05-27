@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 // Components
 import BackgroundMusic from "./components/BackgroundMusic.jsx"
 import ScrollToTop from "./components/ScrollToTop.jsx"
-import ProtectedRoute from "./components/auth/ProtectedRoute.jsx"
+import ProtectedRoute, { TeacherProtectedRoute, ParentProtectedRoute } from "./components/auth/ProtectedRoute.jsx"
 import GuestRoute from "./components/auth/GuestRoute.jsx"
 
 // Core pages
@@ -53,7 +53,7 @@ export default function App() {
           <Route path='/' element={<Landing />} />
           <Route path='/monitoring-login-guru' element={<MonitoringLogin role="guru" />} />
           <Route path='/monitoring-login-ortu' element={<MonitoringLogin role="ortu" />} />
-          
+
           {/* ========================================
               TEACHER PROTECTED ROUTES
               ======================================== */}

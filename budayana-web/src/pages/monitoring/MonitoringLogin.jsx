@@ -1,14 +1,35 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { authClient } from "../../lib/auth-client";
 import "../../pages/auth/Sign_Up.css"; // Reuse the sign-up styling
+import PortalRedirectPopup from "../../components/PortalRedirectPopup";
 
 export default function MonitoringLogin({ role }) {
   const navigate = useNavigate();
-  const [isLoginMode, setIsLoginMode] = useState(false);
+  const [isLoginMode, setIsLoginMode] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Monitor active session for role mismatch on mount and clear it immediately
+  const { data: session } = authClient.useSession();
+  const isGuru = role === "guru";
+
+  // State for portal redirect popup
+  const [showRedirectPopup, setShowRedirectPopup] = useState(false);
+  const [redirectPopupConfig, setRedirectPopupConfig] = useState({
+    message: "",
+    targetPath: "",
+    targetLabel: ""
+  });
+
+  useEffect(() => {
+    const trigger = sessionStorage.getItem("portal_mismatch_popup_trigger");
+    if (trigger === "true") {
+      setShowRedirectPopup(true);
+    }
+  }, []);
+
 
   const [formData, setFormData] = useState({
     name: "",
@@ -18,9 +39,6 @@ export default function MonitoringLogin({ role }) {
     grade: "",
     namaAnak: "", // For parent portal
   });
-
-  const isGuru = role === "guru";
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
@@ -59,14 +77,14 @@ export default function MonitoringLogin({ role }) {
         const isExpectedRole = isGuru ? userRole === "TEACHER" : userRole === "PARENT";
 
         if (!isExpectedRole) {
-          try {
-            await authClient.signOut();
-          } catch (signOutErr) {
-            console.error("SignOut during role bypass failed:", signOutErr);
-          }
+          authClient.signOut().catch(() => {});
           localStorage.removeItem("ba_token");
           localStorage.removeItem("ba_user_id");
-          throw new Error(isGuru ? "Akun ini bukan akun Guru." : "Akun ini bukan akun Orang Tua.");
+          
+          setLoading(false);
+          sessionStorage.setItem("portal_mismatch_popup_trigger", "true");
+          window.location.reload();
+          return;
         }
 
         if (userRole === "TEACHER") {
@@ -111,14 +129,14 @@ export default function MonitoringLogin({ role }) {
         const isExpectedRole = isGuru ? userRole === "TEACHER" : userRole === "PARENT";
 
         if (!isExpectedRole) {
-          try {
-            await authClient.signOut();
-          } catch (signOutErr) {
-            console.error("SignOut during role bypass failed:", signOutErr);
-          }
+          authClient.signOut().catch(() => {});
           localStorage.removeItem("ba_token");
           localStorage.removeItem("ba_user_id");
-          throw new Error(isGuru ? "Akun ini bukan akun Guru." : "Akun ini bukan akun Orang Tua.");
+          
+          setLoading(false);
+          sessionStorage.setItem("portal_mismatch_popup_trigger", "true");
+          window.location.reload();
+          return;
         }
 
         if (userRole === "TEACHER") {
@@ -140,6 +158,13 @@ export default function MonitoringLogin({ role }) {
 
   return (
     <div className='signin_page'>
+      <button className='back_button' onClick={() => navigate("/")}>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+        Kembali
+      </button>
+
       <div className='redirect'>
         <p>{isLoginMode ? "Belum punya akun?" : "Sudah punya akun?"}</p>
         <div className='redi_button'>
@@ -189,13 +214,13 @@ export default function MonitoringLogin({ role }) {
           )}
 
           <div className='field'>
-            <label htmlFor='email'>{isGuru ? "Email" : "Email Orang Tua"}</label>
+            <label htmlFor='email'>{isGuru ? "Email/Username Guru" : "Email/Username Orang Tua"}</label>
             <input 
               type='text' 
               id='email' 
               placeholder={isLoginMode 
-                ? 'emailkamu@gmail.com / username_kamu' 
-                : (isGuru ? 'emailkamu@gmail.com' : 'Pastikan email orang tua sama dengan akun anak')} 
+                ? 'email@gmail.com / username_kamu' 
+                : (isGuru ? 'email@gmail.com' : 'Pastikan email orang tua sama dengan akun anak')} 
               value={formData.email} 
               onChange={handleChange} 
               required 
@@ -205,7 +230,7 @@ export default function MonitoringLogin({ role }) {
           <div className='field'>
             <label htmlFor='password'>Password</label>
             <div className='password-wrapper' style={{ position: 'relative' }}>
-              <input type={showPassword ? "text" : "password"} id='password' placeholder='Password Kamu (8+ Karakter)' value={formData.password} onChange={handleChange} required />
+              <input type={showPassword ? "text" : "password"} id='password' placeholder='Password Kamu (6+ Karakter)' value={formData.password} onChange={handleChange} required />
               {formData.password && (
                 <button
                   type='button'
@@ -242,6 +267,15 @@ export default function MonitoringLogin({ role }) {
           </div>
         </div>
       </div>
+
+      <PortalRedirectPopup
+        open={showRedirectPopup}
+        currentPortal={isGuru ? "teacher" : "parent"}
+        onClose={() => {
+          sessionStorage.removeItem("portal_mismatch_popup_trigger");
+          setShowRedirectPopup(false);
+        }}
+      />
     </div>
   );
 }

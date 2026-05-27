@@ -4,35 +4,11 @@
  */
 export const islands = [
   {
-    id: "sulawesi",
-    slug: "sulawesi",
-    name: "Sulawesi",
-    storyTitle: "Cerita Nenek Pakande",
-    unlockOrder: 1,
-    isLockedDefault: false,
-    stages: ["pre-test", "story", "game", "post-test"],
-    // Theme colors for pre-test (blue) and post-test (orange)
-    theme: {
-      preTest: {
-        cardBg: "#c6d7d0",
-        cardBorder: "#b1c8c0",
-        accent: "#0e7794",
-        contentBg: "#f2f7ff",
-      },
-      postTest: {
-        cardBg: "#f6c7a6",
-        cardBorder: "#f0b184",
-        accent: "#f19367",
-        contentBg: "#fff9f0",
-      },
-    },
-  },
-  {
     id: "sumatra",
     slug: "sumatra",
     name: "Sumatra",
     storyTitle: "Cerita Malin Kundang",
-    unlockOrder: 2,
+    unlockOrder: 1,
     isLockedDefault: false,
     stages: ["pre-test", "story", "game", "post-test"],
     theme: {
@@ -55,8 +31,8 @@ export const islands = [
     slug: "jawa",
     name: "Jawa",
     storyTitle: "Cerita Roro Jonggrang",
-    unlockOrder: 3,
-    isLockedDefault: false,
+    unlockOrder: 2,
+    isLockedDefault: true,
     stages: ["pre-test", "story", "game", "post-test"],
     theme: {
       preTest: {
@@ -74,12 +50,12 @@ export const islands = [
     },
   },
   {
-    id: "papua",
-    slug: "papua",
-    name: "Papua",
-    storyTitle: "Cerita Biwar Penakluk Naga",
-    unlockOrder: 4,
-    isLockedDefault: false,
+    id: "bali",
+    slug: "bali",
+    name: "Bali",
+    storyTitle: "Cerita Bawang dan Kesuna",
+    unlockOrder: 3,
+    isLockedDefault: true,
     stages: ["pre-test", "story", "game", "post-test"],
     theme: {
       preTest: {
@@ -91,8 +67,8 @@ export const islands = [
       postTest: {
         cardBg: "#f6c7a6",
         cardBorder: "#f0b184",
-        accent: "#d87c4a",
-        contentBg: "#fff7f2",
+        accent: "#f19367",
+        contentBg: "#fff9f0",
       },
     },
   },
@@ -101,7 +77,54 @@ export const islands = [
     slug: "kalimantan",
     name: "Kalimantan",
     storyTitle: "Cerita Pesut Mahakam",
+    unlockOrder: 4,
+    isLockedDefault: true,
+    stages: ["pre-test", "story", "game", "post-test"],
+    theme: {
+      preTest: {
+        cardBg: "#c6d7d0",
+        cardBorder: "#b1c8c0",
+        accent: "#0e7794",
+        contentBg: "#f2f7ff",
+      },
+      postTest: {
+        cardBg: "#f6c7a6",
+        cardBorder: "#f0b184",
+        accent: "#f19367",
+        contentBg: "#fff9f0",
+      },
+    },
+  },
+  {
+    id: "sulawesi",
+    slug: "sulawesi",
+    name: "Sulawesi",
+    storyTitle: "Cerita Nenek Pakande",
     unlockOrder: 5,
+    isLockedDefault: true,
+    stages: ["pre-test", "story", "game", "post-test"],
+    // Theme colors for pre-test (blue) and post-test (orange)
+    theme: {
+      preTest: {
+        cardBg: "#c6d7d0",
+        cardBorder: "#b1c8c0",
+        accent: "#0e7794",
+        contentBg: "#f2f7ff",
+      },
+      postTest: {
+        cardBg: "#f6c7a6",
+        cardBorder: "#f0b184",
+        accent: "#f19367",
+        contentBg: "#fff9f0",
+      },
+    },
+  },
+  {
+    id: "nusa-tenggara",
+    slug: "nusa-tenggara",
+    name: "Nusa Tenggara",
+    storyTitle: "Cerita Watu Maladong",
+    unlockOrder: 6,
     isLockedDefault: true,
     stages: ["pre-test", "story", "game", "post-test"],
     theme: {
@@ -124,7 +147,7 @@ export const islands = [
     slug: "maluku",
     name: "Maluku",
     storyTitle: "Cerita Legenda Telaga Biru",
-    unlockOrder: 6,
+    unlockOrder: 7,
     isLockedDefault: true,
     stages: ["pre-test", "story", "game", "post-test"],
     theme: {
@@ -143,35 +166,12 @@ export const islands = [
     },
   },
   {
-    id: "bali",
-    slug: "bali",
-    name: "Bali",
-    storyTitle: "Cerita Bawang dan Kesuna",
-    unlockOrder: 7,
-    isLockedDefault: false,
-    stages: ["pre-test", "story", "game", "post-test"],
-    theme: {
-      preTest: {
-        cardBg: "#c6d7d0",
-        cardBorder: "#b1c8c0",
-        accent: "#0e7794",
-        contentBg: "#f2f7ff",
-      },
-      postTest: {
-        cardBg: "#f6c7a6",
-        cardBorder: "#f0b184",
-        accent: "#f19367",
-        contentBg: "#fff9f0",
-      },
-    },
-  },
-  {
-    id: "nusa-tenggara",
-    slug: "nusa-tenggara",
-    name: "Nusa Tenggara",
-    storyTitle: "Cerita Watu Maladong",
+    id: "papua",
+    slug: "papua",
+    name: "Papua",
+    storyTitle: "Cerita Biwar Penakluk Naga",
     unlockOrder: 8,
-    isLockedDefault: false,
+    isLockedDefault: true,
     stages: ["pre-test", "story", "game", "post-test"],
     theme: {
       preTest: {
@@ -183,8 +183,8 @@ export const islands = [
       postTest: {
         cardBg: "#f6c7a6",
         cardBorder: "#f0b184",
-        accent: "#f19367",
-        contentBg: "#fff9f0",
+        accent: "#d87c4a",
+        contentBg: "#fff7f2",
       },
     },
   },

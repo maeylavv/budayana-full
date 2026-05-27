@@ -7,6 +7,40 @@
     overflow-x: hidden;
   }
 
+  .back_button {
+    position: absolute;
+    top: 3%;
+    left: 3%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 24px;
+    border-radius: 30px;
+    background-color: #ffffff;
+    border: 3px solid #000000;
+    font-family: 'Fredoka One', sans-serif;
+    color: #000000;
+    font-weight: 700;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    z-index: 10;
+  }
+
+  .back_button:hover {
+    background-color: #f2f2f2;
+    transform: translateY(-2px);
+  }
+
+  .back_button:active {
+    transform: translateY(0);
+  }
+
+  .back_button svg {
+    width: 20px;
+    height: 20px;
+  }
+
   .header_form {
     display: flex !important;
     flex-direction: column !important;
@@ -243,6 +277,21 @@
       margin-bottom: 20px;
       font-size: 1rem;
       gap: 10px;
+      margin-top: 45px;
+    }
+
+    .back_button {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      font-size: 0.95rem;
+      padding: 6px 16px;
+      border-width: 2.5px;
+    }
+
+    .back_button svg {
+      width: 16px;
+      height: 16px;
     }
 
     .redirect p {
@@ -338,6 +387,19 @@
       width: 250px;
       height: 60px;
       font-size: 1.8rem;
+    }
+
+    .back_button {
+      top: 5%;
+      left: 5%;
+      font-size: 1.5rem;
+      padding: 12px 32px;
+      border-width: 4px;
+    }
+
+    .back_button svg {
+      width: 26px;
+      height: 26px;
     }
   }
 

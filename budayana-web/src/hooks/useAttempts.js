@@ -45,6 +45,10 @@ export function useStartAttempt() {
     onSuccess: (data, storyId) => {
       // Invalidate the list query to refetch
       queryClient.invalidateQueries({ queryKey: attemptKeys.list(storyId) })
+      queryClient.invalidateQueries({ queryKey: ["myProgress"] })
+      queryClient.invalidateQueries({ queryKey: ["progress"] })
+      queryClient.invalidateQueries({ queryKey: ["islandProgress"] })
+      queryClient.invalidateQueries({ queryKey: ["islandCycles"] })
     },
   })
 }
@@ -60,6 +64,10 @@ export function useUpdateAttempt() {
     onSuccess: (result, { attemptId }) => {
       queryClient.invalidateQueries({ queryKey: attemptKeys.detail(attemptId) })
       queryClient.invalidateQueries({ queryKey: attemptKeys.all })
+      queryClient.invalidateQueries({ queryKey: ["myProgress"] })
+      queryClient.invalidateQueries({ queryKey: ["progress"] })
+      queryClient.invalidateQueries({ queryKey: ["islandProgress"] })
+      queryClient.invalidateQueries({ queryKey: ["islandCycles"] })
     },
   })
 }
@@ -75,6 +83,11 @@ export function useAddStage() {
       attemptsApi.addStage(attemptId, stageData),
     onSuccess: (result, { attemptId }) => {
       queryClient.invalidateQueries({ queryKey: attemptKeys.detail(attemptId) })
+      queryClient.invalidateQueries({ queryKey: attemptKeys.all })
+      queryClient.invalidateQueries({ queryKey: ["myProgress"] })
+      queryClient.invalidateQueries({ queryKey: ["progress"] })
+      queryClient.invalidateQueries({ queryKey: ["islandProgress"] })
+      queryClient.invalidateQueries({ queryKey: ["islandCycles"] })
     },
   })
 }

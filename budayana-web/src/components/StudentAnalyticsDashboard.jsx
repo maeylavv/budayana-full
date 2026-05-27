@@ -134,7 +134,7 @@ function StoryAnalyticsPanel({ storyAnalytics, studentInfo }) {
         <h2 className="results-section-title" style={{ fontSize: '1.2rem', marginBottom: '12px', color: '#7B4F2E' }}>Statistik Cerita Rakyat</h2>
         <div className="stats-grid">
           <div className="stat-card green" style={{ border: 'none', borderRadius: '24px' }}>
-            <div className="stat-value">{stats.storiesCompleted}/8</div>
+            <div className="stat-value">{stats.storiesCompleted}</div>
             <div className="stat-label">Cerita Selesai</div>
           </div>
           <div className="stat-card purple" style={{ border: 'none', borderRadius: '24px' }}>
@@ -203,7 +203,7 @@ function StoryAnalyticsPanel({ storyAnalytics, studentInfo }) {
                   </ResponsiveContainer>
                   <div style={{ position: 'absolute', bottom: '15%', left: '50%', transform: 'translate(-50%, 0)', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
                     <span style={{ fontSize: '2.2rem', fontWeight: 'bold', color: dynamicColor }}>{formattedText}</span>
-                    <span style={{ fontSize: '0.8rem', color: '#955C2E', fontWeight: 'bold' }}>Rerata Kenaikan</span>
+                    <span style={{ fontSize: '0.8rem', color: '#955C2E', fontWeight: 'bold' }}>Rata-rata Kenaikan</span>
                   </div>
                 </>
               );
@@ -251,8 +251,8 @@ function StoryAnalyticsPanel({ storyAnalytics, studentInfo }) {
               history.map((item, index) => (
                 <div key={index} className="history-row" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1.2fr 1.2fr 3fr', padding: '16px 24px', borderBottom: '1px solid #E8D9C0', alignItems: 'center' }}>
                   <div style={{ textAlign: 'left', fontWeight: 'bold', color: '#7B4F2E' }}>{item.storyTitle}</div>
-                  <div style={{ textAlign: 'center', color: '#FF9800', fontWeight: 'bold' }}>{item.preTestScore}</div>
-                  <div style={{ textAlign: 'center', color: '#4CAF50', fontWeight: 'bold' }}>{item.postTestScore}</div>
+                  <div style={{ textAlign: 'center', color: '#FF9800', fontWeight: 'bold' }}>{item.preTestScore !== null ? item.preTestScore : "-"}</div>
+                  <div style={{ textAlign: 'center', color: '#4CAF50', fontWeight: 'bold' }}>{item.postTestScore !== null ? item.postTestScore : "-"}</div>
                   <div style={{ textAlign: 'center', color: '#9C27B0', fontWeight: 'bold' }}>+{item.xp}</div>
                   <div style={{ textAlign: 'center' }}>{item.date}</div>
                   <div style={{ textAlign: 'center' }}>{item.time}</div>
