@@ -26,8 +26,8 @@ const app = new Elysia()
         // Dynamically check against allowed origins from auth configuration
         return allowedOrigins.includes(origin)
       },
-      methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
-      allowedHeaders: ["Content-Type", "Authorization"],
+      methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS", "PUT"],
+      allowedHeaders: ["Content-Type", "Authorization", "Accept", "Origin", "x-better-auth-session"],
       credentials: true,
     })
   )
@@ -60,7 +60,7 @@ const app = new Elysia()
   .use(apiRoutes)
   .get("/", () => "OK")
 
-if (process.env.NODE_ENV === "development") {
+if (process.env.NODE_ENV === "development" && !process.env.VERCEL) {
   app.listen(3000)
   console.log("🚀 Server running at http://localhost:3000")
 }
