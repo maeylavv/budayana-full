@@ -25838,7 +25838,7 @@ const app = new Elysia().use(cors({
 	origin: (request) => {
 		const origin = request.headers.get("origin");
 		if (!origin) return false;
-		if (origin.startsWith("http://localhost:")) return true;
+		if (origin.startsWith("http://localhost:") || origin === "https://budayana-app.vercel.app") return true;
 		return allowedOrigins.includes(origin);
 	},
 	methods: [
