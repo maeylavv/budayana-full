@@ -13,6 +13,10 @@ import { ErrorResponseSchema, SuccessResponseSchema } from "../../lib/utils/sche
 export const monitoringRoutes = new Elysia({ prefix: "/monitoring" })
   .get("/", () => ({ status: "Monitoring module active" })) // Health check
   .derive(async ({ request, set }) => {
+    if (request.method === "OPTIONS") {
+      return { user: null }
+    }
+
     const session = await auth.api.getSession({ headers: request.headers })
 
     if (!session?.user) {
