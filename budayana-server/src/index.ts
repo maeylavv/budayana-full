@@ -13,6 +13,8 @@ const app = new Elysia()
         const origin = request.headers.get("origin")
         if (!origin) return false
 
+        
+
         // Always allow localhost and production frontend
         if (
           origin.startsWith("http://localhost:") ||
