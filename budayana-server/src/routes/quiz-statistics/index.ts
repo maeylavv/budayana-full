@@ -9,8 +9,13 @@ import { QuizStatisticsSchema } from "./schema"
 import * as quizStatisticsService from "./service"
 
 export const quizStatisticsRoutes = new Elysia({ prefix: "/quiz-statistics" })
-  // Auth middleware using derive — same pattern as all other routes
   .derive(async ({ request, set }) => {
+    if (request.method === "OPTIONS") {
+      return {
+        user: null as { id: string; name: string; email: string } | null,
+      }
+    }
+
     const session = await auth.api.getSession({ headers: request.headers })
 
     if (!session?.user) {

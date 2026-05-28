@@ -9,11 +9,16 @@ import { OpenAPI } from "./lib/auth/config"
 const app = new Elysia()
   .use(
     cors({
-      origin: [
-        "http://localhost:5173",
-        "http://localhost:5174",
-        "https://budayana-app.vercel.app"
-      ],
+      origin: (request) => {
+        const origin = request.headers.get("origin")
+        if (!origin) return false
+        
+        // Always allow localhost for local development
+        if (origin.startsWith("http://localhost:")) return true
+        
+        // Dynamically check against allowed origins from auth configuration
+        return allowedOrigins.includes(origin)
+      },
       methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
       allowedHeaders: ["Content-Type", "Authorization"],
       credentials: true,
