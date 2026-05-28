@@ -12,10 +12,17 @@ const app = new Elysia()
       origin: (request) => {
         const origin = request.headers.get("origin")
         if (!origin) return false
+
         
-        // Always allow localhost for local development
-        if (origin.startsWith("http://localhost:")) return true
-        
+
+        // Always allow localhost and production frontend
+        if (
+          origin.startsWith("http://localhost:") ||
+          origin === "https://budayana-app.vercel.app"
+        ) {
+          return true
+        }
+
         // Dynamically check against allowed origins from auth configuration
         return allowedOrigins.includes(origin)
       },
