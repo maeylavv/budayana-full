@@ -9,7 +9,11 @@ import { OpenAPI } from "./lib/auth/config"
 const app = new Elysia()
   .use(
     cors({
-      origin: true,
+      origin: [
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "https://budayana-app.vercel.app"
+      ],
       methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
       allowedHeaders: ["Content-Type", "Authorization"],
       credentials: true,
