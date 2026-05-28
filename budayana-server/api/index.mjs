@@ -25846,9 +25846,16 @@ const app = new Elysia().use(cors({
 		"POST",
 		"PATCH",
 		"DELETE",
-		"OPTIONS"
+		"OPTIONS",
+		"PUT"
 	],
-	allowedHeaders: ["Content-Type", "Authorization"],
+	allowedHeaders: [
+		"Content-Type",
+		"Authorization",
+		"Accept",
+		"Origin",
+		"x-better-auth-session"
+	],
 	credentials: true
 })).onError(({ error, set }) => {
 	console.error("Elysia caught error:", error);
@@ -25865,7 +25872,7 @@ const app = new Elysia().use(cors({
 		paths: await OpenAPI.getPaths()
 	}
 })).use(apiRoutes).get("/", () => "OK");
-if (process.env.NODE_ENV === "development") {
+if (process.env.NODE_ENV === "development" && !process.env.VERCEL) {
 	app.listen(3e3);
 	console.log("🚀 Server running at http://localhost:3000");
 }
