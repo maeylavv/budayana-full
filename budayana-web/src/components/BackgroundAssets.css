@@ -1,0 +1,104 @@
+.backgroundassets {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.wave {
+  position: absolute;
+  opacity: 0.8;
+}
+
+/* Base positions (optimized for desktop) */
+.wave1 {
+  top: 0px;
+  left: 20%;
+}
+
+.wave2 {
+  top: 450px;
+  left: 30%;
+}
+
+.wave3 {
+  top: 150px;
+  left: 2%;
+}
+
+.wave4 {
+  top: 550px;
+  left: 60%;
+}
+
+.wave5 {
+  top: 500px;
+  right: 20%;
+}
+
+.wave6 {
+  top: 60px;
+  right: 35%;
+}
+
+.wave7 {
+  top: 280px;
+  left: 15%;
+}
+
+.wave8 {
+  top: 380px;
+  right: 30%;
+}
+
+.wave9 {
+  top: 530px;
+  left: 40%;
+}
+
+.wave10 {
+  top: 550px;
+  left: 10%;
+}
+
+.wave11 {
+  top: 410px;
+  left: 3%;
+}
+
+/* Whale */
+.paus {
+  position: absolute;
+  width: 120px;
+  top: 10px;
+  left: 35%;
+}
+
+/* Shark */
+.hiuk {
+  position: absolute;
+  width: 95px;
+  top: 100px;
+  right: 20%;
+}
+
+/* Tablet responsive: reduce opacity, hide large animals */
+@media (max-width: 1024px) {
+  .backgroundassets {
+    opacity: 0.4;
+  }
+  .backgroundassets .paus,
+  .backgroundassets .hiuk {
+    display: none !important;
+  }
+}
+
+/* Mobile responsive: hide decorative assets */
+@media (max-width: 768px) {
+  .backgroundassets {
+    display: none !important;
+  }
+}
