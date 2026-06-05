@@ -875,13 +875,15 @@
   font-family: 'Fredoka One', sans-serif;
   font-weight: 500;
   font-size: 2.5rem;
-  margin-top: 8px;
+  margin-top: 24px;
 }
 
 .progress-dots {
   display: flex;
   justify-content: center;
   gap: 8px;
+  margin-top: 10px;
+  margin-bottom: 24px;
 }
 
 .dot {
@@ -904,73 +906,160 @@
 .stage-grid {
   display: flex;
   justify-content: center;
-  gap: 32px;
-  margin-top: 28px;
+  gap: 20px;
+  margin-top: 0;
 }
 
-/* Each stage card */
+/* Original PNG stage card styles */
 .stage-card {
   position: relative;
-  width: 260px;
-  height: 480px;
-  border-radius: 25px;
+  width: 240px;
+  aspect-ratio: 250 / 480;
+  height: auto;
+  border-radius: 32px;
   overflow: hidden;
-  display: flex;
-  justify-content: center;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  box-sizing: border-box;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Background image of the card */
+.stage-card:not(.locked):hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2);
+}
+
+.stage-card.locked {
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
 .stage-bg {
-  width: 250px;
-  height: auto;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
   display: block;
 }
 
-/* Text on top of card */
 .stage-content {
   position: absolute;
   top: 10%;
   left: 0;
   right: 0;
-  text-align: center;
-  color: #ffffff;
-  font-weight: 700;
-  font-size: 18px;
-  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.35);
-}
-
-/* Lock overlay like attachment 1 – small lock, dim card */
-.stage-lock-overlay {
-  position: relative;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.35);
+  height: 35%;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  gap: 10px;
+  z-index: 2;
 }
 
-.stage-lock-icon {
-  width: 80px;
-  /* adjust until it matches your mockup */
-  height: 100px;
+.stage-title {
+  font-family: 'Fredoka One', 'Fredoka', sans-serif !important;
+  font-size: clamp(16px, 2vw, 24px) !important;
+  font-weight: 800;
+  text-align: center;
+  color: white !important;
+  margin: 0 !important;
+  padding: 0 16px !important;
+  height: auto !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
-/* ---------- LOCKED STATE VISUAL ---------- */
-.stage-card.locked {
-  filter: brightness(50%);
+.stage-order {
+  display: inline-block !important;
+  background-color: #ffffff !important;
+  font-family: 'Fredoka One', 'Fredoka', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: clamp(10px, 1.2vw, 14px) !important;
+  padding: 6px 18px !important;
+  border-radius: 999px !important;
+  text-align: center !important;
+  width: fit-content !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06) !important;
+  margin: 0 !important;
+}
+
+.stage-order.tahap-1 {
+  color: #FFA5C9 !important;
+}
+
+.stage-order.tahap-2 {
+  color: #5AD9AD !important;
+}
+
+.stage-order.tahap-3 {
+  color: #F7885E !important;
 }
 
 .stage-lock-overlay {
   position: absolute;
   inset: 0;
+  background: rgba(0, 0, 0, 0.35);
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  z-index: 10;
 }
 
 .stage-lock-icon {
-  font-size: 40px;
-  color: rgb(145, 138, 138);
+  max-width: 28%;
+  object-fit: contain;
+  height: auto;
+}
+
+/* Gameplay overlays */
+.stage-check {
+  position: absolute !important;
+  top: 8% !important;
+  right: 8% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 14% !important;
+  max-width: 36px !important;
+  aspect-ratio: 1;
+  border-radius: 999px !important;
+  background-color: #7BC142 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+  z-index: 5 !important;
+}
+
+.resume-btn {
+  position: absolute !important;
+  bottom: 12% !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 5 !important;
+  background: #F6B80F !important;
+  color: #fff !important;
+  border: 2px solid #ffffff !important;
+  border-radius: 12px !important;
+  padding: 6px 14px !important;
+  font-family: 'Fredoka One', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: clamp(11px, 1.2vw, 14px) !important;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.18) !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+}
+
+.stage-score-badge {
+  position: absolute !important;
+  bottom: 5% !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  background: rgba(0, 0, 0, 0.6) !important;
+  color: white !important;
+  padding: 4px 10px !important;
+  border-radius: 8px !important;
+  font-size: clamp(10px, 1vw, 12px) !important;
+  font-weight: 800 !important;
+  z-index: 5 !important;
+  font-family: 'Fredoka One', sans-serif !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12) !important;
+  white-space: nowrap !important;
 }
 
 /* LOCKED ISLAND */
@@ -1152,7 +1241,61 @@
   color: #000;
 }
 
-/* Stage completed checkmark styling (appended) */
+/* Popup top row containing cycle count and close button */
+.popup-top-row {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  position: relative !important;
+}
+
+.popup-top-row .popup-cycle-count {
+  position: static !important;
+  font-family: 'Fredoka One', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 1.5rem !important;
+  color: #000 !important;
+  margin: 0 !important;
+}
+
+.popup-top-row .popup-close {
+  position: static !important;
+  border: none !important;
+  background: transparent !important;
+  cursor: pointer !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 50px !important;
+  height: 50px !important;
+  margin: 0 !important;
+}
+
+.popup-top-row .close-button {
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  object-fit: contain !important;
+}
+
+.unlockedpopup .popup-title {
+  margin-top: 24px !important;
+  margin-bottom: 12px !important;
+  font-family: 'Fredoka One', sans-serif !important;
+  font-weight: 500 !important;
+  font-size: 2.5rem !important;
+  color: #111111 !important; /* Near black island title color */
+}
+
+.unlockedpopup .progress-dots {
+  margin-top: 0 !important;
+  margin-bottom: 20px !important;
+}
+
+/* Stage completed checkmark styling */
 .stage-check {
   display: flex;
   align-items: center;
@@ -1163,13 +1306,13 @@
   background-color: #7BC142;
   color: #ffffff;
   font-weight: 800;
-  margin: 16px auto 0;
+  margin: 0 auto;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
 }
 
 .resume-btn {
   display: block;
-  margin: 250px auto 0;
+  margin: 0 auto;
   background: #F6B80F;
   color: #fff;
   border: 2px solid #ffffff;
@@ -1205,5 +1348,355 @@
     position: static;
     transform: none;
     left: auto;
+  }
+}
+
+/* ==========================================================================
+   UNIFIED RESPONSIVE REFINEMENT FOR TABLET & MOBILE (<=1024px)
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .home-page {
+    padding: max(16px, env(safe-area-inset-top)) 16px 24px !important; /* Page padding-top: max(16px, env(safe-area-inset-top)) */
+    min-height: 100vh !important;
+    height: auto !important;
+  }
+
+  /* Header structure and vertical flow */
+  .header {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    position: relative !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    padding-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* Profile top-right placement */
+  .profile {
+    position: absolute !important;
+    top: max(16px, env(safe-area-inset-top)) !important; /* top: safe area */
+    right: 16px !important; /* right: existing value */
+    z-index: 20 !important;
+    margin: 0 !important;
+    order: 1 !important;
+    align-self: flex-end !important;
+  }
+
+  .profile img {
+    height: 76px !important; /* Tablet profile size */
+    width: auto !important;
+  }
+
+  /* Logo center placement */
+  .home-page .gameName {
+    position: static !important;
+    transform: none !important;
+    order: 2 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-self: center !important; /* align-self: center */
+    width: 100% !important;
+    margin-top: 24px !important; /* Logo margin-top: 24px */
+    margin-bottom: 12px !important; /* Logo margin-bottom: 12px */
+  }
+
+  .gameName img {
+    width: 240px !important; /* Tablet logo size: 220-260px */
+    height: auto !important;
+  }
+
+  /* Toggle switch below logo */
+  .toggle-wrapper {
+    order: 3 !important;
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+    margin-bottom: 18px !important; /* Toggle margin-bottom: 18px */
+    margin-top: 0 !important;
+  }
+
+  /* Unified Card Grid for Tablet (2 columns) */
+  .story-island-cards-container {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px !important; /* Card -> Card: 14-16px */
+    width: 100% !important;
+    max-width: 800px !important;
+    margin: 0 auto !important; /* Card list margin-top: 0 */
+    padding: 0 16px !important;
+    box-sizing: border-box !important;
+    z-index: 5 !important;
+    position: relative !important;
+  }
+
+  /* Compact Card styling - Horizontal Row Layout with exact visual styles */
+  .story-island-card {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 20px !important;
+    background: rgba(255, 255, 255, 0.45) !important;
+    backdrop-filter: blur(6px) !important;
+    border-radius: 20px !important;
+    padding: 12px 20px !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 50, 0.12) !important;
+    border: 2px solid rgba(255, 255, 255, 0.7) !important;
+    height: 130px !important; /* Tablet height: 120-140px */
+    box-sizing: border-box !important;
+    cursor: pointer !important;
+    transition: transform 0.18s ease, box-shadow 0.18s ease !important;
+    position: relative !important;
+    user-select: none !important;
+  }
+
+  .story-island-card:active {
+    transform: scale(0.98) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 50, 0.08) !important;
+  }
+
+  .story-island-card.locked {
+    filter: brightness(0.75) !important;
+    opacity: 0.85 !important;
+    cursor: not-allowed !important;
+  }
+
+  /* Proportions for Tablet: image ~30%, title centered */
+  .story-island-card-image-wrapper {
+    width: 30% !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative !important;
+    flex-shrink: 0 !important;
+  }
+
+  .story-island-card-image {
+    max-height: 72px !important; /* Prevent stretching */
+    max-width: 100% !important;
+    object-fit: contain !important;
+  }
+
+  .story-island-card-lock-overlay {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    background: rgba(255, 255, 255, 0.4) !important;
+    border-radius: 50% !important;
+    width: 36px !important;
+    height: 36px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: 1.5px solid #7B4F2E !important;
+  }
+
+  .story-island-card-lock-icon {
+    height: 20px !important;
+    width: auto !important;
+  }
+
+  .story-island-card-info {
+    flex: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .story-island-card-title {
+    font-family: 'Fredoka One', 'Fredoka', sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 24px !important; /* Title font-size: 22-26px */
+    color: #111111 !important; /* Higher contrast near-black */
+    margin: 0 !important;
+  }
+
+  /* Popup Responsive Overrides for Tablet */
+  .popup {
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 88vw !important;
+    max-width: 500px !important;
+    max-height: 86vh !important;
+    overflow-y: auto !important;
+  }
+
+  .popup-unlocked {
+    width: 100% !important;
+    max-width: 95vw !important;
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+
+  .popup-top-row .popup-cycle-count {
+    font-size: 18px !important;
+  }
+
+  .popup-top-row .popup-close {
+    width: 48px !important;
+    height: 48px !important;
+  }
+
+  .unlockedpopup .popup-title {
+    margin-top: 24px !important;
+    margin-bottom: 12px !important;
+    font-size: 40px !important;
+  }
+
+  .unlockedpopup .progress-dots {
+    margin-top: 0 !important;
+    margin-bottom: 20px !important;
+  }
+
+  .stage-grid {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    gap: 18px !important;
+    width: 100% !important;
+  }
+
+  .stage-card {
+    position: relative !important;
+    width: 200px !important;
+    height: auto !important;
+    aspect-ratio: 250 / 480 !important;
+    border-radius: 26px !important;
+    padding: 0 !important;
+  }
+
+  .stage-card:not(.locked) {
+    cursor: pointer !important;
+  }
+
+  .stage-card.locked {
+    pointer-events: none !important;
+    cursor: not-allowed !important;
+  }
+}
+
+/* ==========================================================================
+   UNIFIED RESPONSIVE REFINEMENT FOR MOBILE (<=768px)
+   ========================================================================== */
+@media (max-width: 768px) {
+  /* Profile smaller size on Mobile */
+  .profile img {
+    height: 58px !important;
+  }
+
+  /* Profile absolute top-right for mobile */
+  .profile {
+    top: max(16px, env(safe-area-inset-top)) !important;
+  }
+
+  /* Logo size on Mobile: 180-220px, max-width 70vw */
+  .gameName img {
+    width: 200px !important;
+    max-width: 70vw !important;
+  }
+
+  /* Single column cards on Mobile, centered and max-width 92% */
+  .story-island-cards-container {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important; /* Card -> Card: 14-16px */
+    width: 100% !important;
+    max-width: 92% !important;
+    margin: 0 auto !important; /* Card list margin-top: 0 */
+    padding: 0 !important;
+  }
+
+  /* Card styling adjustments for Mobile */
+  .story-island-card {
+    height: 100px !important; /* Mobile height: 90-110px */
+    border-radius: 20px !important;
+    padding: 12px 20px !important;
+  }
+
+  .story-island-card:active {
+    transform: scale(0.97) !important;
+  }
+
+  /* Proportions for Mobile: image ~28%, title centered */
+  .story-island-card-image-wrapper {
+    width: 28% !important;
+  }
+
+  .story-island-card-title {
+    font-size: 22px !important; /* Title font-size: 22-26px */
+  }
+
+  /* Popup Responsive Overrides for Mobile */
+  .popup {
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 92vw !important;
+    padding: 24px 16px !important;
+    border-radius: 26px !important;
+    max-height: 86vh !important;
+    overflow-y: auto !important;
+  }
+
+  .popup-unlocked {
+    width: 94vw !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  .popup-top-row .popup-cycle-count {
+    font-size: 16px !important;
+  }
+
+  .popup-top-row .popup-close {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .unlockedpopup .popup-title {
+    margin-top: 24px !important;
+    margin-bottom: 12px !important;
+    font-size: 32px !important;
+  }
+
+  .unlockedpopup .progress-dots {
+    margin-top: 0 !important;
+    margin-bottom: 20px !important;
+  }
+
+  .stage-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 18px !important;
+    width: 100% !important;
+  }
+
+  .stage-card {
+    position: relative !important;
+    width: 180px !important;
+    height: auto !important;
+    aspect-ratio: 250 / 480 !important;
+    border-radius: 24px !important;
+    padding: 0 !important;
+    margin: auto !important;
+  }
+
+  .stage-card:not(.locked) {
+    cursor: pointer !important;
+  }
+
+  .stage-card.locked {
+    pointer-events: none !important;
+    cursor: not-allowed !important;
   }
 }
