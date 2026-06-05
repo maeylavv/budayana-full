@@ -84,6 +84,8 @@
   .island.sumatra { left: 2%; }
   .island.sulawesi { left: 55%; }
   .island.maluku { left: 75%; }
+  .paus, .hiuk { display: none !important; }
+  .wave { opacity: 0.3 !important; }
 }
 
 @media (max-width: 768px) {
@@ -94,5 +96,5 @@
   .island.sulawesi { width: 120px; top: 140px; left: 65%; }
   .island.bali { width: 70px; top: 340px; left: 45%; }
   .island.maluku { width: 90px; top: 160px; left: 80%; }
-  .paus, .hiuk { display: none; }
+  .wave, .paus, .hiuk { display: none !important; }
 }
