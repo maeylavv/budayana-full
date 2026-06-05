@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import "./QuizKulturPage.css"
 import ToggleMenu from "../components/ToggleMenu"
@@ -14,13 +14,35 @@ export default function QuizKulturPage() {
     return daysSince > 7;
   });
   const [currentStep, setCurrentStep] = useState(1)
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth)
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
 
   // Use the static islands directly, assuming they are unlocked/open for now
-  // Since you mentioned "For now, clicking an island does not need to navigate anywhere yet."
   const allIslands = staticIslands.map((island) => ({
     ...island,
     isUnlocked: true, // We can keep them conceptually unlocked for the quiz
   }))
+
+  // Reorder allIslands based on orderedIslandIds for Tablet/Mobile rendering
+  const orderedIslandIds = [
+    "sulawesi",
+    "sumatra",
+    "jawa",
+    "papua",
+    "kalimantan",
+    "maluku",
+    "bali",
+    "nusa-tenggara"
+  ]
+
+  const orderedIslands = [...allIslands].sort((a, b) => {
+    return orderedIslandIds.indexOf(a.id) - orderedIslandIds.indexOf(b.id)
+  })
 
   const handleOpenIsland = (island) => {
     navigate(`/islands/${island.slug || island.id}/quiz`)
@@ -32,9 +54,8 @@ export default function QuizKulturPage() {
     <div className='page quiz-page'>
       {/* HEADER */}
       <div className='header'>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', alignItems: 'flex-start', zIndex: 10 }}>
+        <div className="toggle-wrapper" style={{ zIndex: 10 }}>
           <ToggleMenu />
-          {/* Omit 'Tahap Selesai' for this page or put something relevant later */}
         </div>
 
         <div className='gameName'>
@@ -46,8 +67,15 @@ export default function QuizKulturPage() {
         </div>
       </div>
 
-      {/* MAP ISLANDS */}
-      <MapUI allIslands={allIslands} onIslandClick={handleOpenIsland} />
+      {/* MAP ISLANDS OR RESPONSIVE CARDS */}
+      {windowWidth > 1024 ? (
+        <MapUI allIslands={allIslands} onIslandClick={handleOpenIsland} />
+      ) : (
+        <>
+          <MapUI allIslands={allIslands} onIslandClick={handleOpenIsland} showIslands={false} showBackground={windowWidth > 768} />
+          <QuizIslandCardsList islands={orderedIslands} onIslandClick={handleOpenIsland} />
+        </>
+      )}
 
       {/* WELCOME POPUP */}
       {showWelcome && (
@@ -102,4 +130,61 @@ export default function QuizKulturPage() {
       )}
     </div>
   )
+}
+
+function QuizIslandCardsList({ islands, onIslandClick }) {
+  return (
+    <div className="quiz-island-cards-container">
+      {islands.map((island) => {
+        /*
+        ========================
+        TEMP TESTING MODE
+        RESTORE LOCK AFTER TEST
+        ========================
+        const isLocked = !island.isUnlocked;
+        */
+        const isLocked = false;
+        return (
+          <div
+            key={island.id || island.slug}
+            className={`quiz-island-card ${isLocked ? 'locked' : ''}`}
+            /*
+            ========================
+            TEMP TESTING MODE
+            RESTORE LOCK AFTER TEST
+            ========================
+            onClick={() => !isLocked && onIslandClick(island)}
+            */
+            onClick={() => onIslandClick(island)}
+          >
+            <div className="quiz-island-card-image-wrapper">
+              <img
+                src={`/assets/budayana/islands/${island.name}.png`}
+                alt={island.name}
+                className="quiz-island-card-image"
+              />
+              {/*
+              ========================
+              TEMP TESTING MODE
+              RESTORE LOCK AFTER TEST
+              ========================
+              isLocked && (
+                <div className="quiz-island-card-lock-overlay">
+                  <img
+                    src='/assets/budayana/islands/padlock.png'
+                    alt='locked'
+                    className="quiz-island-card-lock-icon"
+                  />
+                </div>
+              )
+              */}
+            </div>
+            <div className="quiz-island-card-info">
+              <h3 className="quiz-island-card-title">{island.name}</h3>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
 }

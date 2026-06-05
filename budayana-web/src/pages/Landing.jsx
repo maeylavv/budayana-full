@@ -1,8 +1,10 @@
+import { useState } from "react";
 import "./Landing.css";
 import { useNavigate } from "react-router-dom";
 
 export default function Landing() {
     const navigate = useNavigate();
+    const [activeFeature, setActiveFeature] = useState("cerita-rakyat");
     const scrollToSection = (id) => {
         const el = document.getElementById(id);
         if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -84,43 +86,52 @@ export default function Landing() {
             </div>
 
             <div id="features" className="lnd-features">
-               <h1 className="lnd-title-brown">Fitur Utama</h1>
-               <p className="lnd-subtitle-brown">Jelajahi kekayaan budaya Indonesia dari 8 pulau<br/>dengan cara yang menyenangkan!</p>
-               <div className="lnd-features-content" style={{ position: 'relative', width: '100%' }}>
-                 <div style={{ position: 'relative', border: '2px solid #7B4F2E', backgroundColor: '#FDEBCC', borderRadius: '24px', display: 'flex', width: '100%', maxWidth: '800px', margin: '40px auto', paddingBottom: '20px' }}>
-                    
-                    {/* Kolom Cerita Rakyat */}
-                    <div style={{ flex: 1, borderRight: '2px dashed #955C2E', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '40px', position: 'relative' }}>
-                       <div style={{ position: 'absolute', top: '-24px', backgroundColor: '#BE6E3A', borderRadius: '12px', padding: '12px 40px', color: 'white', fontWeight: '800', fontSize: '1.4rem' }}>
-                         Cerita Rakyat
-                       </div>
-                       
-                       {/* Connector Line */}
-                       <div style={{ position: 'absolute', width: '2px', backgroundColor: '#7B4F2E', top: '100px', bottom: '80px', zIndex: 1 }}></div>
+                <h1 className="lnd-title-brown">Fitur Utama</h1>
+                <p className="lnd-subtitle-brown">Jelajahi kekayaan budaya Indonesia dari 8 pulau<br/>dengan cara yang menyenangkan!</p>
+                
+                <div className="lnd-feature-toggle-container">
+                    <button 
+                        className={`lnd-feature-toggle-btn ${activeFeature === 'cerita-rakyat' ? 'active' : ''}`}
+                        onClick={() => setActiveFeature('cerita-rakyat')}
+                    >
+                        Cerita Rakyat
+                    </button>
+                    <button 
+                        className={`lnd-feature-toggle-btn ${activeFeature === 'quiz-kultur' ? 'active' : ''}`}
+                        onClick={() => setActiveFeature('quiz-kultur')}
+                    >
+                        Quiz Kultur
+                    </button>
+                </div>
 
-                       <FlowCircle img="tahap 1.png" text="Pre-Test" />
-                       <FlowCircle img="tahap 2.png" text="Story" />
-                       <FlowCircle img="tahap 3.png" text="Post-Test" />
-                    </div>
+                <div className="lnd-features-content" style={{ position: 'relative', width: '100%' }}>
+                  <div style={{ position: 'relative', border: '2px solid #7B4F2E', backgroundColor: '#FDEBCC', borderRadius: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', maxWidth: '450px', margin: '40px auto', paddingBottom: '20px', paddingTop: '40px' }}>
+                     
+                     <div style={{ position: 'absolute', top: '-24px', backgroundColor: '#BE6E3A', borderRadius: '12px', padding: '12px 40px', color: 'white', fontWeight: '800', fontSize: '1.4rem', boxShadow: '0 4px 6px rgba(123, 79, 46, 0.2)' }}>
+                       {activeFeature === 'cerita-rakyat' ? 'Cerita Rakyat' : 'Quiz Kultur'}
+                     </div>
+                     
+                     {/* Connector Line */}
+                     <div style={{ position: 'absolute', width: '2px', backgroundColor: '#7B4F2E', top: '100px', bottom: '80px', zIndex: 1 }}></div>
 
-                    {/* Kolom Quiz Kultur */}
-                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '40px', position: 'relative' }}>
-                       <div style={{ position: 'absolute', top: '-24px', backgroundColor: '#BE6E3A', borderRadius: '12px', padding: '12px 40px', color: 'white', fontWeight: '800', fontSize: '1.4rem' }}>
-                         Quiz Kultur
-                       </div>
-                       
-                       {/* Connector Line */}
-                       <div style={{ position: 'absolute', width: '2px', backgroundColor: '#7B4F2E', top: '100px', bottom: '80px', zIndex: 1 }}></div>
-
-                       <FlowCircle img="tahap 1.png" text="Pilih Pulau" />
-                       <FlowCircle img="tahap 2.png" text="Pilih Topik" />
-                       <FlowCircle img="tahap 3.png" text="Pilih Level" />
-                    </div>
-                 </div>
-                 
-                 <img src="/assets/budayana/islands/Badak.png" alt="Badak" className="lnd-badak-float" style={{ right: '-50px', bottom: '-50px', zIndex: 4 }} />
-               </div>
-            </div>
+                     {activeFeature === 'cerita-rakyat' ? (
+                        <>
+                           <FlowCircle img="tahap 1.png" text="Pre-Test" />
+                           <FlowCircle img="tahap 2.png" text="Story" />
+                           <FlowCircle img="tahap 3.png" text="Post-Test" />
+                        </>
+                     ) : (
+                        <>
+                           <FlowCircle img="tahap 1.png" text="Pilih Pulau" />
+                           <FlowCircle img="tahap 2.png" text="Pilih Topik" />
+                           <FlowCircle img="tahap 3.png" text="Pilih Level" />
+                        </>
+                     )}
+                  </div>
+                  
+                  <img src="/assets/budayana/islands/Badak.png" alt="Badak" className="lnd-badak-float" style={{ right: '-50px', bottom: '-50px', zIndex: 4 }} />
+                </div>
+             </div>
 
             <div className="lnd-wave-footer">
                <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
@@ -130,15 +141,17 @@ export default function Landing() {
 
             <div id="contact" className="lnd-kontak">
                 <h1 className="lnd-title-white">Kontak Kami</h1>
-                <p className="lnd-kontak-sub">Punya pertanyaan, saran, atau ingin berkolaborasi? Jangan ragu untuk mengirimkan pesan kepada kami.</p>
+                <p className="lnd-kontak-sub">Punya pertanyaan, saran, atau ingin berkolaborasi?<br/>Jangan ragu untuk mengirimkan pesan kepada kami.</p>
                 <div className="lnd-contact-info">
-                   <div className="lnd-contact-row">
-                      <img src="/assets/budayana/islands/email.png" alt="email" />
-                      <span>budayana@gmail.com</span>
-                   </div>
-                   <div className="lnd-contact-row">
-                      <span>📞 0895-000-000</span>
-                   </div>
+                   <a
+                        href="https://mail.google.com/mail/?view=cm&fs=1&to=budayana3ra@gmail.com&su=Halo%20Tim%20Budayana&body=Halo,%20saya%20ingin%20bertanya%20tentang%20Budayana."
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="lnd-contact-row"
+                    >
+                        <img src="/assets/budayana/islands/email.png" alt="email" />
+                        <span>budayana3ra@gmail.com</span>
+                    </a>
                 </div>
             </div>
         </div>

@@ -13,6 +13,7 @@ import { islands as staticIslands } from "../data/islands"
 // Components
 import ToggleMenu from "../components/ToggleMenu"
 import MapUI from "../components/MapUI"
+import StageCardComponent from "../components/StageCard"
 
 // Helper to see if we need special slug handling
 function getIslandSlug(name) {
@@ -106,11 +107,36 @@ function StageCard({ stage, status, index, onClick, activeAttempt, latestFinishe
     return { label: null, value: null }
   }, [activeAttempt, latestFinishedAttempt, stage])
 
+  /* CUSTOM RESPONSIVE VERSION
+  const animals = [
+    "/assets/budayana/islands/Monyet.png",
+    "/assets/budayana/islands/Buaya.png",
+    "/assets/budayana/islands/Badak.png"
+  ]
+
+  const colors = ["pink", "green", "orange"]
+
+  return (
+    <StageCardComponent
+      title={stage.title}
+      stage={`Tahap ${index + 1}`}
+      animal={animals[index % 3]}
+      color={colors[index % 3]}
+      locked={isLocked}
+      completed={isCompleted}
+      resume={status === "resume"}
+      scoreLabel={label}
+      scoreValue={value}
+      onClick={onClick}
+    />
+  )
+  */
+
   return (
     <div
       className={`stage-card ${isLocked ? "locked" : ""} ${isCompleted ? "completed" : ""}`}
-      onClick={onClick}
-      style={{ cursor: "pointer" }}
+      onClick={isLocked ? undefined : onClick}
+      style={{ cursor: isLocked ? "not-allowed" : "pointer" }}
     >
       <img
         src={`/assets/budayana/islands/tahap ${(index % 3) + 1}.png`}
@@ -129,7 +155,10 @@ function StageCard({ stage, status, index, onClick, activeAttempt, latestFinishe
           </div>
         )}
         {status === "resume" && (
-          <button className='resume-btn'>Lanjutkan</button>
+          <button className='resume-btn' onClick={(e) => {
+            e.stopPropagation();
+            if (onClick) onClick();
+          }}>Lanjutkan</button>
         )}
       </div>
       {value !== null && label && (
@@ -156,6 +185,13 @@ export default function Home() {
   const [searchParams, setSearchParams] = useSearchParams()
   const [activeIsland, setActiveIsland] = useState(null)
   const [lockedIslandWarning, setLockedIslandWarning] = useState(null)
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth)
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
 
   // Fetch user's progress from API
   const { data: progressData, isLoading: isProgressLoading } = useMyProgress()
@@ -188,6 +224,11 @@ export default function Home() {
 
     // Compute isUnlocked dynamically based on previous island completion
     const processedIslands = sortedIslands.map((island, idx) => {
+      /*
+      ========================
+      TEMP TESTING MODE
+      RESTORE LOCK AFTER TEST
+      ========================
       let isUnlocked = false
       if (island.unlockOrder === 1) {
         // First island (Sumatra) is unlocked by default
@@ -196,6 +237,8 @@ export default function Home() {
         const prevIsland = sortedIslands[idx - 1]
         isUnlocked = prevIsland ? prevIsland.isCompleted : false
       }
+      */
+      let isUnlocked = true
 
       return {
         ...island,
@@ -213,6 +256,22 @@ export default function Home() {
       }
     })
   }, [progressData])
+
+  const orderedIslands = useMemo(() => {
+    const orderedIslandIds = [
+      "sulawesi",
+      "sumatra",
+      "jawa",
+      "papua",
+      "kalimantan",
+      "maluku",
+      "bali",
+      "nusa-tenggara"
+    ]
+    return [...allIslands].sort((a, b) => {
+      return orderedIslandIds.indexOf(a.id) - orderedIslandIds.indexOf(b.id)
+    })
+  }, [allIslands])
 
   // Auto-open island popup from URL param (only on initial load)
   useEffect(() => {
@@ -232,6 +291,11 @@ export default function Home() {
 
   // Handle island popup open/close with URL sync
   const handleOpenIsland = (island) => {
+    /*
+    ========================
+    TEMP TESTING MODE
+    RESTORE LOCK AFTER TEST
+    ========================
     if (!island.isUnlocked) {
       // Find the previous island in the sorted sequence
       const sorted = [...allIslands].sort((a, b) => a.unlockOrder - b.unlockOrder)
@@ -243,6 +307,7 @@ export default function Home() {
       }
       return
     }
+    */
     setActiveIsland(island)
     setSearchParams({ island: island.slug }, { replace: true })
   }
@@ -265,7 +330,7 @@ export default function Home() {
     <div className='page home-page'>
       {/* HEADER */}
       <div className='header'>
-        <div style={{ zIndex: 10 }}>
+        <div className="toggle-wrapper" style={{ zIndex: 10 }}>
           <ToggleMenu />
         </div>
 
@@ -302,8 +367,15 @@ export default function Home() {
         </div>
       )}
 
-      {/* MAP ISLANDS */}
-      <MapUI allIslands={allIslands} onIslandClick={handleOpenIsland} />
+      {/* MAP ISLANDS OR RESPONSIVE CARDS */}
+      {windowWidth > 1024 ? (
+        <MapUI allIslands={allIslands} onIslandClick={handleOpenIsland} />
+      ) : (
+        <>
+          <MapUI allIslands={allIslands} onIslandClick={handleOpenIsland} showIslands={false} showBackground={windowWidth > 768} />
+          <StoryIslandCardsList islands={orderedIslands} onIslandClick={handleOpenIsland} />
+        </>
+      )}
 
       {/* POPUP */}
       {activeIsland && (
@@ -531,18 +603,18 @@ function IslandPopup({ activeIsland, onClose }) {
       >
         {activeIsland.isUnlocked ? (
           <div className='unlockedpopup'>
-            {/* Close button */}
-            <button className='popup-close' onClick={onClose}>
-              <img
-                src='/assets/budayana/islands/close button.png'
-                className='close-button'
-                alt='close'
-              />
-            </button>
-
-            {/* Cycle Count */}
-            <div className='popup-cycle-count'>
-              Percobaan : {totalFinishedAttempts}
+            {/* Top Row */}
+            <div className='popup-top-row'>
+              <div className='popup-cycle-count'>
+                Percobaan : {totalFinishedAttempts}
+              </div>
+              <button className='popup-close' onClick={onClose}>
+                <img
+                  src='/assets/budayana/islands/close button.png'
+                  className='close-button'
+                  alt='close'
+                />
+              </button>
             </div>
 
             {/* Title */}
@@ -657,4 +729,54 @@ function IslandPopup({ activeIsland, onClose }) {
       </div>
     </div>
   )
+}
+
+function StoryIslandCardsList({ islands, onIslandClick }) {
+  return (
+    <div className="story-island-cards-container">
+      {islands.map((island) => {
+        /*
+        ========================
+        TEMP TESTING MODE
+        RESTORE LOCK AFTER TEST
+        ========================
+        const isLocked = !island.isUnlocked;
+        */
+        const isLocked = false;
+        return (
+          <div
+            key={island.id || island.slug}
+            className={`story-island-card ${isLocked ? 'locked' : ''}`}
+            onClick={() => onIslandClick(island)}
+          >
+            <div className="story-island-card-image-wrapper">
+              <img
+                src={`/assets/budayana/islands/${island.name}.png`}
+                alt={island.name}
+                className="story-island-card-image"
+              />
+              {/*
+              ========================
+              TEMP TESTING MODE
+              RESTORE LOCK AFTER TEST
+              ========================
+              isLocked && (
+                <div className="story-island-card-lock-overlay">
+                  <img
+                    src='/assets/budayana/islands/padlock.png'
+                    alt='locked'
+                    className="story-island-card-lock-icon"
+                  />
+                </div>
+              )
+              */}
+            </div>
+            <div className="story-island-card-info">
+              <h3 className="story-island-card-title">{island.name}</h3>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
 }

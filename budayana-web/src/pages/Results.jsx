@@ -360,10 +360,7 @@ export default function Results() {
           <section>
             <h2 className='results-section-title'>Riwayat Skor Quiz</h2>
             <div className='history-table-container'>
-              <div
-                className='history-header'
-                style={{ gridTemplateColumns: '1.3fr 1.3fr 0.8fr 1.2fr 0.8fr 1fr 1fr' }}
-              >
+              <div className='history-header quiz-history-grid'>
                 <div>Pulau</div>
                 <div>Topik</div>
                 <div>Level</div>
@@ -387,8 +384,7 @@ export default function Results() {
                     .map((attempt) => (
                       <div
                         key={attempt.id}
-                        className='history-row'
-                        style={{ gridTemplateColumns: '1.3fr 1.3fr 0.8fr 1.2fr 0.8fr 1fr 1fr' }}
+                        className='history-row quiz-history-grid'
                       >
                         <div>{attempt.islandName}</div>
                         <div>{attempt.topicName}</div>
