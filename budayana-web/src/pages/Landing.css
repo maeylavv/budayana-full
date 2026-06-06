@@ -20,6 +20,7 @@ body { margin: 0; min-height: 100vh; overflow-x: hidden; font-family: 'Fredoka O
     justify-content: space-between;
     align-items: center;
     background-color: transparent;
+    position: relative;
 }
 .lnd-logo { height: 26px; cursor: pointer; margin-left: 10px; }
 .lnd-links { display: flex; gap: 40px; }
@@ -44,22 +45,45 @@ body { margin: 0; min-height: 100vh; overflow-x: hidden; font-family: 'Fredoka O
     cursor: pointer;
 }
 
-/* Hero */
-.lnd-hero {
-    position: relative;
+.lnd-desktop-nav {
     display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    padding-top: 15% !important;
-    gap: 20%;
-    padding: 140px 5% 0;
+    align-items: center;
+    gap: 40px;
 }
-.lnd-hero-mascots {
-    width: 100%;
-    max-width: 700px;
+
+.lnd-mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: #955C2E;
+    cursor: pointer;
+}
+
+/* Hero */
+.lnd-hero{
     position: relative;
-    z-index: 2;
-    margin-bottom: -5%; /* Stand on ground wave */
+    overflow: visible;
+    display:flex;
+    justify-content:center;
+    align-items:flex-end;
+    padding:200px 5% 0;
+    gap:20%;
+}
+
+/* Mascot */
+.lnd-hero-mascots{
+    width:100%;
+    max-width:700px;
+
+    position:relative;
+
+    /* BIKIN DI ATAS WAVE */
+    z-index:5;
+
+    pointer-events:none;
+
+    /* cuma nempel dikit ke tanah */
+    margin-bottom:-7%;
 }
 .lnd-hero-text {
     display: flex;
@@ -95,13 +119,26 @@ body { margin: 0; min-height: 100vh; overflow-x: hidden; font-family: 'Fredoka O
 }
 .lnd-daftar-btn:hover { transform: scale(1.05); }
 
-/* Ground Wave */
-.lnd-ground-wave {
-    width: 100%;
-    margin-top: -6%;
+.register-dropdown-wrapper {
     position: relative;
-    z-index: 1;
-    display: block;
+    z-index: 200;
+}
+.register-dropdown-wrapper .absolute {
+    z-index: 9999;
+}
+
+/* Ground */
+.lnd-ground-wave{
+    width:100%;
+
+    position:relative;
+
+    /* turun ke belakang */
+    z-index:1;
+
+    margin-top:-3%;
+
+    display:block;
 }
 
 /* Tentang Kami */
@@ -261,9 +298,9 @@ body { margin: 0; min-height: 100vh; overflow-x: hidden; font-family: 'Fredoka O
 }
 .lnd-badak-float {
     position: absolute;
-    right: -50px;
+    right: -30px;
     bottom: -30px;
-    width: 250px;
+    width: 230px;
     z-index: 1;
 }
 
@@ -292,6 +329,23 @@ body { margin: 0; min-height: 100vh; overflow-x: hidden; font-family: 'Fredoka O
     font-weight: 800;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Roadmap Images */
+.lnd-features-roadmap-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px; /* Moved up for Desktop & Tablet */
+}
+
+.lnd-roadmap-img {
+    max-width: 1000px;
+    width: 90%;
+    height: auto;
+    z-index: 2;
+    margin-top: -65px;
 }
 
 .lnd-feature-toggle-btn.active {
@@ -359,21 +413,82 @@ body { margin: 0; min-height: 100vh; overflow-x: hidden; font-family: 'Fredoka O
     width: 30px;
 }
 
+/* Desktop Navbar Centering */
+@media (min-width: 901px) {
+    .lnd-links {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
 /* Mobile Responsiveness */
 @media (max-width: 900px) {
-    .lnd-navbar-container { display: none; }
+    .lnd-navbar-container { padding-top: 15px; }
+    .lnd-navbar {
+        padding: 8px 16px;
+        border-width: 2.5px;
+        border-radius: 30px;
+    }
+    .lnd-logo { height: 20px; margin-left: 5px; }
+    .lnd-desktop-nav { display: none; }
+    .lnd-mobile-menu-btn { display: block; }
+    /* General mobile layout adjustments below 900px, hero will be overridden by more specific queries */
     .lnd-hero { flex-direction: column; padding-top: 80px !important; align-items: center; gap: 0; }
-    .lnd-hero-text { order: 1; padding-bottom: 30px; margin-left: 0; }
-    .lnd-hero-mascots { order: 2; width: 80%; margin-bottom: -5px; }
-    .lnd-ground-wave { margin-top: -1%; }
+    .lnd-hero-text { order: 1; padding-bottom: 50px; margin-left: 0; }
+    .lnd-hero-mascots { order: 2; width: 95%; margin-bottom: -20px; transform:translateY(18px); }
+    .lnd-ground-wave { margin-top: -2%; }
     .lnd-grid-islands { grid-template-columns: repeat(2, 1fr); padding: 0 10px; }
     .lnd-about-content { flex-direction: column; text-align: center; gap: 30px; }
     .lnd-features-content { flex-direction: column; align-items: center; }
     .lnd-feature-img { width: 95%; margin-bottom: 50px; }
-    .lnd-badak-float { position: relative; right: 0; bottom: 0; margin-top: -30px; width: 200px; }
+    .lnd-badak-float { position: relative; margin-right: -180px; margin-bottom: 5px; margin-top: -200px; width: 150px; }
     .lnd-contact-info { flex-direction: column; gap: 20px; }
+
+    .lnd-features-roadmap-wrapper {
+        margin-top: 20px;
+    }
+    .lnd-roadmap-img {
+        width: 100%;
+    }
     
     .lnd-title-brown, .lnd-title-white { font-size: 2.2rem; }
     .lnd-subtitle-white, .lnd-subtitle-brown { font-size: 1.1rem; }
     .lnd-interaktif { padding: 40px 10px; margin: 30px auto; border-radius: 16px; }
+
+    .register-dropdown-wrapper {
+        position: relative;
+        z-index: 999;
+    }
+    
+    .register-dropdown-wrapper .absolute {
+        top: auto !important;
+        bottom: calc(100% + 12px) !important;
+        left:110% !important;
+        transform: translateX(-50%) !important;
+        margin-top: 0 !important;
+        width: 220px;
+        max-width: 80vw;
+        z-index: 99999;
+    }
+}
+
+/* Desktop & Tablet Hero Alignment (>= 901px) */
+@media (min-width: 901px) {
+    .lnd-hero-text {
+        margin-left: -120px;
+        padding-bottom: 80px;
+    }
+    .lnd-banner {
+        width: 380px;
+        max-width: 100%;
+    }
+    .lnd-hero-sub {
+        font-size: 1.3rem;
+        line-height: 1.5;
+        margin-bottom: 24px;
+    }
+    .lnd-daftar-btn {
+        align-self: center;
+    }
 }
