@@ -174,7 +174,7 @@ export const QUIZ_DATA = {
                 "id": "m2",
                 "text": "Ukiran Bunga",
                 "color": "#D4DCFF",
-                "image": "/assets/budayana/islands/ukiran bunga.png"
+                "image": "/assets/budayana/islands/Ukiran bunga.png"
               },
               {
                 "id": "m1",
@@ -299,68 +299,80 @@ export const QUIZ_DATA = {
           },
           {
             "type": "drag_drop_sentence",
-            "text": "Susunlah pesan ajakan untuk temanmu agar mau menjaga kebersihan Rumah Gadang!",
+            "text": "Kamu ingin mengajak teman-temanmu untuk mengenal Rumah Gadang. Susun kalimat ajakanmu menggunakan minimal 4 kata dari pilihan berikut!",
             "draggables": [
               {
-                "id": "w6",
-                "text": "kebersihan",
-                "color": "#e3baf4ff"
-              },
-              {
                 "id": "w1",
-                "text": "menjaga",
-                "color": "#f6bad3ff"
+                "text": "Ayo",
+                "color": "#F6E78A"
               },
               {
                 "id": "w2",
-                "text": "Rumah Gadang",
-                "color": "#99AAEF"
-              },
-              {
-                "id": "w5",
-                "text": "Ayo kita",
-                "color": "#f5f199ff"
-              },
-              {
-                "id": "w4",
-                "text": "sebagai",
-                "color": "#a5ec93ff"
+                "text": "kenali",
+                "color": "#FFC6D8"
               },
               {
                 "id": "w3",
-                "text": "warisan budaya",
-                "color": "#FFC7B1"
+                "text": "Rumah Gadang",
+                "color": "#AEE5A1"
+              },
+              {
+                "id": "w4",
+                "text": "rumah",
+                "color": "#BFD1FF"
+              },
+              {
+                "id": "w5",
+                "text": "adat",
+                "color": "#CDB4FF"
+              },
+              {
+                "id": "w6",
+                "text": "kita",
+                "color": "#FFD6A5"
+              },
+              {
+                "id": "w7",
+                "text": "kuat",
+                "color": "#D5F4E6"
+              },
+              {
+                "id": "w8",
+                "text": "tanpa",
+                "color": "#FFC2C2"
+              },
+              {
+                "id": "w9",
+                "text": "paku",
+                "color": "#B9FBC0"
+              },
+              {
+                "id": "w10",
+                "text": "warisan",
+                "color": "#FFE29A"
+              },
+              {
+                "id": "w11",
+                "text": "Minangkabau",
+                "color": "#A8D8FF"
+              },
+              {
+                "id": "w12",
+                "text": "hebat",
+                "color": "#D9C6FF"
+              },
+              {
+                "id": "w13",
+                "text": "bersama",
+                "color": "#FAD6A5"
               }
             ],
-            "dropZones": [
-              {
-                "id": "z1"
-              },
-              {
-                "id": "z2"
-              },
-              {
-                "id": "z3"
-              },
-              {
-                "id": "z4"
-              },
-              {
-                "id": "z5"
-              },
-              {
-                "id": "z6"
-              }
-            ],
-            "correctOrder": [
-              "w5",
-              "w1",
-              "w6",
-              "w2",
-              "w4",
-              "w3"
-            ],
-            "xp": 40
+            "xp": 40,
+            "mode": "creative",
+            "minWords": 4,
+            "requiredWords": [
+              "Rumah Gadang"
+            ]
           }
         ]
       }
@@ -650,68 +662,85 @@ export const QUIZ_DATA = {
           },
           {
             "type": "drag_drop_sentence",
-            "text": "Susunlah ajakan untuk bangga pada kuliner asli Indonesia!",
+            "text": "Kamu ingin mengajak teman-temanmu untuk bangga memasak dan menjaga resep Rendang. Susun kalimat ajakanmu menggunakan minimal 4 kata dari pilihan berikut!",
             "draggables": [
               {
                 "id": "w1",
-                "text": "Ayo kita",
-                "color": "#f5f199ff"
-              },
-              {
-                "id": "w4",
-                "text": "sebagai",
-                "color": "#a5ec93ff"
-              },
-              {
-                "id": "w3",
-                "text": "Rendang",
-                "color": "#99AAEF"
-              },
-              {
-                "id": "w6",
-                "text": "terlezat di dunia",
-                "color": "#e3baf4ff"
+                "text": "Ayo",
+                "color": "#F6E78A"
               },
               {
                 "id": "w2",
-                "text": "cintai",
-                "color": "#f6bad3ff"
+                "text": "kita",
+                "color": "#FFC6D8"
+              },
+              {
+                "id": "w3",
+                "text": "masak",
+                "color": "#AEE5A1"
+              },
+              {
+                "id": "w4",
+                "text": "jaga",
+                "color": "#BFD1FF"
               },
               {
                 "id": "w5",
-                "text": "makanan",
-                "color": "#FFC7B1"
+                "text": "Rendang",
+                "color": "#CDB4FF"
+              },
+              {
+                "id": "w6",
+                "text": "asli",
+                "color": "#FFD6A5"
+              },
+              {
+                "id": "w7",
+                "text": "resep",
+                "color": "#D5F4E6"
+              },
+              {
+                "id": "w8",
+                "text": "tradisional",
+                "color": "#FFC2C2"
+              },
+              {
+                "id": "w9",
+                "text": "rempah",
+                "color": "#B9FBC0"
+              },
+              {
+                "id": "w10",
+                "text": "Indonesia",
+                "color": "#FFE29A"
+              },
+              {
+                "id": "w11",
+                "text": "warisan",
+                "color": "#A8D8FF"
+              },
+              {
+                "id": "w12",
+                "text": "dunia",
+                "color": "#D9C6FF"
+              },
+              {
+                "id": "w13",
+                "text": "bersama",
+                "color": "#FAD6A5"
+              },
+              {
+                "id": "w14",
+                "text": "bangga",
+                "color": "#F6E78A"
               }
             ],
-            "dropZones": [
-              {
-                "id": "z1"
-              },
-              {
-                "id": "z2"
-              },
-              {
-                "id": "z3"
-              },
-              {
-                "id": "z4"
-              },
-              {
-                "id": "z5"
-              },
-              {
-                "id": "z6"
-              }
-            ],
-            "correctOrder": [
-              "w1",
-              "w2",
-              "w3",
-              "w4",
-              "w5",
-              "w6"
-            ],
-            "xp": 40
+            "xp": 40,
+            "mode": "creative",
+            "minWords": 4,
+            "requiredWords": [
+              "Rendang"
+            ]
           }
         ]
       }
@@ -1011,68 +1040,80 @@ export const QUIZ_DATA = {
           },
           {
             "type": "drag_drop_sentence",
-            "text": "Susunlah pesan untuk menjaga kelestarian Tari Saman!",
+            "text": "Kamu ingin mengajak teman-teman untuk ikut belajar dan melestarikan Tari Saman. Susun kalimat semangatmu menggunakan minimal 4 kata dari pilihan berikut!",
             "draggables": [
               {
-                "id": "w6",
-                "text": "budaya Indonesia",
-                "color": "#e3baf4ff"
-              },
-              {
-                "id": "w3",
-                "text": "Tari Saman",
-                "color": "#99AAEF"
+                "id": "w1",
+                "text": "Ayo",
+                "color": "#F6E78A"
               },
               {
                 "id": "w2",
-                "text": "lestarikan",
-                "color": "#f6bad3ff"
+                "text": "belajar",
+                "color": "#FFC6D8"
               },
               {
-                "id": "w1",
-                "text": "Mari kita",
-                "color": "#f5f199ff"
+                "id": "w3",
+                "text": "kita",
+                "color": "#AEE5A1"
               },
               {
                 "id": "w4",
-                "text": "sebagai",
-                "color": "#a5ec93ff"
+                "text": "latih",
+                "color": "#BFD1FF"
               },
               {
                 "id": "w5",
+                "text": "Tari Saman",
+                "color": "#CDB4FF"
+              },
+              {
+                "id": "w6",
+                "text": "kompak",
+                "color": "#FFD6A5"
+              },
+              {
+                "id": "w7",
+                "text": "bersama",
+                "color": "#D5F4E6"
+              },
+              {
+                "id": "w8",
+                "text": "budaya",
+                "color": "#FFC2C2"
+              },
+              {
+                "id": "w9",
+                "text": "Aceh",
+                "color": "#B9FBC0"
+              },
+              {
+                "id": "w10",
+                "text": "lestarikan",
+                "color": "#FFE29A"
+              },
+              {
+                "id": "w11",
+                "text": "dunia",
+                "color": "#A8D8FF"
+              },
+              {
+                "id": "w12",
                 "text": "kebanggaan",
-                "color": "#FFC7B1"
+                "color": "#D9C6FF"
+              },
+              {
+                "id": "w13",
+                "text": "muda",
+                "color": "#FAD6A5"
               }
             ],
-            "dropZones": [
-              {
-                "id": "z1"
-              },
-              {
-                "id": "z2"
-              },
-              {
-                "id": "z3"
-              },
-              {
-                "id": "z4"
-              },
-              {
-                "id": "z5"
-              },
-              {
-                "id": "z6"
-              }
-            ],
-            "correctOrder": [
-              "w1",
-              "w2",
-              "w3",
-              "w4",
-              "w5",
-              "w6"
-            ],
-            "xp": 40
+            "xp": 40,
+            "mode": "creative",
+            "minWords": 4,
+            "requiredWords": [
+              "Tari Saman"
+            ]
           }
         ]
       }
@@ -1374,68 +1415,80 @@ export const QUIZ_DATA = {
           },
           {
             "type": "drag_drop_sentence",
-            "text": "Susunlah pesan untuk menjaga kerukunan di rumah panjang!",
+            "text": "Kamu ingin mengajak teman untuk merasakan semangat gotong royong Rumah Betang. Susun kalimat ajakanmu menggunakan minimal 4 kata dari pilihan berikut!",
             "draggables": [
               {
-                "id": "w4",
-                "text": "bergotong royong",
-                "color": "#a5ec93ff"
-              },
-              {
                 "id": "w1",
-                "text": "Mari kita",
-                "color": "#f5f199ff"
-              },
-              {
-                "id": "w6",
-                "text": "Rumah Betang",
-                "color": "#e3baf4ff"
-              },
-              {
-                "id": "w3",
-                "text": "dan",
-                "color": "#99AAEF"
+                "text": "Ayo",
+                "color": "#F6E78A"
               },
               {
                 "id": "w2",
-                "text": "hidup rukun",
-                "color": "#f6bad3ff"
+                "text": "kita",
+                "color": "#FFC6D8"
+              },
+              {
+                "id": "w3",
+                "text": "hidup",
+                "color": "#AEE5A1"
+              },
+              {
+                "id": "w4",
+                "text": "rukun",
+                "color": "#BFD1FF"
               },
               {
                 "id": "w5",
-                "text": "di",
-                "color": "#FFC7B1"
+                "text": "gotong royong",
+                "color": "#CDB4FF"
+              },
+              {
+                "id": "w6",
+                "text": "seperti",
+                "color": "#FFD6A5"
+              },
+              {
+                "id": "w7",
+                "text": "Rumah Betang",
+                "color": "#D5F4E6"
+              },
+              {
+                "id": "w8",
+                "text": "Dayak",
+                "color": "#FFC2C2"
+              },
+              {
+                "id": "w9",
+                "text": "bersama",
+                "color": "#B9FBC0"
+              },
+              {
+                "id": "w10",
+                "text": "satu",
+                "color": "#FFE29A"
+              },
+              {
+                "id": "w11",
+                "text": "hati",
+                "color": "#A8D8FF"
+              },
+              {
+                "id": "w12",
+                "text": "kuat",
+                "color": "#D9C6FF"
+              },
+              {
+                "id": "w13",
+                "text": "panjang",
+                "color": "#FAD6A5"
               }
             ],
-            "dropZones": [
-              {
-                "id": "z1"
-              },
-              {
-                "id": "z2"
-              },
-              {
-                "id": "z3"
-              },
-              {
-                "id": "z4"
-              },
-              {
-                "id": "z5"
-              },
-              {
-                "id": "z6"
-              }
-            ],
-            "correctOrder": [
-              "w1",
-              "w2",
-              "w3",
-              "w4",
-              "w5",
-              "w6"
-            ],
-            "xp": 40
+            "xp": 40,
+            "mode": "creative",
+            "minWords": 4,
+            "requiredWords": [
+              "Rumah Betang"
+            ]
           }
         ]
       }
@@ -1614,7 +1667,7 @@ export const QUIZ_DATA = {
                 "id": "m1",
                 "text": "Kuah Soto",
                 "color": "#FFF3B0",
-                "image": "/assets/budayana/islands/kuah_soto.png"
+                "image": "/assets/budayana/islands/kuah soto.png"
               },
               {
                 "id": "m2",
@@ -1735,68 +1788,80 @@ export const QUIZ_DATA = {
           },
           {
             "type": "drag_drop_sentence",
-            "text": "Susunlah ajakan untuk mencicipi kuliner khas Kalimantan!",
+            "text": "Kamu ingin mengajak teman-temanmu untuk mencicipi dan mengenal Soto Banjar. Susun kalimat ajakanmu menggunakan minimal 4 kata dari pilihan berikut!",
             "draggables": [
               {
-                "id": "w5",
-                "text": "yang",
-                "color": "#FFC7B1"
+                "id": "w1",
+                "text": "Ayo",
+                "color": "#F6E78A"
               },
               {
                 "id": "w2",
                 "text": "cicipi",
-                "color": "#f6bad3ff"
-              },
-              {
-                "id": "w4",
-                "text": "Soto Banjar",
-                "color": "#a5ec93ff"
-              },
-              {
-                "id": "w6",
-                "text": "kaya rempah",
-                "color": "#e3baf4ff"
+                "color": "#FFC6D8"
               },
               {
                 "id": "w3",
-                "text": "kelezatan",
-                "color": "#99AAEF"
+                "text": "kita",
+                "color": "#AEE5A1"
               },
               {
-                "id": "w1",
-                "text": "Mari kita",
-                "color": "#f5f199ff"
+                "id": "w4",
+                "text": "kenali",
+                "color": "#BFD1FF"
+              },
+              {
+                "id": "w5",
+                "text": "Soto Banjar",
+                "color": "#CDB4FF"
+              },
+              {
+                "id": "w6",
+                "text": "lezat",
+                "color": "#FFD6A5"
+              },
+              {
+                "id": "w7",
+                "text": "rempah",
+                "color": "#D5F4E6"
+              },
+              {
+                "id": "w8",
+                "text": "khas",
+                "color": "#FFC2C2"
+              },
+              {
+                "id": "w9",
+                "text": "Kalimantan",
+                "color": "#B9FBC0"
+              },
+              {
+                "id": "w10",
+                "text": "kuliner",
+                "color": "#FFE29A"
+              },
+              {
+                "id": "w11",
+                "text": "asli",
+                "color": "#A8D8FF"
+              },
+              {
+                "id": "w12",
+                "text": "nikmat",
+                "color": "#D9C6FF"
+              },
+              {
+                "id": "w13",
+                "text": "bersama",
+                "color": "#FAD6A5"
               }
             ],
-            "dropZones": [
-              {
-                "id": "z1"
-              },
-              {
-                "id": "z2"
-              },
-              {
-                "id": "z3"
-              },
-              {
-                "id": "z4"
-              },
-              {
-                "id": "z5"
-              },
-              {
-                "id": "z6"
-              }
-            ],
-            "correctOrder": [
-              "w1",
-              "w2",
-              "w3",
-              "w4",
-              "w5",
-              "w6"
-            ],
-            "xp": 40
+            "xp": 40,
+            "mode": "creative",
+            "minWords": 4,
+            "requiredWords": [
+              "Soto Banjar"
+            ]
           }
         ]
       }
@@ -2096,68 +2161,81 @@ export const QUIZ_DATA = {
           },
           {
             "type": "drag_drop_sentence",
-            "text": "Susunlah pesan untuk melestarikan seni budaya Kalimantan!",
+            "text": "Kamu ingin mengajak teman-temanmu untuk mengenal keindahan Sape dan Tari Enggang. Susun kalimat ajakanmu menggunakan minimal 4 kata dari pilihan berikut!",
             "draggables": [
               {
-                "id": "w3",
-                "text": "alunan Sape",
-                "color": "#99AAEF"
-              },
-              {
                 "id": "w1",
-                "text": "Mari kita",
-                "color": "#f5f199ff"
-              },
-              {
-                "id": "w6",
-                "text": "warisan Dayak",
-                "color": "#e3baf4ff"
-              },
-              {
-                "id": "w5",
-                "text": "Tari Enggang",
-                "color": "#FFC7B1"
-              },
-              {
-                "id": "w4",
-                "text": "dan",
-                "color": "#a5ec93ff"
+                "text": "Ayo",
+                "color": "#F6E78A"
               },
               {
                 "id": "w2",
+                "text": "dengarkan",
+                "color": "#FFC6D8"
+              },
+              {
+                "id": "w3",
+                "text": "petikan",
+                "color": "#AEE5A1"
+              },
+              {
+                "id": "w4",
+                "text": "Sape",
+                "color": "#BFD1FF"
+              },
+              {
+                "id": "w5",
+                "text": "indah",
+                "color": "#CDB4FF"
+              },
+              {
+                "id": "w6",
+                "text": "dan",
+                "color": "#FFD6A5"
+              },
+              {
+                "id": "w7",
+                "text": "Tari Enggang",
+                "color": "#D5F4E6"
+              },
+              {
+                "id": "w8",
+                "text": "warisan",
+                "color": "#FFC2C2"
+              },
+              {
+                "id": "w9",
+                "text": "Dayak",
+                "color": "#B9FBC0"
+              },
+              {
+                "id": "w10",
+                "text": "kita",
+                "color": "#FFE29A"
+              },
+              {
+                "id": "w11",
                 "text": "jaga",
-                "color": "#f6bad3ff"
+                "color": "#A8D8FF"
+              },
+              {
+                "id": "w12",
+                "text": "bersama",
+                "color": "#D9C6FF"
+              },
+              {
+                "id": "w13",
+                "text": "budaya",
+                "color": "#FAD6A5"
               }
             ],
-            "dropZones": [
-              {
-                "id": "z1"
-              },
-              {
-                "id": "z2"
-              },
-              {
-                "id": "z3"
-              },
-              {
-                "id": "z4"
-              },
-              {
-                "id": "z5"
-              },
-              {
-                "id": "z6"
-              }
-            ],
-            "correctOrder": [
-              "w1",
-              "w2",
-              "w3",
-              "w4",
-              "w5",
-              "w6"
-            ],
-            "xp": 40
+            "xp": 40,
+            "mode": "creative",
+            "minWords": 4,
+            "requiredWords": [
+              "Sape",
+              "Tari Enggang"
+            ]
           }
         ]
       }
@@ -2190,7 +2268,7 @@ export const QUIZ_DATA = {
               {
                 "text": "Ukiran Bunga",
                 "emoji": "🌸",
-                "image": "/assets/budayana/islands/ukiran bunga.png"
+                "image": "/assets/budayana/islands/Ukiran bunga.png"
               },
               {
                 "text": "Anyaman Bambu",
@@ -2337,7 +2415,7 @@ export const QUIZ_DATA = {
               {
                 "id": "m1",
                 "text": "Tanduk Kerbau",
-                "image": "/assets/budayana/islands/tanduk kerbau.png",
+                "image": "/assets/budayana/islands/deretan tanduk kerbau.png",
                 "color": "#FFF3B0"
               },
               {
@@ -2459,68 +2537,80 @@ export const QUIZ_DATA = {
           },
           {
             "type": "drag_drop_sentence",
-            "text": "Susunlah ajakan untuk mempelajari makna di balik ukiran Toraja!",
+            "text": "Kamu ingin mengajak teman-temanmu untuk memahami makna di balik Rumah Tongkonan. Susun kalimat ajakanmu menggunakan minimal 4 kata dari pilihan berikut!",
             "draggables": [
               {
-                "id": "w5",
-                "text": "Rumah Tongkonan",
-                "color": "#FFC7B1"
-              },
-              {
-                "id": "w6",
-                "text": "Sulawesi",
-                "color": "#e3baf4ff"
-              },
-              {
-                "id": "w3",
-                "text": "makna suci",
-                "color": "#99AAEF"
-              },
-              {
-                "id": "w4",
-                "text": "ukiran",
-                "color": "#a5ec93ff"
-              },
-              {
                 "id": "w1",
-                "text": "Mari kita",
-                "color": "#f5f199ff"
+                "text": "Ayo",
+                "color": "#F6E78A"
               },
               {
                 "id": "w2",
                 "text": "pahami",
-                "color": "#f6bad3ff"
+                "color": "#FFC6D8"
+              },
+              {
+                "id": "w3",
+                "text": "makna",
+                "color": "#AEE5A1"
+              },
+              {
+                "id": "w4",
+                "text": "ukiran",
+                "color": "#BFD1FF"
+              },
+              {
+                "id": "w5",
+                "text": "Rumah Tongkonan",
+                "color": "#CDB4FF"
+              },
+              {
+                "id": "w6",
+                "text": "Toraja",
+                "color": "#FFD6A5"
+              },
+              {
+                "id": "w7",
+                "text": "kaya",
+                "color": "#D5F4E6"
+              },
+              {
+                "id": "w8",
+                "text": "filosofi",
+                "color": "#FFC2C2"
+              },
+              {
+                "id": "w9",
+                "text": "budaya",
+                "color": "#B9FBC0"
+              },
+              {
+                "id": "w10",
+                "text": "kita",
+                "color": "#FFE29A"
+              },
+              {
+                "id": "w11",
+                "text": "hargai",
+                "color": "#A8D8FF"
+              },
+              {
+                "id": "w12",
+                "text": "warisan",
+                "color": "#D9C6FF"
+              },
+              {
+                "id": "w13",
+                "text": "indah",
+                "color": "#FAD6A5"
               }
             ],
-            "dropZones": [
-              {
-                "id": "z1"
-              },
-              {
-                "id": "z2"
-              },
-              {
-                "id": "z3"
-              },
-              {
-                "id": "z4"
-              },
-              {
-                "id": "z5"
-              },
-              {
-                "id": "z6"
-              }
-            ],
-            "correctOrder": [
-              "w1",
-              "w2",
-              "w3",
-              "w4",
-              "w5",
-              "w6"
-            ],
-            "xp": 40
+            "xp": 40,
+            "mode": "creative",
+            "minWords": 4,
+            "requiredWords": [
+              "Rumah Tongkonan"
+            ]
           }
         ]
       }
@@ -2820,68 +2910,80 @@ export const QUIZ_DATA = {
           },
           {
             "type": "drag_drop_sentence",
-            "text": "Susunlah ajakan untuk menjaga keaslian resep nusantara!",
+            "text": "Kamu ingin mengajak teman untuk menjaga keaslian resep Coto Makassar. Susun kalimat ajakanmu menggunakan minimal 4 kata dari pilihan berikut!",
             "draggables": [
               {
-                "id": "w5",
-                "text": "sebagai",
-                "color": "#FFC7B1"
-              },
-              {
                 "id": "w1",
-                "text": "Mari kita",
-                "color": "#f5f199ff"
-              },
-              {
-                "id": "w3",
-                "text": "resep asli",
-                "color": "#99AAEF"
-              },
-              {
-                "id": "w6",
-                "text": "warisan Sulawesi",
-                "color": "#e3baf4ff"
+                "text": "Ayo",
+                "color": "#F6E78A"
               },
               {
                 "id": "w2",
                 "text": "jaga",
-                "color": "#f6bad3ff"
+                "color": "#FFC6D8"
+              },
+              {
+                "id": "w3",
+                "text": "kita",
+                "color": "#AEE5A1"
               },
               {
                 "id": "w4",
+                "text": "resep",
+                "color": "#BFD1FF"
+              },
+              {
+                "id": "w5",
                 "text": "Coto Makassar",
-                "color": "#a5ec93ff"
+                "color": "#CDB4FF"
+              },
+              {
+                "id": "w6",
+                "text": "asli",
+                "color": "#FFD6A5"
+              },
+              {
+                "id": "w7",
+                "text": "rempah",
+                "color": "#D5F4E6"
+              },
+              {
+                "id": "w8",
+                "text": "empat puluh",
+                "color": "#FFC2C2"
+              },
+              {
+                "id": "w9",
+                "text": "bumbu",
+                "color": "#B9FBC0"
+              },
+              {
+                "id": "w10",
+                "text": "warisan",
+                "color": "#FFE29A"
+              },
+              {
+                "id": "w11",
+                "text": "Sulawesi",
+                "color": "#A8D8FF"
+              },
+              {
+                "id": "w12",
+                "text": "bersama",
+                "color": "#D9C6FF"
+              },
+              {
+                "id": "w13",
+                "text": "lezat",
+                "color": "#FAD6A5"
               }
             ],
-            "dropZones": [
-              {
-                "id": "z1"
-              },
-              {
-                "id": "z2"
-              },
-              {
-                "id": "z3"
-              },
-              {
-                "id": "z4"
-              },
-              {
-                "id": "z5"
-              },
-              {
-                "id": "z6"
-              }
-            ],
-            "correctOrder": [
-              "w1",
-              "w2",
-              "w3",
-              "w4",
-              "w5",
-              "w6"
-            ],
-            "xp": 40
+            "xp": 40,
+            "mode": "creative",
+            "minWords": 4,
+            "requiredWords": [
+              "Coto Makassar"
+            ]
           }
         ]
       }
@@ -3181,68 +3283,80 @@ export const QUIZ_DATA = {
           },
           {
             "type": "drag_drop_sentence",
-            "text": "Susunlah ajakan untuk menjaga keanggunan budaya Sulawesi!",
+            "text": "Kamu ingin mengajak teman-temanmu untuk menghargai keanggunan Tari Pakarena. Susun kalimat ajakanmu menggunakan minimal 4 kata dari pilihan berikut!",
             "draggables": [
               {
-                "id": "w3",
-                "text": "kelembutan",
-                "color": "#99AAEF"
-              },
-              {
-                "id": "w5",
-                "text": "sebagai",
-                "color": "#FFC7B1"
+                "id": "w1",
+                "text": "Ayo",
+                "color": "#F6E78A"
               },
               {
                 "id": "w2",
-                "text": "jaga",
-                "color": "#f6bad3ff"
+                "text": "hargai",
+                "color": "#FFC6D8"
               },
               {
-                "id": "w1",
-                "text": "Mari kita",
-                "color": "#f5f199ff"
+                "id": "w3",
+                "text": "keanggunan",
+                "color": "#AEE5A1"
               },
               {
                 "id": "w4",
                 "text": "Tari Pakarena",
-                "color": "#a5ec93ff"
+                "color": "#BFD1FF"
+              },
+              {
+                "id": "w5",
+                "text": "lembut",
+                "color": "#CDB4FF"
               },
               {
                 "id": "w6",
-                "text": "kebanggaan Sulawesi",
-                "color": "#e3baf4ff"
+                "text": "sabar",
+                "color": "#FFD6A5"
+              },
+              {
+                "id": "w7",
+                "text": "perempuan",
+                "color": "#D5F4E6"
+              },
+              {
+                "id": "w8",
+                "text": "budaya",
+                "color": "#FFC2C2"
+              },
+              {
+                "id": "w9",
+                "text": "Sulawesi",
+                "color": "#B9FBC0"
+              },
+              {
+                "id": "w10",
+                "text": "kita",
+                "color": "#FFE29A"
+              },
+              {
+                "id": "w11",
+                "text": "kagumi",
+                "color": "#A8D8FF"
+              },
+              {
+                "id": "w12",
+                "text": "warisan",
+                "color": "#D9C6FF"
+              },
+              {
+                "id": "w13",
+                "text": "indah",
+                "color": "#FAD6A5"
               }
             ],
-            "dropZones": [
-              {
-                "id": "z1"
-              },
-              {
-                "id": "z2"
-              },
-              {
-                "id": "z3"
-              },
-              {
-                "id": "z4"
-              },
-              {
-                "id": "z5"
-              },
-              {
-                "id": "z6"
-              }
-            ],
-            "correctOrder": [
-              "w1",
-              "w2",
-              "w3",
-              "w4",
-              "w5",
-              "w6"
-            ],
-            "xp": 40
+            "xp": 40,
+            "mode": "creative",
+            "minWords": 4,
+            "requiredWords": [
+              "Tari Pakarena"
+            ]
           }
         ]
       }
@@ -3275,7 +3389,7 @@ export const QUIZ_DATA = {
               {
                 "text": "Rumah di Atas Pohon",
                 "emoji": "🌳",
-                "image": "/assets/budayana/islands/rumah di atas pohon.png"
+                "image": "/assets/budayana/islands/rumah pohon.png"
               },
               {
                 "text": "Rumah Panggung Tanpa Dinding",
@@ -3544,77 +3658,80 @@ export const QUIZ_DATA = {
           },
           {
             "type": "drag_drop_sentence",
-            "text": "Susunlah pesan untuk menjaga kerukunan di tanah Maluku!",
+            "text": "Kamu ingin mengajak teman untuk menjaga semangat musyawarah dan persatuan Baileo. Susun kalimat ajakanmu menggunakan minimal 4 kata dari pilihan berikut!",
             "draggables": [
               {
                 "id": "w1",
-                "text": "Mari kita",
-                "color": "#f5f199ff"
+                "text": "Ayo",
+                "color": "#F6E78A"
               },
               {
                 "id": "w2",
-                "text": "jaga",
-                "color": "#f6bad3ff"
-              },
-              {
-                "id": "w7",
-                "text": "Rumah Baileo",
-                "color": "#FFF3B0"
-              },
-              {
-                "id": "w4",
-                "text": "dan",
-                "color": "#a5ec93ff"
-              },
-              {
-                "id": "w6",
-                "text": "di",
-                "color": "#e3baf4ff"
-              },
-              {
-                "id": "w5",
-                "text": "kerukunan",
-                "color": "#FFC7B1"
+                "text": "musyawarah",
+                "color": "#FFC6D8"
               },
               {
                 "id": "w3",
+                "text": "kita",
+                "color": "#AEE5A1"
+              },
+              {
+                "id": "w4",
+                "text": "bersatu",
+                "color": "#BFD1FF"
+              },
+              {
+                "id": "w5",
+                "text": "seperti",
+                "color": "#CDB4FF"
+              },
+              {
+                "id": "w6",
+                "text": "Baileo",
+                "color": "#FFD6A5"
+              },
+              {
+                "id": "w7",
+                "text": "terbuka",
+                "color": "#D5F4E6"
+              },
+              {
+                "id": "w8",
+                "text": "rukun",
+                "color": "#FFC2C2"
+              },
+              {
+                "id": "w9",
+                "text": "bersama",
+                "color": "#B9FBC0"
+              },
+              {
+                "id": "w10",
+                "text": "Maluku",
+                "color": "#FFE29A"
+              },
+              {
+                "id": "w11",
+                "text": "damai",
+                "color": "#A8D8FF"
+              },
+              {
+                "id": "w12",
+                "text": "jaga",
+                "color": "#D9C6FF"
+              },
+              {
+                "id": "w13",
                 "text": "persatuan",
-                "color": "#99AAEF"
+                "color": "#FAD6A5"
               }
             ],
-            "dropZones": [
-              {
-                "id": "z1"
-              },
-              {
-                "id": "z2"
-              },
-              {
-                "id": "z3"
-              },
-              {
-                "id": "z4"
-              },
-              {
-                "id": "z5"
-              },
-              {
-                "id": "z6"
-              },
-              {
-                "id": "z7"
-              }
-            ],
-            "correctOrder": [
-              "w1",
-              "w2",
-              "w3",
-              "w4",
-              "w5",
-              "w6",
-              "w7"
-            ],
-            "xp": 40
+            "xp": 40,
+            "mode": "creative",
+            "minWords": 4,
+            "requiredWords": [
+              "Baileo"
+            ]
           }
         ]
       }
@@ -3793,13 +3910,13 @@ export const QUIZ_DATA = {
                 "id": "m1",
                 "text": "Buah Pala",
                 "color": "#FFF3B0",
-                "image": "/assets/budayana/islands/buah_pala.png"
+                "image": "/assets/budayana/islands/buah pala.png"
               },
               {
                 "id": "m2",
                 "text": "Ikan Laut Segar",
                 "color": "#D4DCFF",
-                "image": "/assets/budayana/islands/ikan_laut.png"
+                "image": "/assets/budayana/islands/ikan laut.png"
               }
             ],
             "dropZones": [
@@ -3914,68 +4031,81 @@ export const QUIZ_DATA = {
           },
           {
             "type": "drag_drop_sentence",
-            "text": "Susunlah ajakan untuk menjaga kekayaan rempah Maluku!",
+            "text": "Kamu ingin mengajak teman untuk menjaga rempah pala dan kuliner khas Maluku. Susun kalimat ajakanmu menggunakan minimal 4 kata dari pilihan berikut!",
             "draggables": [
               {
-                "id": "w5",
-                "text": "Ikan Kuah Pala",
-                "color": "#FFC7B1"
-              },
-              {
-                "id": "w6",
-                "text": "tetap ada",
-                "color": "#e3baf4ff"
-              },
-              {
-                "id": "w4",
-                "text": "agar",
-                "color": "#a5ec93ff"
-              },
-              {
                 "id": "w1",
-                "text": "Mari kita",
-                "color": "#f5f199ff"
-              },
-              {
-                "id": "w3",
-                "text": "rempah pala",
-                "color": "#99AAEF"
+                "text": "Ayo",
+                "color": "#F6E78A"
               },
               {
                 "id": "w2",
-                "text": "lestarikan",
-                "color": "#f6bad3ff"
+                "text": "tanam",
+                "color": "#FFC6D8"
+              },
+              {
+                "id": "w3",
+                "text": "kita",
+                "color": "#AEE5A1"
+              },
+              {
+                "id": "w4",
+                "text": "jaga",
+                "color": "#BFD1FF"
+              },
+              {
+                "id": "w5",
+                "text": "pohon pala",
+                "color": "#CDB4FF"
+              },
+              {
+                "id": "w6",
+                "text": "rempah",
+                "color": "#FFD6A5"
+              },
+              {
+                "id": "w7",
+                "text": "asli",
+                "color": "#D5F4E6"
+              },
+              {
+                "id": "w8",
+                "text": "Maluku",
+                "color": "#FFC2C2"
+              },
+              {
+                "id": "w9",
+                "text": "agar",
+                "color": "#B9FBC0"
+              },
+              {
+                "id": "w10",
+                "text": "Ikan Kuah Pala",
+                "color": "#FFE29A"
+              },
+              {
+                "id": "w11",
+                "text": "tetap",
+                "color": "#A8D8FF"
+              },
+              {
+                "id": "w12",
+                "text": "ada",
+                "color": "#D9C6FF"
+              },
+              {
+                "id": "w13",
+                "text": "lestari",
+                "color": "#FAD6A5"
               }
             ],
-            "dropZones": [
-              {
-                "id": "z1"
-              },
-              {
-                "id": "z2"
-              },
-              {
-                "id": "z3"
-              },
-              {
-                "id": "z4"
-              },
-              {
-                "id": "z5"
-              },
-              {
-                "id": "z6"
-              }
-            ],
-            "correctOrder": [
-              "w1",
-              "w2",
-              "w3",
-              "w4",
-              "w5",
-              "w6"
-            ],
-            "xp": 40
+            "xp": 40,
+            "mode": "creative",
+            "minWords": 4,
+            "requiredWords": [
+              "pohon pala",
+              "Ikan Kuah Pala"
+            ]
           }
         ]
       }
@@ -4275,68 +4405,80 @@ export const QUIZ_DATA = {
           },
           {
             "type": "drag_drop_sentence",
-            "text": "Susunlah ajakan untuk menjaga keceriaan budaya Maluku!",
+            "text": "Kamu ingin mengajak teman untuk merasakan kegembiraan Tari Lenso. Susun kalimat ajakanmu menggunakan minimal 4 kata dari pilihan berikut!",
             "draggables": [
               {
+                "id": "w1",
+                "text": "Ayo",
+                "color": "#F6E78A"
+              },
+              {
                 "id": "w2",
-                "text": "jaga",
-                "color": "#f6bad3ff"
+                "text": "kita",
+                "color": "#FFC6D8"
               },
               {
                 "id": "w3",
-                "text": "persahabatan",
-                "color": "#99AAEF"
+                "text": "menari",
+                "color": "#AEE5A1"
               },
               {
                 "id": "w4",
-                "text": "melalui",
-                "color": "#a5ec93ff"
-              },
-              {
-                "id": "w1",
-                "text": "Mari kita",
-                "color": "#f5f199ff"
+                "text": "bersama",
+                "color": "#BFD1FF"
               },
               {
                 "id": "w5",
-                "text": "Tari Lenso",
-                "color": "#FFC7B1"
+                "text": "Lenso",
+                "color": "#CDB4FF"
               },
               {
                 "id": "w6",
+                "text": "sambil",
+                "color": "#FFD6A5"
+              },
+              {
+                "id": "w7",
+                "text": "jaga",
+                "color": "#D5F4E6"
+              },
+              {
+                "id": "w8",
+                "text": "persahabatan",
+                "color": "#FFC2C2"
+              },
+              {
+                "id": "w9",
                 "text": "Maluku",
-                "color": "#e3baf4ff"
+                "color": "#B9FBC0"
+              },
+              {
+                "id": "w10",
+                "text": "ceria",
+                "color": "#FFE29A"
+              },
+              {
+                "id": "w11",
+                "text": "warisan",
+                "color": "#A8D8FF"
+              },
+              {
+                "id": "w12",
+                "text": "budaya",
+                "color": "#D9C6FF"
+              },
+              {
+                "id": "w13",
+                "text": "bangga",
+                "color": "#FAD6A5"
               }
             ],
-            "dropZones": [
-              {
-                "id": "z1"
-              },
-              {
-                "id": "z2"
-              },
-              {
-                "id": "z3"
-              },
-              {
-                "id": "z4"
-              },
-              {
-                "id": "z5"
-              },
-              {
-                "id": "z6"
-              }
-            ],
-            "correctOrder": [
-              "w1",
-              "w2",
-              "w3",
-              "w4",
-              "w5",
-              "w6"
-            ],
-            "xp": 40
+            "xp": 40,
+            "mode": "creative",
+            "minWords": 4,
+            "requiredWords": [
+              "Lenso"
+            ]
           }
         ]
       }
@@ -4369,7 +4511,7 @@ export const QUIZ_DATA = {
               {
                 "text": "Atap Bulat Seperti Jamur",
                 "emoji": "🍄",
-                "image": "/assets/budayana/islands/atap bulat seperti jamur.png"
+                "image": "/assets/budayana/islands/atap jamur.png"
               },
               {
                 "text": "Atap Runcing",
@@ -4638,68 +4780,80 @@ export const QUIZ_DATA = {
           },
           {
             "type": "drag_drop_sentence",
-            "text": "Susunlah ajakan untuk menghargai keunikan arsitektur Papua!",
+            "text": "Kamu ingin mengajak teman untuk menghargai keunikan dan kecerdasan desain Rumah Honai. Susun kalimat ajakanmu menggunakan minimal 4 kata dari pilihan berikut!",
             "draggables": [
               {
-                "id": "w3",
-                "text": "keunikan",
-                "color": "#99AAEF"
-              },
-              {
-                "id": "w6",
-                "text": "tanah Papua",
-                "color": "#e3baf4ff"
-              },
-              {
-                "id": "w4",
-                "text": "Rumah Honai",
-                "color": "#a5ec93ff"
-              },
-              {
                 "id": "w1",
-                "text": "Mari kita",
-                "color": "#f5f199ff"
-              },
-              {
-                "id": "w5",
-                "text": "warisan",
-                "color": "#FFC7B1"
+                "text": "Ayo",
+                "color": "#F6E78A"
               },
               {
                 "id": "w2",
-                "text": "banggakan",
-                "color": "#f6bad3ff"
+                "text": "kagumi",
+                "color": "#FFC6D8"
+              },
+              {
+                "id": "w3",
+                "text": "kita",
+                "color": "#AEE5A1"
+              },
+              {
+                "id": "w4",
+                "text": "keunikan",
+                "color": "#BFD1FF"
+              },
+              {
+                "id": "w5",
+                "text": "Rumah Honai",
+                "color": "#CDB4FF"
+              },
+              {
+                "id": "w6",
+                "text": "hangat",
+                "color": "#FFD6A5"
+              },
+              {
+                "id": "w7",
+                "text": "bulat",
+                "color": "#D5F4E6"
+              },
+              {
+                "id": "w8",
+                "text": "cerdas",
+                "color": "#FFC2C2"
+              },
+              {
+                "id": "w9",
+                "text": "Papua",
+                "color": "#B9FBC0"
+              },
+              {
+                "id": "w10",
+                "text": "warisan",
+                "color": "#FFE29A"
+              },
+              {
+                "id": "w11",
+                "text": "arsitektur",
+                "color": "#A8D8FF"
+              },
+              {
+                "id": "w12",
+                "text": "bangga",
+                "color": "#D9C6FF"
+              },
+              {
+                "id": "w13",
+                "text": "lokal",
+                "color": "#FAD6A5"
               }
             ],
-            "dropZones": [
-              {
-                "id": "z1"
-              },
-              {
-                "id": "z2"
-              },
-              {
-                "id": "z3"
-              },
-              {
-                "id": "z4"
-              },
-              {
-                "id": "z5"
-              },
-              {
-                "id": "z6"
-              }
-            ],
-            "correctOrder": [
-              "w1",
-              "w2",
-              "w3",
-              "w4",
-              "w5",
-              "w6"
-            ],
-            "xp": 40
+            "xp": 40,
+            "mode": "creative",
+            "minWords": 4,
+            "requiredWords": [
+              "Rumah Honai"
+            ]
           }
         ]
       }
@@ -4735,12 +4889,12 @@ export const QUIZ_DATA = {
               {
                 "text": "Mi Kuning",
                 "emoji": "🍜",
-                "image": "/assets/budayana/islands/mi kuning.png"
+                "image": "/assets/budayana/islands/mie kuning.png"
               },
               {
                 "text": "Bubur Putih Bening dan Lengket",
                 "emoji": "🥣",
-                "image": "/assets/budayana/islands/bubur putih bening dan lengket.png"
+                "image": "/assets/budayana/islands/bubur bening.png"
               },
               {
                 "text": "Nasi Butiran",
@@ -5009,68 +5163,80 @@ export const QUIZ_DATA = {
           },
           {
             "type": "drag_drop_sentence",
-            "text": "Susunlah ajakan untuk bangga memakan sagu!",
+            "text": "Kamu ingin mengajak teman untuk bangga makan Papeda dan menjaga hutan sagu Papua. Susun kalimat ajakanmu menggunakan minimal 4 kata dari pilihan berikut!",
             "draggables": [
               {
-                "id": "w6",
-                "text": "tetap terjaga",
-                "color": "#e3baf4ff"
-              },
-              {
-                "id": "w4",
-                "text": "agar",
-                "color": "#a5ec93ff"
-              },
-              {
-                "id": "w3",
-                "text": "Papeda",
-                "color": "#99AAEF"
-              },
-              {
-                "id": "w5",
-                "text": "hutan sagu",
-                "color": "#FFC7B1"
+                "id": "w1",
+                "text": "Ayo",
+                "color": "#F6E78A"
               },
               {
                 "id": "w2",
-                "text": "lestarikan",
-                "color": "#f6bad3ff"
+                "text": "makan",
+                "color": "#FFC6D8"
               },
               {
-                "id": "w1",
-                "text": "Ayo kita",
-                "color": "#f5f199ff"
+                "id": "w3",
+                "text": "kita",
+                "color": "#AEE5A1"
+              },
+              {
+                "id": "w4",
+                "text": "Papeda",
+                "color": "#BFD1FF"
+              },
+              {
+                "id": "w5",
+                "text": "jaga",
+                "color": "#CDB4FF"
+              },
+              {
+                "id": "w6",
+                "text": "hutan",
+                "color": "#FFD6A5"
+              },
+              {
+                "id": "w7",
+                "text": "sagu",
+                "color": "#D5F4E6"
+              },
+              {
+                "id": "w8",
+                "text": "Papua",
+                "color": "#FFC2C2"
+              },
+              {
+                "id": "w9",
+                "text": "sehat",
+                "color": "#B9FBC0"
+              },
+              {
+                "id": "w10",
+                "text": "lezat",
+                "color": "#FFE29A"
+              },
+              {
+                "id": "w11",
+                "text": "alam",
+                "color": "#A8D8FF"
+              },
+              {
+                "id": "w12",
+                "text": "bersama",
+                "color": "#D9C6FF"
+              },
+              {
+                "id": "w13",
+                "text": "bangga",
+                "color": "#FAD6A5"
               }
             ],
-            "dropZones": [
-              {
-                "id": "z1"
-              },
-              {
-                "id": "z2"
-              },
-              {
-                "id": "z3"
-              },
-              {
-                "id": "z4"
-              },
-              {
-                "id": "z5"
-              },
-              {
-                "id": "z6"
-              }
-            ],
-            "correctOrder": [
-              "w1",
-              "w2",
-              "w3",
-              "w4",
-              "w5",
-              "w6"
-            ],
-            "xp": 40
+            "xp": 40,
+            "mode": "creative",
+            "minWords": 4,
+            "requiredWords": [
+              "Papeda"
+            ]
           }
         ]
       }
@@ -5370,68 +5536,80 @@ export const QUIZ_DATA = {
           },
           {
             "type": "drag_drop_sentence",
-            "text": "Susunlah ajakan untuk bangga dengan seni budaya Papua!",
+            "text": "Kamu ingin mengajak teman untuk bangga dengan irama Tifa dan tarian Papua. Susun kalimat semangatmu menggunakan minimal 4 kata dari pilihan berikut!",
             "draggables": [
               {
-                "id": "w6",
-                "text": "dari Papua",
-                "color": "#e3baf4ff"
-              },
-              {
                 "id": "w1",
-                "text": "Mari kita",
-                "color": "#f5f199ff"
-              },
-              {
-                "id": "w5",
-                "text": "tarian indah",
-                "color": "#FFC7B1"
+                "text": "Ayo",
+                "color": "#F6E78A"
               },
               {
                 "id": "w2",
-                "text": "banggakan",
-                "color": "#f6bad3ff"
+                "text": "ikuti",
+                "color": "#FFC6D8"
               },
               {
                 "id": "w3",
-                "text": "irama Tifa",
-                "color": "#99AAEF"
+                "text": "irama",
+                "color": "#AEE5A1"
               },
               {
                 "id": "w4",
-                "text": "dan",
-                "color": "#a5ec93ff"
+                "text": "Tifa",
+                "color": "#BFD1FF"
+              },
+              {
+                "id": "w5",
+                "text": "menari",
+                "color": "#CDB4FF"
+              },
+              {
+                "id": "w6",
+                "text": "bersama",
+                "color": "#FFD6A5"
+              },
+              {
+                "id": "w7",
+                "text": "Papua",
+                "color": "#D5F4E6"
+              },
+              {
+                "id": "w8",
+                "text": "semangat",
+                "color": "#FFC2C2"
+              },
+              {
+                "id": "w9",
+                "text": "budaya",
+                "color": "#B9FBC0"
+              },
+              {
+                "id": "w10",
+                "text": "kita",
+                "color": "#FFE29A"
+              },
+              {
+                "id": "w11",
+                "text": "bangga",
+                "color": "#A8D8FF"
+              },
+              {
+                "id": "w12",
+                "text": "indah",
+                "color": "#D9C6FF"
+              },
+              {
+                "id": "w13",
+                "text": "warisan",
+                "color": "#FAD6A5"
               }
             ],
-            "dropZones": [
-              {
-                "id": "z1"
-              },
-              {
-                "id": "z2"
-              },
-              {
-                "id": "z3"
-              },
-              {
-                "id": "z4"
-              },
-              {
-                "id": "z5"
-              },
-              {
-                "id": "z6"
-              }
-            ],
-            "correctOrder": [
-              "w1",
-              "w2",
-              "w3",
-              "w4",
-              "w5",
-              "w6"
-            ],
-            "xp": 40
+            "xp": 40,
+            "mode": "creative",
+            "minWords": 4,
+            "requiredWords": [
+              "Tifa"
+            ]
           }
         ]
       }
@@ -5474,7 +5652,7 @@ export const QUIZ_DATA = {
               {
                 "text": "Dua Tiang Kembar Terbelah Tanpa Atap",
                 "emoji": "⛩️",
-                "image": "/assets/budayana/islands/dua tiang kembar terbelah tanpa atap.png"
+                "image": "/assets/budayana/islands/2 tiang kembar.png"
               },
               {
                 "text": "Lubang Gua",
@@ -5619,18 +5797,6 @@ export const QUIZ_DATA = {
                 "text": "Panyengker (Tembok)",
                 "color": "#D4DCFF",
                 "image": "/assets/budayana/islands/tembok panyengker.png"
-              },
-              {
-                "id": "m3",
-                "text": "Aling-aling",
-                "color": "#ffb2d8",
-                "image": "/assets/budayana/islands/aling aling.png"
-              },
-              {
-                "id": "m4",
-                "text": "Gapura Candi Bentar",
-                "color": "#ffd5c0",
-                "image": "/assets/budayana/islands/candi bentar.png"
               }
             ],
             "dropZones": [
@@ -5641,21 +5807,11 @@ export const QUIZ_DATA = {
               {
                 "id": "z2",
                 "label": "Memberikan rasa aman dan batas rumah"
-              },
-              {
-                "id": "z3",
-                "label": "Menghalangi pandangan langsung & melindungi rumah"
-              },
-              {
-                "id": "z4",
-                "label": "Pintu masuk yang melambangkan keseimbangan"
               }
             ],
             "correctOrder": [
               "m1",
-              "m2",
-              "m3",
-              "m4"
+              "m2"
             ],
             "xp": 25
           }
@@ -5755,68 +5911,80 @@ export const QUIZ_DATA = {
           },
           {
             "type": "drag_drop_sentence",
-            "text": "Susunlah pesan untuk menjaga keindahan budaya Bali!",
+            "text": "Kamu ingin mengajak teman untuk memahami keselarasan dan makna di balik Gapura Candi Bentar. Susun kalimat ajakanmu menggunakan minimal 4 kata dari pilihan berikut!",
             "draggables": [
               {
-                "id": "w6",
-                "text": "budaya Bali",
-                "color": "#e3baf4ff"
-              },
-              {
-                "id": "w5",
-                "text": "keindahan",
-                "color": "#FFC7B1"
-              },
-              {
                 "id": "w1",
-                "text": "Mari kita",
-                "color": "#f5f199ff"
+                "text": "Ayo",
+                "color": "#F6E78A"
               },
               {
                 "id": "w2",
-                "text": "jaga",
-                "color": "#f6bad3ff"
-              },
-              {
-                "id": "w4",
-                "text": "dan",
-                "color": "#a5ec93ff"
+                "text": "pahami",
+                "color": "#FFC6D8"
               },
               {
                 "id": "w3",
-                "text": "keselarasan",
-                "color": "#99AAEF"
+                "text": "makna",
+                "color": "#AEE5A1"
+              },
+              {
+                "id": "w4",
+                "text": "Candi Bentar",
+                "color": "#BFD1FF"
+              },
+              {
+                "id": "w5",
+                "text": "selaras",
+                "color": "#CDB4FF"
+              },
+              {
+                "id": "w6",
+                "text": "indah",
+                "color": "#FFD6A5"
+              },
+              {
+                "id": "w7",
+                "text": "filosofi",
+                "color": "#D5F4E6"
+              },
+              {
+                "id": "w8",
+                "text": "Bali",
+                "color": "#FFC2C2"
+              },
+              {
+                "id": "w9",
+                "text": "budaya",
+                "color": "#B9FBC0"
+              },
+              {
+                "id": "w10",
+                "text": "kita",
+                "color": "#FFE29A"
+              },
+              {
+                "id": "w11",
+                "text": "kagumi",
+                "color": "#A8D8FF"
+              },
+              {
+                "id": "w12",
+                "text": "jaga",
+                "color": "#D9C6FF"
+              },
+              {
+                "id": "w13",
+                "text": "warisan",
+                "color": "#FAD6A5"
               }
             ],
-            "dropZones": [
-              {
-                "id": "z1"
-              },
-              {
-                "id": "z2"
-              },
-              {
-                "id": "z3"
-              },
-              {
-                "id": "z4"
-              },
-              {
-                "id": "z5"
-              },
-              {
-                "id": "z6"
-              }
-            ],
-            "correctOrder": [
-              "w1",
-              "w2",
-              "w3",
-              "w4",
-              "w5",
-              "w6"
-            ],
-            "xp": 40
+            "xp": 40,
+            "mode": "creative",
+            "minWords": 4,
+            "requiredWords": [
+              "Candi Bentar"
+            ]
           }
         ]
       }
@@ -5857,12 +6025,11 @@ export const QUIZ_DATA = {
               {
                 "text": "Ditimbun dalam bara sekam padi",
                 "emoji": "🔥",
-                "image": "/assets/budayana/islands/ditimbun sekam.png"
               },
               {
                 "text": "Dibakar sate",
                 "emoji": "🍢",
-                "image": "/assets/budayana/islands/dibakar langsung di api.png"
+
               }
             ],
             "correctIndex": 2,
@@ -6116,68 +6283,80 @@ export const QUIZ_DATA = {
           },
           {
             "type": "drag_drop_sentence",
-            "text": "Susunlah ajakan untuk melestarikan kuliner tradisional Bali!",
+            "text": "Kamu ingin mengajak teman untuk menjaga cara memasak tradisional Ayam Betutu. Susun kalimat ajakanmu menggunakan minimal 4 kata dari pilihan berikut!",
             "draggables": [
               {
                 "id": "w1",
-                "text": "Mari kita",
-                "color": "#f5f199ff"
+                "text": "Ayo",
+                "color": "#F6E78A"
               },
               {
                 "id": "w2",
                 "text": "jaga",
-                "color": "#f6bad3ff"
-              },
-              {
-                "id": "w6",
-                "text": "kebanggaan Bali",
-                "color": "#e3baf4ff"
-              },
-              {
-                "id": "w4",
-                "text": "Ayam Betutu",
-                "color": "#a5ec93ff"
+                "color": "#FFC6D8"
               },
               {
                 "id": "w3",
-                "text": "keaslian",
-                "color": "#99AAEF"
+                "text": "cara",
+                "color": "#AEE5A1"
+              },
+              {
+                "id": "w4",
+                "text": "masak",
+                "color": "#BFD1FF"
               },
               {
                 "id": "w5",
-                "text": "sebagai",
-                "color": "#FFC7B1"
+                "text": "Ayam Betutu",
+                "color": "#CDB4FF"
+              },
+              {
+                "id": "w6",
+                "text": "tradisional",
+                "color": "#FFD6A5"
+              },
+              {
+                "id": "w7",
+                "text": "rempah",
+                "color": "#D5F4E6"
+              },
+              {
+                "id": "w8",
+                "text": "Bali",
+                "color": "#FFC2C2"
+              },
+              {
+                "id": "w9",
+                "text": "asli",
+                "color": "#B9FBC0"
+              },
+              {
+                "id": "w10",
+                "text": "kita",
+                "color": "#FFE29A"
+              },
+              {
+                "id": "w11",
+                "text": "lezat",
+                "color": "#A8D8FF"
+              },
+              {
+                "id": "w12",
+                "text": "warisan",
+                "color": "#D9C6FF"
+              },
+              {
+                "id": "w13",
+                "text": "bersama",
+                "color": "#FAD6A5"
               }
             ],
-            "dropZones": [
-              {
-                "id": "z1"
-              },
-              {
-                "id": "z2"
-              },
-              {
-                "id": "z3"
-              },
-              {
-                "id": "z4"
-              },
-              {
-                "id": "z5"
-              },
-              {
-                "id": "z6"
-              }
-            ],
-            "correctOrder": [
-              "w1",
-              "w2",
-              "w3",
-              "w4",
-              "w5",
-              "w6"
-            ],
-            "xp": 40
+            "xp": 40,
+            "mode": "creative",
+            "minWords": 4,
+            "requiredWords": [
+              "Ayam Betutu"
+            ]
           }
         ]
       }
@@ -6364,18 +6543,6 @@ export const QUIZ_DATA = {
                 "color": "#D4DCFF",
                 "image": "/assets/budayana/islands/lingkaran penari.png"
               },
-              {
-                "id": "m3",
-                "text": "Ritual Sanghyang",
-                "color": "#ffb2d8",
-                "image": "/assets/budayana/islands/sanghyang.png"
-              },
-              {
-                "id": "m4",
-                "text": "Kisah Ramayana",
-                "color": "#ffd5c0",
-                "image": "/assets/budayana/islands/ramayana.png"
-              }
             ],
             "dropZones": [
               {
@@ -6385,21 +6552,11 @@ export const QUIZ_DATA = {
               {
                 "id": "z2",
                 "label": "Pasukan kera (Wanara) pembela Rama"
-              },
-              {
-                "id": "z3",
-                "label": "Akar tradisi sakral penolak bala"
-              },
-              {
-                "id": "z4",
-                "label": "Cerita utama drama penyelamatan Sinta"
               }
             ],
             "correctOrder": [
               "m1",
-              "m2",
-              "m3",
-              "m4"
+              "m2"
             ],
             "xp": 25
           }
@@ -6499,68 +6656,80 @@ export const QUIZ_DATA = {
           },
           {
             "type": "drag_drop_sentence",
-            "text": "Susunlah ajakan untuk melestarikan keunikan Tari Kecak!",
+            "text": "Kamu ingin mengajak teman untuk merasakan kesakralan dan keunikan Tari Kecak. Susun kalimat ajakanmu menggunakan minimal 4 kata dari pilihan berikut!",
             "draggables": [
               {
-                "id": "w4",
-                "text": "Tari Kecak",
-                "color": "#a5ec93ff"
+                "id": "w1",
+                "text": "Ayo",
+                "color": "#F6E78A"
               },
               {
-                "id": "w5",
-                "text": "sebagai",
-                "color": "#FFC7B1"
+                "id": "w2",
+                "text": "rasakan",
+                "color": "#FFC6D8"
               },
               {
                 "id": "w3",
                 "text": "kemurnian",
-                "color": "#99AAEF"
+                "color": "#AEE5A1"
               },
               {
-                "id": "w1",
-                "text": "Mari kita",
-                "color": "#f5f199ff"
+                "id": "w4",
+                "text": "Tari Kecak",
+                "color": "#BFD1FF"
+              },
+              {
+                "id": "w5",
+                "text": "suara",
+                "color": "#CDB4FF"
               },
               {
                 "id": "w6",
-                "text": "kebanggaan Bali",
-                "color": "#e3baf4ff"
+                "text": "manusia",
+                "color": "#FFD6A5"
               },
               {
-                "id": "w2",
+                "id": "w7",
+                "text": "api",
+                "color": "#D5F4E6"
+              },
+              {
+                "id": "w8",
+                "text": "sakral",
+                "color": "#FFC2C2"
+              },
+              {
+                "id": "w9",
+                "text": "Bali",
+                "color": "#B9FBC0"
+              },
+              {
+                "id": "w10",
+                "text": "kita",
+                "color": "#FFE29A"
+              },
+              {
+                "id": "w11",
                 "text": "jaga",
-                "color": "#f6bad3ff"
+                "color": "#A8D8FF"
+              },
+              {
+                "id": "w12",
+                "text": "budaya",
+                "color": "#D9C6FF"
+              },
+              {
+                "id": "w13",
+                "text": "bersama",
+                "color": "#FAD6A5"
               }
             ],
-            "dropZones": [
-              {
-                "id": "z1"
-              },
-              {
-                "id": "z2"
-              },
-              {
-                "id": "z3"
-              },
-              {
-                "id": "z4"
-              },
-              {
-                "id": "z5"
-              },
-              {
-                "id": "z6"
-              }
-            ],
-            "correctOrder": [
-              "w1",
-              "w2",
-              "w3",
-              "w4",
-              "w5",
-              "w6"
-            ],
-            "xp": 40
+            "xp": 40,
+            "mode": "creative",
+            "minWords": 4,
+            "requiredWords": [
+              "Tari Kecak"
+            ]
           }
         ]
       }
@@ -6872,68 +7041,80 @@ export const QUIZ_DATA = {
           },
           {
             "type": "drag_drop_sentence",
-            "text": "Susunlah pesan untuk menjaga kelestarian Rumah Mbaru Niang!",
+            "text": "Kamu ingin mengajak teman untuk merawat dan bangga pada Mbaru Niang warisan UNESCO. Susun kalimat ajakanmu menggunakan minimal 4 kata dari pilihan berikut!",
             "draggables": [
+              {
+                "id": "w1",
+                "text": "Ayo",
+                "color": "#F6E78A"
+              },
               {
                 "id": "w2",
                 "text": "rawat",
-                "color": "#f6bad3ff"
+                "color": "#FFC6D8"
               },
               {
                 "id": "w3",
-                "text": "warisan dunia",
-                "color": "#99AAEF"
-              },
-              {
-                "id": "w5",
-                "text": "di",
-                "color": "#FFC7B1"
-              },
-              {
-                "id": "w6",
-                "text": "tanah Flores",
-                "color": "#e3baf4ff"
+                "text": "kita",
+                "color": "#AEE5A1"
               },
               {
                 "id": "w4",
+                "text": "banggakan",
+                "color": "#BFD1FF"
+              },
+              {
+                "id": "w5",
                 "text": "Mbaru Niang",
-                "color": "#a5ec93ff"
+                "color": "#CDB4FF"
               },
               {
-                "id": "w1",
-                "text": "Mari kita",
-                "color": "#f5f199ff"
+                "id": "w6",
+                "text": "warisan",
+                "color": "#FFD6A5"
+              },
+              {
+                "id": "w7",
+                "text": "UNESCO",
+                "color": "#D5F4E6"
+              },
+              {
+                "id": "w8",
+                "text": "Flores",
+                "color": "#FFC2C2"
+              },
+              {
+                "id": "w9",
+                "text": "dunia",
+                "color": "#B9FBC0"
+              },
+              {
+                "id": "w10",
+                "text": "bersama",
+                "color": "#FFE29A"
+              },
+              {
+                "id": "w11",
+                "text": "jaga",
+                "color": "#A8D8FF"
+              },
+              {
+                "id": "w12",
+                "text": "budaya",
+                "color": "#D9C6FF"
+              },
+              {
+                "id": "w13",
+                "text": "kerucut",
+                "color": "#FAD6A5"
               }
             ],
-            "dropZones": [
-              {
-                "id": "z1"
-              },
-              {
-                "id": "z2"
-              },
-              {
-                "id": "z3"
-              },
-              {
-                "id": "z4"
-              },
-              {
-                "id": "z5"
-              },
-              {
-                "id": "z6"
-              }
-            ],
-            "correctOrder": [
-              "w1",
-              "w2",
-              "w3",
-              "w4",
-              "w5",
-              "w6"
-            ],
-            "xp": 40
+            "xp": 40,
+            "mode": "creative",
+            "minWords": 4,
+            "requiredWords": [
+              "Mbaru Niang"
+            ]
           }
         ]
       }
@@ -6969,7 +7150,7 @@ export const QUIZ_DATA = {
               {
                 "text": "Diasapi di atas bara kayu (panas tidak langsung)",
                 "emoji": "💨",
-                "image": "/assets/budayana/islands/diletakkan di atas asap kayu.png"
+                "image": "/assets/budayana/islands/di atas asap kayu.png"
               },
               {
                 "text": "Direbus dalam air panas",
@@ -6979,7 +7160,7 @@ export const QUIZ_DATA = {
               {
                 "text": "Dibakar langsung di atas api",
                 "emoji": "🔥",
-                "image": "/assets/budayana/islands/dibakar langsung di api.png"
+                "image": "/assets/budayana/islands/dibakar di api.png"
               }
             ],
             "correctIndex": 1,
@@ -7243,68 +7424,80 @@ export const QUIZ_DATA = {
           },
           {
             "type": "drag_drop_sentence",
-            "text": "Susunlah ajakan untuk menghargai kuliner dari Nusa Tenggara!",
+            "text": "Kamu ingin mengajak teman untuk menghargai Se'i dan menjaga pohon kosambi. Susun kalimat ajakanmu menggunakan minimal 4 kata dari pilihan berikut!",
             "draggables": [
               {
-                "id": "w3",
-                "text": "kelezatan",
-                "color": "#99AAEF"
-              },
-              {
-                "id": "w6",
-                "text": "kebanggaan nusantara",
-                "color": "#e3baf4ff"
-              },
-              {
-                "id": "w5",
-                "text": "sebagai",
-                "color": "#FFC7B1"
+                "id": "w1",
+                "text": "Ayo",
+                "color": "#F6E78A"
               },
               {
                 "id": "w2",
                 "text": "cintai",
-                "color": "#f6bad3ff"
+                "color": "#FFC6D8"
               },
               {
-                "id": "w1",
-                "text": "Mari kita",
-                "color": "#f5f199ff"
+                "id": "w3",
+                "text": "kita",
+                "color": "#AEE5A1"
               },
               {
                 "id": "w4",
-                "text": "Se'i Timor",
-                "color": "#a5ec93ff"
+                "text": "Se'i",
+                "color": "#BFD1FF"
+              },
+              {
+                "id": "w5",
+                "text": "asap",
+                "color": "#CDB4FF"
+              },
+              {
+                "id": "w6",
+                "text": "kosambi",
+                "color": "#FFD6A5"
+              },
+              {
+                "id": "w7",
+                "text": "asli",
+                "color": "#D5F4E6"
+              },
+              {
+                "id": "w8",
+                "text": "Timor",
+                "color": "#FFC2C2"
+              },
+              {
+                "id": "w9",
+                "text": "rasa",
+                "color": "#B9FBC0"
+              },
+              {
+                "id": "w10",
+                "text": "jaga",
+                "color": "#FFE29A"
+              },
+              {
+                "id": "w11",
+                "text": "pohon",
+                "color": "#A8D8FF"
+              },
+              {
+                "id": "w12",
+                "text": "lezat",
+                "color": "#D9C6FF"
+              },
+              {
+                "id": "w13",
+                "text": "nusantara",
+                "color": "#FAD6A5"
               }
             ],
-            "dropZones": [
-              {
-                "id": "z1"
-              },
-              {
-                "id": "z2"
-              },
-              {
-                "id": "z3"
-              },
-              {
-                "id": "z4"
-              },
-              {
-                "id": "z5"
-              },
-              {
-                "id": "z6"
-              }
-            ],
-            "correctOrder": [
-              "w1",
-              "w2",
-              "w3",
-              "w4",
-              "w5",
-              "w6"
-            ],
-            "xp": 40
+            "xp": 40,
+            "mode": "creative",
+            "minWords": 4,
+            "requiredWords": [
+              "Se'i"
+            ]
           }
         ]
       }
@@ -7614,68 +7807,81 @@ export const QUIZ_DATA = {
           },
           {
             "type": "drag_drop_sentence",
-            "text": "Susunlah ajakan untuk bangga pada seni musik Nusa Tenggara!",
+            "text": "Kamu ingin mengajak teman untuk mendengar petikan Sasando dan mengenal Tari Caci. Susun kalimat ajakanmu menggunakan minimal 4 kata dari pilihan berikut!",
             "draggables": [
               {
+                "id": "w1",
+                "text": "Ayo",
+                "color": "#F6E78A"
+              },
+              {
                 "id": "w2",
-                "text": "banggakan",
-                "color": "#f6bad3ff"
+                "text": "dengar",
+                "color": "#FFC6D8"
               },
               {
                 "id": "w3",
-                "text": "petikan Sasando",
-                "color": "#99AAEF"
-              },
-              {
-                "id": "w1",
-                "text": "Mari kita",
-                "color": "#f5f199ff"
+                "text": "petikan",
+                "color": "#AEE5A1"
               },
               {
                 "id": "w4",
-                "text": "sebagai",
-                "color": "#a5ec93ff"
-              },
-              {
-                "id": "w6",
-                "text": "dari NTT",
-                "color": "#e3baf4ff"
+                "text": "Sasando",
+                "color": "#BFD1FF"
               },
               {
                 "id": "w5",
-                "text": "suara indah",
-                "color": "#FFC7B1"
+                "text": "dan",
+                "color": "#CDB4FF"
+              },
+              {
+                "id": "w6",
+                "text": "saksikan",
+                "color": "#FFD6A5"
+              },
+              {
+                "id": "w7",
+                "text": "Tari Caci",
+                "color": "#D5F4E6"
+              },
+              {
+                "id": "w8",
+                "text": "NTT",
+                "color": "#FFC2C2"
+              },
+              {
+                "id": "w9",
+                "text": "bangga",
+                "color": "#B9FBC0"
+              },
+              {
+                "id": "w10",
+                "text": "kita",
+                "color": "#FFE29A"
+              },
+              {
+                "id": "w11",
+                "text": "budaya",
+                "color": "#A8D8FF"
+              },
+              {
+                "id": "w12",
+                "text": "indah",
+                "color": "#D9C6FF"
+              },
+              {
+                "id": "w13",
+                "text": "warisan",
+                "color": "#FAD6A5"
               }
             ],
-            "dropZones": [
-              {
-                "id": "z1"
-              },
-              {
-                "id": "z2"
-              },
-              {
-                "id": "z3"
-              },
-              {
-                "id": "z4"
-              },
-              {
-                "id": "z5"
-              },
-              {
-                "id": "z6"
-              }
-            ],
-            "correctOrder": [
-              "w1",
-              "w2",
-              "w3",
-              "w4",
-              "w5",
-              "w6"
-            ],
-            "xp": 40
+            "xp": 40,
+            "mode": "creative",
+            "minWords": 4,
+            "requiredWords": [
+              "Sasando",
+              "Tari Caci"
+            ]
           }
         ]
       }
@@ -7718,7 +7924,7 @@ export const QUIZ_DATA = {
               {
                 "text": "Atap Kerucut",
                 "emoji": "📐",
-                "image": "/assets/budayana/islands/atap kerucut.png"
+                "image": "/assets/budayana/islands/atap kerucutt.png"
               },
               {
                 "text": "Atap Tanduk",
@@ -7850,7 +8056,7 @@ export const QUIZ_DATA = {
           },
           {
             "type": "drag_drop",
-            "text": "Pasangkan ruangan Rumah Joglo dengan fungsinya!",
+            "text": "Pasangkan bagian Rumah Joglo dengan fungsinya!",
             "draggables": [
               {
                 "id": "m1",
@@ -7860,46 +8066,24 @@ export const QUIZ_DATA = {
               },
               {
                 "id": "m2",
-                "text": "Pringgitan",
+                "text": "Soko Guru",
                 "color": "#D4DCFF",
-                "image": "/assets/budayana/islands/pringgitan.png"
-              },
-              {
-                "id": "m3",
-                "text": "Omah Dalem",
-                "color": "#ffb2d8",
-                "image": "/assets/budayana/islands/omah dalem.png"
-              },
-              {
-                "id": "m4",
-                "text": "Krobongan",
-                "color": "#ffd5c0",
-                "image": "/assets/budayana/islands/krobongan.png"
+                "image": "/assets/budayana/islands/soko guru.png"
               }
             ],
             "dropZones": [
               {
                 "id": "z1",
-                "label": "Ruang publik terbuka untuk menerima tamu"
+                "label": "Ruang terbuka untuk menerima tamu dan kegiatan bersama"
               },
               {
                 "id": "z2",
-                "label": "Ruang perantara tempat pertunjukan wayang"
-              },
-              {
-                "id": "z3",
-                "label": "Bagian dalam privasi keluarga yang sakral"
-              },
-              {
-                "id": "z4",
-                "label": "Bilik suci untuk pusaka & Dewi Sri"
+                "label": "Empat tiang utama penyangga struktur atap Joglo"
               }
             ],
             "correctOrder": [
               "m1",
-              "m2",
-              "m3",
-              "m4"
+              "m2"
             ],
             "xp": 25
           }
@@ -7999,68 +8183,80 @@ export const QUIZ_DATA = {
           },
           {
             "type": "drag_drop_sentence",
-            "text": "Susunlah pesan untuk mengajak orang lain bangga dengan Rumah Joglo!",
+            "text": "Kamu ingin mengajak teman untuk bangga dan melestarikan Rumah Joglo. Susun kalimat ajakanmu menggunakan minimal 4 kata dari pilihan berikut!",
             "draggables": [
               {
-                "id": "w3",
-                "text": "Rumah Joglo",
-                "color": "#99AAEF"
-              },
-              {
-                "id": "w6",
-                "text": "budaya Jawa",
-                "color": "#e3baf4ff"
-              },
-              {
-                "id": "w4",
-                "text": "sebagai",
-                "color": "#a5ec93ff"
+                "id": "w1",
+                "text": "Ayo",
+                "color": "#F6E78A"
               },
               {
                 "id": "w2",
                 "text": "lestarikan",
-                "color": "#f6bad3ff"
+                "color": "#FFC6D8"
+              },
+              {
+                "id": "w3",
+                "text": "Rumah Joglo",
+                "color": "#AEE5A1"
+              },
+              {
+                "id": "w4",
+                "text": "filosofi",
+                "color": "#BFD1FF"
               },
               {
                 "id": "w5",
-                "text": "kebanggaan",
-                "color": "#FFC7B1"
+                "text": "kebersamaan",
+                "color": "#CDB4FF"
               },
               {
-                "id": "w1",
-                "text": "Mari kita",
-                "color": "#f5f199ff"
+                "id": "w6",
+                "text": "Jawa",
+                "color": "#FFD6A5"
+              },
+              {
+                "id": "w7",
+                "text": "kita",
+                "color": "#D5F4E6"
+              },
+              {
+                "id": "w8",
+                "text": "jaga",
+                "color": "#FFC2C2"
+              },
+              {
+                "id": "w9",
+                "text": "kokoh",
+                "color": "#B9FBC0"
+              },
+              {
+                "id": "w10",
+                "text": "warisan",
+                "color": "#FFE29A"
+              },
+              {
+                "id": "w11",
+                "text": "bangga",
+                "color": "#A8D8FF"
+              },
+              {
+                "id": "w12",
+                "text": "budaya",
+                "color": "#D9C6FF"
+              },
+              {
+                "id": "w13",
+                "text": "bersama",
+                "color": "#FAD6A5"
               }
             ],
-            "dropZones": [
-              {
-                "id": "z1"
-              },
-              {
-                "id": "z2"
-              },
-              {
-                "id": "z3"
-              },
-              {
-                "id": "z4"
-              },
-              {
-                "id": "z5"
-              },
-              {
-                "id": "z6"
-              }
-            ],
-            "correctOrder": [
-              "w1",
-              "w2",
-              "w3",
-              "w4",
-              "w5",
-              "w6"
-            ],
-            "xp": 40
+            "xp": 40,
+            "mode": "creative",
+            "minWords": 4,
+            "requiredWords": [
+              "Rumah Joglo"
+            ]
           }
         ]
       }
@@ -8360,292 +8556,80 @@ export const QUIZ_DATA = {
           },
           {
             "type": "drag_drop_sentence",
-            "text": "Susunlah ajakan untuk menjaga warisan kuliner Jawa!",
+            "text": "Kamu ingin mengajak teman untuk bangga dan menjaga resep asli Gudeg Yogyakarta. Susun kalimat ajakanmu menggunakan minimal 4 kata dari pilihan berikut!",
             "draggables": [
               {
+                "id": "w1",
+                "text": "Ayo",
+                "color": "#F6E78A"
+              },
+              {
                 "id": "w2",
-                "text": "lestarikan",
-                "color": "#f6bad3ff"
+                "text": "cicipi",
+                "color": "#FFC6D8"
               },
               {
                 "id": "w3",
-                "text": "Gudeg",
-                "color": "#99AAEF"
-              },
-              {
-                "id": "w1",
-                "text": "Mari kita",
-                "color": "#f5f199ff"
-              },
-              {
-                "id": "w5",
-                "text": "makanan khas",
-                "color": "#FFC7B1"
-              },
-              {
-                "id": "w6",
-                "text": "kebanggaan Jawa",
-                "color": "#e3baf4ff"
+                "text": "kita",
+                "color": "#AEE5A1"
               },
               {
                 "id": "w4",
-                "text": "sebagai",
-                "color": "#a5ec93ff"
+                "text": "Gudeg",
+                "color": "#BFD1FF"
+              },
+              {
+                "id": "w5",
+                "text": "manis",
+                "color": "#CDB4FF"
+              },
+              {
+                "id": "w6",
+                "text": "asli",
+                "color": "#FFD6A5"
+              },
+              {
+                "id": "w7",
+                "text": "Jogja",
+                "color": "#D5F4E6"
+              },
+              {
+                "id": "w8",
+                "text": "resep",
+                "color": "#FFC2C2"
+              },
+              {
+                "id": "w9",
+                "text": "tradisional",
+                "color": "#B9FBC0"
+              },
+              {
+                "id": "w10",
+                "text": "jaga",
+                "color": "#FFE29A"
+              },
+              {
+                "id": "w11",
+                "text": "warisan",
+                "color": "#A8D8FF"
+              },
+              {
+                "id": "w12",
+                "text": "kuliner",
+                "color": "#D9C6FF"
+              },
+              {
+                "id": "w13",
+                "text": "Jawa",
+                "color": "#FAD6A5"
               }
             ],
-            "dropZones": [
-              {
-                "id": "z1"
-              },
-              {
-                "id": "z2"
-              },
-              {
-                "id": "z3"
-              },
-              {
-                "id": "z4"
-              },
-              {
-                "id": "z5"
-              },
-              {
-                "id": "z6"
-              }
-            ],
-            "correctOrder": [
-              "w1",
-              "w2",
-              "w3",
-              "w4",
-              "w5",
-              "w6"
-            ],
-            "xp": 40
-          }
-        ]
-      }
-    },
-    "pakaian": {
-      "1": {
-        "literacy": {
-          "image": "/assets/budayana/islands/pakaian1 jawa.png",
-          "text": "Pernahkah kamu melihat pengantin pria Jawa Tengah yang penampilannya sangat gagah dan rapi? Pakaian adat resminya disebut Jawi Jangkep. Pakaian ini sangat sarat makna filosofis. Atasannya berupa jas tertutup yang disebut Beskap. Uniknya, kancing Beskap diletakkan di sisi kiri dan kanan, bukan lurus di tengah. Sebagai pelengkap, pria memakai penutup kepala dari kain batik yang disebut Blangkon, serta menyelipkan Keris (senjata pusaka) di sabuk bagian belakang. Pakaian ini membuat pemakainya terlihat berwibawa dan sopan."
-        },
-        "questions": [
-          {
-            "type": "multiple_choice",
-            "text": "Apa nama pakaian adat resmi untuk pria dari daerah Jawa Tengah?",
-            "options": [
-              "Baju Bodo",
-              "Jawi Jangkep",
-              "Ulee Balang",
-              "Pakaian Pangsi"
-            ],
-            "correctIndex": 1,
-            "xp": 20
-          },
-          {
-            "type": "multiple_choice",
-            "text": "Apa makna dari letak kancing Beskap yang menyamping ke kiri dan kanan?",
-            "options": [
-              "Melambangkan kekayaan",
-              "Melambangkan tindakan yang cermat dan berhati-hati",
-              "Melambangkan kecepatan berlari",
-              "Melambangkan kekuatan fisik"
-            ],
-            "correctIndex": 1,
-            "xp": 20
-          },
-          {
-            "type": "picture_selection",
-            "text": "Pilih gambar penutup kepala khas pria Jawa yang memiliki mondolan di bagian belakangnya!",
-            "options": [
-              {
-                "text": "Topi Koboi",
-                "emoji": "🤠",
-                "image": "/assets/budayana/islands/topi koboi.png"
-              },
-              {
-                "text": "Blangkon",
-                "emoji": "👳",
-                "image": "/assets/budayana/islands/blangkon.png"
-              },
-              {
-                "text": "Peci Hitam",
-                "emoji": "🧢",
-                "image": "/assets/budayana/islands/peci hitam.png"
-              },
-              {
-                "text": "Udeng Bali",
-                "emoji": "🧣",
-                "image": "/assets/budayana/islands/udeng bali.png"
-              }
-            ],
-            "correctIndex": 1,
-            "xp": 20
-          },
-          {
-            "type": "multiple_choice",
-            "text": "Senjata tradisional apakah yang biasanya diselipkan di bagian belakang sabuk pada pakaian Jawi Jangkep?",
-            "options": [
-              "Golok",
-              "Rencong",
-              "Keris",
-              "Mandau"
-            ],
-            "correctIndex": 2,
-            "xp": 20
-          },
-          {
-            "type": "multiple_choice",
-            "text": "Mengapa kancing pada Beskap tidak dipasang lurus di tengah seperti kemeja biasa?",
-            "options": [
-              "Karena penjahit kehabisan bahan kain di tengah",
-              "Mengajarkan pemakainya agar selalu berhati-hati dan tidak tergesa-gesa dalam mengambil keputusan",
-              "Agar mudah dilepas saat cuaca sedang panas",
-              "Supaya terlihat sama dengan seragam tentara Belanda"
-            ],
-            "correctIndex": 1,
-            "xp": 20
-          }
-        ]
-      },
-      "2": {
-        "literacy": {
-          "image": "/assets/budayana/islands/pakaian2 jawa.png",
-          "text": "Setiap bagian dari Jawi Jangkep mengandung ajaran hidup leluhur Jawa. Kancing Beskap yang letaknya menyamping melambangkan bahwa segala tindakan harus diperhitungkan dengan cermat dan berhati-hati. Blangkon memiliki tonjolan (mondolan) di bagian belakang yang melambangkan kemampuan mengendalikan emosi dan menutupi aib atau rahasia. Sementara itu, Keris yang diselipkan di bagian punggung melambangkan keberanian dan tanggung jawab sebagai pelindung keluarga, sekaligus berfungsi sebagai penolak bala secara spiritual. Pemakai Jawi Jangkep diharapkan menjadi manusia yang bijaksana."
-        },
-        "questions": [
-          {
-            "type": "drag_drop",
-            "text": "Pasangkan kelengkapan Jawi Jangkep dengan maknanya!",
-            "draggables": [
-              {
-                "id": "m1",
-                "text": "Beskap (Kancing Menyamping)",
-                "color": "#FFF3B0",
-                "image": "/assets/budayana/islands/beskap.png"
-              },
-              {
-                "id": "m2",
-                "text": "Blangkon (Mondolan)",
-                "color": "#D4DCFF",
-                "image": "/assets/budayana/islands/blangkon.png"
-              },
-              {
-                "id": "m3",
-                "text": "Keris di Punggung",
-                "color": "#ffb2d8",
-                "image": "/assets/budayana/islands/keris.png"
-              },
-              {
-                "id": "m4",
-                "text": "Kain Jarik (Wiru)",
-                "color": "#ffd5c0",
-                "image": "/assets/budayana/islands/kain jarik.png"
-              }
-            ],
-            "dropZones": [
-              {
-                "id": "z1",
-                "label": "Simbol kehati-hatian dalam bertindak"
-              },
-              {
-                "id": "z2",
-                "label": "Pengendalian emosi & penyimpan rahasia"
-              },
-              {
-                "id": "z3",
-                "label": "Tanggung jawab, keberanian & tolak bala"
-              },
-              {
-                "id": "z4",
-                "label": "Kesabaran dan keanggunan dalam melangkah"
-              }
-            ],
-            "correctOrder": [
-              "m1",
-              "m2",
-              "m3",
-              "m4"
-            ],
-            "xp": 25
-          },
-          {
-            "type": "multiple_choice",
-            "text": "Apa arti dari tonjolan (mondolan) di bagian belakang Blangkon gaya Yogyakarta?",
-            "options": [
-              "Tempat untuk menyimpan uang koin",
-              "Simbol kemampuan menahan emosi dan menyimpan rahasia dengan rapat",
-              "Bantalan agar kepala tidak sakit saat bersandar",
-              "Hiasan semata agar terlihat lebih tinggi"
-            ],
-            "correctIndex": 1,
-            "xp": 25
-          },
-          {
-            "type": "multiple_choice",
-            "text": "Mengapa Keris pusaka diselipkan di bagian punggung (belakang), bukan di depan perut?",
-            "options": [
-              "Menandakan kerendahan hati dan pertahanan terakhir tanpa pamer",
-              "Agar tidak mengganggu saat sedang makan di meja",
-              "Karena keris terlalu berat jika ditaruh di depan",
-              "Supaya musuh tidak bisa melihat senjata yang dibawa"
-            ],
-            "correctIndex": 0,
-            "xp": 25
-          }
-        ]
-      },
-      "3": {
-        "literacy": {
-          "image": "/assets/budayana/islands/pakaian3 jawa.png",
-          "text": "Memakai Jawi Jangkep yang lengkap dan benar membutuhkan waktu lama, karena kain jarik (bawahan batik) harus dililitkan dengan ketat sehingga langkah kaki menjadi kecil dan pelan. Di era modern yang serba cepat, banyak anak muda merasa pakaian ini tidak praktis. Desainer kini membuat Beskap dan Blangkon instan (beresleting) agar mudah dipakai seperti pakaian biasa. Menurutmu, apakah modifikasi instan ini bagus agar anak muda mau memakai pakaian adat, atau justru menghilangkan nilai kesabaran dan keanggunan dari tradisi aslinya? Ini adalah pertanyaan penting dalam evolusi busana tradisional."
-        },
-        "questions": [
-          {
-            "type": "opinion_reason",
-            "text": "Jika seorang desainer membuat Beskap dan Blangkon instan beresleting agar praktis dipakai anak muda, bagaimana pendapatmu?",
-            "opinions": [
-              {
-                "id": "op1",
-                "text": "Sangat Bagus"
-              },
-              {
-                "id": "op2",
-                "text": "Kurang Tepat"
-              }
-            ],
-            "reasons": [
-              {
-                "id": "r4",
-                "text": "A. Karena bisa menghilangkan filosofi kesabaran dan proses dari tradisi aslinya"
-              },
-              {
-                "id": "r1",
-                "text": "B. Agar pakaian adat lebih disukai, mudah dipakai, dan tetap lestari di era modern"
-              },
-              {
-                "id": "r2",
-                "text": "C. Supaya harga pakaian adat menjadi sangat mahal"
-              },
-              {
-                "id": "r3",
-                "text": "D. Agar bahan kain yang digunakan lebih sedikit"
-              }
-            ],
-            "correctPairs": [
-              {
-                "opinionId": "op1",
-                "reasonId": "r1"
-              },
-              {
-                "opinionId": "op2",
-                "reasonId": "r4"
-              }
-            ],
-            "xp": 30
+            "xp": 40,
+            "mode": "creative",
+            "minWords": 4,
+            "requiredWords": [
+              "Gudeg"
+            ]
           }
         ]
       }
@@ -8945,68 +8929,80 @@ export const QUIZ_DATA = {
           },
           {
             "type": "drag_drop_sentence",
-            "text": "Susunlah ajakan untuk mencintai seni gamelan!",
+            "text": "Kamu ingin mengajak teman untuk mendengar dan mencintai harmoni suara Gamelan. Susun kalimat ajakanmu menggunakan minimal 4 kata dari pilihan berikut!",
             "draggables": [
               {
-                "id": "w5",
-                "text": "harmoni",
-                "color": "#FFC7B1"
+                "id": "w1",
+                "text": "Ayo",
+                "color": "#F6E78A"
               },
               {
                 "id": "w2",
-                "text": "lestarikan",
-                "color": "#f6bad3ff"
-              },
-              {
-                "id": "w1",
-                "text": "Mari kita",
-                "color": "#f5f199ff"
-              },
-              {
-                "id": "w4",
-                "text": "sebagai",
-                "color": "#a5ec93ff"
-              },
-              {
-                "id": "w6",
-                "text": "budaya Jawa",
-                "color": "#e3baf4ff"
+                "text": "dengarkan",
+                "color": "#FFC6D8"
               },
               {
                 "id": "w3",
-                "text": "suara gamelan",
-                "color": "#99AAEF"
+                "text": "harmoni",
+                "color": "#AEE5A1"
+              },
+              {
+                "id": "w4",
+                "text": "Gamelan",
+                "color": "#BFD1FF"
+              },
+              {
+                "id": "w5",
+                "text": "bersama",
+                "color": "#CDB4FF"
+              },
+              {
+                "id": "w6",
+                "text": "selaras",
+                "color": "#FFD6A5"
+              },
+              {
+                "id": "w7",
+                "text": "indah",
+                "color": "#D5F4E6"
+              },
+              {
+                "id": "w8",
+                "text": "Jawa",
+                "color": "#FFC2C2"
+              },
+              {
+                "id": "w9",
+                "text": "kita",
+                "color": "#B9FBC0"
+              },
+              {
+                "id": "w10",
+                "text": "jaga",
+                "color": "#FFE29A"
+              },
+              {
+                "id": "w11",
+                "text": "suara",
+                "color": "#A8D8FF"
+              },
+              {
+                "id": "w12",
+                "text": "warisan",
+                "color": "#D9C6FF"
+              },
+              {
+                "id": "w13",
+                "text": "logam",
+                "color": "#FAD6A5"
               }
             ],
-            "dropZones": [
-              {
-                "id": "z1"
-              },
-              {
-                "id": "z2"
-              },
-              {
-                "id": "z3"
-              },
-              {
-                "id": "z4"
-              },
-              {
-                "id": "z5"
-              },
-              {
-                "id": "z6"
-              }
-            ],
-            "correctOrder": [
-              "w1",
-              "w2",
-              "w3",
-              "w4",
-              "w5",
-              "w6"
-            ],
-            "xp": 40
+            "xp": 40,
+            "mode": "creative",
+            "minWords": 4,
+            "requiredWords": [
+              "Gamelan"
+            ]
           }
         ]
       }

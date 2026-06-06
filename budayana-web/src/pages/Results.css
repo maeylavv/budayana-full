@@ -218,10 +218,14 @@
     grid-template-columns: 1fr 1fr;
   }
 
+  .history-table-container {
+    overflow-x: auto;
+  }
+
   .history-header,
   .history-row,
   .quiz-history-grid {
-    grid-template-columns: 1fr 1.4fr .6fr 1fr .6fr .9fr 1.1fr !important;
+    min-width: 650px;
   }
 
   /* Make sure the second-to-last column (Time) remains visible so columns don't break */

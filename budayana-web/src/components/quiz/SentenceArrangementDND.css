@@ -71,18 +71,41 @@
   user-select: none;
 }
 
+/* ── Creative Zone ──────────────────────────────────────── */
+.sa-creative-zone {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  align-items: flex-start;
+  align-content: flex-start;
+  gap: 14px;
+  width: 100%;
+  min-height: 120px;
+  max-height: 220px;
+  padding: 18px 20px;
+  border: 3px dashed #E8D9C0;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.35);
+  overflow-y: auto;
+  margin-bottom: 24px;
+  box-sizing: border-box;
+}
+
 /* ── Placed Chips (inside Drop Zones) ───────────────────── */
 .sa-placed-chip {
   position: relative;
-  width: 100%;
-  min-height: 52px;
-  height: auto;
-  display: flex;
+  display: inline-flex !important;
+  flex: 0 0 auto !important;
+  width: auto !important;
+  min-width: unset !important;
+  max-width: max-content !important;
+  white-space: nowrap;
+  height: 62px;
+  padding: 0 24px;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;
+  border-radius: 18px;
   border: 2.5px solid transparent;
-  padding: 8px 30px 8px 12px;
   box-sizing: border-box;
   transition: background-color 0.2s;
 }
