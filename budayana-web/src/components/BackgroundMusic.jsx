@@ -11,59 +11,69 @@ export default function BackgroundMusic() {
   const audioRef = useRef(null)
   const [hasInteracted, setHasInteracted] = useState(false)
 
-  const isLandingPage = !!(location.pathname === '/' || location.pathname === '')
+  // Determine if music should pause based on current route
+  const pathParts = location.pathname.split('/').filter(Boolean)
+  let shouldPause = false
+
+  if (pathParts[0] === 'monitoring-guru' || pathParts[0] === 'monitoring-ortu') {
+    // Pause music when teachers/parents enter their dashboard portals
+    shouldPause = true
+  } else if (pathParts[0] === 'islands') {
+    if (pathParts[2] === 'story') {
+      // /islands/:islandSlug/story/... (reading, pre-test, post-test, game)
+      shouldPause = true
+    } else if (pathParts[2] === 'quiz' && pathParts.length > 3) {
+      // /islands/:islandSlug/quiz/:topicId/:levelId (gameplay)
+      shouldPause = true
+    }
+  }
 
   useEffect(() => {
     const audioNode = audioRef.current;
-
-    // Only continue if we're on the landing page
-    if (!isLandingPage) {
-      if (audioNode) audioNode.pause();
-      return;
-    }
-
     if (!audioNode) return
 
-    // Set volume (0.0 - 1.0 range)
-    audioNode.volume = 0.3
-
-    // Try to play (may fail due to autoplay policy)
-    const playPromise = audioNode.play()
-    if (playPromise !== undefined) {
-      playPromise.catch(() => {
-        // Autoplay was blocked - will play after user interaction
-        console.log("Autoplay blocked, waiting for user interaction")
-      })
+    if (shouldPause) {
+      audioNode.pause()
+    } else {
+      audioNode.volume = 0.3
+      // Try to play (may fail due to autoplay policy if no interaction yet)
+      const playPromise = audioNode.play()
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          console.log("Autoplay blocked, waiting for user interaction")
+        })
+      }
     }
+  }, [shouldPause, location.pathname])
+
+  useEffect(() => {
+    const audioNode = audioRef.current;
+    if (!audioNode) return
 
     // Handle user interaction to enable audio
     const handleInteraction = () => {
-      // Must double check audioNode and isLandingPage flag at interaction time
-      if (!hasInteracted && audioNode) {
+      if (!hasInteracted) {
         setHasInteracted(true)
         audioNode.muted = false
-        audioNode.play().catch(() => {})
+        if (!shouldPause) {
+          audioNode.play().catch(() => {})
+        }
       }
     }
 
     // Listen for any user interaction
-    document.addEventListener("click", handleInteraction)
-    document.addEventListener("keydown", handleInteraction)
-    document.addEventListener("touchstart", handleInteraction)
+    if (!hasInteracted) {
+      document.addEventListener("click", handleInteraction)
+      document.addEventListener("keydown", handleInteraction)
+      document.addEventListener("touchstart", handleInteraction)
+    }
 
     return () => {
       document.removeEventListener("click", handleInteraction)
       document.removeEventListener("keydown", handleInteraction)
       document.removeEventListener("touchstart", handleInteraction)
-      if (audioNode) {
-        audioNode.pause();
-      }
     }
-  }, [hasInteracted, isLandingPage])
-
-  if (!isLandingPage) {
-    return null
-  }
+  }, [hasInteracted, shouldPause])
 
   return (
     <audio
@@ -71,6 +81,7 @@ export default function BackgroundMusic() {
       src='/assets/budayana/music/Into the Wild.mp3'
       loop
       muted
+      style={{ display: 'none' }}
     />
   )
 }

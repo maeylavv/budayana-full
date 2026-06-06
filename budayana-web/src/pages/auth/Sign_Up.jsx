@@ -106,8 +106,14 @@ export default function SignIn() {
       return;
     }
 
+    let finalEmail = email.trim();
+    if (!finalEmail) {
+      // Auto-generate dummy email if left blank (for SD students without email)
+      finalEmail = `${username.trim().toLowerCase().replace(/\s+/g, '')}@siswa.budayana.local`;
+    }
+
     registerMutation.mutate({
-      email: email,
+      email: finalEmail,
       name: name,
       grade: parsedGrade,
       classLabel: classLabel.trim(),
@@ -159,12 +165,11 @@ export default function SignIn() {
           </div>
 
           <div className='field'>
-            <label htmlFor='email'>Email</label>
+            <label htmlFor='email'>Email <span style={{ fontWeight: 'normal', fontSize: '0.9em', opacity: 0.8 }}>(Opsional)</span></label>
             <input
               type='email'
               id='email'
               placeholder='Email Kamu'
-              required
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value)
