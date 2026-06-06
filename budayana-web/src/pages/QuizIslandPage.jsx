@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { ChevronLeft, Lock, Play, Check, Star, Info, Lightbulb } from 'lucide-react';
 import { authClient } from '../lib/auth-client';
+import { useSound } from '../hooks/useSound';
 import './QuizIslandPage.css';
 
 // Static Data definitions
@@ -17,6 +18,7 @@ export default function QuizIslandPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { data: session } = authClient.useSession();
   const userId = session?.user?.id || 'guest';
+  const { playClick } = useSound();
 
   const [entryPopup, setEntryPopup] = useState(null);
 
@@ -64,6 +66,7 @@ export default function QuizIslandPage() {
   }, [searchParams, setSearchParams]);
 
   const handleLevelClick = (topicId, levelId) => {
+    playClick();
     setProgress((prev) => {
       const topicProgress = prev[topicId];
       if (topicProgress[levelId] === 'locked') return prev; // Cannot play locked levels, but completed is actively allowed!
@@ -76,6 +79,7 @@ export default function QuizIslandPage() {
   const closeEntryPopup = () => setEntryPopup(null);
 
   const startQuiz = () => {
+    playClick();
     navigate(`/islands/${islandSlug}/quiz/${entryPopup.topicId}/${entryPopup.levelId}`);
   };
 
@@ -107,7 +111,7 @@ export default function QuizIslandPage() {
     <div className='quiz-detail-page'>
       {/* Header */}
       <div className='quiz-detail-header'>
-        <button className='quiz-back-btn' onClick={() => navigate('/quiz')}>
+        <button className='quiz-back-btn' onClick={() => { playClick(); navigate('/quiz'); }}>
           <ChevronLeft size={28} color="#000" />
         </button>
         
@@ -142,11 +146,11 @@ export default function QuizIslandPage() {
 
       {/* Quiz Entry Popup */}
       {entryPopup && (
-        <div className='popup-overlay' onClick={closeEntryPopup} style={{zIndex: 9999, backgroundColor: 'rgba(253, 245, 230, 0.95)'}}>
-          <div className='quiz-welcome-popup' onClick={(e) => e.stopPropagation()} style={{maxWidth: '400px', backgroundColor: '#fdf5e6', border: '5px solid #51423c', borderRadius: '40px', padding: '40px 30px', position: 'relative', marginTop: '60px'}}>
+        <div className='popup-overlay' onClick={() => { playClick(); closeEntryPopup(); }} style={{zIndex: 9999, backgroundColor: 'rgba(253, 245, 230, 0.95)'}}>
+          <div className='quiz-welcome-popup-island' onClick={(e) => e.stopPropagation()}>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               {/* Mascot positioned overflowing the top organically like the success views */}
-              <img src={mascotByLevel[entryPopup.levelId]} style={{height: '165px', position: 'absolute', top: '-60px', objectFit: 'contain'}} alt="character" onError={e => e.target.style.display='none'} />
+              <img src={mascotByLevel[entryPopup.levelId]} className="welcome-popup-mascot" alt="character" onError={e => e.target.style.display='none'} />
               
               <h2 className='welcome-title' style={{fontSize: '2.2rem', textAlign: 'center', fontFamily: "'Fredoka', sans-serif", fontWeight: 700, color: '#51423c', margin: '80px 0 5px 0', lineHeight: '1.2'}}>
                 {TOPICS.find(t => t.id === entryPopup.topicId)?.title || ''}
