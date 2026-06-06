@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './SentenceArrangementDND.css';
 
 export default function SentenceArrangementDND({ question, answersMapping = {}, onAnswer }) {
+  const safeDropZones = Array.isArray(question?.dropZones) ? question.dropZones : [];
   const [placements, setPlacements] = useState(answersMapping.placements || {});
   const [lockedZones, setLockedZones] = useState([]);
 
@@ -13,7 +14,7 @@ export default function SentenceArrangementDND({ question, answersMapping = {}, 
 
     const savedLocked = answersMapping.lockedZones || [];
     if (hasAnsweredFully) {
-      setLockedZones(question.dropZones.map(z => z.id));
+      setLockedZones(safeDropZones.map(z => z.id));
     } else {
       setLockedZones(savedLocked);
     }
@@ -78,7 +79,7 @@ export default function SentenceArrangementDND({ question, answersMapping = {}, 
     let newLocked = [...lockedZones];
     let newPlacements = { ...placements };
 
-    question.dropZones.forEach((z, idx) => {
+    safeDropZones.forEach((z, idx) => {
       const placedId = placements[z.id];
       if (placedId) {
         if (placedId === question.correctOrder[idx]) {
@@ -92,13 +93,15 @@ export default function SentenceArrangementDND({ question, answersMapping = {}, 
     setPlacements(newPlacements);
     setLockedZones(newLocked);
 
-    const isFullyCorrect = newLocked.length === question.dropZones.length;
+    const isFullyCorrect = newLocked.length === safeDropZones.length;
     onAnswer(newPlacements, isFullyCorrect, newLocked);
   };
 
   const placedDragIds = Object.values(placements);
   const remainingDraggables = question.draggables.filter(d => !placedDragIds.includes(d.id));
-  const allPlaced = Object.keys(placements).length === question.dropZones.length;
+  const allPlaced = question.mode === 'creative'
+    ? Object.keys(placements || {}).length >= (question.minWords || 1)
+    : Object.keys(placements || {}).length === safeDropZones.length;
 
   const btnText = hasAnsweredFully ? 'Jawaban Benar!' : 'Periksa!';
   const btnClass = `sa-periksa-btn${hasAnsweredFully ? ' correct' : ''}`;
@@ -119,8 +122,47 @@ export default function SentenceArrangementDND({ question, answersMapping = {}, 
       </div>
 
       {/* Answer Drop Zones */}
-      <div className='sa-zones-row'>
-        {question.dropZones.map((z, idx) => {
+      {question.mode === 'creative' ? (
+        <div 
+          className='sa-creative-zone' 
+          onDrop={(e) => handleDrop(e, 'c_' + Date.now() + Math.random())}
+          onDragOver={handleDragOver}
+        >
+          {Object.entries(placements || {}).map(([zoneId, dragId]) => {
+            const placedItem = question.draggables.find(d => d.id === dragId);
+            if (!placedItem) return null;
+            return (
+              <div
+                key={zoneId}
+                draggable={!hasAnsweredFully}
+                onDragStart={(e) => handleDragStart(e, dragId)}
+                className='sa-placed-chip'
+                style={{
+                  backgroundColor: placedItem.color || '#fff',
+                  cursor: hasAnsweredFully ? 'default' : 'grab',
+                }}
+              >
+                {!hasAnsweredFully && (
+                  <button
+                    className='sa-remove-btn'
+                    onClick={(e) => { e.stopPropagation(); handleRemove(zoneId); }}
+                  >
+                    ✕
+                  </button>
+                )}
+                <span className='sa-chip-text'>{placedItem.text}</span>
+              </div>
+            );
+          })}
+          {Object.keys(placements || {}).length === 0 && (
+            <span className='sa-placeholder' style={{ width: '100%', textAlign: 'center', opacity: 0.6, alignSelf: 'center', margin: 'auto' }}>
+              Tarik dan letakkan kata-kata di sini...
+            </span>
+          )}
+        </div>
+      ) : (
+        <div className='sa-zones-row'>
+        {safeDropZones.map((z, idx) => {
           const placedDragId = placements[z.id];
           const placedItem = question.draggables.find(d => d.id === placedDragId);
           const isLocked = lockedZones.includes(z.id) || hasAnsweredFully;
@@ -159,7 +201,8 @@ export default function SentenceArrangementDND({ question, answersMapping = {}, 
             </div>
           );
         })}
-      </div>
+        </div>
+      )}
 
       {/* Word Pool */}
       <div
