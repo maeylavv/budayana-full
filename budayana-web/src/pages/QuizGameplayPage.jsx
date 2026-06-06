@@ -6,9 +6,12 @@ import { quizAttemptsApi } from '../lib/api';
 import QuestionRenderer from '../components/quiz/QuestionRenderer';
 import ProgressBar from '../components/quiz/ProgressBar';
 import HeartEmptyPopup from '../components/quiz/HeartEmptyPopup';
+import confetti from 'canvas-confetti';
+import { useSound } from '../hooks/useSound';
 import './QuizGameplayPage.css';
 
 export default function QuizGameplayPage() {
+  const { playClick, playCorrect, playWrong, playTada } = useSound();
   const navigate = useNavigate();
   const { islandSlug, topicId, levelId } = useParams();
   const { data: session } = authClient.useSession();
@@ -57,6 +60,20 @@ export default function QuizGameplayPage() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(stateToSave));
   }, [STORAGE_KEY, gameState, currentQuestionIndex, hearts, startTime, endTime, answers, wrongAttempts]);
 
+  // Trigger confetti when game state changes to success
+  useEffect(() => {
+    if (gameState === 'success') {
+      playTada();
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 },
+        zIndex: 10000,
+        colors: ['#ffaa00', '#23a0ba', '#e05fa3', '#51423c', '#ffefcd']
+      });
+    }
+  }, [gameState]);
+
   // Load quiz data safely with defensive checks
   const quizConfig = QUIZ_DATA?.[islandSlug]?.[topicId]?.[levelId];
 
@@ -65,7 +82,7 @@ export default function QuizGameplayPage() {
     return (
       <div style={{ padding: '40px', textAlign: 'center', fontFamily: 'Fredoka One', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
         <h2 style={{ color: '#51423c' }}>Mohon maaf, konten kuis ini belum tersedia atau gagal dimuat!</h2>
-        <button className='quiz-action-btn primary' onClick={() => navigate(`/islands/${islandSlug}/quiz`)}>Kembali ke Topik</button>
+        <button className='quiz-action-btn primary' onClick={() => { playClick(); navigate(`/islands/${islandSlug}/quiz`); }}>Kembali ke Topik</button>
       </div>
     );
   }
@@ -97,6 +114,7 @@ export default function QuizGameplayPage() {
     const currentQAnswers = answers[safeQuestionIndex] || {};
 
     if (isCorrect) {
+      playCorrect();
       setAnswers(prev => ({
         ...prev,
         [safeQuestionIndex]: { 
@@ -108,6 +126,7 @@ export default function QuizGameplayPage() {
         }
       }));
     } else {
+      playWrong();
       setAnswers(prev => ({
         ...prev,
         [safeQuestionIndex]: { 
@@ -133,6 +152,7 @@ export default function QuizGameplayPage() {
   };
 
   const handleKembali = () => {
+    playClick();
     if (safeQuestionIndex > 0) {
       setCurrentQuestionIndex(safeQuestionIndex - 1);
     } else {
@@ -142,6 +162,7 @@ export default function QuizGameplayPage() {
   };
 
   const handleSelanjutnya = () => {
+    playClick();
     if (safeQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(safeQuestionIndex + 1);
     } else {
@@ -175,6 +196,7 @@ export default function QuizGameplayPage() {
   };
 
   const handleRetry = () => {
+    playClick();
     // For multiple-choice: clear wrong highlights. For DragDrop: keep placements
     // so the DragDropQuestion useEffect restores locked correct zones.
     setAnswers(prev => {
@@ -236,7 +258,7 @@ export default function QuizGameplayPage() {
         totalQuestions={questions.length}
         hearts={hearts}
         gameState={gameState}
-        onBack={() => setShowQuitPopup(true)}
+        onBack={() => { playClick(); setShowQuitPopup(true); }}
         islandSlug={islandSlug}
         levelId={levelId}
       />
@@ -253,7 +275,7 @@ export default function QuizGameplayPage() {
             </p>
           </div>
           <div className='literacy-action'>
-            <button className='quiz-action-btn primary mt-4' onClick={() => setGameState('question')} style={{ marginTop: '2px' }}>
+            <button className='quiz-action-btn primary mt-4' onClick={() => { playClick(); setGameState('question'); }} style={{ marginTop: '2px' }}>
               Lanjut ke Quiz &rarr;
             </button>
           </div>
@@ -298,7 +320,7 @@ export default function QuizGameplayPage() {
             <div style={{ textAlign: 'center', marginTop: '14px' }}>
             <button
               className='quiz-nav-btn back-btn'
-              onClick={() => setGameState('literacy')}
+              onClick={() => { playClick(); setGameState('literacy'); }}
               style={{
                 background: 'none',
                 border: 'none',
@@ -352,8 +374,8 @@ export default function QuizGameplayPage() {
       <HeartEmptyPopup 
         isOpen={showHeartPopup}
         mascotSrc={mascotByLevel[levelId]}
-        onRetry={handleResetLevel}
-        onBack={handleGameOverBack}
+        onRetry={() => { playClick(); handleResetLevel(); }}
+        onBack={() => { playClick(); handleGameOverBack(); }}
       />
 
       {/* Quit confirmation popup */}
@@ -369,10 +391,11 @@ export default function QuizGameplayPage() {
             <p className='quit-title'>
               Kamu yakin mau keluar?
             </p>
-            <button className='btn-continue-pill' onClick={() => setShowQuitPopup(false)}>
+            <button className='btn-continue-pill' onClick={() => { playClick(); setShowQuitPopup(false); }}>
               Lanjutkan Belajar
             </button>
             <button className='btn-quit-link' onClick={() => {
+              playClick();
               localStorage.removeItem(STORAGE_KEY);
               navigate(`/islands/${islandSlug}/quiz`);
             }}>
@@ -422,12 +445,14 @@ export default function QuizGameplayPage() {
 
       <div className='success-actions'>
         <button className='btn-pill-primary' onClick={() => {
+          playClick();
           localStorage.removeItem(STORAGE_KEY);
           navigate(`/islands/${islandSlug}/quiz?completedTopic=${topicId}&completedLevel=${levelId}`);
         }}>
           ← Kembali ke Topik
         </button>
         <button className='btn-pill-secondary' onClick={() => {
+          playClick();
           localStorage.removeItem(STORAGE_KEY);
           navigate('/quiz');
         }}>
