@@ -91,7 +91,9 @@ export default function QuizKulturPage() {
               🗺️ Petualangan Kultur Quiz
             </h2>
             <p className='welcome-subtitle'>
-              Jelajahi 8 pulau, 3 topik budaya, dan taklukkan tantangan quiz yang menantimu!
+              Jelajahi 8 pulau, 3 topik budaya, 
+              <br />
+             dan taklukkan tantangan quiz yang menantimu!
             </p>
 
             <div className='steps-container'>
