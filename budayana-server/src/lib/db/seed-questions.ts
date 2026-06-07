@@ -29,10 +29,10 @@ const questionsData: Record<string, any[]> = {
       id: 3,
       question: "Menurut cerita para ibu, apa yang suka dilakukan oleh Nenek Pakande?",
       options: [
-        "Menangkap anak-anak yang nakal",
-        "Memberikan hadiah kepada anak yang rajin",
+        "Menangkap anak-anak yang keluar rumah saat sore hari",
+        "Memberikan hadiah kepada anak yang rajin menolong",
         "Mengajak anak-anak bermain di ladang",
-        "Membantu warga desa memasak",
+        "Membantu warga desa memasak makanan lezat untuk warga",
       ],
       correctAnswer: 0,
     },
@@ -41,7 +41,7 @@ const questionsData: Record<string, any[]> = {
       question: "Bagaimana tanggapan anak-anak saat pertama kali mendengar cerita tentang Nenek Pakande?",
       options: [
         "Mereka menangis ketakutan dan langsung pulang",
-        "Mereka bersembunyi di dalam kamar",
+        "Mereka bersembunyi di dalam kamar dan mengunci pintu",
         "Mereka hanya tertawa dan menganggapnya cerita menakut-nakuti",
         "Mereka mencari Nenek Pakande ke dalam hutan",
       ],
@@ -132,7 +132,7 @@ const questionsData: Record<string, any[]> = {
       question: "Apa yang dilakukan Malin setiap pagi untuk membantu ibunya ketika masih kecil?",
       options: [
         "Membuat kapal dagang yang besar",
-        "Membeli pakaian baru di pasar",
+        "Membeli pakaian baru di pasar desa sebelah",
         "Menanam padi di sawah",
         "Mencari ikan dan menjemur hasil tangkapan",
       ],
@@ -208,7 +208,7 @@ const questionsData: Record<string, any[]> = {
       id: 9,
       question: "Apa yang terjadi pada alam sekitar sesaat setelah sang ibu berdoa menahan kepedihan?",
       options: [
-        "Matahari bersinar sangat terik",
+        "Matahari bersinar sangat terik dan makanan di dalam kapal menjadi basi",
         "Langit menjadi hitam pekat dan badai besar datang menggulung lautan",
         "Air laut tiba-tiba surut dan kering",
         "Turun salju yang sangat lebat di pantai",
@@ -219,9 +219,9 @@ const questionsData: Record<string, any[]> = {
       id: 10,
       question: "Benda apa yang ditemukan di tepi pantai setelah badai usai?",
       options: [
-        "Sebuah peti berisi emas murni",
+        "Sebuah peti kayu berisi emas murni",
         "Sebongkah batu besar menyerupai manusia yang bersujud",
-        "Pecahan kayu kapal yang berubah jadi rumah",
+        "Pecahan kayu kapal yang berubah jadi rumah yang besar",
         "Patung ikan lumba-lumba emas",
       ],
       correctAnswer: 1,
@@ -256,11 +256,11 @@ const questionsData: Record<string, any[]> = {
       question: "Mengapa Roro Jonggrang merasa terkejut dengan tawaran sang kesatria?",
       options: [
         "Karena dia tidak mau tinggal di dalam istana",
-        "Karena dia tidak menyukai sang kesatria yang telah merusak kerajaannya",
         "Karena dia ingin pergi merantau ke negeri seberang",
+        "Karena dia tidak menyukai sang kesatria yang telah merusak kerajaannya",
         "Karena dia belum mengenal sang kesatria",
       ],
-      correctAnswer: 1,
+      correctAnswer: 2,
     },
     {
       id: 4,
@@ -268,11 +268,11 @@ const questionsData: Record<string, any[]> = {
         "Apa syarat mustahil yang diajukan Roro Jonggrang agar ia bersedia menikah dengan Bandung Bondowoso?",
       options: [
         "Mencari batu sakti di tepi Sungai Mahakam",
-        "Membangun seribu candi dalam waktu satu malam",
         "Menangkap silumen penyu besar di pantai",
         "Mengumpulkan karung berisi emas murni",
+        "Membangun seribu candi dalam waktu satu malam",
       ],
-      correctAnswer: 1,
+      correctAnswer: 3,
     },
     {
       id: 5,
@@ -288,7 +288,11 @@ const questionsData: Record<string, any[]> = {
     {
       id: 6,
       question: "Daerah atau tempat manakah yang menjadi riuh oleh suara dentingan batu saat candi mulai dibangun?",
-      options: ["Halmahera", "Prambanan", "Sulawesi", "Sumba"],
+      options: [
+        "Halmahera", 
+        "Prambanan", 
+        "Sulawesi", 
+        "Sumba"],
       correctAnswer: 2,
     },
     {
@@ -317,7 +321,12 @@ const questionsData: Record<string, any[]> = {
     {
       id: 9,
       question: "Berapa jumlah candi yang berhasil dibangun oleh pasukan jin sebelum mereka panik dan pergi menghilang?",
-      options: ["1.000 candi", "998 candi", "999 candi", "500 candi"],
+      options: [
+        "1.000 candi", 
+        "998 candi", 
+        "999 candi", 
+        "500 candi"
+      ],
       correctAnswer: 2,
     },
     {
@@ -337,7 +346,11 @@ const questionsData: Record<string, any[]> = {
     {
       id: 1,
       question: "Di daerah manakah latar tempat cerita pemuda pemberani bernama Biwar ini terjadi?",
-      options: ["Pulau Sumba", "Halmahera Utara", "Tanah Papua", "Sulawesi"],
+      options: [
+        "Pulau Sumba", 
+        "Halmahera Utara", 
+        "Tanah Papua", 
+        "Sulawesi"],
       correctAnswer: 2,
     },
     {
@@ -354,7 +367,8 @@ const questionsData: Record<string, any[]> = {
     {
       id: 3,
       question: "Di manakah makhluk raksasa jahat itu tinggal?",
-      options: ["Di atas pohon beringin yang sepi", 
+      options: [
+        "Di atas pohon beringin yang sepi", 
         "Di dasar Sungai Mahakam", 
         "Di dalam gua besar dekat sungai", 
         "Di pulau seberang pantai"],
@@ -387,17 +401,21 @@ const questionsData: Record<string, any[]> = {
       question: "Apa saja senjata yang dibawa oleh Biwar saat bersiap pergi pagi-pagi sekali?",
       options: [
         "Tombak pusaka Numbu Ranggata dan batu sakti",
-        "Tombak, busur, dan panah",
         "Karung besar dan jaring ikan",
+        "Tombak, busur, dan anak panah",
         "Pedang panjang dan lentera",
       ],
-      correctAnswer: 1,
+      correctAnswer: 2,
     },
     {
       id: 7,
       question:
         "Bagian tubuh naga mana yang dibidik dan terkena anak panah Biwar hingga membuat naga itu berteriak kesakitan?",
-      options: ["Ekor naga", "Mata naga", "Kaki naga", "Sayap naga"],
+      options: [
+        "Ekor naga", 
+        "Mata naga", 
+        "Kaki naga", 
+        "Sayap naga"],
       correctAnswer: 1,
     },
     {
@@ -471,7 +489,7 @@ const questionsData: Record<string, any[]> = {
       question: "Siapa nama anak perempuan dan anak laki-laki yang dilaporkan hilang oleh keluarga mereka?",
       options: [
         "Bawang dan Kesuna",
-        "Malin dan Mita",
+        "Malindo dan Mitaloka",
         "Majojaru dan Magohiduuru",
         "Pakande dan Pesut",
       ],
@@ -492,9 +510,9 @@ const questionsData: Record<string, any[]> = {
       id: 6,
       question: "Apa yang dilakukan oleh Majojaru setiap kali ada kapal yang bersandar di pelabuhan?",
       options: [
-        "Membeli barang dagangan dari negeri seberang",
+        "Membeli barang dagangan dari negeri seberang untuk Magohiduuru",
         "Membantu awak kapal mengangkat barang-barang",
-        "Menangis di tepi dermaga karena takut laut",
+        "Majoraru menangis di tepi dermaga karena takut dengan air laut",
         "Datang mendekat dan bertanya tentang kabar Magohiduuru",
       ],
       correctAnswer: 3,
@@ -503,10 +521,11 @@ const questionsData: Record<string, any[]> = {
       id: 7,
       question:
         "Kabar buruk apa yang disampaikan oleh salah seorang awak kapal kepada Majojaru?",
-      options: ["Magohiduuru sudah menikah dengan gadis bangsawan", 
-        "Magohiduuru tidak mau pulang lagi ke Desa Mamuya", 
+      options: [
+        "Magohiduuru sudah menjadi raja di negeri seberang", 
+        "Magohiduuru tidak mau pulang lagi ke Desa Mamuya karena dia sudah berkeluarga", 
         "Kapal Magohiduuru karam dihantam badai besar dan tidak ada yang selamat", 
-        "Magohiduuru lupa ingatan dan tinggal di pelabuhan lain"],
+        "Magohiduuru lupa ingatan dan tinggal di pulau lain"],
       correctAnswer: 2,
     },
     {
@@ -516,17 +535,17 @@ const questionsData: Record<string, any[]> = {
         "Di dalam rumah kosong miliknya",
         "Di bawah pohon beringin yang sepi",
         "Di atas batu bekas lahar panas",
-        "Di atas kapal besar yang sedang merapat",
+        "Di dalam perahu kecil yang sedang berlabuh",
       ],
       correctAnswer: 1,
     },
     {
       id: 9,
-      question: "Apa yang dilakukan Biwar untuk mengalahkan naga raksasa itu saat sang naga mulai lelah dan lengah?",
+      question: "Berapa lama Majojaru menangis tanpa henti?",
       options: [
         "Satu jam berturut-turut",
         "Seminggu penuh tanpa istirahat",
-        "Tiga bulan lamanya",
+        "Tiga hari dua malam berturut-turut",
         "Dua hari dua malam berturut-turut",
       ],
       correctAnswer: 3,
@@ -565,7 +584,8 @@ const questionsData: Record<string, any[]> = {
     {
       id: 3,
       question: "Apa nama tombak pusaka yang digunakan petani untuk menjaga kebunnya di malam hari?",
-      options: ["Numbu Ranggata", 
+      options: [
+        "Numbu Ranggata", 
         "Watu Maladong", 
         "Keris Pusaka", 
         "Tombak Sumba"],
@@ -584,7 +604,7 @@ const questionsData: Record<string, any[]> = {
     },
     {
       id: 5,
-      question: "Benda apa yang harus dipanjat oleh petani jika ia ingin memanggil Penyu untuk pulang?",
+      question: "Dari mana petani harus memanggil penyu saat ia ingin pulang?",
       options: [
         "Pohon kelapa",
         "Pohon beringin",
@@ -608,7 +628,8 @@ const questionsData: Record<string, any[]> = {
       id: 7,
       question:
         "Siapakah tokoh di desa pulau seberang yang diceritakan sedang sakit karena luka aneh?",
-      options: ["Nenek tua pembuat ramuan", 
+      options: [
+        "Nenek tua pembuat ramuan", 
         "Anak dari petani rajin", 
         "Kepala Desa", 
         "Pengawal istana"],
@@ -619,7 +640,7 @@ const questionsData: Record<string, any[]> = {
       question: "Apa dua benda yang diminta oleh petani sebagai syarat untuk menyembuhkan luka aneh tersebut?",
       options: [
         "Emas murni dan pakaian indah",
-        "Ramuan nenek tua dan sayur-sayuran",
+        "Ramuan nenek tua dan sayur-sayuran segar",
         "Tombak miliknya dan batu sakti Watu Maladong",
         "Kapal besar dan seekor penyu",
       ],
@@ -653,7 +674,8 @@ const questionsData: Record<string, any[]> = {
     {
       id: 1,
       question: "Bagaimana sifat atau karakter yang dimiliki oleh Kesuna?",
-      options: ["Malas dan suka berbohong", 
+      options: [
+        "Malas dan suka berbohong", 
         "Rajin, jujur, dan suka membantu", 
         "Sombong dan suka memamerkan harta", 
         "Penakut dan sering menangis"],
@@ -673,7 +695,8 @@ const questionsData: Record<string, any[]> = {
     {
       id: 3,
       question: "Apa saja pekerjaan rumah yang diselesaikan oleh Kesuna saat orang tuanya pergi?",
-      options: ["Membersihkan kebun dan menanam bunga", 
+      options: [
+        "Membersihkan kebun dan menanam bunga", 
         "Menumbuk padi, mengayak, dan memasak", 
         "Mencuci pakaian dan menjahit baju", 
         "Membuat perhiasan emas di dapur"],
@@ -716,7 +739,8 @@ const questionsData: Record<string, any[]> = {
       id: 7,
       question:
         "Kejadian ajaib apa yang terjadi ketika burung tersebut mematuk tubuh Kesuna dengan lembut?",
-      options: ["Tubuh Kesuna menjadi sangat besar", 
+      options: [
+        "Tubuh Kesuna menjadi sangat besar", 
         "Muncul perhiasan emas dari bekas patukan burung", 
         "Tubuh Kesuna terluka dan mengeluarkan darah", 
         "Kesuna bisa terbang bersama burung tersebut"],
@@ -761,7 +785,11 @@ const questionsData: Record<string, any[]> = {
     {
       id: 1,
       question: "Di dekat sungai manakah latar tempat cerita ini terjadi?",
-      options: ["Sungai Kapuas", "Sungai Mahakam", "Sungai Musi", "Sungai Barito"],
+      options: [
+        "Sungai Kapuas", 
+        "Sungai Mahakam", 
+        "Sungai Musi", 
+        "Sungai Barito"],
       correctAnswer: 1,
     },
     {
@@ -778,7 +806,8 @@ const questionsData: Record<string, any[]> = {
     {
       id: 3,
       question: "Di manakah sang ayah pertama kali bertemu dengan wanita yang kemudian menjadi ibu tiri anak-anaknya?",
-      options: ["Di tepi sungai saat mencari ikan", 
+      options: [
+        "Di tepi sungai saat mencari ikan", 
         "Di sebuah pasar tradisional", 
         "Di sebuah pesta desa", 
         "Di dalam hutan saat mencari kayu"],
@@ -789,7 +818,7 @@ const questionsData: Record<string, any[]> = {
       question: "Apa yang dilakukan oleh ibu tiri kepada kedua anak tersebut ketika sang ayah pergi bekerja?",
       options: [
         "Memaksa mereka bekerja tanpa makan dan memfitnah mereka malas",
-        "Mengajari mereka menari dan menyanyi",
+        "Mengajari mereka menari dan menyanyi dengan indah seperti ibu tiri",
         "Mengajak mereka berlibur ke pesta desa",
         "Membelikan mereka pakaian baru yang indah",
       ],
@@ -799,10 +828,10 @@ const questionsData: Record<string, any[]> = {
       id: 5,
       question: "Tugas apa yang diperintahkan oleh ibu tiri kepada kedua anak itu sebelum dia pergi meninggalkan rumah?",
       options: [
-        "Memasak bubur yang banyak di dapur",
+        "Mencuci pakaian hingga bersih tanpa ada noda sedikit pun",
         "Mencari kayu dua kali lebih banyak dari biasanya",
         "Membersihkan seluruh halaman rumah",
-        "Mencari ikan di Sungai Mahakam",
+        "Mencari 100 ekor ikan di Sungai Mahakam",
       ],
       correctAnswer: 1,
     },
@@ -811,7 +840,7 @@ const questionsData: Record<string, any[]> = {
       question: "Apa yang ditemukan oleh kedua anak tersebut ketika mereka pulang setelah mencari kayu?",
       options: [
         "Ayah dan ibu tiri sedang menunggu mereka sambil makan",
-        "Ibu tiri sedang memasak ikan di dapur",
+        "Ibu tiri sedang memasak ikan yang ditangkap dari sungai",
         "Rumah mereka dipenuhi oleh warga desa",
         "Rumah sudah kosong dan semua barang telah dibawa pergi",
       ],
@@ -821,9 +850,10 @@ const questionsData: Record<string, any[]> = {
       id: 7,
       question:
         "Apa yang ditemukan kedua anak itu di dalam dapur sebuah rumah kecil setelah berjalan berhari-hari mencari ayahnya?",
-      options: ["Buah-buahan yang segar", 
+      options: [
+        "Buah-buahan yang segar", 
         "Bubur panas yang sedang dimasak", 
-        "Ikan goreng yang lezat", 
+        "Ikan goreng yang banyak dan lezat", 
         "Air minum yang dingin"],
       correctAnswer: 1,
     },
@@ -833,7 +863,7 @@ const questionsData: Record<string, any[]> = {
       options: [
         "Tubuh mereka terasa sangat dingin dan menggigil",
         "Mereka langsung tertidur pulas karena kenyang",
-        "Tubuh mereka terasa panas hingga panik",
+        "Tubuh mereka terasa panas bagaikan terbakar",
         "Mereka menjadi sangat kuat dan bersemangat",
       ],
       correctAnswer: 2,
@@ -843,7 +873,7 @@ const questionsData: Record<string, any[]> = {
       question: "Ke mana kedua anak itu berlari dan melompat untuk meredakan rasa panas di tubuh mereka?",
       options: [
         "Ke dalam hutan yang rindang",
-        "Ke dalam Sungai Mahakam",
+        "Ke dalam sungai",
         "Ke atas gunung yang sejuk",
         "Ke dalam sumur tua di belakang rumah",
       ],
@@ -855,7 +885,7 @@ const questionsData: Record<string, any[]> = {
       options: [
         "Dua ekor burung yang terbang tinggi ke langit",
         "Dua bongkah batu besar di tepi sungai",
-        "Dua makhluk seperti ikan berwajah manusia yang berenang di air",
+        "Dua makhluk seperti ikan berwajah manusia",
         "Dua ekor buaya raksasa yang menjaga sungai",
       ],
       correctAnswer: 2,
