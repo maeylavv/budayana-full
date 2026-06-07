@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react"
 import { useLocation } from "react-router-dom"
+import { useMusic } from "../context/MusicContext"
 
 /**
  * Background music component with autoplay policy handling
@@ -9,6 +10,7 @@ import { useLocation } from "react-router-dom"
 export default function BackgroundMusic() {
   const location = useLocation()
   const audioRef = useRef(null)
+  const { isMuted } = useMusic()
   const [hasInteracted, setHasInteracted] = useState(false)
 
   // Determine if music should pause based on current route
@@ -36,6 +38,9 @@ export default function BackgroundMusic() {
       audioNode.pause()
     } else {
       audioNode.volume = 0.3
+      // Set muted state based on global setting and interaction
+      audioNode.muted = isMuted || !hasInteracted
+      
       // Try to play (may fail due to autoplay policy if no interaction yet)
       const playPromise = audioNode.play()
       if (playPromise !== undefined) {
@@ -44,7 +49,7 @@ export default function BackgroundMusic() {
         })
       }
     }
-  }, [shouldPause, location.pathname])
+  }, [shouldPause, location.pathname, isMuted, hasInteracted])
 
   useEffect(() => {
     const audioNode = audioRef.current;
@@ -54,7 +59,7 @@ export default function BackgroundMusic() {
     const handleInteraction = () => {
       if (!hasInteracted) {
         setHasInteracted(true)
-        audioNode.muted = false
+        audioNode.muted = isMuted
         if (!shouldPause) {
           audioNode.play().catch(() => {})
         }
@@ -73,14 +78,14 @@ export default function BackgroundMusic() {
       document.removeEventListener("keydown", handleInteraction)
       document.removeEventListener("touchstart", handleInteraction)
     }
-  }, [hasInteracted, shouldPause])
+  }, [hasInteracted, shouldPause, isMuted])
 
   return (
     <audio
       ref={audioRef}
       src='/assets/budayana/music/Into the Wild.mp3'
       loop
-      muted
+      muted={isMuted || !hasInteracted}
       style={{ display: 'none' }}
     />
   )

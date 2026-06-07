@@ -4,6 +4,7 @@ import "./QuizKulturPage.css"
 import ToggleMenu from "../components/ToggleMenu"
 import MapUI from "../components/MapUI"
 import { islands as staticIslands } from "../data/islands"
+import MusicToggleButton from "../components/MusicToggleButton"
 
 export default function QuizKulturPage() {
   const navigate = useNavigate()
@@ -54,15 +55,16 @@ export default function QuizKulturPage() {
     <div className='page quiz-page'>
       {/* HEADER */}
       <div className='header'>
-        <div className="toggle-wrapper" style={{ zIndex: 10 }}>
+        <div className="toggle-wrapper" style={{ zIndex: 10, display: "flex", alignItems: "center", gap: "15px" }}>
           <ToggleMenu />
+          <MusicToggleButton />
         </div>
 
         <div className='gameName'>
           <img src='/assets/budayana/islands/Game Name.png' alt='Budayana' />
         </div>
 
-        <div className='profile' onClick={goToProfile}>
+        <div className='profile' onClick={goToProfile} title="Buka Profil">
           <img src='/assets/budayana/islands/Profile.png' alt='Profil' />
         </div>
       </div>

@@ -24,6 +24,11 @@
 
 .sidebar-logo img {
   cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.sidebar-logo img:hover {
+  transform: scale(1.1);
 }
 
 .sidebar-menu {

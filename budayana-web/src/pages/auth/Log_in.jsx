@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query"
 import { authClient } from "../../lib/auth-client"
 import CookieBlockedPopup from "../../components/CookieBlockedPopup"
 import PortalRedirectPopup from "../../components/PortalRedirectPopup"
+import MusicToggleButton from "../../components/MusicToggleButton.jsx"
 
 export default function Login() {
   const navigate = useNavigate()
@@ -134,12 +135,15 @@ export default function Login() {
 
   return (
     <div className='signin_page'>
-      <button className='back_button' onClick={() => navigate("/")}>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M19 12H5M12 19l-7-7 7-7" />
-        </svg>
-        Kembali
-      </button>
+      <div className="auth-header-controls">
+        <button className='back_button' onClick={() => navigate("/")}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+          Kembali
+        </button>
+        <MusicToggleButton />
+      </div>
 
       <div className='redirect'>
         <p>Belum punya akun?</p>

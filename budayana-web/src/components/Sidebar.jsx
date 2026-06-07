@@ -56,7 +56,7 @@ export default function Sidebar() {
 
       <aside className={`sidebar ${isOpen ? "open" : ""}`}>
         <div className='sidebar-logo'>
-          <img src="/assets/budayana/islands/Budayana text.png" alt="Budayana" onClick={goToHome} />
+          <img src="/assets/budayana/islands/Budayana text.png" alt="Budayana" onClick={goToHome} title="Kembali ke Peta Nusantara" />
         </div>
 
         <nav className='sidebar-menu'>

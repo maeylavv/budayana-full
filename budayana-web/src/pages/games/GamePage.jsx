@@ -252,16 +252,36 @@ export default function GamePage() {
     allQuestions.forEach((q) => {
       const log = latestLogsByQuestion[q.id]
       if (log) {
-        // Find the option index by matching userAnswerText with option text
-        const optionIndex = q.answerOptions?.findIndex(
-          (opt) => opt.optionText === log.userAnswerText
-        )
-        if (optionIndex !== -1) {
-          restoredAnswers[q.id] = {
-            choiceIndex: optionIndex,
-            isCorrect: log.isCorrect,
-            optionId: q.answerOptions[optionIndex]?.id,
-            pending: false,
+        if (q.questionType === "DRAG_DROP") {
+          try {
+            const parsedOrder = JSON.parse(log.userAnswerText)
+            if (Array.isArray(parsedOrder)) {
+              restoredAnswers[q.id] = {
+                isCorrect: log.isCorrect,
+                pending: false,
+                order: parsedOrder,
+              }
+              // Restore drag-drop order state
+              setDragDropOrder((prev) => ({
+                ...prev,
+                [q.id]: parsedOrder,
+              }))
+            }
+          } catch (e) {
+            console.warn("Failed to parse restored drag-drop order:", e)
+          }
+        } else {
+          // Find the option index by matching userAnswerText with option text
+          const optionIndex = q.answerOptions?.findIndex(
+            (opt) => opt.optionText === log.userAnswerText
+          )
+          if (optionIndex !== -1) {
+            restoredAnswers[q.id] = {
+              choiceIndex: optionIndex,
+              isCorrect: log.isCorrect,
+              optionId: q.answerOptions[optionIndex]?.id,
+              pending: false,
+            }
           }
         }
       }
@@ -271,6 +291,7 @@ export default function GamePage() {
       setAnswers((prev) => ({ ...prev, ...restoredAnswers }))
     }
   }
+
 
   // Start Attempt
   const startAttemptRef = useRef(false)
@@ -403,9 +424,10 @@ export default function GamePage() {
   }
 
   // Handle Answer Selection
-  const handleAnswer = (question, choiceIndex) => {
+  const handleAnswer = async (question, choiceIndex) => {
     // Prevent changing answer if already correct
     if (answers[question.id]?.isCorrect) return
+    if (!attemptId) return
 
     const selectedOption = question.answerOptions[choiceIndex]
 
@@ -420,54 +442,47 @@ export default function GamePage() {
       },
     }))
 
-    // API Log - correctness comes from API response
-    if (!attemptId) return
-
-    addQuestionLog.mutate(
-      {
+    try {
+      const response = await addQuestionLog.mutateAsync({
         attemptId,
         logData: {
           questionId: question.id,
           selectedOptionId: selectedOption.id,
           attemptCount: 1,
         },
-      },
-      {
-        onSuccess: (response) => {
-          // Update answer with actual correctness from API
-          setAnswers((prev) => ({
-            ...prev,
-            [question.id]: {
-              choiceIndex,
-              isCorrect: response.isCorrect,
-              optionId: selectedOption.id,
-              pending: false,
-            },
-          }))
+      })
 
-          if (!response.isCorrect) {
-            setLastIncorrectQuestionId(question.id)
-            setShowIncorrectPopup(true)
-            setIncorrectAttempts(prev => {
-              const newSet = new Set(prev)
-              newSet.add(question.id)
-              return newSet
-            })
-          }
+      // Update answer with actual correctness from API
+      setAnswers((prev) => ({
+        ...prev,
+        [question.id]: {
+          choiceIndex,
+          isCorrect: response.isCorrect,
+          optionId: selectedOption.id,
+          pending: false,
         },
-        onError: (err) => {
-          console.error("Failed to log answer:", err)
-          // Reset pending state on error
-          setAnswers((prev) => ({
-            ...prev,
-            [question.id]: {
-              ...prev[question.id],
-              pending: false,
-            },
-          }))
-        },
+      }))
+
+      if (!response.isCorrect) {
+        setLastIncorrectQuestionId(question.id)
+        setShowIncorrectPopup(true)
+        setIncorrectAttempts((prev) => {
+          const newSet = new Set(prev)
+          newSet.add(question.id)
+          return newSet
+        })
       }
-    )
+    } catch (err) {
+      console.error("Failed to log answer:", err)
+      // Reset pending state on error
+      setAnswers((prev) => ({
+        ...prev,
+        [question.id]: {
+          ...prev[question.id],
+          pending: false,
+        },
+      }))
+    }
   }
 
   // Finish Logic
@@ -558,9 +573,55 @@ export default function GamePage() {
     navigate(`/home?island=${islandSlug}`)
   }
 
+  const isAttemptLoading = !attemptId && !isResultsPage
+
   // Render Loading
-  if (isStoryLoading)
-    return <div className='text-center p-10'>Memuat permainan...</div>
+  if ((isStoryLoading || isAttemptLoading) && !isResultsPage && !startAttempt.isError) {
+    return (
+      <div className='min-h-screen bg-[#fdf4d7] flex items-center justify-center'>
+        <div className='text-center'>
+          <div className='animate-spin rounded-full h-16 w-16 border-b-4 border-[#f88c63] mx-auto mb-4'></div>
+          <p className='text-xl font-semibold text-[#2c2c2c]'>
+            {isStoryLoading ? "Memuat cerita..." : "Menyiapkan permainan..."}
+          </p>
+        </div>
+      </div>
+    )
+  }
+
+  // Render Error
+  if (startAttempt.isError && !isResultsPage) {
+    return (
+      <div className='min-h-screen bg-[#fdf4d7] flex items-center justify-center'>
+        <div className='text-center p-6 bg-white rounded-3xl border-3 border-[#2c2c2c] shadow-xl max-w-md mx-auto'>
+          <h1 className='text-2xl font-bold text-[#e64c45] mb-4'>
+            Sesi Bermasalah
+          </h1>
+          <p className='text-[#2c2c2c] mb-6'>
+            {startAttempt.error?.message || "Gagal menghubungkan ke server untuk memulai sesi permainan."}
+          </p>
+          <div className='flex gap-3 justify-center'>
+            <button
+              onClick={() => {
+                startAttemptRef.current = false
+                navigate(0) // Reload the page/route to try again
+              }}
+              className='bg-[#4fb986] text-white px-6 py-2.5 rounded-full font-semibold hover:opacity-90 transition'
+            >
+              Coba Lagi
+            </button>
+            <button
+              onClick={() => navigate(`/home?island=${islandSlug}`)}
+              className='bg-gray-400 text-white px-6 py-2.5 rounded-full font-semibold hover:opacity-90 transition'
+            >
+              Kembali
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   if (!story) return <div className='text-center p-10'>Story not found</div>
 
   /* ---------------- RENDER HELPERS ---------------- */
@@ -665,7 +726,7 @@ export default function GamePage() {
           <img
             src={pageData.imageUrl}
             alt='Interactive Story'
-            className='w-full max-h-[200px] md:max-h-[700px] object-contain'
+            className='w-full max-h-[190px] md:max-h-[630px] object-contain'
           />
         ) : (
           <div className='text-center p-8 text-gray-400'>
@@ -750,7 +811,7 @@ export default function GamePage() {
       })
     }
 
-    const handleCheckAnswer = () => {
+    const handleCheckAnswer = async () => {
       const order = dragDropOrder[questionId] || []
       const filledSlots = order.filter((id) => id !== null)
 
@@ -766,34 +827,49 @@ export default function GamePage() {
         [questionId]: { isCorrect: null, pending: true, order },
       }))
 
-      // Check locally (since drag-drop doesn't have an API endpoint for checking)
-      // Compare order with correctOrder
-      const isCorrect = order.every((id, idx) => id === correctOrder[idx])
+      if (!attemptId) return
 
-      // Simulate API response delay for consistency
-      setTimeout(() => {
+      try {
+        const response = await addQuestionLog.mutateAsync({
+          attemptId,
+          logData: {
+            questionId,
+            userAnswerText: JSON.stringify(order),
+            attemptCount: 1,
+          },
+        })
+
         setAnswers((prev) => ({
           ...prev,
-          [questionId]: { isCorrect, pending: false, order },
+          [questionId]: { isCorrect: response.isCorrect, pending: false, order },
         }))
 
-        if (!isCorrect) {
+        if (!response.isCorrect) {
           setLastIncorrectQuestionId(questionId)
           setShowIncorrectPopup(true)
-          setIncorrectAttempts(prev => {
+          setIncorrectAttempts((prev) => {
             const newSet = new Set(prev)
             newSet.add(questionId)
             return newSet
           })
         }
-      }, 300)
+      } catch (err) {
+        console.error("Failed to log drag-drop answer:", err)
+        setAnswers((prev) => ({
+          ...prev,
+          [questionId]: {
+            ...prev[questionId],
+            pending: false,
+          },
+        }))
+      }
     }
 
     return (
       <div className='flex flex-col gap-4 md:gap-6'>
         <div>
           <div className='flex flex-col md:flex-row md:items-center md:justify-between mb-3 gap-3'>
-            <p className='text-sm font-semibold text-[#2c2c2c]'>
+            <p className='text-base md:text-lg font-semibold text-[#2c2c2c]'>
               Urutkan kejadian di bawah ini:
             </p>
             <button
@@ -866,7 +942,7 @@ export default function GamePage() {
                     </div>
                     {item ? (
                       <div className='flex flex-col items-center gap-2 w-full'>
-                        <span className='text-sm font-semibold text-[#1f1f1f] text-center px-2'>
+                        <span className='text-base font-semibold text-[#1f1f1f] text-center px-2'>
                           {item.label}
                         </span>
                         {!isLocked && (
@@ -889,12 +965,12 @@ export default function GamePage() {
           </div>
 
           {isIncorrect && (
-            <p className='text-[#E9645F] font-semibold text-sm mt-3'>
+            <p className='text-[#E9645F] font-semibold text-base mt-3'>
               Item yang ditandai merah perlu dipindahkan ke posisi yang tepat.
             </p>
           )}
           {isLocked && (
-            <p className='text-[#7BC142] font-semibold text-sm mt-3 flex items-center'>
+            <p className='text-[#7BC142] font-semibold text-base mt-3 flex items-center'>
               Sempurna! Semua urutan sudah benar!
               <span className='inline-flex items-center justify-center w-8 h-8 md:w-9 md:h-9 rounded-full bg-[#7BC142] text-white font-bold ml-2'>
                 <Check size={18} strokeWidth={3} color='#ffffff' />
@@ -906,7 +982,7 @@ export default function GamePage() {
         {/* Available items to drag */}
         {availableItems.length > 0 && !isLocked && (
           <div>
-            <p className='text-sm font-semibold text-[#2c2c2c] mb-3'>
+            <p className='text-base md:text-lg font-semibold text-[#2c2c2c] mb-3'>
               Pilih kejadian:
             </p>
             <div className='grid grid-cols-2 md:grid-cols-5 gap-2 md:gap-3'>
@@ -918,7 +994,7 @@ export default function GamePage() {
                     key={item.id}
                     draggable
                     onDragStart={(e) => handleDragStart(e, item.id)}
-                    className='rounded-xl px-3 py-4 md:px-4 md:py-3 shadow text-center font-semibold cursor-move text-[#1f1f1f] transition hover:scale-105 text-sm border-2 border-[#2c2c2c]'
+                    className='rounded-xl px-3 py-4 md:px-4 md:py-3 shadow text-center font-semibold cursor-move text-[#1f1f1f] transition hover:scale-105 text-base border-2 border-[#2c2c2c]'
                     style={{ backgroundColor: color }}
                   >
                     {item.label}
@@ -1186,26 +1262,63 @@ export default function GamePage() {
     <div className='min-h-screen bg-[#fdf4d7] flex flex-col p-4'>
       {renderHeader()}
 
-      <div className='flex-1 flex items-center justify-center'>
-        {isResultsPage
-          ? renderResults()
-          : isStory
-            ? renderStoryPage(currentPageData)
-            : isImage
-              ? renderImagePage(currentPageData)
-              : isQuestion
-                ? renderQuestionPage(currentPageData)
-                : isEnding
-                  ? renderEndingPage()
-                  : null}
+      <div className='flex-1 flex items-center justify-center w-full max-w-7xl mx-auto relative lg:px-44'>
+        <div className='relative w-full max-w-5xl mx-auto flex items-center justify-center'>
+          {/* On desktop/horizontal tablet: Left button */}
+          {!isResultsPage && (
+            <button
+              onClick={goPrev}
+              disabled={currentPageIndex === 0}
+              style={{ top: "50%", transform: "translateY(-50%)" }}
+              className='hidden lg:flex items-center gap-2 px-6 py-3 rounded-full text-white font-semibold transition disabled:opacity-50 disabled:bg-[#ccc] disabled:cursor-not-allowed bg-[#f27f68] hover:bg-[#d96750] cursor-pointer absolute right-[calc(100%+2rem)] whitespace-nowrap'
+            >
+              <ArrowLeft size={20} /> Sebelumnya
+            </button>
+          )}
+
+          {isResultsPage
+            ? renderResults()
+            : isStory
+              ? renderStoryPage(currentPageData)
+              : isImage
+                ? renderImagePage(currentPageData)
+                : isQuestion
+                  ? renderQuestionPage(currentPageData)
+                  : isEnding
+                    ? renderEndingPage()
+                    : null}
+
+          {/* On desktop/horizontal tablet: Right button */}
+          {!isResultsPage && (
+            <button
+              onClick={goNext}
+              disabled={(isQuestion && answers[currentPageData?.question?.id]?.isCorrect !== true) || isSubmitting}
+              style={{ top: "50%", transform: "translateY(-50%)" }}
+              className={`hidden lg:flex items-center gap-2 px-6 py-3 rounded-full text-white font-semibold transition ${(isQuestion && answers[currentPageData?.question?.id]?.isCorrect !== true) || isSubmitting
+                ? "bg-gray-400 cursor-not-allowed opacity-70"
+                : "bg-[#4fb986] hover:bg-[#3ea572] cursor-pointer"
+                } absolute left-[calc(100%+2rem)] whitespace-nowrap`}
+            >
+              {isQuestion && answers[currentPageData?.question?.id]?.pending ? (
+                "Memproses..."
+              ) : isSubmitting ? (
+                "Menyimpan..."
+              ) : (
+                <>
+                  {isLastPage ? "Selesai" : "Berikutnya"} <ArrowRight size={20} />
+                </>
+              )}
+            </button>
+          )}
+        </div>
       </div>
 
       {!isResultsPage && (
-        <div className='w-full max-w-5xl mx-auto mt-6 flex justify-between'>
+        <div className='w-full max-w-5xl mx-auto mt-6 flex justify-between lg:hidden'>
           <button
             onClick={goPrev}
             disabled={currentPageIndex === 0}
-            className='flex items-center gap-2 px-6 py-3 rounded-full text-white font-semibold transition disabled:opacity-50 disabled:bg-[#ccc] bg-[#f27f68]'
+            className='flex items-center gap-2 px-6 py-3 rounded-full text-white font-semibold transition disabled:opacity-50 disabled:bg-[#ccc] disabled:cursor-not-allowed bg-[#f27f68] hover:bg-[#d96750] cursor-pointer'
           >
             <ArrowLeft size={20} /> Sebelumnya
           </button>
@@ -1214,7 +1327,7 @@ export default function GamePage() {
             disabled={(isQuestion && answers[currentPageData?.question?.id]?.isCorrect !== true) || isSubmitting}
             className={`flex items-center gap-2 px-6 py-3 rounded-full text-white font-semibold transition ${(isQuestion && answers[currentPageData?.question?.id]?.isCorrect !== true) || isSubmitting
               ? "bg-gray-400 cursor-not-allowed opacity-70"
-              : "bg-[#4fb986]"
+              : "bg-[#4fb986] hover:bg-[#3ea572] cursor-pointer"
               }`}
           >
             {isQuestion && answers[currentPageData?.question?.id]?.pending ? (

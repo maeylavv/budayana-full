@@ -259,7 +259,11 @@ const HomePage = () => {
         />
       </div>
 
-      <button className='absolute top-6 right-6 rounded-full border-2 border-[#c3874b] bg-[#fdf0dd] shadow px-2 py-2'>
+      <button 
+        onClick={() => navigate("/profile")} 
+        title="Buka Profil" 
+        className='absolute top-6 right-6 rounded-full border-2 border-[#c3874b] bg-[#fdf0dd] shadow px-2 py-2'
+      >
         <img
           src='/assets/budayana/islands/Profile.png'
           alt='Profile'
