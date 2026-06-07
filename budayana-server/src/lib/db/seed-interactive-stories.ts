@@ -48,9 +48,9 @@ const interactiveStoryData: Record<string, InteractiveStoryData> = {
         questionType: QuestionType.MCQ,
         questionText: "Apa yang sedang dilakukan oleh anak-anak tersebut?",
         options: [
-          { text: "Berlari-larian", isCorrect: true },
-          { text: "Main layangan", isCorrect: false },
-          { text: "Main kelereng", isCorrect: false },
+          { text: "Berlari-lari", isCorrect: true },
+          { text: "Bermain layangan", isCorrect: false },
+          { text: "Bermain kelereng", isCorrect: false },
           { text: "Memancing", isCorrect: false },
         ],
       },
@@ -60,8 +60,8 @@ const interactiveStoryData: Record<string, InteractiveStoryData> = {
         questionText:
           "Apakah anak-anak itu langsung pulang saat waktu sore tiba?",
         options: [
-          { text: "Benar", isCorrect: false },
-          { text: "Salah", isCorrect: true },
+          { text: "Iya", isCorrect: false },
+          { text: "Tidak", isCorrect: true },
         ],
       },
       {
@@ -93,11 +93,11 @@ const interactiveStoryData: Record<string, InteractiveStoryData> = {
           "Urutkan kejadian apa saja yang terjadi pada cerita nenek Pakande!",
         metadata: {
           items: [
-            { id: "search", label: "Anak-anak ketakutan" },
-            { id: "play", label: "Anak-anak bermain di ladang" },
-            { id: "home", label: "Warga mencari anak-anak" },
-            { id: "appear", label: "Nenek Pakande muncul" },
-            { id: "sunset", label: "Sore hari mulai datang" },
+            { id: "search", label: "Warga desa mencari anak-anak yang hilang" },
+            { id: "play", label: "Anak-anak bermain sambil menertawakan nasihat ibu" },
+            { id: "home", label: "Orang tua melarang anak keluar malam karena Nenek Pakande mengintai" },
+            { id: "appear", label: "Nenek Pakande muncul dan menculik anak-anak" },
+            { id: "sunset", label: "Sore mulai datang dan anak-anak masih bermain" },
           ],
           correctOrder: ["play", "sunset", "appear", "search", "home"],
         },
@@ -106,7 +106,7 @@ const interactiveStoryData: Record<string, InteractiveStoryData> = {
         slideNumber: 11,
         questionType: QuestionType.ESSAY,
         questionText:
-          "Apa pesan moral yang bisa di ambil dari cerita tersebut?",
+          "Menurutmu, mengapa Nenek Pakande menculik anak-anak yang bermain pada waktu sore hari?",
         isBonus: true,
       },
     ],
@@ -125,12 +125,12 @@ const interactiveStoryData: Record<string, InteractiveStoryData> = {
       {
         slideNumber: 2,
         questionType: QuestionType.MCQ,
-        questionText: "Apa yang dilakukan Kesuna saat orang tua pergi ke sawah?",
+        questionText: "Kemana kedua orang tua Kesuna dan Bawang pergi??",
         options: [
-          { text: "Mengerjakan semua pekerjaan rumah sendirian", isCorrect: true },
-          { text: "Bermain di luar rumah", isCorrect: false },
-          { text: "Tidur di rumah seharian", isCorrect: false },
-          { text: "Pergi ke hutan", isCorrect: false },
+          { text: "Gunung", isCorrect: false },
+          { text: "Sawah", isCorrect: true },
+          { text: "Pasar", isCorrect: false },
+          { text: "Pesisir Pantai", isCorrect: false },
         ],
       },
       {
@@ -139,8 +139,8 @@ const interactiveStoryData: Record<string, InteractiveStoryData> = {
         questionText:
           "Apakah ayah percaya cerita Bawang dan mengusir Kesuna dari rumah?",
         options: [
-          { text: "Benar", isCorrect: true },
-          { text: "Salah", isCorrect: false },
+          { text: "Iya", isCorrect: true },
+          { text: "Tidak", isCorrect: false },
         ],
       },
       {
@@ -150,7 +150,7 @@ const interactiveStoryData: Record<string, InteractiveStoryData> = {
         options: [
           { text: "Muncul perhiasan emas dari bekas patukan", isCorrect: true },
           { text: "Kesuna merasa kesakitan", isCorrect: false },
-          { text: "Burung itu membawa terbang Kesuna", isCorrect: false },
+          { text: "Burung itu terbang membawa Kesuna", isCorrect: false },
           { text: "Kesuna berubah menjadi burung", isCorrect: false },
         ],
       },
@@ -159,33 +159,32 @@ const interactiveStoryData: Record<string, InteractiveStoryData> = {
         questionType: QuestionType.MCQ,
         questionText: "Apa yang terjadi saat burung mematuk tubuh Bawang?",
         options: [
-          { text: "Bawang mendapat lebih banyak emas", isCorrect: false },
           { text: "Bawang berubah menjadi burung", isCorrect: false },
-          { text: "Tubuh Bawang terluka dan tidak mendapat emas", isCorrect: true },
-          { text: "Bawang bisa terbang seperti burung", isCorrect: false },
+          { text: "Bawang mendapat lebih banyak emas", isCorrect: false },
+          { text: "Bawang dilukai oleh burung", isCorrect: true },
+          { text: "Bawang bisa terbang", isCorrect: false },
         ],
       },
       {
         slideNumber: 10,
         questionType: QuestionType.DRAG_DROP,
-        questionText:
-          "Urutkan kejadian apa saja yang terjadi pada cerita nenek Pakande!",
+        questionText: "Urutkan kejadian apa saja yang terjadi pada cerita Bawang dan Kesuna!",
         metadata: {
           items: [
-            { id: "report", label: "Bawang melapor ke orang tua tentang Kesuna" },
-            { id: "chores", label: "Kesuna mengerjakan pekerjaan rumah sendirian" },
-            { id: "hurt", label: "Bawang terluka akibat patukan burung" },
-            { id: "forest", label: "Kesuna pergi ke hutan sambil menangis" },
-            { id: "gold", label: "Kesuna mendapat perhiasan dari patukan burung" },
+            { id: "gold", label: "Kesuna mendapat perhiasan emas dari burung ajaib" },
+            { id: "lie", label: "Bawang memfitnah Kesuna hingga diusir ke hutan" },
+            { id: "hurt", label: "Bawang terluka akibat patukan burung ajaib" },
+            { id: "work", label: "Kesuna patuh untuk membersihkan rumah dan Bawang bermalas-malasan" },
+            { id: "sad", label: "Bawang pulang dengan menyesal dan Kesuna hidup tenang dengan Nenek" },
           ],
-          correctOrder: ["chores", "report", "forest", "gold", "hurt"],
+          correctOrder: ["work", "lie", "gold", "hurt", "sad"],
         },
       },
       {
         slideNumber: 11,
         questionType: QuestionType.ESSAY,
         questionText:
-          "Apa pesan moral yang bisa di ambil dari cerita tersebut?",
+          "Menurutmu, mengapa Bawang tidak mendapatkan emas seperti Kesuna?",
         isBonus: true,
       },
     ],
@@ -215,10 +214,10 @@ const interactiveStoryData: Record<string, InteractiveStoryData> = {
       {
         slideNumber: 4,
         questionType: QuestionType.TRUE_FALSE,
-        questionText: "Apakah ibu malin selalu memarahi malin?",
+        questionText: "Apakah ibu mengizinkan Malin pergi berlayar?",
         options: [
-          { text: "Benar", isCorrect: false },
-          { text: "Salah", isCorrect: true },
+          { text: "Iya", isCorrect: true },
+          { text: "Tidak", isCorrect: false },
         ],
       },
       {
@@ -251,12 +250,12 @@ const interactiveStoryData: Record<string, InteractiveStoryData> = {
         metadata: {
           items: [
             { id: "stone", label: "Malin dikutuk menjadi batu" },
-            { id: "leave", label: "Malin tinggal bersama ibunya" },
+            { id: "live", label: "Malin tinggal bersama ibunya" },
             { id: "ship", label: "Malin menjadi saudagar kaya" },
             { id: "miss", label: "Malin pergi merantau" },
             { id: "deny", label: "Malin mengingkari ibunya" },
           ],
-          correctOrder: ["leave", "miss", "ship", "deny", "stone"],
+          correctOrder: ["live", "miss", "ship", "deny", "stone"],
         },
       },
     ],
@@ -286,10 +285,10 @@ const interactiveStoryData: Record<string, InteractiveStoryData> = {
       {
         slideNumber: 4,
         questionType: QuestionType.TRUE_FALSE,
-        questionText: "Apakah siluman penyu membawa petani ke pulau seberang?",
+        questionText: "Apakah siluman penyu membawa petani ke pasar ikan?",
         options: [
-          { text: "Benar", isCorrect: true },
-          { text: "Salah", isCorrect: false },
+          { text: "Iya", isCorrect: false },
+          { text: "Tidak", isCorrect: true },
         ],
       },
       {
@@ -298,7 +297,7 @@ const interactiveStoryData: Record<string, InteractiveStoryData> = {
         questionText: "Apa yang diberikan nenek tua kepada petani?",
         options: [
           { text: "Ramuan dan pesan untuk meminta tombak serta Watu Maladong", isCorrect: true },
-          { text: "Makanan dan minuman untuk mengobati luka", isCorrect: false },
+          { text: "Makanan dan minuman", isCorrect: false },
           { text: "Pakaian dan senjata baru", isCorrect: false },
           { text: "Peta menuju desa kepala desa", isCorrect: false },
         ],
@@ -320,11 +319,11 @@ const interactiveStoryData: Record<string, InteractiveStoryData> = {
         questionText: "Urutkan kejadian apa saja yang terjadi pada cerita Watu Maladong!",
         metadata: {
           items: [
-            { id: "water", label: "Mata air muncul dari batu sakti" },
-            { id: "turtle", label: "Petani naik punggung siluman penyu" },
-            { id: "farm", label: "Kebun petani dirusak babi hutan" },
-            { id: "fight", label: "Petani bertarung dengan kepala desa" },
-            { id: "grandma", label: "Petani bertemu dengan Nenek tua" },
+            { id: "water", label: "Watu Maladong mengeluarkan air dari dalam tanah" },
+            { id: "turtle", label: "Penyu mengantar petani ke pulau seberang" },
+            { id: "farm", label: "Babi hutan merusak kebun petani" },
+            { id: "fight", label: "Petani mengalahkan kepala desa" },
+            { id: "grandma", label: "Nenek memberi ramuan kepada petani" },
           ],
           correctOrder: ["farm", "turtle", "grandma", "fight", "water"],
         },
@@ -332,7 +331,7 @@ const interactiveStoryData: Record<string, InteractiveStoryData> = {
       {
         slideNumber: 11,
         questionType: QuestionType.ESSAY,
-        questionText: "Menurutmu, mengapa petani menyembunyikan Watu Maladong agar tidak disalahgunakan?",
+        questionText: "Menurutmu, mengapa petani menyembunyikan Watu Maladong?",
         isBonus: true,
       },
     ],
