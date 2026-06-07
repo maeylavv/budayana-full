@@ -76,6 +76,30 @@ export default function SentenceArrangementDND({ question, answersMapping = {}, 
 
   const handlePeriksa = () => {
     if (hasAnsweredFully) return;
+
+    if (question.mode === 'creative') {
+      const placedIds = Object.values(placements);
+      const placedTexts = placedIds.map(id => {
+        const item = question.draggables.find(d => d.id === id);
+        return item ? item.text : "";
+      });
+
+      const hasMinWords = placedIds.length >= (question.minWords || 1);
+      
+      let hasRequiredWords = true;
+      if (question.requiredWords && question.requiredWords.length > 0) {
+        hasRequiredWords = question.requiredWords.every(rw => placedTexts.includes(rw));
+      }
+
+      const isFullyCorrect = hasMinWords && hasRequiredWords;
+      
+      // If correct, lock all placed zones
+      const finalLocked = isFullyCorrect ? Object.keys(placements) : [];
+      setLockedZones(finalLocked);
+      onAnswer(placements, isFullyCorrect, finalLocked);
+      return;
+    }
+
     let newLocked = [...lockedZones];
     let newPlacements = { ...placements };
 
@@ -136,9 +160,10 @@ export default function SentenceArrangementDND({ question, answersMapping = {}, 
                 key={zoneId}
                 draggable={!hasAnsweredFully}
                 onDragStart={(e) => handleDragStart(e, dragId)}
-                className='sa-placed-chip'
+                className={`sa-placed-chip${hasAnsweredFully ? ' locked' : ''}`}
                 style={{
-                  backgroundColor: placedItem.color || '#fff',
+                  backgroundColor: hasAnsweredFully ? '#b5e47a' : (placedItem.color || '#fff'),
+                  borderColor: hasAnsweredFully ? '#5faa1e' : 'transparent',
                   cursor: hasAnsweredFully ? 'default' : 'grab',
                 }}
               >

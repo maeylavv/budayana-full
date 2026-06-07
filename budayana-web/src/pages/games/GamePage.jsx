@@ -10,6 +10,8 @@ import {
   useAddQuestionLog,
   useUpdateAttempt,
 } from "../../hooks/useAttempts"
+import confetti from "canvas-confetti"
+import { useSound } from "../../hooks/useSound"
 
 const formatTime = (seconds) => {
   const mins = Math.floor(seconds / 60)
@@ -24,6 +26,7 @@ const formatTime = (seconds) => {
  * Fetches story data and manages interactive game attempts
  */
 export default function GamePage() {
+  const { playClick, playCorrect, playWrong, playTada } = useSound()
   const { islandSlug, storyId } = useParams()
   const navigate = useNavigate()
 
@@ -181,8 +184,8 @@ export default function GamePage() {
   const isStory = currentPageData?.type === "story"
   const isImage = currentPageData?.type === "image"
   const isEnding = currentPageData?.type === "ending"
-  const isLastPage = currentPageIndex === pages.length - 1
-  const isResultsPage = currentPageIndex === pages.length // We use index out of bounds for results
+  const isLastPage = pages.length > 0 && currentPageIndex === pages.length - 1
+  const isResultsPage = pages.length > 0 && currentPageIndex === pages.length // We use index out of bounds for results
 
   // State for pending logs (when story data isn't loaded yet)
   const [pendingLogs, setPendingLogs] = useState(null)
@@ -389,6 +392,20 @@ export default function GamePage() {
     const t = setInterval(calculateElapsed, 1000)
     return () => clearInterval(t)
   }, [timerRunning, story, isResultsPage, attemptId])
+
+  useEffect(() => {
+    if (isResultsPage) {
+      playTada();
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 },
+        zIndex: 10000,
+        colors: ['#ffaa00', '#23a0ba', '#e05fa3', '#51423c', '#ffefcd']
+      });
+    }
+  }, [isResultsPage]);
+
   // Persist drag-drop order to localStorage on every change
   useEffect(() => {
     if (attemptId && Object.keys(dragDropOrder).length > 0) {
@@ -401,6 +418,7 @@ export default function GamePage() {
   const [isNavigating, setIsNavigating] = useState(false)
 
   const goNext = () => {
+    playClick()
     // Check if current question has pending answer validation
     if (isQuestion) {
       const currentQ = currentPageData.question
@@ -420,6 +438,7 @@ export default function GamePage() {
   }
 
   const goPrev = () => {
+    playClick()
     setCurrentPage(Math.max(0, currentPageIndex - 1))
   }
 
@@ -463,7 +482,10 @@ export default function GamePage() {
         },
       }))
 
-      if (!response.isCorrect) {
+      if (response.isCorrect) {
+        playCorrect()
+      } else {
+        playWrong()
         setLastIncorrectQuestionId(question.id)
         setShowIncorrectPopup(true)
         setIncorrectAttempts((prev) => {
@@ -489,6 +511,7 @@ export default function GamePage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleFinish = async () => {
+    playClick()
     setIsSubmitting(true)
     setTimerRunning(false)
     setFinalTime(timeElapsed)
@@ -549,6 +572,7 @@ export default function GamePage() {
   const [isExitSubmitting, setIsExitSubmitting] = useState(false)
 
   const handleExit = async () => {
+    playClick()
     setIsExitSubmitting(true)
     // Clear drag-drop storage
     clearDragDropStorage()
@@ -1133,7 +1157,7 @@ export default function GamePage() {
             </div>
           </div>
           <button
-            onClick={() => navigate(`/home?island=${islandSlug}`)}
+            onClick={() => { playClick(); navigate(`/home?island=${islandSlug}`); }}
             className='bg-[#F7885E] text-white font-extrabold text-xl px-12 py-3 rounded-full shadow-lg hover:bg-[#e4764c] transition'
           >
             Kembali ke Beranda

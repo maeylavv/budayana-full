@@ -11,6 +11,8 @@ import {
 } from "../../hooks/useAttempts"
 import { useQuestions } from "../../hooks/useQuestions"
 import { useIsland } from "../../hooks/useIslands"
+import confetti from "canvas-confetti"
+import { useSound } from "../../hooks/useSound"
 
 /**
  * Unified Test Page Component
@@ -18,6 +20,7 @@ import { useIsland } from "../../hooks/useIslands"
  * Dynamically loads questions based on storyId and stageType from URL
  */
 export default function TestPage({ testType = "pre" }) {
+  const { playClick, playTada } = useSound()
   const { islandSlug, storyId } = useParams()
   const navigate = useNavigate()
 
@@ -249,6 +252,19 @@ export default function TestPage({ testType = "pre" }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questions, pendingLogs])
 
+  useEffect(() => {
+    if (showResults) {
+      playTada();
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 },
+        zIndex: 10000,
+        colors: ['#ffaa00', '#23a0ba', '#e05fa3', '#51423c', '#ffefcd']
+      });
+    }
+  }, [showResults]);
+
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60)
     const secs = seconds % 60
@@ -263,13 +279,16 @@ export default function TestPage({ testType = "pre" }) {
 
 
 
-  const handleAnswerSelect = (index) =>
+  const handleAnswerSelect = (index) => {
+    playClick()
     setAnswers({ ...answers, [currentQuestion]: index })
+  }
 
   // State to track correctness of answers
   const [correctness, setCorrectness] = useState({})
 
   const handleNext = () => {
+    playClick()
     // Log the answer before moving to next question
     logCurrentAnswer()
     const nextPage = Math.min(currentQuestion + 1, questions.length - 1)
@@ -277,10 +296,12 @@ export default function TestPage({ testType = "pre" }) {
   }
 
   const handleExit = () => {
+    playClick()
     setShowWarning(true)
   }
 
   const handlePrevQuestion = () => {
+    playClick()
     // Log the answer before moving to previous question
     logCurrentAnswer()
     const prevPage = Math.max(0, currentQuestion - 1)
@@ -342,6 +363,7 @@ export default function TestPage({ testType = "pre" }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleFinish = async () => {
+    playClick()
     setIsSubmitting(true)
     // Log and verify the last question's answer before finishing
     await logCurrentAnswer()
@@ -408,6 +430,7 @@ export default function TestPage({ testType = "pre" }) {
   }
 
   const handleBackToHome = () => {
+    playClick()
     // const nextStage = getNextStage(isPreTest ? "pre-test" : "post-test")
     // if (nextStage) {
     //   navigate(`/islands/${islandSlug}/${nextStage}`)
@@ -417,6 +440,7 @@ export default function TestPage({ testType = "pre" }) {
   }
 
   const handleConfirmExit = async () => {
+    playClick()
     setIsSubmitting(true)
     if (attemptId) {
       try {

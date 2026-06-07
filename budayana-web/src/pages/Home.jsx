@@ -9,6 +9,7 @@ import {
 import { useMyProgress, useIslandCycles } from "../hooks/useProgress"
 import { useIsland } from "../hooks/useIslands"
 import { islands as staticIslands } from "../data/islands"
+import { useSound } from "../hooks/useSound"
 
 // Components
 import ToggleMenu from "../components/ToggleMenu"
@@ -441,6 +442,7 @@ export default function Home() {
 
 function IslandPopup({ activeIsland, onClose, isMobile }) {
   const navigate = useNavigate()
+  const { playClick } = useSound()
   // Fetch dynamic island details including stories
   const { data: islandDetails, isLoading: isIslandLoading } = useIsland(
     activeIsland.slug
@@ -459,6 +461,7 @@ function IslandPopup({ activeIsland, onClose, isMobile }) {
   const [completedStageWarning, setCompletedStageWarning] = useState(false)
 
   const handleStageClick = (stage, status, index) => {
+    playClick()
     if (status === "locked") {
       if (index === 1) {
         setLockedStageWarning(1)

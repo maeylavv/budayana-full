@@ -14,6 +14,8 @@ import {
   useAddStage,
   useUpdateAttempt,
 } from "../../hooks/useAttempts"
+import confetti from "canvas-confetti"
+import { useSound } from "../../hooks/useSound"
 import "./flipbook.css"
 
 const $ = window.$
@@ -30,6 +32,7 @@ const formatTime = (seconds) => {
  * Uses turn.js for flipbook effect
  */
 export default function StoryPage() {
+  const { playClick, playTada } = useSound()
   const { islandSlug, storyId } = useParams()
   const navigate = useNavigate()
 
@@ -277,9 +280,23 @@ export default function StoryPage() {
     setCurrentPageUrl,
   ])
 
+  useEffect(() => {
+    if (showResults) {
+      playTada();
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 },
+        zIndex: 10000,
+        colors: ['#ffaa00', '#23a0ba', '#e05fa3', '#51423c', '#ffefcd']
+      });
+    }
+  }, [showResults]);
+
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleFinish = async () => {
+    playClick()
     setIsSubmitting(true)
     setTimerRunning(false)
 
@@ -322,6 +339,7 @@ export default function StoryPage() {
   const [isExitSubmitting, setIsExitSubmitting] = useState(false)
 
   const handleExit = async () => {
+    playClick()
     setIsExitSubmitting(true)
     // Clear local storage
     clearStorage()
@@ -431,7 +449,7 @@ export default function StoryPage() {
       <div className='absolute inset-0 flex items-center justify-center pointer-events-none z-20'>
         <div className='w-full max-w-[95%] md:max-w-[92%] lg:max-w-350 flex justify-between px-2'>
           <button
-            onClick={() => $(bookRef.current).turn("previous")}
+            onClick={() => { playClick(); $(bookRef.current).turn("previous"); }}
             disabled={currentPageFromUrl === 1}
             className='pointer-events-auto bg-white/90 backdrop-blur-sm text-[#2c2c2c] w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all hover:bg-white border-2 border-[#2c2c2c] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100'
           >
@@ -448,7 +466,7 @@ export default function StoryPage() {
             </button>
           ) : (
             <button
-              onClick={() => $(bookRef.current).turn("next")}
+              onClick={() => { playClick(); $(bookRef.current).turn("next"); }}
               className='pointer-events-auto bg-white/90 backdrop-blur-sm text-[#2c2c2c] w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all hover:bg-white border-2 border-[#2c2c2c]'
             >
               <ArrowRight size={28} strokeWidth={2.5} />
@@ -461,7 +479,7 @@ export default function StoryPage() {
       <div className='w-full max-w-[95%] md:max-w-[92%] lg:max-w-[1100px] grid grid-cols-3 items-center absolute top-6 z-30 px-4'>
         <div className='flex justify-start'>
           <button
-            onClick={() => setShowExitWarning(true)}
+            onClick={() => { playClick(); setShowExitWarning(true); }}
             className='px-5 py-2.5 bg-white/90 backdrop-blur-sm border-2 border-[#2c2c2c] flex items-center gap-2 rounded-full shadow-md hover:bg-white hover:scale-105 transition-all font-semibold text-sm md:text-base'
           >
             <ArrowLeft size={18} /> Keluar
@@ -562,7 +580,7 @@ export default function StoryPage() {
               Kamu yakin mau keluar?
             </p>
             <button
-              onClick={() => setShowExitWarning(false)}
+              onClick={() => { playClick(); setShowExitWarning(false); }}
               className='w-full bg-linear-to-r from-[#f88c63] to-[#ff6b45] text-white font-bold py-3.5 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all mb-3 border-2 border-[#c7623a]'
             >
               Lanjutkan Belajar
