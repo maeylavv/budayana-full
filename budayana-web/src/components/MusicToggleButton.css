@@ -1,0 +1,60 @@
+.music-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  border: 3px solid #955C2E;
+  background-color: #FFF8E7; /* Light cream/white background */
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease-in-out;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.music-toggle-btn:hover {
+  transform: scale(1.08);
+  background-color: #fcebc4;
+}
+
+.music-toggle-btn:active {
+  transform: scale(0.95);
+}
+
+.music-toggle-btn img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+/* Positioning overrides for specific pages if wrapped in flex containers */
+.auth-header-controls {
+  position: absolute;
+  top: 3%;
+  left: 3%;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  z-index: 10;
+}
+
+.auth-header-controls .back_button {
+  position: static !important;
+}
+
+@media (max-width: 768px) {
+  .auth-header-controls {
+    top: 16px;
+    left: 16px;
+    gap: 10px;
+  }
+}
+
+@media (min-width: 1921px) {
+  .auth-header-controls {
+    top: 5%;
+    left: 5%;
+  }
+}

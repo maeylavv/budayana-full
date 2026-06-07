@@ -702,24 +702,24 @@ export default function TestPage({ testType = "pre" }) {
               disabled={currentQuestion === 0}
               className={`flex items-center gap-2 px-6 py-3 rounded-full text-white font-semibold shadow-md transition ${currentQuestion === 0
                 ? "bg-[#f2c3c3] cursor-not-allowed"
-                : "bg-[#e76964] hover:bg-[#d95e59]"
+                : "bg-[#e76964] hover:bg-[#d95e59] cursor-pointer"
                 }`}
             >
               <ArrowLeft size={20} />
               Sebelumnya
             </button>
-
+ 
             <div className='text-sm font-semibold text-[#5a5a5a]'>
               Halaman {currentQuestion + 1} dari {questions.length}
             </div>
-
+ 
             {isLastQuestion ? (
               <button
                 onClick={handleFinish}
                 disabled={answers[currentQuestion] === undefined || isSubmitting}
                 className={`flex items-center gap-2 px-6 py-3 rounded-full text-white font-semibold shadow-md transition ${answers[currentQuestion] === undefined || isSubmitting
                   ? "bg-gray-300 cursor-not-allowed opacity-50"
-                  : "bg-[#19758E] hover:bg-[#17748D]"
+                  : "bg-[#19758E] hover:bg-[#126278] cursor-pointer"
                   }`}
               >
                 {isSubmitting ? "Menyimpan..." : "Selesai"}
@@ -731,7 +731,7 @@ export default function TestPage({ testType = "pre" }) {
                 disabled={answers[currentQuestion] === undefined}
                 className={`flex items-center gap-2 px-6 py-3 rounded-full text-white font-semibold shadow-md transition ${answers[currentQuestion] === undefined
                   ? "bg-gray-300 cursor-not-allowed opacity-50"
-                  : "bg-[#19758E] hover:bg-[#17748D]"
+                  : "bg-[#19758E] hover:bg-[#126278] cursor-pointer"
                   }`}
               >
                 Berikutnya

@@ -14,6 +14,7 @@ import { islands as staticIslands } from "../data/islands"
 import ToggleMenu from "../components/ToggleMenu"
 import MapUI from "../components/MapUI"
 import StageCardComponent from "../components/StageCard"
+import MusicToggleButton from "../components/MusicToggleButton"
 
 // Helper to see if we need special slug handling
 function getIslandSlug(name) {
@@ -36,7 +37,7 @@ function ProgressDots({ completed = 0, total = 3 }) {
 }
 
 // Stage Card Component with navigation
-function StageCard({ stage, status, index, onClick, activeAttempt, latestFinishedAttempt }) {
+function StageCard({ stage, status, index, onClick, activeAttempt, latestFinishedAttempt, isMobile }) {
   const isLocked = status === "locked"
   const isCompleted = status === "completed"
 
@@ -107,36 +108,61 @@ function StageCard({ stage, status, index, onClick, activeAttempt, latestFinishe
     return { label: null, value: null }
   }, [activeAttempt, latestFinishedAttempt, stage])
 
-  /* CUSTOM RESPONSIVE VERSION
-  const animals = [
-    "/assets/budayana/islands/Monyet.png",
-    "/assets/budayana/islands/Buaya.png",
-    "/assets/budayana/islands/Badak.png"
-  ]
+  // MOBILE HORIZONTAL CARD LAYOUT
+  if (isMobile) {
+    const mobileCardColors = ["#FFA5C9", "#5AD9AD", "#F7885E"]
+    const cardColor = mobileCardColors[index % 3]
+    return (
+      <div
+        className={`stage-card-mobile ${isLocked ? "locked" : ""} ${isCompleted ? "completed" : ""}`}
+        onClick={onClick}
+        style={{ cursor: isLocked ? "default" : "pointer" }}
+      >
+        {/* Card background image fills the whole card */}
+        <img
+          src={`/assets/budayana/islands/stage ${(index % 3) + 1} - mobile.png`}
+          className='stage-mobile-bg'
+          alt={stage.title}
+        />
+        {/* Text content overlay on left */}
+        <div className='stage-mobile-content'>
+          <p className='stage-mobile-title'>{stage.title}</p>
+          <div className={`stage-mobile-badge tahap-${index + 1}`} style={{ color: cardColor }}>
+            Tahap {index + 1}
+          </div>
+          {isCompleted && (
+            <div className='stage-mobile-check'>
+              <Check size={14} strokeWidth={3} color='#ffffff' />
+            </div>
+          )}
+          {value !== null && label && (
+            <div className='stage-mobile-score'>
+              {label}: {value}
+            </div>
+          )}
+          {status === "resume" && (
+            <span className='stage-mobile-resume'>Lanjutkan ›</span>
+          )}
+        </div>
+        {isLocked && (
+          <div className='stage-mobile-lock-overlay'>
+            <img
+              src='/assets/budayana/islands/padlock.png'
+              className='stage-mobile-lock-icon'
+              alt='locked'
+            />
+          </div>
+        )}
+      </div>
+    )
+  }
 
-  const colors = ["pink", "green", "orange"]
-
-  return (
-    <StageCardComponent
-      title={stage.title}
-      stage={`Tahap ${index + 1}`}
-      animal={animals[index % 3]}
-      color={colors[index % 3]}
-      locked={isLocked}
-      completed={isCompleted}
-      resume={status === "resume"}
-      scoreLabel={label}
-      scoreValue={value}
-      onClick={onClick}
-    />
-  )
-  */
-
+  // DESKTOP / TABLET VERTICAL CARD LAYOUT (unchanged)
   return (
     <div
       className={`stage-card ${isLocked ? "locked" : ""} ${isCompleted ? "completed" : ""}`}
-      onClick={isLocked ? undefined : onClick}
-      style={{ cursor: isLocked ? "not-allowed" : "pointer" }}
+      onClick={onClick}
+      style={{ cursor: "pointer" }}
     >
       <img
         src={`/assets/budayana/islands/tahap ${(index % 3) + 1}.png`}
@@ -155,10 +181,7 @@ function StageCard({ stage, status, index, onClick, activeAttempt, latestFinishe
           </div>
         )}
         {status === "resume" && (
-          <button className='resume-btn' onClick={(e) => {
-            e.stopPropagation();
-            if (onClick) onClick();
-          }}>Lanjutkan</button>
+          <button className='resume-btn'>Lanjutkan</button>
         )}
       </div>
       {value !== null && label && (
@@ -186,6 +209,7 @@ export default function Home() {
   const [activeIsland, setActiveIsland] = useState(null)
   const [lockedIslandWarning, setLockedIslandWarning] = useState(null)
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+  const isMobileView = windowWidth <= 768
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth)
@@ -330,15 +354,16 @@ export default function Home() {
     <div className='page home-page'>
       {/* HEADER */}
       <div className='header'>
-        <div className="toggle-wrapper" style={{ zIndex: 10 }}>
+        <div className="toggle-wrapper" style={{ zIndex: 10, display: "flex", alignItems: "center", gap: "15px" }}>
           <ToggleMenu />
+          <MusicToggleButton />
         </div>
 
         <div className='gameName'>
           <img src='/assets/budayana/islands/Game Name.png' alt='Budayana' />
         </div>
 
-        <div className='profile' onClick={goToProfile}>
+        <div className='profile' onClick={goToProfile} title="Buka Profil">
           <img src='/assets/budayana/islands/Profile.png' alt='Profil' />
         </div>
       </div>
@@ -379,7 +404,7 @@ export default function Home() {
 
       {/* POPUP */}
       {activeIsland && (
-        <IslandPopup activeIsland={activeIsland} onClose={handleCloseIsland} />
+        <IslandPopup activeIsland={activeIsland} onClose={handleCloseIsland} isMobile={isMobileView} />
       )}
 
       {/* LOCKED ISLAND WARNING POPUP */}
@@ -414,7 +439,7 @@ export default function Home() {
   )
 }
 
-function IslandPopup({ activeIsland, onClose }) {
+function IslandPopup({ activeIsland, onClose, isMobile }) {
   const navigate = useNavigate()
   // Fetch dynamic island details including stories
   const { data: islandDetails, isLoading: isIslandLoading } = useIsland(
@@ -595,41 +620,56 @@ function IslandPopup({ activeIsland, onClose }) {
   const isLoading = isIslandLoading
 
   return (
-    <div className='popup-overlay' onClick={onClose}>
+    <div className={`popup-overlay${isMobile && activeIsland.isUnlocked ? ' popup-overlay-mobile-sheet' : ''}`} onClick={onClose}>
       <div
-        className={`popup ${activeIsland.isUnlocked ? "popup-unlocked" : "popup-locked"
+        className={`popup ${activeIsland.isUnlocked
+          ? isMobile ? "popup-mobile-unlocked" : "popup-unlocked"
+          : "popup-locked"
           }`}
         onClick={(e) => e.stopPropagation()}
       >
         {activeIsland.isUnlocked ? (
-          <div className='unlockedpopup'>
-            {/* Top Row */}
-            <div className='popup-top-row'>
-              <div className='popup-cycle-count'>
-                Percobaan : {totalFinishedAttempts}
-              </div>
-              <button className='popup-close' onClick={onClose}>
-                <img
-                  src='/assets/budayana/islands/close button.png'
-                  className='close-button'
-                  alt='close'
-                />
-              </button>
-            </div>
+          <div className={isMobile ? 'unlockedpopup-mobile' : 'unlockedpopup'}>
+            {/* Close button */}
+            <button className='popup-close' onClick={onClose}>
+              <img
+                src='/assets/budayana/islands/close button.png'
+                className='close-button'
+                alt='close'
+              />
+            </button>
 
-            {/* Title */}
-            <h2 className='popup-title'>{activeIsland.name}</h2>
-            <ProgressDots
-              completed={completedCount}
-              total={stages.length || 3}
-            />
+            {/* Mobile header: title top, cycle count subtitle */}
+            {isMobile ? (
+              <div className='popup-mobile-header'>
+                <h2 className='popup-mobile-title'>{activeIsland.name}</h2>
+                <p className='popup-mobile-cycle'>Percobaan: {totalFinishedAttempts}</p>
+                <ProgressDots
+                  completed={completedCount}
+                  total={stages.length || 3}
+                />
+              </div>
+            ) : (
+              <>
+                {/* Cycle Count */}
+                <div className='popup-cycle-count'>
+                  Percobaan : {totalFinishedAttempts}
+                </div>
+                {/* Title */}
+                <h2 className='popup-title'>{activeIsland.name}</h2>
+                <ProgressDots
+                  completed={completedCount}
+                  total={stages.length || 3}
+                />
+              </>
+            )}
 
             {/* Loading state */}
             {isLoading && <div className='loading-text'>Memuat cerita...</div>}
 
             {/* Stage Grid */}
             {!isLoading && (
-              <div className='stage-grid'>
+              <div className={isMobile ? 'stage-grid-mobile' : 'stage-grid'}>
                 {stages.map((stage, index) => {
                   const status = getStageStatus(stage, index)
                   return (
@@ -641,6 +681,7 @@ function IslandPopup({ activeIsland, onClose }) {
                       activeAttempt={activeAttempt}
                       latestFinishedAttempt={latestFinishedAttempt}
                       onClick={() => handleStageClick(stage, status, index)}
+                      isMobile={isMobile}
                     />
                   )
                 })}

@@ -1,6 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 
+// Contexts
+import { MusicProvider } from "./context/MusicContext.jsx"
+
 // Components
 import BackgroundMusic from "./components/BackgroundMusic.jsx"
 import ScrollToTop from "./components/ScrollToTop.jsx"
@@ -40,10 +43,11 @@ const queryClient = new QueryClient()
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <ScrollToTop />
-        {/* Global background music */}
-        <BackgroundMusic />
+      <MusicProvider>
+        <BrowserRouter>
+          <ScrollToTop />
+          {/* Global background music */}
+          <BackgroundMusic />
 
         <Routes>
 
@@ -124,7 +128,8 @@ export default function App() {
             <Route path='/login' element={<Log_in />} />
           </Route>
         </Routes>
-      </BrowserRouter>
+        </BrowserRouter>
+      </MusicProvider>
     </QueryClientProvider>
   )
 }

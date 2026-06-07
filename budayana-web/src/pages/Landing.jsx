@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "./Landing.css";
 import { useNavigate } from "react-router-dom";
 import { Menu, X } from 'lucide-react';
+import MusicToggleButton from "../components/MusicToggleButton.jsx";
 
 export default function Landing() {
     const navigate = useNavigate();
@@ -31,6 +32,7 @@ export default function Landing() {
     return (
         <div className="page_landing">
             <div className="lnd-navbar-container">
+                <MusicToggleButton />
                 <div className="lnd-navbar">
                     <img src="/assets/budayana/islands/Budayana text.png" alt="Budayana" className="lnd-logo" onClick={() => window.scrollTo(0, 0)} />
                     
