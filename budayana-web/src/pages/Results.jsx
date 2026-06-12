@@ -321,33 +321,11 @@ export default function Results() {
                 <div className='stat-value'>{quizStats?.totalXpFromQuiz ?? 0}</div>
                 <div className='stat-label'>Total XP Quiz</div>
               </div>
-              <div className='stat-card pink'>
-                <div
-                  className='stat-value'
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '4px',
-                  }}
-                >
-                  <span style={{ fontSize: '2rem', lineHeight: 1 }}>🏆</span>
-                  <span
-                    style={{
-                      fontSize:
-                        quizStats?.currentBadge && quizStats.currentBadge !== '-'
-                          ? '1.1rem'
-                          : '1.6rem',
-                      lineHeight: 1.2,
-                      fontWeight: 700,
-                      textAlign: 'center',
-                    }}
-                  >
-                    {quizStats?.currentBadge || '-'}
-                  </span>
+              <div className='stat-card pink' style={{ border: 'none', borderRadius: '24px', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                <div className='stat-value' style={{ fontSize: '2rem' }}>
+                  🏅 {quizStats?.currentBadge || '-'}
                 </div>
-                <div className='stat-label'>Gelar Saat Ini</div>
+                <div className='stat-label' style={{ fontSize: '1.2rem' }}>Peringkat Petualang</div>
               </div>
               <div className='stat-card orange'>
                 <div className='stat-value'>{quizStats?.averageScore ?? 0}%</div>

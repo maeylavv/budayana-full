@@ -76,7 +76,7 @@ export default function MonitoringGuruProfilAnak() {
                   value={selectedClass}
                   onChange={(e) => setSelectedClass(e.target.value)}
                   style={{
-                    padding: '10px 20px',
+                    padding: '10px 44px 10px 20px',
                     borderRadius: '999px',
                     border: '2px solid #955C2E',
                     backgroundColor: 'white',
@@ -85,7 +85,12 @@ export default function MonitoringGuruProfilAnak() {
                     fontWeight: 'bold',
                     outline: 'none',
                     cursor: 'pointer',
-                    fontSize: '1.1rem'
+                    fontSize: '1.1rem',
+                    appearance: 'none',
+                    WebkitAppearance: 'none',
+                    backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23955C2E' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e")`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'right 16px center'
                   }}
                 >
                   <option value="">Semua Kelas</option>
