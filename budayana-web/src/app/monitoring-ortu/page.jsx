@@ -146,18 +146,23 @@ export default function MonitoringOrtuDashboard() {
             id="child-select"
             value={selectedStudentId}
             onChange={(e) => setSelectedStudentId(e.target.value)}
-            style={{
-              padding: '6px 12px',
-              borderRadius: '12px',
-              border: '2px solid #7B4F2E',
-              backgroundColor: 'white',
-              color: '#7B4F2E',
-              fontFamily: "'Fredoka One', sans-serif",
-              fontWeight: 'bold',
-              outline: 'none',
-              cursor: 'pointer',
-              fontSize: '0.9rem'
-            }}
+              style={{
+                padding: '6px 36px 6px 12px',
+                borderRadius: '12px',
+                border: '2px solid #7B4F2E',
+                backgroundColor: 'white',
+                color: '#7B4F2E',
+                fontFamily: "'Fredoka One', sans-serif",
+                fontWeight: 'bold',
+                outline: 'none',
+                cursor: 'pointer',
+                fontSize: '0.9rem',
+                appearance: 'none',
+                WebkitAppearance: 'none',
+                backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%237B4F2E' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e")`,
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'right 12px center'
+              }}
           >
             {students.map(s => (
               <option key={s.id} value={s.id}>{s.name}</option>

@@ -20,7 +20,7 @@ export default function ToggleMenu() {
         className={`toggle-menu-btn ${isQuiz ? 'active' : ''}`}
         onClick={() => navigate('/quiz')}
       >
-        Quiz Kultur
+        Quiz Budaya
       </button>
     </div>
   );

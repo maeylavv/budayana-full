@@ -7,6 +7,8 @@ import {
 import ScoreTable from "./ScoreTable";
 import "../pages/Profile.css";
 import "../pages/Results.css";
+import InfoIcon from "./InfoIcon";
+import { PARENT_INFO } from "./infoContent/parentInfoContent";
 
 // Half Pie/Donut Chart Colors
 const GAUGE_COLORS = ["#4CAF50", "#E8D9C0"];
@@ -55,12 +57,6 @@ export default function StudentAnalyticsDashboard({
         <div className="profile-top-text">
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
             <h1 className="profile-name" style={{ color: '#7B4F2E', margin: 0 }}>{studentInfo.name}</h1>
-            {activeTab === "quizBudaya" && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', backgroundColor: '#FFF3E0', padding: '6px 14px', borderRadius: '12px', border: '2px solid #FFE0B2', height: 'fit-content' }}>
-                <span style={{ fontSize: '1.1rem' }}>🏆</span>
-                <span style={{ fontSize: '0.9rem', color: '#E65100', fontWeight: 'bold' }}>Lencana Literasi: {quizAnalytics.currentBadge}</span>
-              </div>
-            )}
           </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '12px' }}>
             <div className="profile-grade-badge student-badge-btn" style={{ backgroundColor: '#f3a64c', color: 'white' }}>
@@ -131,11 +127,14 @@ function StoryAnalyticsPanel({ storyAnalytics, studentInfo }) {
     <div className="fade-in">
       {/* Stats Cards */}
       <section>
-        <h2 className="results-section-title" style={{ fontSize: '1.2rem', marginBottom: '12px', color: '#7B4F2E' }}>Statistik Cerita Rakyat</h2>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '12px', gap: '8px' }}>
+          <h2 className="results-section-title" style={{ fontSize: '1.2rem', color: '#7B4F2E', margin: 0 }}>Statistik Cerita Rakyat</h2>
+          <InfoIcon {...PARENT_INFO.statistikCerita} />
+        </div>
         <div className="stats-grid">
           <div className="stat-card green" style={{ border: 'none', borderRadius: '24px' }}>
             <div className="stat-value">{stats.storiesCompleted}</div>
-            <div className="stat-label">Cerita Selesai</div>
+            <div className="stat-label">Sesi Cerita Selesai</div>
           </div>
           <div className="stat-card purple" style={{ border: 'none', borderRadius: '24px' }}>
             <div className="stat-value">{stats.totalXp}</div>
@@ -156,7 +155,7 @@ function StoryAnalyticsPanel({ storyAnalytics, studentInfo }) {
       <section className="charts-grid-2" style={{ marginTop: '30px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
         {/* Gauge Improvement Chart */}
         <div style={{ border: '3px solid #955C2E', borderRadius: '16px', padding: '20px', backgroundColor: 'white', boxSizing: 'border-box' }}>
-          <h3 style={{ color: '#955C2E', fontWeight: 'bold', marginBottom: '20px', marginTop: 0 }}>Kenaikan Pemahaman Belajar</h3>
+          <h3 style={{ color: '#955C2E', fontWeight: 'bold', marginBottom: '20px', marginTop: 0, display: 'flex', alignItems: 'center' }}>Kenaikan Pemahaman Belajar <InfoIcon {...PARENT_INFO.peningkatanCerita} /></h3>
           <div style={{ position: 'relative', width: '100%', height: '220px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {history && history.length > 0 ? (() => {
               const improvementValue = improvementGauge && improvementGauge[0] ? improvementGauge[0].value : 0;
@@ -208,14 +207,16 @@ function StoryAnalyticsPanel({ storyAnalytics, studentInfo }) {
                 </>
               );
             })() : (
-              <div style={{ color: '#955C2E', fontSize: '1rem', fontWeight: 'bold', textAlign: 'center', padding: '40px 0' }}>Belum ada data visualisasi.</div>
+              <div style={{ color: '#955C2E', fontSize: '1rem', fontWeight: 'bold', textAlign: 'center', padding: '40px 0' }}>Belum ada data untuk ditampilkan.</div>
             )}
           </div>
         </div>
 
         {/* Story Interest Bar Chart */}
         <div style={{ border: '3px solid #955C2E', borderRadius: '16px', padding: '20px', backgroundColor: 'white', boxSizing: 'border-box' }}>
-          <h3 style={{ color: '#955C2E', fontWeight: 'bold', marginBottom: '20px', marginTop: 0 }}>Cerita Rakyat Terpopuler</h3>
+          <h3 style={{ color: '#955C2E', fontWeight: 'bold', marginBottom: '20px', marginTop: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
+            Cerita Rakyat Terpopuler <InfoIcon {...PARENT_INFO.ceritaTerpopuler} />
+          </h3>
           <div className="chart-wrapper-responsive" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '220px' }}>
             {hasInterestData && history && history.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
@@ -227,7 +228,7 @@ function StoryAnalyticsPanel({ storyAnalytics, studentInfo }) {
                 </BarChart>
               </ResponsiveContainer>
             ) : (
-              <div style={{ color: '#955C2E', fontSize: '1rem', fontWeight: 'bold', textAlign: 'center', padding: '40px 0' }}>Belum ada data visualisasi.</div>
+              <div style={{ color: '#955C2E', fontSize: '1rem', fontWeight: 'bold', textAlign: 'center', padding: '40px 0' }}>Belum ada data untuk ditampilkan.</div>
             )}
           </div>
         </div>
@@ -262,8 +263,8 @@ function StoryAnalyticsPanel({ storyAnalytics, studentInfo }) {
                 </div>
               ))
             ) : (
-              <div style={{ textAlign: 'center', padding: '40px', color: '#955C2E', fontWeight: 'bold' }}>
-                Belum ada riwayat cerita rakyat.
+              <div className="history-row" style={{ display: 'flex', justifyContent: 'center', padding: '24px', color: '#7B4F2E', fontStyle: 'italic' }}>
+                Belum ada data untuk ditampilkan.
               </div>
             )}
           </div>
@@ -294,8 +295,9 @@ function QuizAnalyticsPanel({ quizAnalytics, studentInfo }) {
     <div className="fade-in">
       {/* Stats Cards */}
       <section>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', flexWrap: 'wrap', gap: '8px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '12px', gap: '8px' }}>
           <h2 className="results-section-title" style={{ fontSize: '1.2rem', color: '#7B4F2E', margin: 0 }}>Statistik Quiz Budaya</h2>
+          <InfoIcon {...PARENT_INFO.statistikQuiz} />
         </div>
         <div className="stats-grid">
           <div className="stat-card green" style={{ border: 'none', borderRadius: '24px' }}>
@@ -308,7 +310,7 @@ function QuizAnalyticsPanel({ quizAnalytics, studentInfo }) {
           </div>
           <div className="stat-card pink" style={{ border: 'none', borderRadius: '24px', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
             <div className="stat-value" style={{ fontSize: '2rem' }}>🏅 {studentInfo.title}</div>
-            <div className="stat-label" style={{ fontSize: '1.2rem' }}>Gelar Saat Ini</div>
+            <div className="stat-label" style={{ fontSize: '1.2rem' }}>Peringkat Petualang</div>
           </div>
           <div className="stat-card orange" style={{ border: 'none', borderRadius: '24px' }}>
             <div className="stat-value">{stats.averageScore}%</div>
@@ -321,7 +323,7 @@ function QuizAnalyticsPanel({ quizAnalytics, studentInfo }) {
       <section className="charts-grid-2" style={{ marginTop: '30px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
         {/* Radar Literacy */}
         <div style={{ border: '3px solid #955C2E', borderRadius: '16px', padding: '20px', backgroundColor: 'white', boxSizing: 'border-box' }}>
-          <h3 style={{ color: '#955C2E', fontWeight: 'bold', marginBottom: '20px', marginTop: 0 }}>Analisis Level Literasi Siswa</h3>
+          <h3 style={{ color: '#955C2E', fontWeight: 'bold', marginBottom: '20px', marginTop: 0, display: 'flex', alignItems: 'center' }}>Analisis Level Literasi Siswa <InfoIcon {...PARENT_INFO.literasiBudaya} /></h3>
           <div className="chart-wrapper-responsive" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '260px' }}>
             {hasRadarData && formattedHistory.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
@@ -335,14 +337,16 @@ function QuizAnalyticsPanel({ quizAnalytics, studentInfo }) {
                 </RadarChart>
               </ResponsiveContainer>
             ) : (
-              <div style={{ color: '#955C2E', fontSize: '1rem', fontWeight: 'bold', textAlign: 'center', padding: '40px 0' }}>Belum ada data visualisasi.</div>
+              <div style={{ color: '#955C2E', fontSize: '1rem', fontWeight: 'bold', textAlign: 'center', padding: '40px 0' }}>Belum ada data untuk ditampilkan.</div>
             )}
           </div>
         </div>
 
         {/* Topic Minat Budaya */}
         <div style={{ border: '3px solid #955C2E', borderRadius: '16px', padding: '20px', backgroundColor: 'white', boxSizing: 'border-box' }}>
-          <h3 style={{ color: '#955C2E', fontWeight: 'bold', marginBottom: '20px', marginTop: 0 }}>Minat Budaya Terbesar</h3>
+          <h3 style={{ color: '#955C2E', fontWeight: 'bold', marginBottom: '20px', marginTop: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
+            Minat Budaya Terbesar <InfoIcon {...PARENT_INFO.minatBudaya} />
+          </h3>
           <div className="chart-wrapper-responsive" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '260px' }}>
             {hasInterestData && formattedHistory.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
@@ -356,7 +360,7 @@ function QuizAnalyticsPanel({ quizAnalytics, studentInfo }) {
                 </BarChart>
               </ResponsiveContainer>
             ) : (
-              <div style={{ color: '#955C2E', fontSize: '1rem', fontWeight: 'bold', textAlign: 'center', padding: '40px 0' }}>Belum ada data visualisasi.</div>
+              <div style={{ color: '#955C2E', fontSize: '1rem', fontWeight: 'bold', textAlign: 'center', padding: '40px 0' }}>Belum ada data untuk ditampilkan.</div>
             )}
           </div>
         </div>

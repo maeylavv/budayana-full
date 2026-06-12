@@ -10,6 +10,8 @@ import {
 } from 'recharts';
 import "../../pages/Profile.css";
 import "../../pages/Results.css";
+import InfoIcon from "../../components/InfoIcon";
+import { GURU_INFO } from "../../components/infoContent/guruInfoContent";
 
 export default function MonitoringGuruDashboard() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -183,18 +185,23 @@ export default function MonitoringGuruDashboard() {
               <select
                 value={selectedClass}
                 onChange={(e) => setSelectedClass(e.target.value)}
-                style={{
-                  padding: '8px 16px',
-                  borderRadius: '999px',
-                  border: '2px solid #955C2E',
-                  backgroundColor: 'white',
-                  color: '#5C3A1E',
-                  fontFamily: "'Fredoka One', sans-serif",
-                  fontWeight: 'bold',
-                  outline: 'none',
-                  cursor: 'pointer',
-                  fontSize: '1rem'
-                }}
+                  style={{
+                    padding: '8px 40px 8px 16px',
+                    borderRadius: '999px',
+                    border: '2px solid #955C2E',
+                    backgroundColor: 'white',
+                    color: '#5C3A1E',
+                    fontFamily: "'Fredoka One', sans-serif",
+                    fontWeight: 'bold',
+                    outline: 'none',
+                    cursor: 'pointer',
+                    fontSize: '1rem',
+                    appearance: 'none',
+                    WebkitAppearance: 'none',
+                    backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23955C2E' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e")`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'right 16px center'
+                  }}
               >
                 <option value="">Semua Kelas</option>
                 <option value="A">Kelas A</option>
@@ -207,7 +214,7 @@ export default function MonitoringGuruDashboard() {
             <div className="charts-grid-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '20px' }}>
               {/* Gauge (using Pie half) */}
               <div style={{ border: '2px solid #955C2E', borderRadius: '16px', padding: '20px', backgroundColor: 'white' }}>
-                <h3 style={{ color: '#955C2E', fontWeight: 'bold', marginBottom: '10px' }}>Rata-rata Kenaikan</h3>
+                <h3 style={{ color: '#955C2E', fontWeight: 'bold', marginBottom: '10px' }}>Rata-rata Kenaikan <InfoIcon {...GURU_INFO.rataRataKenaikan} /></h3>
                 <div className="chart-wrapper-200">
                   {(() => {
                     const classImpVal = classSummary.averageImprovement;
@@ -259,7 +266,7 @@ export default function MonitoringGuruDashboard() {
 
               {/* Donut Chart */}
               <div style={{ border: '2px solid #955C2E', borderRadius: '16px', padding: '20px', backgroundColor: 'white' }}>
-                <h3 style={{ color: '#955C2E', fontWeight: 'bold', marginBottom: '10px' }}>Siswa Aktif vs Tidak</h3>
+                <h3 style={{ color: '#955C2E', fontWeight: 'bold', marginBottom: '10px' }}>Siswa Aktif vs Tidak <InfoIcon {...GURU_INFO.siswaAktif} /></h3>
                 <div className="chart-wrapper-200" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   {classSummary.activeStudents > 0 || classSummary.inactiveStudents > 0 ? (
                     <ResponsiveContainer width="100%" height="100%">
@@ -287,7 +294,7 @@ export default function MonitoringGuruDashboard() {
 
               {/* Bar Chart Rata-rata Kelas per Level Bloom (LOGIC UNCHANGED) */}
               <div style={{ border: '2px solid #955C2E', borderRadius: '16px', padding: '20px', backgroundColor: 'white' }}>
-                <h3 style={{ color: '#955C2E', fontWeight: 'bold', marginBottom: '10px' }}>Rata-rata Kelas per Level</h3>
+                <h3 style={{ color: '#955C2E', fontWeight: 'bold', marginBottom: '10px' }}>Rata-rata Kelas per Level <InfoIcon {...GURU_INFO.rataRataLevel} /></h3>
                 <div className="chart-wrapper-200" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   {classSummary.literacyLevels && classSummary.literacyLevels.length > 0 ? (
                     <ResponsiveContainer width="100%" height="100%">
@@ -309,7 +316,7 @@ export default function MonitoringGuruDashboard() {
             <div className="charts-grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
               {/* Island Completion Rate (FIXED TO VERTIKAL BAR BASED ON MOCKUP) */}
               <div style={{ border: '2px solid #955C2E', borderRadius: '16px', padding: '20px', backgroundColor: 'white' }}>
-                <h3 style={{ color: '#955C2E', fontWeight: 'bold', marginBottom: '10px' }}>Tingkat Penyelesaian Pulau</h3>
+                <h3 style={{ color: '#955C2E', fontWeight: 'bold', marginBottom: '10px' }}>Tingkat Penyelesaian Pulau <InfoIcon {...GURU_INFO.penyelesaianPulau} /></h3>
                 <div className="chart-wrapper-responsive" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   {classSummary.islandExploration && classSummary.islandExploration.length > 0 ? (
                     <ResponsiveContainer width="100%" height="100%">
@@ -328,7 +335,7 @@ export default function MonitoringGuruDashboard() {
 
               {/* Analisis Waktu (Area Chart) */}
               <div style={{ border: '2px solid #955C2E', borderRadius: '16px', padding: '20px', backgroundColor: 'white' }}>
-                <h3 style={{ color: '#955C2E', fontWeight: 'bold', marginBottom: '10px' }}>Analisis Waktu</h3>
+                <h3 style={{ color: '#955C2E', fontWeight: 'bold', marginBottom: '10px' }}>Analisis Waktu <InfoIcon {...GURU_INFO.analisisWaktu} /></h3>
                 <div className="chart-wrapper-responsive" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   {classSummary.timeAnalysis && classSummary.timeAnalysis.length > 0 ? (
                     <ResponsiveContainer width="100%" height="100%">
@@ -349,7 +356,7 @@ export default function MonitoringGuruDashboard() {
 
         <section style={{ marginTop: '40px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
-              <h2 className="results-section-title" style={{ fontSize: '1.2rem', margin: 0 }}>Tabel Siswa</h2>
+              <h2 className="results-section-title" style={{ fontSize: '1.2rem', margin: 0, display: 'flex', alignItems: 'center' }}>Tabel Siswa <InfoIcon {...GURU_INFO.tabelSiswa} /></h2>
               <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
                 <div style={{ position: 'relative', width: '250px' }}>
                   <input 
@@ -364,16 +371,17 @@ export default function MonitoringGuruDashboard() {
               </div>
             </div>
             
-            <div className="history-table-container" style={{ display: 'flex', flexDirection: 'column', height: '500px' }}>
-              <div className="history-header" style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr 1.5fr 1.5fr 1.2fr', backgroundColor: '#955C2E', color: 'white', padding: '16px 24px', alignItems: 'center' }}>
-                <div style={{ paddingLeft: '24px' }}>Nama</div>
-                <div style={{ textAlign: 'center' }}>Kelas</div>
-                <div style={{ textAlign: 'center' }}>Total XP</div>
-                <div style={{ textAlign: 'center' }}>Peningkatan Cerita</div>
-                <div style={{ textAlign: 'center' }}>Literasi Budaya</div>
-                <div style={{ textAlign: 'center' }}>Aksi</div>
-              </div>
-              <div className="history-body" style={{ overflowY: 'auto', flex: 1 }}>
+            <div className="history-table-wrapper" style={{ overflowX: 'auto', width: '100%' }}>
+              <div className="history-table-container" style={{ display: 'flex', flexDirection: 'column', minWidth: '900px' }}>
+                <div className="history-header" style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr 1.5fr 1.5fr 1.2fr', backgroundColor: '#955C2E', color: 'white', padding: '16px 24px', alignItems: 'center' }}>
+                  <div style={{ textAlign: 'left' }}>Nama</div>
+                  <div style={{ textAlign: 'center' }}>Kelas</div>
+                  <div style={{ textAlign: 'center' }}>Total XP</div>
+                  <div style={{ textAlign: 'center' }}>Peningkatan Cerita</div>
+                  <div style={{ textAlign: 'center' }}>Literasi Budaya</div>
+                  <div style={{ textAlign: 'center' }}>Aksi</div>
+                </div>
+                <div className="history-body">
                 {tableLoading ? (
                   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '200px', color: '#955C2E', fontSize: '1.2rem', fontWeight: 'bold', backgroundColor: '#FEF6DF' }}>
                     Memuat data siswa...
@@ -396,12 +404,12 @@ export default function MonitoringGuruDashboard() {
                       : "0%";
                     
                     const averageLiteracyScore = student.averageLiteracyScore !== undefined && student.averageLiteracyScore !== null 
-                      ? `${student.averageLiteracyScore}%` 
+                      ? (Number(student.averageLiteracyScore) > 0 ? `+${student.averageLiteracyScore}%` : `${student.averageLiteracyScore}%`) 
                       : "0%";
 
                     return (
                       <div key={student.id} className="history-row" style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr 1.5fr 1.5fr 1.2fr', padding: '16px 24px', borderBottom: '2px solid #955C2E', alignItems: 'center', backgroundColor: '#FEF6DF' }}>
-                        <div style={{ fontWeight: '800', color: '#333' }}>{student.name}</div>
+                        <div style={{ textAlign: 'left', fontWeight: '800', color: '#333' }}>{student.name}</div>
                         <div style={{ textAlign: 'center', fontWeight: '800', color: '#333' }}>{studentClass}</div>
                         <div style={{ textAlign: 'center', fontWeight: '800', color: '#333' }}>{totalXp}</div>
                         <div style={{ textAlign: 'center', fontWeight: '800', color: '#333' }}>{learningImprovement}</div>
@@ -416,6 +424,7 @@ export default function MonitoringGuruDashboard() {
                   })
                 )}
               </div>
+            </div>
             </div>
         </section>
       </main>
