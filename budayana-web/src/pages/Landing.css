@@ -426,15 +426,36 @@ body { margin: 0; min-height: 100vh; overflow-x: hidden; font-family: 'Fredoka O
 
 /* Mobile Responsiveness */
 @media (max-width: 900px) {
-    .lnd-navbar-container { padding-top: 15px; }
-    .lnd-navbar {
-        padding: 8px 16px;
-        border-width: 2.5px;
-        border-radius: 30px;
+    .lnd-navbar-container {
+        padding: 15px 24px 0;
+        justify-content: space-between;
+        gap: 0;
+        box-sizing: border-box;
     }
-    .lnd-logo { height: 20px; margin-left: 5px; }
-    .lnd-desktop-nav { display: none; }
-    .lnd-mobile-menu-btn { display: block; }
+    .lnd-navbar {
+        border: none;
+        padding: 0;
+        width: auto;
+        background-color: transparent;
+    }
+    .lnd-logo {
+        display: none;
+    }
+    .lnd-desktop-nav {
+        display: none;
+    }
+    .lnd-mobile-menu-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px;
+        border-radius: 12px;
+        background-color: #FEEBCC;
+        border: 2px solid #955C2E;
+        color: #955C2E;
+        cursor: pointer;
+        flex-shrink: 0;
+    }
     /* General mobile layout adjustments below 900px, hero will be overridden by more specific queries */
     .lnd-hero { flex-direction: column; padding-top: 80px !important; align-items: center; gap: 0; }
     .lnd-hero-text { order: 1; padding-bottom: 50px; margin-left: 0; }
@@ -452,6 +473,22 @@ body { margin: 0; min-height: 100vh; overflow-x: hidden; font-family: 'Fredoka O
     }
     .lnd-roadmap-img {
         width: 100%;
+    }
+    
+    .lnd-feature-toggle-container {
+        border-width: 2px;
+        padding: 4px;
+        gap: 6px;
+        margin-bottom: 60px;
+    }
+    .lnd-feature-toggle-btn {
+        padding: 6px 16px;
+        font-size: 0.9rem;
+        border-radius: 15px;
+    }
+    .lnd-feature-toggle-btn.active {
+        box-shadow: 0 2px 0px #955C2E;
+        transform: translateY(-1px);
     }
     
     .lnd-title-brown, .lnd-title-white { font-size: 2.2rem; }

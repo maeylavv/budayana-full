@@ -23,8 +23,8 @@ export default function ScoreTable({ history }) {
   };
 
   return (
-    <div className="history-table-container" style={{ display: 'flex', flexDirection: 'column', height: '400px' }}>
-      <div className="history-header" style={{ display: 'grid', gridTemplateColumns: '1.5fr 2fr 1fr 1fr 1fr 1fr 1.5fr', padding: '16px 24px', borderBottom: '1px solid #E8D9C0', backgroundColor: '#955c2e', color: 'white', alignItems: 'center' }}>
+    <div className="history-table-container" style={{ display: 'flex', flexDirection: 'column', height: '400px', overflowY: 'auto', overflowX: 'auto', position: 'relative' }}>
+      <div className="history-header" style={{ display: 'grid', gridTemplateColumns: '1.5fr 2fr 1fr 1fr 1fr 1fr 1.5fr', padding: '16px 24px', borderBottom: '1px solid #E8D9C0', backgroundColor: '#955c2e', color: 'white', alignItems: 'center', position: 'sticky', top: 0, zIndex: 10, borderTopLeftRadius: '17px', borderTopRightRadius: '17px', minWidth: '850px' }}>
         <div style={{ textAlign: 'center', fontWeight: 'bold' }}>Pulau</div>
         <div style={{ textAlign: 'center', fontWeight: 'bold' }}>Topik</div>
         <div style={{ textAlign: 'center', fontWeight: 'bold' }}>Level</div>
@@ -33,10 +33,10 @@ export default function ScoreTable({ history }) {
         <div style={{ textAlign: 'center', fontWeight: 'bold' }}>Waktu</div>
         <div style={{ textAlign: 'center', fontWeight: 'bold' }}>Tanggal</div>
       </div>
-      <div className="history-body" style={{ overflowY: 'auto', flex: '1 1 0%' }}>
+      <div className="history-body" style={{ overflowY: 'visible', flex: '1 1 0%' }}>
         {history.length > 0 ? (
           history.map((item, index) => (
-            <div key={index} className="history-row" style={{ display: 'grid', gridTemplateColumns: '1.5fr 2fr 1fr 1fr 1fr 1fr 1.5fr', padding: '16px 24px', borderBottom: '1px solid #E8D9C0', alignItems: 'center' }}>
+            <div key={index} className="history-row" style={{ display: 'grid', gridTemplateColumns: '1.5fr 2fr 1fr 1fr 1fr 1fr 1.5fr', padding: '16px 24px', borderBottom: '1px solid #E8D9C0', alignItems: 'center', minWidth: '850px' }}>
               <div style={{ textAlign: 'center' }}>
                 <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${ISLAND_COLORS[item.island] || 'bg-gray-100'}`}>
                   {item.island}
@@ -60,7 +60,7 @@ export default function ScoreTable({ history }) {
             </div>
           ))
         ) : (
-          <div className="empty-message" style={{ textAlign: 'center', padding: '20px' }}>
+          <div className="empty-message" style={{ textAlign: 'center', padding: '20px', minWidth: '850px' }}>
             Belum ada riwayat pengerjaan.
           </div>
         )}

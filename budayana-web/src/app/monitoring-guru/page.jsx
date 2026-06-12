@@ -125,7 +125,7 @@ export default function MonitoringGuruDashboard() {
       return (
         <div className="flex bg-[#FEF6DF] min-h-screen w-full" style={{ fontFamily: "'Fredoka One', sans-serif" }}>
           <MonitoringSidebar role="guru" />
-          <main className="flex-1 p-10 box-border overflow-x-hidden">
+          <main className="flex-1 p-6 md:p-10 box-border overflow-x-hidden">
             <div style={{ marginBottom: '30px' }}>
                 <h1 className="results-section-title" style={{ fontSize: '2rem', marginBottom: '4px' }}>Ringkasan Hasil Siswa</h1>
                 <hr className="profile-divider" style={{ borderTop: '2px solid #E8D9C0', marginTop: '10px' }} />
@@ -142,7 +142,7 @@ export default function MonitoringGuruDashboard() {
     return (
       <div className="flex bg-[#FEF6DF] min-h-screen w-full" style={{ fontFamily: "'Fredoka One', sans-serif" }}>
         <MonitoringSidebar role="guru" />
-        <main className="flex-1 p-10 box-border overflow-x-hidden">
+        <main className="flex-1 p-6 md:p-10 box-border overflow-x-hidden">
           <div style={{ marginBottom: '30px' }}>
               <h1 className="results-section-title" style={{ fontSize: '2rem', marginBottom: '4px' }}>Ringkasan Hasil Siswa</h1>
               <hr className="profile-divider" style={{ borderTop: '2px solid #E8D9C0', marginTop: '10px' }} />
@@ -173,7 +173,7 @@ export default function MonitoringGuruDashboard() {
     <div className="flex bg-[#FEF6DF] min-h-screen w-full" style={{ fontFamily: "'Fredoka One', sans-serif" }}>
       <MonitoringSidebar role="guru" />
       
-      <main className="flex-1 p-10 box-border overflow-x-hidden">
+      <main className="flex-1 p-6 md:p-10 box-border overflow-x-hidden">
         <div style={{ marginBottom: '30px' }}>
             <h1 className="results-section-title" style={{ fontSize: '2rem', marginBottom: '4px' }}>Ringkasan Hasil Siswa</h1>
             <hr className="profile-divider" style={{ borderTop: '2px solid #E8D9C0', marginTop: '10px' }} />
@@ -356,7 +356,7 @@ export default function MonitoringGuruDashboard() {
 
         <section style={{ marginTop: '40px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
-              <h2 className="results-section-title" style={{ fontSize: '1.2rem', margin: 0, display: 'flex', alignItems: 'center' }}>Tabel Siswa <InfoIcon {...GURU_INFO.tabelSiswa} /></h2>
+              <h2 className="results-section-title" style={{ fontSize: '1.2rem', margin: 0, display: 'flex', alignItems: 'center', whiteSpace: 'nowrap' }}>Tabel Siswa <InfoIcon {...GURU_INFO.tabelSiswa} /></h2>
               <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
                 <div style={{ position: 'relative', width: '250px' }}>
                   <input 
@@ -372,7 +372,7 @@ export default function MonitoringGuruDashboard() {
             </div>
             
             <div className="history-table-wrapper" style={{ overflowX: 'auto', width: '100%' }}>
-              <div className="history-table-container" style={{ display: 'flex', flexDirection: 'column', minWidth: '900px' }}>
+              <div className="history-table-container" style={{ display: 'flex', flexDirection: 'column', minWidth: '900px', height: 'auto', overflowY: 'visible' }}>
                 <div className="history-header" style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr 1.5fr 1.5fr 1.2fr', backgroundColor: '#955C2E', color: 'white', padding: '16px 24px', alignItems: 'center' }}>
                   <div style={{ textAlign: 'left' }}>Nama</div>
                   <div style={{ textAlign: 'center' }}>Kelas</div>

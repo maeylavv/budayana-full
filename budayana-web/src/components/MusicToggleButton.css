@@ -44,7 +44,17 @@
   position: static !important;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
+  .music-toggle-btn {
+    width: 40px;
+    height: 40px;
+    border-width: 2.5px;
+    margin-right: 60px;
+  }
+  .music-toggle-btn img {
+    width: 22px;
+    height: 22px;
+  }
   .auth-header-controls {
     top: 16px;
     left: 16px;

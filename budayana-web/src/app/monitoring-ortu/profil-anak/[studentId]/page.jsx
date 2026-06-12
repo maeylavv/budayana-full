@@ -5,6 +5,17 @@ import { monitoringApi } from "../../../../lib/api";
 import "../../../../pages/Profile.css";
 import "../../../../pages/Results.css";
 
+const getAnimalAvatar = (seed) => {
+  const animals = ["Buaya.png", "Badak.png", "Harimau.png", "Monyet.png"];
+  if (!seed) return `/assets/budayana/islands/${animals[0]}`;
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) {
+    hash = seed.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const index = Math.abs(hash) % animals.length;
+  return `/assets/budayana/islands/${animals[index]}`;
+};
+
 export default function MonitoringOrtuProfilAnakDetail() {
   const { studentId } = useParams();
   const navigate = useNavigate();
@@ -72,9 +83,9 @@ export default function MonitoringOrtuProfilAnakDetail() {
         <section className="profile-top">
           <div className="profile-avatar-circle" style={{ width: '120px', height: '120px', borderColor: '#7B4F2E', backgroundColor: '#F2E5D3', overflow: 'hidden' }}>
              <img 
-              src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${student.name}`} 
+              src={getAnimalAvatar(studentId || student.name)} 
               alt="Avatar" 
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              style={{ width: '80%', height: '80%', objectFit: 'contain' }}
             />
           </div>
           <div className="profile-top-text">
