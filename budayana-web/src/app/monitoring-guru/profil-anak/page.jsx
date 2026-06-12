@@ -6,6 +6,17 @@ import { monitoringApi } from "../../../lib/api";
 import "../../../pages/Profile.css";
 import "../../../pages/Results.css";
 
+const getAnimalAvatar = (seed) => {
+  const animals = ["Buaya.png", "Badak.png", "Harimau.png", "Monyet.png"];
+  if (!seed) return `/assets/budayana/islands/${animals[0]}`;
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) {
+    hash = seed.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const index = Math.abs(hash) % animals.length;
+  return `/assets/budayana/islands/${animals[index]}`;
+};
+
 export default function MonitoringGuruProfilAnak() {
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -67,7 +78,7 @@ export default function MonitoringGuruProfilAnak() {
     <div className="flex bg-[#FEF6DF] min-h-screen w-full" style={{ fontFamily: "'Fredoka One', sans-serif" }}>
       <MonitoringSidebar role="guru" />
       
-      <main className="flex-1 p-10 box-border overflow-x-hidden">
+      <main className="flex-1 p-6 md:p-10 box-border overflow-x-hidden">
         <section>
             <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
               <h2 className="results-section-title" style={{ fontSize: '2rem', margin: 0, color: '#955C2E', fontWeight: 'bold' }}>Daftar Profil Siswa</h2>
@@ -111,40 +122,156 @@ export default function MonitoringGuruProfilAnak() {
               </div>
             </div>
             
-            <div className="history-table-container" style={{ height: 'auto', minHeight: '500px' }}>
-              <div className="history-header" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', backgroundColor: '#955C2E', color: 'white', padding: '16px 24px', alignItems: 'center' }}>
-                <div style={{ paddingLeft: '24px' }}>Nama</div>
-                <div style={{ textAlign: 'center' }}>Username</div>
-                <div style={{ textAlign: 'center' }}>Kelas</div>
-                <div style={{ textAlign: 'center' }}>Label Kelas</div>
-                <div style={{ textAlign: 'center' }}>Aksi</div>
-              </div>
-              <div className="history-body" style={{ overflowY: 'auto' }}>
-                {loading ? (
-                   <div style={{ padding: '40px', textAlign: 'center', color: '#955C2E' }}>Memuat data siswa...</div>
-                ) : error ? (
-                   <div style={{ padding: '40px', textAlign: 'center', color: '#F44336' }}>⚠️ Gagal memuat data: {error}</div>
-                ) : filteredStudents.length === 0 ? (
-                   <div style={{ padding: '40px', textAlign: 'center', color: '#955C2E' }}>
-                     {debouncedSearch ? "Tidak ada siswa ditemukan." : "Belum ada siswa di kelas ini."}
-                   </div>
-                ) : (
-                  filteredStudents.map((student) => (
-                    <div key={student.id} className="history-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', padding: '16px 24px', borderBottom: '2px solid #955C2E', alignItems: 'center', backgroundColor: '#FEF6DF' }}>
-                      <div style={{ fontWeight: '800', color: '#333' }}>{student.name}</div>
-                      <div style={{ textAlign: 'center', fontWeight: '800', color: '#333' }}>{student.displayUsername || "-"}</div>
-                      <div style={{ textAlign: 'center', fontWeight: '800', color: '#333' }}>{student.grade}</div>
-                      <div style={{ textAlign: 'center', fontWeight: '800', color: '#333' }}>{student.classLabel || "-"}</div>
-                      <div style={{ display: 'flex', justifyContent: 'center' }}>
-                          <Link to={`/monitoring-guru/profil-anak/${student.id}`} className="no-wrap-btn" style={{ backgroundColor: '#f3a64c', color: 'white', padding: '10px 24px', borderRadius: '12px', textDecoration: 'none', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '1rem', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
-                              Lihat Profil <Search size={18} />
-                          </Link>
-                      </div>
+            {loading ? (
+               <div style={{ padding: '40px', textAlign: 'center', color: '#955C2E', backgroundColor: '#ffffff', border: '3px solid #955C2E', borderRadius: '20px', fontWeight: 'bold' }}>Memuat data siswa...</div>
+            ) : error ? (
+               <div style={{ padding: '40px', textAlign: 'center', color: '#F44336', backgroundColor: '#ffffff', border: '3px solid #F44336', borderRadius: '20px', fontWeight: 'bold' }}>⚠️ Gagal memuat data: {error}</div>
+            ) : filteredStudents.length === 0 ? (
+               <div style={{ padding: '40px', textAlign: 'center', color: '#955C2E', backgroundColor: '#ffffff', border: '3px solid #955C2E', borderRadius: '20px', fontWeight: 'bold' }}>
+                 {debouncedSearch ? "Tidak ada siswa ditemukan." : "Belum ada siswa di kelas ini."}
+               </div>
+            ) : (
+              <>
+                {/* Desktop Grid Table View */}
+                <div className="hidden md:block">
+                  <div className="history-table-container" style={{ height: 'auto', minHeight: '500px', overflowX: 'auto', position: 'relative' }}>
+                    <div className="history-header" style={{ display: 'grid', gridTemplateColumns: '1.8fr 1fr 0.8fr 1fr 2.6fr', backgroundColor: '#955C2E', color: 'white', padding: '16px 24px', alignItems: 'center', position: 'sticky', top: 0, zIndex: 10, borderTopLeftRadius: '17px', borderTopRightRadius: '17px', minWidth: '950px' }}>
+                      <div className="student-name-cell" style={{ paddingLeft: '24px' }}>Nama</div>
+                      <div style={{ textAlign: 'center' }}>Username</div>
+                      <div style={{ textAlign: 'center' }}>Kelas</div>
+                      <div style={{ textAlign: 'center' }}>Label Kelas</div>
+                      <div style={{ textAlign: 'center' }}>Aksi</div>
                     </div>
-                  ))
-                )}
-              </div>
-            </div>
+                    <div className="history-body" style={{ overflowY: 'visible' }}>
+                      {filteredStudents.map((student) => (
+                        <div key={student.id} className="history-row" style={{ display: 'grid', gridTemplateColumns: '1.8fr 1fr 0.8fr 1fr 2.6fr', padding: '16px 24px', borderBottom: '2px solid #955C2E', alignItems: 'center', backgroundColor: '#FEF6DF', minWidth: '950px' }}>
+                          <div className="student-name-cell" style={{ fontWeight: '800', color: '#333', paddingLeft: '24px' }}>{student.name}</div>
+                          <div style={{ textAlign: 'center', fontWeight: '800', color: '#333' }}>{student.displayUsername || "-"}</div>
+                          <div style={{ textAlign: 'center', fontWeight: '800', color: '#333' }}>{student.grade}</div>
+                          <div style={{ textAlign: 'center', fontWeight: '800', color: '#333' }}>{student.classLabel || "-"}</div>
+                          <div style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
+                              <Link to={`/monitoring-guru/hasil/${student.id}`} className="no-wrap-btn" style={{ backgroundColor: '#EF6D54', color: 'white', padding: '10px 16px', borderRadius: '12px', textDecoration: 'none', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '1rem', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+                                  Lihat Dashboard <Search size={18} />
+                              </Link>
+                              <Link to={`/monitoring-guru/profil-anak/${student.id}`} className="no-wrap-btn" style={{ backgroundColor: '#f3a64c', color: 'white', padding: '10px 16px', borderRadius: '12px', textDecoration: 'none', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '1rem', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+                                  Lihat Profil <Search size={18} />
+                              </Link>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Mobile Card Layout View */}
+                <div className="block md:hidden">
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                    {filteredStudents.map((student) => (
+                      <div 
+                        key={student.id} 
+                        style={{
+                          backgroundColor: '#FFFFFF',
+                          border: '3px solid #955C2E',
+                          borderRadius: '20px',
+                          padding: '20px',
+                          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: '12px'
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          <div 
+                            style={{ 
+                              width: '44px', 
+                              height: '44px', 
+                              borderRadius: '50%', 
+                              backgroundColor: '#ffe6b7', 
+                              border: '2.5px solid #f3a64c', 
+                              display: 'flex', 
+                              alignItems: 'center', 
+                              justifyContent: 'center',
+                              overflow: 'hidden',
+                              flexShrink: 0
+                            }}
+                          >
+                            <img 
+                              src={getAnimalAvatar(student.id || student.name)} 
+                              alt="Avatar" 
+                              style={{ width: '80%', height: '80%', objectFit: 'contain' }} 
+                            />
+                          </div>
+                          <div style={{ minWidth: 0, flex: 1 }}>
+                            <h4 style={{ margin: 0, color: '#955C2E', fontSize: '1.25rem', fontWeight: 'bold', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{student.name}</h4>
+                            <span style={{ fontSize: '0.9rem', color: '#666', fontWeight: 'bold' }}>@{student.displayUsername || "-"}</span>
+                          </div>
+                        </div>
+
+                        <hr style={{ border: 'none', borderTop: '2px solid #E8D9C0', margin: '4px 0' }} />
+
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '1rem' }}>
+                          <div>
+                            <span style={{ color: '#955C2E', display: 'block', fontSize: '0.85rem', fontWeight: 'bold' }}>Kelas</span>
+                            <span style={{ fontWeight: '800', color: '#333' }}>{student.grade}</span>
+                          </div>
+                          <div>
+                            <span style={{ color: '#955C2E', display: 'block', fontSize: '0.85rem', fontWeight: 'bold' }}>Label Kelas</span>
+                            <span style={{ fontWeight: '800', color: '#333' }}>Kelas {student.classLabel || "-"}</span>
+                          </div>
+                        </div>
+
+                        <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
+                          <Link 
+                            to={`/monitoring-guru/hasil/${student.id}`} 
+                            style={{ 
+                              flex: 1,
+                              backgroundColor: '#EF6D54', 
+                              color: 'white', 
+                              padding: '10px 8px', 
+                              borderRadius: '12px', 
+                              textDecoration: 'none', 
+                              fontWeight: '800', 
+                              display: 'flex', 
+                              alignItems: 'center', 
+                              justifyContent: 'center',
+                              gap: '6px', 
+                              fontSize: '0.9rem', 
+                              border: 'none', 
+                              cursor: 'pointer',
+                              whiteSpace: 'nowrap'
+                            }}
+                          >
+                            Dashboard <Search size={16} />
+                          </Link>
+                          <Link 
+                            to={`/monitoring-guru/profil-anak/${student.id}`} 
+                            style={{ 
+                              flex: 1,
+                              backgroundColor: '#f3a64c', 
+                              color: 'white', 
+                              padding: '10px 8px', 
+                              borderRadius: '12px', 
+                              textDecoration: 'none', 
+                              fontWeight: '800', 
+                              display: 'flex', 
+                              alignItems: 'center', 
+                              justifyContent: 'center',
+                              gap: '6px', 
+                              fontSize: '0.9rem', 
+                              border: 'none', 
+                              cursor: 'pointer',
+                              whiteSpace: 'nowrap'
+                            }}
+                          >
+                            Profil <Search size={16} />
+                          </Link>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
         </section>
       </main>
     </div>

@@ -6,6 +6,17 @@ import { monitoringApi } from "../../../../lib/api";
 import "../../../../pages/Profile.css";
 import "../../../../pages/Results.css";
 
+const getAnimalAvatar = (seed) => {
+  const animals = ["Buaya.png", "Badak.png", "Harimau.png", "Monyet.png"];
+  if (!seed) return `/assets/budayana/islands/${animals[0]}`;
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) {
+    hash = seed.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const index = Math.abs(hash) % animals.length;
+  return `/assets/budayana/islands/${animals[index]}`;
+};
+
 export default function MonitoringGuruProfilAnakDetail() {
   const { studentId } = useParams();
   const navigate = useNavigate();
@@ -109,8 +120,12 @@ export default function MonitoringGuruProfilAnakDetail() {
       
       <main className="flex-1 p-10 box-border overflow-x-hidden">
         <section className="profile-top">
-          <div className="profile-avatar-circle" style={{ fontSize: '3rem', width: '120px', height: '120px', borderColor: '#7B4F2E', backgroundColor: '#F2E5D3' }}>
-            👤
+          <div className="profile-avatar-circle" style={{ width: '120px', height: '120px', borderColor: '#7B4F2E', backgroundColor: '#F2E5D3', overflow: 'hidden' }}>
+            <img 
+              src={getAnimalAvatar(studentId || formData.nama)} 
+              alt="Avatar" 
+              style={{ width: '80%', height: '80%', objectFit: 'contain' }}
+            />
           </div>
           <div className="profile-top-text">
             <h1 className="profile-name" style={{ color: '#7B4F2E', fontWeight: '800', margin: 0 }}>{formData.nama}</h1>

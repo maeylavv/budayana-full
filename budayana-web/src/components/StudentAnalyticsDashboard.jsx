@@ -13,6 +13,17 @@ import { PARENT_INFO } from "./infoContent/parentInfoContent";
 // Half Pie/Donut Chart Colors
 const GAUGE_COLORS = ["#4CAF50", "#E8D9C0"];
 
+const getAnimalAvatar = (seed) => {
+  const animals = ["Buaya.png", "Badak.png", "Harimau.png", "Monyet.png"];
+  if (!seed) return `/assets/budayana/islands/${animals[0]}`;
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) {
+    hash = seed.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const index = Math.abs(hash) % animals.length;
+  return `/assets/budayana/islands/${animals[index]}`;
+};
+
 export default function StudentAnalyticsDashboard({
   studentAnalytics,
   backLink,
@@ -51,8 +62,8 @@ export default function StudentAnalyticsDashboard({
     <div style={{ fontFamily: "'Fredoka One', sans-serif" }}>
       {/* Top Header */}
       <section className="profile-top">
-        <div className="profile-avatar-circle" style={{ borderColor: '#7B4F2E', backgroundColor: '#e2cfab' }}>
-          <img src="/assets/budayana/islands/Bocah1 1.png" alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        <div className="profile-avatar-circle" style={{ borderColor: '#7B4F2E', backgroundColor: '#e2cfab', overflow: 'hidden' }}>
+          <img src={getAnimalAvatar(studentInfo.id || studentInfo.name)} alt="Avatar" style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
         </div>
         <div className="profile-top-text">
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
@@ -237,8 +248,8 @@ function StoryAnalyticsPanel({ storyAnalytics, studentInfo }) {
       {/* Story History Table */}
       <section style={{ marginTop: '40px' }}>
         <h2 className="results-section-title" style={{ fontSize: '1.2rem', marginBottom: '12px', color: '#7B4F2E' }}>Riwayat Cerita Rakyat</h2>
-        <div className="history-table-container" style={{ display: 'flex', flexDirection: 'column', height: '360px' }}>
-          <div className="history-header" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1.2fr 1.2fr 3fr', padding: '16px 24px', borderBottom: '1px solid #E8D9C0', backgroundColor: '#955c2e', color: 'white', alignItems: 'center' }}>
+        <div className="history-table-container" style={{ display: 'flex', flexDirection: 'column', height: '360px', overflowY: 'auto', overflowX: 'auto', position: 'relative' }}>
+          <div className="history-header" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1.2fr 1.2fr 3fr', padding: '16px 24px', borderBottom: '1px solid #E8D9C0', backgroundColor: '#955c2e', color: 'white', alignItems: 'center', position: 'sticky', top: 0, zIndex: 10, borderTopLeftRadius: '17px', borderTopRightRadius: '17px', minWidth: '900px' }}>
             <div style={{ textAlign: 'left', fontWeight: 'bold' }}>Judul Cerita</div>
             <div style={{ textAlign: 'center', fontWeight: 'bold' }}>Pre-Test</div>
             <div style={{ textAlign: 'center', fontWeight: 'bold' }}>Post-Test</div>
@@ -247,10 +258,10 @@ function StoryAnalyticsPanel({ storyAnalytics, studentInfo }) {
             <div style={{ textAlign: 'center', fontWeight: 'bold' }}>Waktu</div>
             <div style={{ textAlign: 'left', fontWeight: 'bold' }}>Jawaban Esai</div>
           </div>
-          <div className="history-body" style={{ overflowY: 'auto', flex: '1 1 0%' }}>
+          <div className="history-body" style={{ overflowY: 'visible', flex: '1 1 0%' }}>
             {history && history.length > 0 ? (
               history.map((item, index) => (
-                <div key={index} className="history-row" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1.2fr 1.2fr 3fr', padding: '16px 24px', borderBottom: '1px solid #E8D9C0', alignItems: 'center' }}>
+                <div key={index} className="history-row" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1.2fr 1.2fr 3fr', padding: '16px 24px', borderBottom: '1px solid #E8D9C0', alignItems: 'center', minWidth: '900px' }}>
                   <div style={{ textAlign: 'left', fontWeight: 'bold', color: '#7B4F2E' }}>{item.storyTitle}</div>
                   <div style={{ textAlign: 'center', color: '#FF9800', fontWeight: 'bold' }}>{item.preTestScore !== null ? item.preTestScore : "-"}</div>
                   <div style={{ textAlign: 'center', color: '#4CAF50', fontWeight: 'bold' }}>{item.postTestScore !== null ? item.postTestScore : "-"}</div>
@@ -263,7 +274,7 @@ function StoryAnalyticsPanel({ storyAnalytics, studentInfo }) {
                 </div>
               ))
             ) : (
-              <div className="history-row" style={{ display: 'flex', justifyContent: 'center', padding: '24px', color: '#7B4F2E', fontStyle: 'italic' }}>
+              <div className="history-row" style={{ display: 'flex', justifyContent: 'center', padding: '24px', color: '#7B4F2E', fontStyle: 'italic', minWidth: '900px' }}>
                 Belum ada data untuk ditampilkan.
               </div>
             )}
@@ -309,7 +320,9 @@ function QuizAnalyticsPanel({ quizAnalytics, studentInfo }) {
             <div className="stat-label">XP Quiz Budaya</div>
           </div>
           <div className="stat-card pink" style={{ border: 'none', borderRadius: '24px', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-            <div className="stat-value" style={{ fontSize: '2rem' }}>🏅 {studentInfo.title}</div>
+            <div className="stat-value" style={{ fontSize: '2rem' }}>
+              {studentInfo.title && studentInfo.title !== "-" ? `🏅 ${studentInfo.title}` : "-"}
+            </div>
             <div className="stat-label" style={{ fontSize: '1.2rem' }}>Peringkat Petualang</div>
           </div>
           <div className="stat-card orange" style={{ border: 'none', borderRadius: '24px' }}>

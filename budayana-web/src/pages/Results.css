@@ -79,12 +79,13 @@
 .history-table-container {
   width: 100%;
   border-radius: 20px;
-  overflow: hidden;
+  overflow: auto;
   border: 3px solid #955c2e;
   background-color: #fffaf0;
   display: flex;
   flex-direction: column;
   height: 500px;
+  position: relative;
   /* Fixed height for scroll */
 }
 
@@ -99,23 +100,29 @@
   font-size: 1rem;
   align-items: center;
   font-family: 'Fredoka One', sans-serif;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-top-left-radius: 17px;
+  border-top-right-radius: 17px;
 }
 
 .history-body {
-  overflow-y: auto;
+  overflow-y: visible;
   flex: 1;
 }
 
 /* Custom Scrollbar */
-.history-body::-webkit-scrollbar {
+.history-table-container::-webkit-scrollbar {
   width: 12px;
+  height: 12px;
 }
 
-.history-body::-webkit-scrollbar-track {
+.history-table-container::-webkit-scrollbar-track {
   background: #e6dfca;
 }
 
-.history-body::-webkit-scrollbar-thumb {
+.history-table-container::-webkit-scrollbar-thumb {
   background-color: #955c2e;
   border-radius: 6px;
   border: 3px solid #e6dfca;
@@ -372,4 +379,12 @@
   margin: 0;
   line-height: 1.5;
   font-family: 'Fredoka One', sans-serif;
+}
+
+/* Force left-alignment for student name cells on responsive layouts */
+.history-row > .student-name-cell,
+.history-header > .student-name-cell,
+.student-name-cell {
+  justify-content: flex-start !important;
+  text-align: left !important;
 }

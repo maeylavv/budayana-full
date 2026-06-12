@@ -323,7 +323,7 @@ export default function Results() {
               </div>
               <div className='stat-card pink' style={{ border: 'none', borderRadius: '24px', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 <div className='stat-value' style={{ fontSize: '2rem' }}>
-                  🏅 {quizStats?.currentBadge || '-'}
+                  {quizStats?.currentBadge && quizStats?.currentBadge !== "-" ? `🏅 ${quizStats.currentBadge}` : "-"}
                 </div>
                 <div className='stat-label' style={{ fontSize: '1.2rem' }}>Peringkat Petualang</div>
               </div>

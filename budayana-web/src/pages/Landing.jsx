@@ -55,10 +55,10 @@ export default function Landing() {
                             >
                                 Masuk
                             </button>
-                            <div className={`absolute right-0 mt-2 w-56 bg-white border border-[#E8D9C0] rounded-xl shadow-lg py-2 transition-all duration-300 z-50 ${isLoginOpen ? 'opacity-100 visible' : 'opacity-0 invisible group-hover:opacity-100 group-hover:visible'}`}>
-                                <button onClick={() => navigate('/login')} className="w-full text-left px-4 py-2 hover:bg-[#FDF5E6] font-fredoka-one text-[#955C2E] font-semibold transition-colors">Masuk sebagai Siswa</button>
-                                <button onClick={() => navigate('/monitoring-login-guru')} className="w-full text-left px-4 py-2 hover:bg-[#FDF5E6] font-fredoka-one text-[#955C2E] font-semibold transition-colors">Masuk sebagai Guru</button>
-                                <button onClick={() => navigate('/monitoring-login-ortu')} className="w-full text-left px-4 py-2 hover:bg-[#FDF5E6] font-fredoka-one text-[#955C2E] font-semibold transition-colors">Masuk sebagai Orang Tua</button>
+                            <div className={`absolute left-1/2 -translate-x-1/2 mt-2 w-56 bg-white border border-[#E8D9C0] rounded-xl shadow-lg py-2 transition-all duration-300 z-50 ${isLoginOpen ? 'opacity-100 visible' : 'opacity-0 invisible group-hover:opacity-100 group-hover:visible'}`}>
+                                <button onClick={() => navigate('/login')} className="w-full text-center px-4 py-2 hover:bg-[#FDF5E6] font-fredoka-one text-[#955C2E] font-semibold transition-colors">Masuk sebagai Siswa</button>
+                                <button onClick={() => navigate('/monitoring-login-guru')} className="w-full text-center px-4 py-2 hover:bg-[#FDF5E6] font-fredoka-one text-[#955C2E] font-semibold transition-colors">Masuk sebagai Guru</button>
+                                <button onClick={() => navigate('/monitoring-login-ortu')} className="w-full text-center px-4 py-2 hover:bg-[#FDF5E6] font-fredoka-one text-[#955C2E] font-semibold transition-colors">Masuk sebagai Orang Tua</button>
                             </div>
                         </div>
                     </div>
@@ -93,9 +93,9 @@ export default function Landing() {
                         </nav>
                         <div className="flex flex-col gap-3 mt-auto mb-4">
                             <h3 className="font-fredoka-one text-[#955C2E] text-xl font-bold mb-2">Masuk</h3>
-                            <button onClick={() => navigate('/login')} className="bg-white border-2 border-[#955C2E] text-[#955C2E] font-fredoka-one py-2 rounded-full hover:bg-[#955C2E] hover:text-white transition-colors font-bold">Siswa</button>
-                            <button onClick={() => navigate('/monitoring-login-guru')} className="bg-white border-2 border-[#955C2E] text-[#955C2E] font-fredoka-one py-2 rounded-full hover:bg-[#955C2E] hover:text-white transition-colors font-bold">Guru</button>
-                            <button onClick={() => navigate('/monitoring-login-ortu')} className="bg-white border-2 border-[#955C2E] text-[#955C2E] font-fredoka-one py-2 rounded-full hover:bg-[#955C2E] hover:text-white transition-colors font-bold">Orang Tua</button>
+                            <button onClick={() => navigate('/login')} className="bg-white border-2 border-[#955C2E] text-[#955C2E] font-fredoka-one py-2 rounded-full hover:bg-[#5e7a41] hover:border-[#5e7a41] hover:text-white transition-colors font-bold">Siswa</button>
+                            <button onClick={() => navigate('/monitoring-login-guru')} className="bg-white border-2 border-[#955C2E] text-[#955C2E] font-fredoka-one py-2 rounded-full hover:bg-[#5e7a41] hover:border-[#5e7a41] hover:text-white transition-colors font-bold">Guru</button>
+                            <button onClick={() => navigate('/monitoring-login-ortu')} className="bg-white border-2 border-[#955C2E] text-[#955C2E] font-fredoka-one py-2 rounded-full hover:bg-[#5e7a41] hover:border-[#5e7a41] hover:text-white transition-colors font-bold">Orang Tua</button>
                         </div>
                     </div>
                 </div>
@@ -144,7 +144,7 @@ export default function Landing() {
 
             <div className="lnd-interaktif">
                 <h1 className="lnd-title-white">Kuis Budaya Interaktif</h1>
-                <p className="lnd-subtitle-white">Jelajahi kekayaan budaya Indonesia dari 8 pulau<br />dengan cara yang menyenangkan!</p>
+                <p className="lnd-subtitle-white">Jelajahi kekayaan budaya Indonesia dari 8 pulau dengan cara yang menyenangkan!</p>
                 <div className="lnd-grid-islands">
                     <IslandCard img="Sumatra.png" name="Sumatra" navigate={navigate} />
                     <IslandCard img="Jawa.png" name="Jawa" navigate={navigate} />
@@ -177,7 +177,7 @@ export default function Landing() {
 
             <div id="features" className="lnd-features">
                 <h1 className="lnd-title-brown">Fitur Utama</h1>
-                <p className="lnd-subtitle-brown">Jelajahi kekayaan budaya Indonesia dari 8 pulau<br />dengan cara yang menyenangkan!</p>
+                <p className="lnd-subtitle-brown">Jelajahi kekayaan budaya Indonesia <br />  dari 8 pulau dengan cara yang menyenangkan!</p>
 
                 <div className="lnd-feature-toggle-container">
                     <button
