@@ -303,6 +303,7 @@ function formatDate(d: Date): string {
 }
 
 function deriveStudentTitle(totalXp: number, maxLevelCompleted: number): string {
+  if (maxLevelCompleted === 0) return "-";
   if (maxLevelCompleted >= 3 || totalXp >= 1200) return "Si Pakar Budaya";
   if (maxLevelCompleted >= 2 || totalXp >= 800) return "Si Penjelajah";
   return "Si Pengamat";
@@ -943,16 +944,15 @@ export const getStudentAnalytics = async (studentId: string) => {
   }
 
   // Default fallback if no attempts
-  if (maxAttempts === 0) {
-    dominantLevel = 1;
+  let currentBadge = "-";
+  if (maxAttempts > 0) {
+    const badgeMap: Record<number, string> = {
+      1: "Pengamat Budaya",
+      2: "Penjelajah Budaya",
+      3: "Ahli Budaya",
+    };
+    currentBadge = badgeMap[dominantLevel] || "-";
   }
-
-  const badgeMap: Record<number, string> = {
-    1: "Pengamat Budaya",
-    2: "Penjelajah Budaya",
-    3: "Ahli Budaya",
-  };
-  const currentBadge = badgeMap[dominantLevel] || "Pengamat Budaya";
 
   // Radar Literacy (Student vs Class)
   const classQuizzes = await prisma.quizAttempt.findMany({

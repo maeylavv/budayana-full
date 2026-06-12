@@ -24453,6 +24453,7 @@ function formatDate(d) {
 	return `${pad(d.getDate())}-${pad(d.getMonth() + 1)}-${d.getFullYear()}`;
 }
 function deriveStudentTitle(totalXp, maxLevelCompleted) {
+	if (maxLevelCompleted === 0) return "-";
 	if (maxLevelCompleted >= 3 || totalXp >= 1200) return "Si Pakar Budaya";
 	if (maxLevelCompleted >= 2 || totalXp >= 800) return "Si Penjelajah";
 	return "Si Pengamat";
@@ -24967,12 +24968,12 @@ const getStudentAnalytics = async (studentId) => {
 	} else if (levelAttempts[lvl] === maxAttempts && maxAttempts > 0) {
 		if (levelAverages[lvl] > levelAverages[dominantLevel]) dominantLevel = lvl;
 	}
-	if (maxAttempts === 0) dominantLevel = 1;
-	const currentBadge = {
+	let currentBadge = "-";
+	if (maxAttempts > 0) currentBadge = {
 		1: "Pengamat Budaya",
 		2: "Penjelajah Budaya",
 		3: "Ahli Budaya"
-	}[dominantLevel] || "Pengamat Budaya";
+	}[dominantLevel] || "-";
 	const classQuizzes = await prisma.quizAttempt.findMany({
 		where: {
 			user: {
