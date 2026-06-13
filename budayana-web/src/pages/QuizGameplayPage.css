@@ -880,3 +880,63 @@
     padding: 12px 15px;
   }
 }
+
+/* Tooltip styles for Baca Lagi button */
+.baca-lagi-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.baca-lagi-tooltip {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  transition: opacity 150ms ease;
+  pointer-events: none;
+  z-index: 50;
+  width: max-content;
+  max-width: 220px;
+}
+
+.baca-lagi-wrapper:hover .baca-lagi-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltip-arrow-down {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #5C3A1E;
+  margin: 0 auto;
+}
+
+.tooltip-content {
+  background-color: #5C3A1E;
+  color: #FFF8EE;
+  font-size: 12px;
+  font-family: 'Fredoka', sans-serif;
+  padding: 6px 12px;
+  border-radius: 10px;
+  text-align: center;
+  white-space: normal;
+  box-shadow: 0 -4px 10px rgba(0,0,0,0.15);
+}
+
+.drag-drop-helper-text {
+  font-size: 12px;
+  color: #A07040;
+  font-style: italic;
+  background: #FFF8EE;
+  border: 1px dashed #E8C070;
+  border-radius: 8px;
+  padding: 6px 12px;
+  display: inline-block;
+  margin-bottom: 10px;
+  width: fit-content;
+  font-family: 'Fredoka', sans-serif;
+}

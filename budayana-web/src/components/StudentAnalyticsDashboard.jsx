@@ -294,6 +294,7 @@ function QuizAnalyticsPanel({ quizAnalytics, studentInfo }) {
   const { stats, radarLiteracy, culturalInterest, history, currentBadge } = quizAnalytics;
   const hasRadarData = radarLiteracy && radarLiteracy.length > 0;
   const hasInterestData = culturalInterest && culturalInterest.length > 0;
+  console.log('Cultural interest data:', culturalInterest);
 
   // Format score in history to make sure it renders beautifully as string or percentage
   const formattedHistory = (history || []).map(item => ({
@@ -373,9 +374,9 @@ function QuizAnalyticsPanel({ quizAnalytics, studentInfo }) {
                 <BarChart data={culturalInterest} margin={{ top: 20, right: 10, left: -20, bottom: 5 }}>
                   <XAxis dataKey="name" tick={{ fontSize: 10, fill: '#7B4F2E', fontWeight: 'bold' }} />
                   <YAxis tick={{ fontSize: 9 }} allowDecimals={false} domain={[0, 'auto']} />
-                  <Tooltip />
+                  <Tooltip formatter={(value) => `${value} kali`} />
                   <Legend iconType="circle" wrapperStyle={{ fontSize: '11px' }} />
-                  <Bar dataKey="Jumlah Dimainkan" fill="#f3a64c" radius={[6, 6, 0, 0]} />
+                  <Bar dataKey="Siswa Ini" fill="#f3a64c" radius={[6, 6, 0, 0]} />
                   <Bar dataKey="Rata-rata Kelas" fill="#955C2E" radius={[6, 6, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
