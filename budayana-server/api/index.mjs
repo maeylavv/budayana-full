@@ -24257,7 +24257,14 @@ const getStudentsByGrade = async (grade, classLabel, search) => {
 			},
 			quizAttempts: {
 				where: { completed: true },
-				select: { percentageScore: true }
+				select: {
+					islandSlug: true,
+					topicSlug: true,
+					levelId: true,
+					percentageScore: true,
+					startedAt: true
+				},
+				orderBy: { startedAt: "asc" }
 			}
 		},
 		orderBy: { name: "asc" }
@@ -24269,9 +24276,15 @@ const getStudentsByGrade = async (grade, classLabel, search) => {
 			countImp++;
 		}
 		const learningImprovement = countImp > 0 ? Math.round(sumImp / countImp) : 0;
+		const firstAttemptsMap = /* @__PURE__ */ new Map();
+		for (const qa of s.quizAttempts) {
+			const key = `${qa.islandSlug}::${qa.topicSlug}::${qa.levelId}`;
+			if (!firstAttemptsMap.has(key)) firstAttemptsMap.set(key, qa);
+		}
+		const firstAttempts = Array.from(firstAttemptsMap.values());
 		let sumLit = 0;
 		let countLit = 0;
-		for (const qa of s.quizAttempts) {
+		for (const qa of firstAttempts) {
 			sumLit += qa.percentageScore;
 			countLit++;
 		}
@@ -24363,7 +24376,14 @@ const getStudentsByGuardianEmail = async (email, search) => {
 			},
 			quizAttempts: {
 				where: { completed: true },
-				select: { percentageScore: true }
+				select: {
+					islandSlug: true,
+					topicSlug: true,
+					levelId: true,
+					percentageScore: true,
+					startedAt: true
+				},
+				orderBy: { startedAt: "asc" }
 			}
 		},
 		orderBy: { name: "asc" }
@@ -24375,9 +24395,15 @@ const getStudentsByGuardianEmail = async (email, search) => {
 			countImp++;
 		}
 		const learningImprovement = countImp > 0 ? Math.round(sumImp / countImp) : 0;
+		const firstAttemptsMap = /* @__PURE__ */ new Map();
+		for (const qa of s.quizAttempts) {
+			const key = `${qa.islandSlug}::${qa.topicSlug}::${qa.levelId}`;
+			if (!firstAttemptsMap.has(key)) firstAttemptsMap.set(key, qa);
+		}
+		const firstAttempts = Array.from(firstAttemptsMap.values());
 		let sumLit = 0;
 		let countLit = 0;
-		for (const qa of s.quizAttempts) {
+		for (const qa of firstAttempts) {
 			sumLit += qa.percentageScore;
 			countLit++;
 		}
@@ -24488,7 +24514,14 @@ const getClassSummary = async (grade, classLabel) => {
 			},
 			quizAttempts: {
 				where: { completed: true },
-				select: { percentageScore: true }
+				select: {
+					islandSlug: true,
+					topicSlug: true,
+					levelId: true,
+					percentageScore: true,
+					startedAt: true
+				},
+				orderBy: { startedAt: "asc" }
 			}
 		},
 		orderBy: { name: "asc" }
@@ -24782,10 +24815,21 @@ const getClassSummary = async (grade, classLabel) => {
 			completed: true
 		},
 		select: {
+			userId: true,
+			islandSlug: true,
+			topicSlug: true,
 			levelId: true,
-			percentageScore: true
-		}
+			percentageScore: true,
+			startedAt: true
+		},
+		orderBy: { startedAt: "asc" }
 	});
+	const firstAttemptsClassMap = /* @__PURE__ */ new Map();
+	for (const qa of quizAttemptsClass) {
+		const key = `${qa.userId}::${qa.islandSlug}::${qa.topicSlug}::${qa.levelId}`;
+		if (!firstAttemptsClassMap.has(key)) firstAttemptsClassMap.set(key, qa);
+	}
+	const firstAttemptsClass = Array.from(firstAttemptsClassMap.values());
 	const levelScoresMap = /* @__PURE__ */ new Map();
 	levelScoresMap.set(1, {
 		sum: 0,
@@ -24799,7 +24843,7 @@ const getClassSummary = async (grade, classLabel) => {
 		sum: 0,
 		count: 0
 	});
-	for (const qa of quizAttemptsClass) {
+	for (const qa of firstAttemptsClass) {
 		const lvl = qa.levelId;
 		if (levelScoresMap.has(lvl)) {
 			const data = levelScoresMap.get(lvl);
@@ -24835,9 +24879,15 @@ const getClassSummary = async (grade, classLabel) => {
 				countImp++;
 			}
 			const learningImprovement = countImp > 0 ? Math.round(sumImp / countImp) : 0;
+			const firstAttemptsMap = /* @__PURE__ */ new Map();
+			for (const qa of s.quizAttempts) {
+				const key = `${qa.islandSlug}::${qa.topicSlug}::${qa.levelId}`;
+				if (!firstAttemptsMap.has(key)) firstAttemptsMap.set(key, qa);
+			}
+			const firstAttempts = Array.from(firstAttemptsMap.values());
 			let sumLit = 0;
 			let countLit = 0;
-			for (const qa of s.quizAttempts) {
+			for (const qa of firstAttempts) {
 				sumLit += qa.percentageScore;
 				countLit++;
 			}
@@ -24864,7 +24914,10 @@ const getStudentAnalytics = async (studentId) => {
 				story: { include: { island: true } },
 				stageAttempts: true
 			} },
-			quizAttempts: { where: { completed: true } }
+			quizAttempts: {
+				where: { completed: true },
+				orderBy: { startedAt: "asc" }
+			}
 		}
 	});
 	if (!student) throw new Error("Student not found");
@@ -24932,12 +24985,17 @@ const getStudentAnalytics = async (studentId) => {
 		storyInterest,
 		history: storyHistory
 	};
-	const completedQuizzes = studentQuizzes.filter((q) => q.completed);
-	const completedIslands = new Set(completedQuizzes.map((q) => q.islandSlug.toLowerCase().trim()));
+	const firstQuizzesMap = /* @__PURE__ */ new Map();
+	for (const q of studentQuizzes) {
+		const key = `${q.islandSlug}::${q.topicSlug}::${q.levelId}`;
+		if (!firstQuizzesMap.has(key)) firstQuizzesMap.set(key, q);
+	}
+	const firstQuizzes = Array.from(firstQuizzesMap.values());
+	const completedIslands = new Set(firstQuizzes.map((q) => q.islandSlug.toLowerCase().trim()));
 	const standardCompleted = Array.from(completedIslands).filter((slug) => standardSlugs.includes(slug));
 	const explorationProgress = Math.round(standardCompleted.length / 8 * 100);
 	const totalQuizXp = studentQuizzes.reduce((acc, q) => acc + (q.xpGained || 0), 0);
-	const averageQuizScore = studentQuizzes.length > 0 ? Math.round(studentQuizzes.reduce((acc, q) => acc + q.percentageScore, 0) / studentQuizzes.length) : 0;
+	const averageQuizScore = firstQuizzes.length > 0 ? Math.round(firstQuizzes.reduce((acc, q) => acc + q.percentageScore, 0) / firstQuizzes.length) : 0;
 	const levelAttempts = {
 		1: 0,
 		2: 0,
@@ -24948,7 +25006,7 @@ const getStudentAnalytics = async (studentId) => {
 		2: 0,
 		3: 0
 	};
-	for (const q of studentQuizzes) {
+	for (const q of firstQuizzes) {
 		const lvl = q.levelId;
 		if (lvl === 1 || lvl === 2 || lvl === 3) {
 			levelAttempts[lvl]++;
@@ -24984,11 +25042,20 @@ const getStudentAnalytics = async (studentId) => {
 		},
 		select: {
 			userId: true,
+			islandSlug: true,
+			topicSlug: true,
 			levelId: true,
 			percentageScore: true,
-			topicSlug: true
-		}
+			startedAt: true
+		},
+		orderBy: { startedAt: "asc" }
 	});
+	const firstClassQuizzesMap = /* @__PURE__ */ new Map();
+	for (const q of classQuizzes) {
+		const key = `${q.userId}::${q.islandSlug}::${q.topicSlug}::${q.levelId}`;
+		if (!firstClassQuizzesMap.has(key)) firstClassQuizzesMap.set(key, q);
+	}
+	const firstClassQuizzes = Array.from(firstClassQuizzesMap.values());
 	const studentLvlSums = {
 		1: 0,
 		2: 0,
@@ -24999,7 +25066,7 @@ const getStudentAnalytics = async (studentId) => {
 		2: 0,
 		3: 0
 	};
-	for (const q of studentQuizzes) {
+	for (const q of firstQuizzes) {
 		const lvl = q.levelId;
 		if (lvl in studentLvlSums) {
 			studentLvlSums[lvl] += q.percentageScore;
@@ -25016,7 +25083,7 @@ const getStudentAnalytics = async (studentId) => {
 		2: 0,
 		3: 0
 	};
-	for (const q of classQuizzes) {
+	for (const q of firstClassQuizzes) {
 		const lvl = q.levelId;
 		if (lvl in classLvlSums) {
 			classLvlSums[lvl] += q.percentageScore;
@@ -25048,45 +25115,31 @@ const getStudentAnalytics = async (studentId) => {
 		"Rumah Adat",
 		"Tarian & Alat Musik"
 	];
-	const studentTopicSums = {
-		"Makanan Tradisional": 0,
-		"Rumah Adat": 0,
-		"Tarian & Alat Musik": 0
-	};
-	const studentTopicCnts = {
+	const studentTopicCounts = {
 		"Makanan Tradisional": 0,
 		"Rumah Adat": 0,
 		"Tarian & Alat Musik": 0
 	};
 	for (const q of studentQuizzes) {
 		const topicLabel = normalizeTopicLabel(q.topicSlug);
-		if (topicLabel in studentTopicSums) {
-			studentTopicSums[topicLabel] += q.percentageScore;
-			studentTopicCnts[topicLabel]++;
-		}
+		if (topicLabel in studentTopicCounts) studentTopicCounts[topicLabel]++;
 	}
-	const classTopicSums = {
-		"Makanan Tradisional": 0,
-		"Rumah Adat": 0,
-		"Tarian & Alat Musik": 0
-	};
-	const classTopicCnts = {
+	const classTopicCounts = {
 		"Makanan Tradisional": 0,
 		"Rumah Adat": 0,
 		"Tarian & Alat Musik": 0
 	};
 	for (const q of classQuizzes) {
 		const topicLabel = normalizeTopicLabel(q.topicSlug);
-		if (topicLabel in classTopicSums) {
-			classTopicSums[topicLabel] += q.percentageScore;
-			classTopicCnts[topicLabel]++;
-		}
+		if (topicLabel in classTopicCounts) classTopicCounts[topicLabel]++;
 	}
+	const uniqueClassStudents = new Set(classQuizzes.map((q) => q.userId)).size || 1;
 	const culturalInterest = topics.map((topic) => {
+		const classAvgAttempts = classTopicCounts[topic] / uniqueClassStudents;
 		return {
 			name: topic,
-			"Skor Siswa": studentTopicCnts[topic] > 0 ? Math.round(studentTopicSums[topic] / studentTopicCnts[topic]) : 0,
-			"Rata-rata Kelas": classTopicCnts[topic] > 0 ? Math.round(classTopicSums[topic] / classTopicCnts[topic]) : 0
+			"Jumlah Dimainkan": studentTopicCounts[topic],
+			"Rata-rata Kelas": parseFloat(classAvgAttempts.toFixed(1))
 		};
 	});
 	const quizHistory = studentQuizzes.map((qa) => ({
@@ -25221,7 +25274,7 @@ const StudentAnalyticsResponseSchema = t.Object({
 		})),
 		culturalInterest: t.Array(t.Object({
 			name: t.String(),
-			"Skor Siswa": t.Number(),
+			"Jumlah Dimainkan": t.Number(),
 			"Rata-rata Kelas": t.Number()
 		})),
 		history: t.Array(t.Object({
@@ -25589,6 +25642,14 @@ async function submitQuizAttempt(userId, data) {
 		2: "Analisis",
 		3: "Pendapat"
 	}[data.levelId] ?? "culture";
+	const existingAttempt = await prisma.quizAttempt.findFirst({ where: {
+		userId,
+		islandSlug: data.islandSlug,
+		topicSlug: data.topicSlug,
+		levelId: data.levelId,
+		completed: true
+	} });
+	const finalXpGained = existingAttempt ? 0 : data.xpGained;
 	const [attempt] = await prisma.$transaction([prisma.quizAttempt.create({ data: {
 		userId,
 		islandSlug: data.islandSlug,
@@ -25598,7 +25659,7 @@ async function submitQuizAttempt(userId, data) {
 		finishedAt: /* @__PURE__ */ new Date(),
 		completed: true,
 		totalTimeSeconds: data.totalTimeSeconds,
-		xpGained: data.xpGained,
+		xpGained: finalXpGained,
 		score: data.score,
 		totalQuestions: data.totalQuestions,
 		percentageScore,
@@ -25606,9 +25667,12 @@ async function submitQuizAttempt(userId, data) {
 		heartsLeft: data.heartsLeft ?? 5
 	} }), prisma.user.update({
 		where: { id: userId },
-		data: { totalXp: { increment: data.xpGained } }
+		data: { totalXp: { increment: finalXpGained } }
 	})]);
-	return attempt;
+	return {
+		...attempt,
+		isReplay: !!existingAttempt
+	};
 }
 /**
 * Get paginated list of quiz attempts for a user
@@ -25739,40 +25803,36 @@ function deriveBadge(maxLevelCompleted) {
 	return "-";
 }
 async function getQuizStatistics(userId) {
-	const [completedAttempts, allAttempts, xpResult] = await Promise.all([
-		prisma.quizAttempt.findMany({
-			where: {
-				userId,
-				completed: true
-			},
-			select: {
-				islandSlug: true,
-				topicSlug: true,
-				levelId: true,
-				percentageScore: true,
-				xpGained: true
-			}
-		}),
-		prisma.quizAttempt.aggregate({
-			where: {
-				userId,
-				completed: true
-			},
-			_avg: { percentageScore: true },
-			_max: { levelId: true },
-			_sum: { xpGained: true }
-		}),
-		prisma.user.findUnique({
-			where: { id: userId },
-			select: { totalXp: true }
-		})
-	]);
-	const levelsCompleted = new Set(completedAttempts.map((a) => `${a.islandSlug}::${a.topicSlug}::${a.levelId}`)).size;
-	const averageScore = Math.round(allAttempts._avg.percentageScore ?? 0);
-	const currentBadge = deriveBadge(allAttempts._max.levelId ?? 0);
-	const totalXpFromQuiz = allAttempts._sum.xpGained ?? 0;
-	const islandLevelMap = {};
+	const [completedAttempts, xpResult] = await Promise.all([prisma.quizAttempt.findMany({
+		where: {
+			userId,
+			completed: true
+		},
+		orderBy: { startedAt: "asc" },
+		select: {
+			islandSlug: true,
+			topicSlug: true,
+			levelId: true,
+			percentageScore: true,
+			xpGained: true
+		}
+	}), prisma.user.findUnique({
+		where: { id: userId },
+		select: { totalXp: true }
+	})]);
+	const firstAttemptsMap = /* @__PURE__ */ new Map();
 	for (const a of completedAttempts) {
+		const key = `${a.islandSlug}::${a.topicSlug}::${a.levelId}`;
+		if (!firstAttemptsMap.has(key)) firstAttemptsMap.set(key, a);
+	}
+	const firstAttempts = Array.from(firstAttemptsMap.values());
+	const levelsCompleted = firstAttempts.length;
+	const totalPercentageScore = firstAttempts.reduce((sum, a) => sum + a.percentageScore, 0);
+	const averageScore = firstAttempts.length > 0 ? Math.round(totalPercentageScore / firstAttempts.length) : 0;
+	const currentBadge = deriveBadge(firstAttempts.length > 0 ? Math.max(...firstAttempts.map((a) => a.levelId)) : 0);
+	const totalXpFromQuiz = completedAttempts.reduce((sum, a) => sum + a.xpGained, 0);
+	const islandLevelMap = {};
+	for (const a of firstAttempts) {
 		const key = `${a.topicSlug}::${a.levelId}`;
 		if (!islandLevelMap[a.islandSlug]) islandLevelMap[a.islandSlug] = /* @__PURE__ */ new Set();
 		islandLevelMap[a.islandSlug].add(key);

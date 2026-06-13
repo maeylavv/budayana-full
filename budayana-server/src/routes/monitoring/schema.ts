@@ -118,7 +118,7 @@ export const StudentAnalyticsResponseSchema = t.Object({
     culturalInterest: t.Array(
       t.Object({
         name: t.String(),
-        "Skor Siswa": t.Number(),
+        "Jumlah Dimainkan": t.Number(),
         "Rata-rata Kelas": t.Number(),
       })
     ),

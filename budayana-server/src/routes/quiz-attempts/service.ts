@@ -54,6 +54,19 @@ export async function submitQuizAttempt(
   }
   const resolvedQuizType = data.quizType ?? quizTypeMap[data.levelId] ?? "culture"
 
+  // Check if a completed attempt already exists for this user and level
+  const existingAttempt = await prisma.quizAttempt.findFirst({
+    where: {
+      userId,
+      islandSlug: data.islandSlug,
+      topicSlug: data.topicSlug,
+      levelId: data.levelId,
+      completed: true,
+    },
+  })
+
+  const finalXpGained = existingAttempt ? 0 : data.xpGained
+
   // Create the attempt and increment XP in a transaction
   const [attempt] = await prisma.$transaction([
     prisma.quizAttempt.create({
@@ -66,7 +79,7 @@ export async function submitQuizAttempt(
         finishedAt: new Date(),
         completed: true,
         totalTimeSeconds: data.totalTimeSeconds,
-        xpGained: data.xpGained,
+        xpGained: finalXpGained,
         score: data.score,
         totalQuestions: data.totalQuestions,
         percentageScore,
@@ -77,11 +90,14 @@ export async function submitQuizAttempt(
     // Increment totalXp on User — same pattern as attempts/service.ts
     prisma.user.update({
       where: { id: userId },
-      data: { totalXp: { increment: data.xpGained } },
+      data: { totalXp: { increment: finalXpGained } },
     }),
   ])
 
-  return attempt
+  return {
+    ...attempt,
+    isReplay: !!existingAttempt,
+  }
 }
 
 /**
