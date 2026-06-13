@@ -72,24 +72,31 @@ export const PARENT_INFO = {
     noteText: "Ini adalah rekam jejak individual siswa, bukan popularitas antar kelas."
   },
   minatBudaya: {
-    tooltipText: "Rata-rata skor kuis siswa pada 3 topik budaya: Makanan Tradisional, Rumah Adat, dan Tarian & Alat Musik.",
+    tooltipText: "Frekuensi eksplorasi topik kuis kultur siswa dibandingkan rata-rata kelas.",
     modalTitle: "Bagaimana grafik ini terbentuk?",
     modalMetricName: "Minat Budaya Terbesar",
     modalContent: (
-      <div>
-        <p style={{ margin: '0 0 12px 0' }}>Grafik ini bukan dihitung dari seberapa sering siswa membuka suatu topik, melainkan dari rata-rata nilai kuis yang berhasil diraih per topik.</p>
-        <p style={{ margin: '0 0 12px 0' }}>Batang oranye = rata-rata skor siswa ini.<br/>Batang coklat = rata-rata seluruh siswa sekelas (satu angkatan).</p>
-        <p style={{ margin: 0 }}>Topik dengan batang oranye lebih tinggi dari batang coklat berarti siswa ini menguasai topik tersebut lebih baik dari rata-rata.</p>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <p style={{ margin: 0 }}>Grafik ini menunjukkan topik budaya yang paling sering dieksplorasi melalui Kuis Kultur, bukan berdasarkan nilai atau skor.</p>
+        <p style={{ margin: 0 }}>Sistem menghitung berapa kali siswa menyelesaikan aktivitas pada setiap topik, lalu membandingkannya dengan rata-rata seluruh siswa di kelas.</p>
+        <p style={{ margin: 0 }}>
+          🟠 <b>Batang oranye</b> = jumlah percobaan topik yang dimainkan oleh siswa ini.<br/>
+          🟤 <b>Batang coklat</b> = rata-rata jumlah percobaan seluruh siswa di kelas.
+        </p>
+        <p style={{ margin: 0 }}>Semakin tinggi batang berarti semakin sering topik tersebut dipilih dan dieksplorasi.</p>
       </div>
     ),
     exampleBox: (
       <div>
-        <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>Makanan Tradisional</div>
-        <div style={{ marginBottom: '4px' }}>Skor siswa: 90% → batang oranye di angka 90</div>
-        <div>Rata-rata angkatan: 70% → batang coklat di angka 70</div>
+        <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>Rumah Adat</div>
+        <div style={{ marginBottom: '2px' }}>Siswa ini → 3 kali</div>
+        <div style={{ marginBottom: '4px' }}>Rata-rata kelas → 1,4 kali</div>
+        <div style={{ fontSize: '0.9rem', fontStyle: 'italic', marginTop: '6px', color: '#7B4F2E' }}>
+          Artinya siswa ini mengeksplorasi Rumah Adat lebih sering dibanding rata-rata teman sekelas.
+        </div>
       </div>
     ),
-    noteText: "Topik yang ditampilkan hanya 3: Makanan Tradisional, Rumah Adat, dan Tarian & Alat Musik."
+    noteText: "Catatan: Grafik ini menggambarkan ketertarikan dan eksplorasi, bukan kemampuan atau nilai belajar siswa."
   },
   statistikCerita: {
     tooltipText: "Info perhitungan metrik Cerita Rakyat.",

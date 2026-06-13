@@ -305,6 +305,12 @@ export default function QuizGameplayPage() {
             </div>
           </div>
 
+          {currentQuestion.type === 'drag_drop_sentence' && (
+            <div className='drag-drop-helper-text'>
+              Petunjuk: Susun minimal 4 kata menjadi kalimat yang lengkap. Mulailah dengan kata seperti: Ayo..., Mari..., atau Yuk...
+            </div>
+          )}
+
           <QuestionRenderer 
             key={safeQuestionIndex}
             question={currentQuestion}
@@ -322,24 +328,32 @@ export default function QuizGameplayPage() {
             </button>
 
             <div style={{ textAlign: 'center', marginTop: '14px' }}>
-            <button
-              className='quiz-nav-btn back-btn'
-              onClick={() => { playClick(); setGameState('literacy'); }}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: '#1b8599',
-                fontSize: '1rem',
-                fontFamily: "'Fredoka One', 'Fredoka', sans-serif",
-                fontWeight: 600,
-                cursor: 'pointer',
-                textDecoration: 'underline',
-                padding: 0,
-              }}
-            >
-              📖 Lihat Bacaan
-            </button>
-          </div>
+              <div className="baca-lagi-wrapper">
+                <button
+                  className='quiz-nav-btn back-btn'
+                  onClick={() => { playClick(); setGameState('literacy'); }}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: '#1b8599',
+                    fontSize: '1rem',
+                    fontFamily: "'Fredoka One', 'Fredoka', sans-serif",
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    textDecoration: 'underline',
+                    padding: 0,
+                  }}
+                >
+                  📖 Lupa? Baca lagi!
+                </button>
+                <div className="baca-lagi-tooltip">
+                  <div className="tooltip-content">
+                    Kembali ke cerita di awal untuk cari petunjuk jawaban! 🕵️
+                  </div>
+                  <div className="tooltip-arrow-down"></div>
+                </div>
+              </div>
+            </div>
             
             <button 
               className='quiz-nav-btn next-btn' 

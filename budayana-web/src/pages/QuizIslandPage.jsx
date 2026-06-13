@@ -116,7 +116,12 @@ export default function QuizIslandPage() {
     if (topicProgress[levelId] === 'locked') return;
 
     if (topicProgress[levelId] === 'completed') {
-      setInfoPopup({ topicId, levelId });
+      const completedCount = [1, 2, 3].reduce((acc, lvl) => acc + (topicProgress[lvl] === 'completed' ? 1 : 0), 0);
+      if (completedCount < 3) {
+        setInfoPopup({ type: 'continue', topicId, levelId });
+      } else {
+        setInfoPopup({ type: 'replay', topicId, levelId });
+      }
     } else {
       setEntryPopup({ topicId, levelId });
     }
@@ -258,42 +263,47 @@ export default function QuizIslandPage() {
       )}
 
       {/* Info Popup for Completed Levels */}
-      {infoPopup && (
-        <div className='popup-overlay' onClick={() => { playClick(); setInfoPopup(null); }} style={{zIndex: 9999, backgroundColor: 'rgba(253, 245, 230, 0.95)'}}>
-          <div className='quiz-welcome-popup-island' onClick={(e) => e.stopPropagation()}>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', width: '100%' }}>
-              <span style={{ fontSize: '4rem', marginBottom: '10px' }}>✨</span>
-              
-              <h2 className='welcome-title' style={{fontSize: '1.8rem', fontFamily: "'Fredoka', sans-serif", fontWeight: 700, color: '#51423c', margin: '10px 0 10px 0', lineHeight: '1.2'}}>
-                Kamu sudah selesai level ini!
-              </h2>
-              
-              <p style={{fontFamily: "'Fredoka', sans-serif", fontSize: '1.1rem', fontWeight: '500', color: '#7B4F2E', margin: '0 0 25px 0', padding: '0 10px'}}>
-                Yuk lanjut ke level berikutnya — kamu hampir sampai! 💪
-              </p>
-              
-              <button 
-                className='quiz-action-btn' 
-                onClick={() => { playClick(); setInfoPopup(null); }}
-                style={{ 
-                  backgroundColor: '#ffaa00', 
-                  color: '#fff', 
-                  border: 'none', 
-                  boxShadow: '0 5px 0px #d99100', 
-                  width: '100%', 
-                  padding: '12px', 
-                  borderRadius: '30px', 
-                  fontSize: '1.2rem',
-                  fontFamily: "'Fredoka', sans-serif",
-                  fontWeight: '700'
-                }}
-              >
-                Oke, lanjut!
-              </button>
+      {infoPopup && (() => {
+        const isReplayMode = infoPopup.type === 'replay';
+        return (
+          <div className='popup-overlay' onClick={() => { playClick(); setInfoPopup(null); }} style={{zIndex: 9999, backgroundColor: 'rgba(253, 245, 230, 0.95)'}}>
+            <div className='quiz-welcome-popup-island' onClick={(e) => e.stopPropagation()}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', width: '100%' }}>
+                <span style={{ fontSize: '4rem', marginBottom: '10px' }}>{isReplayMode ? '🏆' : '🚀'}</span>
+                
+                <h2 className='welcome-title' style={{fontSize: '1.8rem', fontFamily: "'Fredoka', sans-serif", fontWeight: 700, color: '#51423c', margin: '10px 0 10px 0', lineHeight: '1.2'}}>
+                  {isReplayMode ? 'Level ini sudah kamu taklukkan!' : 'Kamu sudah selesai level ini!'}
+                </h2>
+                
+                <p style={{fontFamily: "'Fredoka', sans-serif", fontSize: '1.1rem', fontWeight: '500', color: '#7B4F2E', margin: '0 0 25px 0', padding: '0 10px'}}>
+                  {isReplayMode 
+                    ? 'Mau ulang topik ini dari awal? Gunakan tombol Tantang Dirimu Lagi di bawah!' 
+                    : 'Yuk lanjut ke level berikutnya,\nkamu hampir sampai! 💪'}
+                </p>
+                
+                <button 
+                  className='quiz-action-btn' 
+                  onClick={() => { playClick(); setInfoPopup(null); }}
+                  style={{ 
+                    backgroundColor: '#ffaa00', 
+                    color: '#fff', 
+                    border: 'none', 
+                    boxShadow: '0 5px 0px #d99100', 
+                    width: '100%', 
+                    padding: '12px', 
+                    borderRadius: '30px', 
+                    fontSize: '1.2rem',
+                    fontFamily: "'Fredoka', sans-serif",
+                    fontWeight: '700'
+                  }}
+                >
+                  {isReplayMode ? 'Oke, mengerti!' : 'Oke, lanjut!'}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* Replay Confirmation Popup */}
       {replayConfirmPopup && (
@@ -307,7 +317,7 @@ export default function QuizIslandPage() {
               </h2>
               
               <p style={{fontFamily: "'Fredoka', sans-serif", fontSize: '1.1rem', fontWeight: '500', color: '#7B4F2E', margin: '0 0 25px 0', padding: '0 10px'}}>
-                Kamu sudah kumpulkan semua XP di topik ini. Sekarang waktunya Mode Latihan — coba jawab lebih banyak yang benar! 💡
+                Topik ini sudah kamu kuasai! Siap tantang dirimu lagi? 💡
               </p>
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%' }}>
