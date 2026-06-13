@@ -1049,7 +1049,8 @@ export const getStudentAnalytics = async (studentId: string) => {
       topicSlug: true,
       levelId: true,
       percentageScore: true,
-      startedAt: true
+      startedAt: true,
+      completed: true
     },
     orderBy: {
       startedAt: "asc"
@@ -1110,8 +1111,11 @@ export const getStudentAnalytics = async (studentId: string) => {
   // Cultural Interest (Frequency of play based on all completed attempts)
   const topics = ["Makanan Tradisional", "Rumah Adat", "Tarian & Alat Musik"];
 
+  const completedStudentAttempts = studentQuizzes.filter(a => a.completed === true);
+  const completedClassAttempts = classQuizzes.filter(a => a.completed === true);
+
   const studentTopicCounts: Record<string, number> = { "Makanan Tradisional": 0, "Rumah Adat": 0, "Tarian & Alat Musik": 0 };
-  for (const q of studentQuizzes) {
+  for (const q of completedStudentAttempts) {
     const topicLabel = normalizeTopicLabel(q.topicSlug);
     if (topicLabel in studentTopicCounts) {
       studentTopicCounts[topicLabel]++;
@@ -1119,7 +1123,7 @@ export const getStudentAnalytics = async (studentId: string) => {
   }
 
   const classTopicCounts: Record<string, number> = { "Makanan Tradisional": 0, "Rumah Adat": 0, "Tarian & Alat Musik": 0 };
-  for (const q of classQuizzes) {
+  for (const q of completedClassAttempts) {
     const topicLabel = normalizeTopicLabel(q.topicSlug);
     if (topicLabel in classTopicCounts) {
       classTopicCounts[topicLabel]++;
@@ -1127,13 +1131,13 @@ export const getStudentAnalytics = async (studentId: string) => {
   }
 
   // Calculate unique students in the class/grade to get average attempts per student
-  const uniqueClassStudents = new Set(classQuizzes.map(q => q.userId)).size || 1;
+  const uniqueClassStudents = new Set(completedClassAttempts.map(q => q.userId)).size || 1;
 
   const culturalInterest = topics.map(topic => {
     const classAvgAttempts = classTopicCounts[topic] / uniqueClassStudents;
     return {
       name: topic,
-      "Jumlah Dimainkan": studentTopicCounts[topic],
+      "Siswa Ini": studentTopicCounts[topic],
       "Rata-rata Kelas": parseFloat(classAvgAttempts.toFixed(1))
     };
   });
