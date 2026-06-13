@@ -43,6 +43,7 @@ export default function QuizGameplayPage() {
   const [showQuitPopup, setShowQuitPopup] = useState(false);
   const [showHeartPopup, setShowHeartPopup] = useState(false);
   const [wrongAttempts, setWrongAttempts] = useState(() => getSavedValue('wrongAttempts', 0));
+  const [attemptResult, setAttemptResult] = useState(null);
   // Track if attempt has been submitted to prevent double-submit on re-render
   const attemptSubmittedRef = useRef(false);
   
@@ -186,6 +187,9 @@ export default function QuizGameplayPage() {
             totalQuestions: questions.length,
             wrongAttempts,
             heartsLeft: hearts,
+          })
+          .then((res) => {
+            setAttemptResult(res);
           })
           .catch((err) => {
             // Non-blocking: log error but don't interrupt user flow
@@ -405,63 +409,80 @@ export default function QuizGameplayPage() {
         </div>
       )}
 
-      {gameState === 'success' && (
-  <div className='popup-overlay success' style={{ zIndex: 999 }}>
-    <div className='success-feedback-card'>
-      <img 
-        src={mascotByLevel[levelId] || '/assets/budayana/islands/Buaya.png'} 
-        alt='Mascot' 
-        className='mascot-img-success' 
-        onError={e => e.target.style.display = 'none'} 
-      />      
-      {/* Level-based title & subtitle */}
-      {levelId === '1' && <>
-        <h1 className='success-title'>Pengamat Budaya</h1>
-        <p className='success-subtitle'>Hebat! Kamu sudah jadi Pengamat Budaya!</p>
-      </>}
-      {levelId === '2' && <>
-        <h1 className='success-title'>Penjelajah Budaya 🧭</h1>
-        <p className='success-subtitle'>Luar biasa! Kamu sekarang seorang penjelajah!</p>
-      </>}
-      {levelId === '3' && <>
-        <h1 className='success-title'>Pakar Budaya 🏆</h1>
-        <p className='success-subtitle'>Selamat! Kamu telah menjadi Pakar Budaya!</p>
-      </>}
+      {gameState === 'success' && (() => {
+        const isReplayMode = attemptResult ? (attemptResult.isReplay || attemptResult.xpGained === 0) : false;
+        return (
+          <div className='popup-overlay success' style={{ zIndex: 999 }}>
+            <div className='success-feedback-card'>
+              {isReplayMode ? (
+                <>
+                  <span style={{ fontSize: '4.5rem', marginBottom: '15px', display: 'block', textAlign: 'center' }}>🎉</span>
+                  <h1 className='success-title'>Keren banget!</h1>
+                  <p className='success-subtitle'>
+                    XP kamu sudah terkumpul sebelumnya 🌟<br />Tapi semangat kamu main lagi itu yang paling penting!
+                  </p>
+                </>
+              ) : (
+                <>
+                  <img 
+                    src={mascotByLevel[levelId] || '/assets/budayana/islands/Buaya.png'} 
+                    alt='Mascot' 
+                    className='mascot-img-success' 
+                    onError={e => e.target.style.display = 'none'} 
+                  />      
+                  {/* Level-based title & subtitle */}
+                  {levelId === '1' && <>
+                    <h1 className='success-title'>Pengamat Budaya</h1>
+                    <p className='success-subtitle'>Hebat! Kamu sudah jadi Pengamat Budaya!</p>
+                  </>}
+                  {levelId === '2' && <>
+                    <h1 className='success-title'>Penjelajah Budaya 🧭</h1>
+                    <p className='success-subtitle'>Luar biasa! Kamu sekarang seorang penjelajah!</p>
+                  </>}
+                  {levelId === '3' && <>
+                    <h1 className='success-title'>Pakar Budaya 🏆</h1>
+                    <p className='success-subtitle'>Selamat! Kamu telah menjadi Pakar Budaya!</p>
+                  </>}
+                </>
+              )}
 
-      <div className='success-stats'>
-        <div className='stat-box xp-box'>
-          <h2>+{totalXP}</h2>
-          <p>XP Didapat</p>
-        </div>
-        <div className='stat-box score-box'>
-          <h2>{score}/{questions.length}</h2>
-          <p>Skor</p>
-        </div>
-        <div className='stat-box time-box'>
-          <h2>{getFormattedTime()}</h2>
-          <p>Waktu</p>
-        </div>
-      </div>
+              <div className='success-stats'>
+                {!isReplayMode && (
+                  <div className='stat-box xp-box'>
+                    <h2>+{totalXP}</h2>
+                    <p>XP Didapat</p>
+                  </div>
+                )}
+                <div className='stat-box score-box'>
+                  <h2>{score}/{questions.length}</h2>
+                  <p>Skor</p>
+                </div>
+                <div className='stat-box time-box'>
+                  <h2>{getFormattedTime()}</h2>
+                  <p>Waktu</p>
+                </div>
+              </div>
 
-      <div className='success-actions'>
-        <button className='btn-pill-primary' onClick={() => {
-          playClick();
-          localStorage.removeItem(STORAGE_KEY);
-          navigate(`/islands/${islandSlug}/quiz?completedTopic=${topicId}&completedLevel=${levelId}`);
-        }}>
-          ← Kembali ke Topik
-        </button>
-        <button className='btn-pill-secondary' onClick={() => {
-          playClick();
-          localStorage.removeItem(STORAGE_KEY);
-          navigate('/quiz');
-        }}>
-          🗺️ Peta Pulau
-        </button>
-      </div>
-    </div>
-  </div>
-)}  
+              <div className='success-actions'>
+                <button className='btn-pill-primary' onClick={() => {
+                  playClick();
+                  localStorage.removeItem(STORAGE_KEY);
+                  navigate(`/islands/${islandSlug}/quiz?completedTopic=${topicId}&completedLevel=${levelId}`);
+                }}>
+                  ← Kembali ke Topik
+                </button>
+                <button className='btn-pill-secondary' onClick={() => {
+                  playClick();
+                  localStorage.removeItem(STORAGE_KEY);
+                  navigate('/quiz');
+                }}>
+                  🗺️ Peta Pulau
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}  
     </div>
   );
 }
