@@ -336,7 +336,14 @@ function QuizAnalyticsPanel({ quizAnalytics, studentInfo }) {
       <section className="charts-grid-2" style={{ marginTop: '30px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
         {/* Radar Literacy */}
         <div style={{ border: '3px solid #955C2E', borderRadius: '16px', padding: '20px', backgroundColor: 'white', boxSizing: 'border-box' }}>
-          <h3 style={{ color: '#955C2E', fontWeight: 'bold', marginBottom: '20px', marginTop: 0, display: 'flex', alignItems: 'center' }}>Analisis Level Literasi Siswa <InfoIcon {...PARENT_INFO.literasiBudaya} /></h3>
+          <div>
+            <h3 style={{ color: '#955C2E', fontWeight: 'bold', marginBottom: '4px', marginTop: 0, display: 'flex', alignItems: 'center' }}>
+              Kemampuan Kognitif Awal <InfoIcon {...PARENT_INFO.literasiBudaya} />
+            </h3>
+            <div style={{ fontSize: '12px', color: '#A07040', fontStyle: 'italic', marginBottom: '16px' }}>
+              Berdasarkan percobaan pertama siswa
+            </div>
+          </div>
           <div className="chart-wrapper-responsive" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '260px' }}>
             {hasRadarData && formattedHistory.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
@@ -365,10 +372,10 @@ function QuizAnalyticsPanel({ quizAnalytics, studentInfo }) {
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={culturalInterest} margin={{ top: 20, right: 10, left: -20, bottom: 5 }}>
                   <XAxis dataKey="name" tick={{ fontSize: 10, fill: '#7B4F2E', fontWeight: 'bold' }} />
-                  <YAxis tick={{ fontSize: 9 }} domain={[0, 100]} />
+                  <YAxis tick={{ fontSize: 9 }} allowDecimals={false} domain={[0, 'auto']} />
                   <Tooltip />
                   <Legend iconType="circle" wrapperStyle={{ fontSize: '11px' }} />
-                  <Bar dataKey="Skor Siswa" fill="#f3a64c" radius={[6, 6, 0, 0]} />
+                  <Bar dataKey="Jumlah Dimainkan" fill="#f3a64c" radius={[6, 6, 0, 0]} />
                   <Bar dataKey="Rata-rata Kelas" fill="#955C2E" radius={[6, 6, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>

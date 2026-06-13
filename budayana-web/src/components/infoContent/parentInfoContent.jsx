@@ -32,7 +32,7 @@ export const PARENT_INFO = {
   literasiBudaya: {
     tooltipText: "Grafik jaring laba-laba yang membandingkan kemampuan literasi kuis siswa per level kesulitan melawan rata-rata kelas.",
     modalTitle: "Bagaimana cara membaca grafik ini?",
-    modalMetricName: "Analisis Level Literasi Siswa",
+    modalMetricName: "Kemampuan Kognitif Awal",
     modalContent: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         <div style={{ margin: 0 }}>Sistem tidak sekadar menggabungkan nilai menjadi satu rata-rata akhir, melainkan membaginya ke dalam 3 tingkat literasi:</div>
