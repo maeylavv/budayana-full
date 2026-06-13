@@ -71,7 +71,14 @@ export const getStudentsByGrade = async (grade: number, classLabel?: string, sea
           completed: true
         },
         select: {
-          percentageScore: true
+          islandSlug: true,
+          topicSlug: true,
+          levelId: true,
+          percentageScore: true,
+          startedAt: true
+        },
+        orderBy: {
+          startedAt: "asc"
         }
       }
     },
@@ -89,9 +96,19 @@ export const getStudentsByGrade = async (grade: number, classLabel?: string, sea
     }
     const learningImprovement = countImp > 0 ? Math.round(sumImp / countImp) : 0;
 
+    // Filter to keep only the first attempt per level
+    const firstAttemptsMap = new Map<string, any>();
+    for (const qa of s.quizAttempts) {
+      const key = `${qa.islandSlug}::${qa.topicSlug}::${qa.levelId}`;
+      if (!firstAttemptsMap.has(key)) {
+        firstAttemptsMap.set(key, qa);
+      }
+    }
+    const firstAttempts = Array.from(firstAttemptsMap.values());
+
     let sumLit = 0;
     let countLit = 0;
-    for (const qa of s.quizAttempts) {
+    for (const qa of firstAttempts) {
       sumLit += qa.percentageScore;
       countLit++;
     }
@@ -201,7 +218,14 @@ export const getStudentsByGuardianEmail = async (email: string, search?: string)
           completed: true
         },
         select: {
-          percentageScore: true
+          islandSlug: true,
+          topicSlug: true,
+          levelId: true,
+          percentageScore: true,
+          startedAt: true
+        },
+        orderBy: {
+          startedAt: "asc"
         }
       }
     },
@@ -219,9 +243,19 @@ export const getStudentsByGuardianEmail = async (email: string, search?: string)
     }
     const learningImprovement = countImp > 0 ? Math.round(sumImp / countImp) : 0;
 
+    // Filter to keep only the first attempt per level
+    const firstAttemptsMap = new Map<string, any>();
+    for (const qa of s.quizAttempts) {
+      const key = `${qa.islandSlug}::${qa.topicSlug}::${qa.levelId}`;
+      if (!firstAttemptsMap.has(key)) {
+        firstAttemptsMap.set(key, qa);
+      }
+    }
+    const firstAttempts = Array.from(firstAttemptsMap.values());
+
     let sumLit = 0;
     let countLit = 0;
-    for (const qa of s.quizAttempts) {
+    for (const qa of firstAttempts) {
       sumLit += qa.percentageScore;
       countLit++;
     }
@@ -347,7 +381,14 @@ export const getClassSummary = async (grade: number, classLabel?: string) => {
           completed: true
         },
         select: {
-          percentageScore: true
+          islandSlug: true,
+          topicSlug: true,
+          levelId: true,
+          percentageScore: true,
+          startedAt: true
+        },
+        orderBy: {
+          startedAt: "asc"
         }
       }
     },
@@ -691,17 +732,34 @@ export const getClassSummary = async (grade: number, classLabel?: string) => {
       completed: true
     },
     select: {
+      userId: true,
+      islandSlug: true,
+      topicSlug: true,
       levelId: true,
-      percentageScore: true
+      percentageScore: true,
+      startedAt: true
+    },
+    orderBy: {
+      startedAt: "asc"
     }
   });
+
+  // Filter class-wide attempts to keep only the first attempt per student and level
+  const firstAttemptsClassMap = new Map<string, typeof quizAttemptsClass[0]>();
+  for (const qa of quizAttemptsClass) {
+    const key = `${qa.userId}::${qa.islandSlug}::${qa.topicSlug}::${qa.levelId}`;
+    if (!firstAttemptsClassMap.has(key)) {
+      firstAttemptsClassMap.set(key, qa);
+    }
+  }
+  const firstAttemptsClass = Array.from(firstAttemptsClassMap.values());
 
   const levelScoresMap = new Map<number, { sum: number; count: number }>();
   levelScoresMap.set(1, { sum: 0, count: 0 });
   levelScoresMap.set(2, { sum: 0, count: 0 });
   levelScoresMap.set(3, { sum: 0, count: 0 });
 
-  for (const qa of quizAttemptsClass) {
+  for (const qa of firstAttemptsClass) {
     const lvl = qa.levelId;
     if (levelScoresMap.has(lvl)) {
       const data = levelScoresMap.get(lvl)!;
@@ -735,9 +793,19 @@ export const getClassSummary = async (grade: number, classLabel?: string) => {
     }
     const learningImprovement = countImp > 0 ? Math.round(sumImp / countImp) : 0;
 
+    // Filter to keep only the first attempt per level
+    const firstAttemptsMap = new Map<string, any>();
+    for (const qa of s.quizAttempts) {
+      const key = `${qa.islandSlug}::${qa.topicSlug}::${qa.levelId}`;
+      if (!firstAttemptsMap.has(key)) {
+        firstAttemptsMap.set(key, qa);
+      }
+    }
+    const firstAttempts = Array.from(firstAttemptsMap.values());
+
     let sumLit = 0;
     let countLit = 0;
-    for (const qa of s.quizAttempts) {
+    for (const qa of firstAttempts) {
       sumLit += qa.percentageScore;
       countLit++;
     }
@@ -784,6 +852,9 @@ export const getStudentAnalytics = async (studentId: string) => {
       quizAttempts: {
         where: {
           completed: true
+        },
+        orderBy: {
+          startedAt: "asc"
         }
       }
     }
@@ -901,20 +972,29 @@ export const getStudentAnalytics = async (studentId: string) => {
   // ==========================================
 
   // Stats
-  const completedQuizzes = studentQuizzes.filter(q => q.completed);
-  const completedIslands = new Set(completedQuizzes.map(q => q.islandSlug.toLowerCase().trim()));
+  // Filter to keep only the first completed attempt per level
+  const firstQuizzesMap = new Map<string, typeof studentQuizzes[0]>();
+  for (const q of studentQuizzes) {
+    const key = `${q.islandSlug}::${q.topicSlug}::${q.levelId}`;
+    if (!firstQuizzesMap.has(key)) {
+      firstQuizzesMap.set(key, q);
+    }
+  }
+  const firstQuizzes = Array.from(firstQuizzesMap.values());
+
+  const completedIslands = new Set(firstQuizzes.map(q => q.islandSlug.toLowerCase().trim()));
   const standardCompleted = Array.from(completedIslands).filter(slug => standardSlugs.includes(slug));
   const explorationProgress = Math.round((standardCompleted.length / 8) * 100);
   const totalQuizXp = studentQuizzes.reduce((acc, q) => acc + (q.xpGained || 0), 0);
-  const averageQuizScore = studentQuizzes.length > 0
-    ? Math.round(studentQuizzes.reduce((acc, q) => acc + q.percentageScore, 0) / studentQuizzes.length)
+  const averageQuizScore = firstQuizzes.length > 0
+    ? Math.round(firstQuizzes.reduce((acc, q) => acc + q.percentageScore, 0) / firstQuizzes.length)
     : 0;
 
-  // Dominant Literacy Badge Derivation
+  // Dominant Literacy Badge Derivation based on first attempts
   const levelAttempts: Record<number, number> = { 1: 0, 2: 0, 3: 0 };
   const levelScores: Record<number, number> = { 1: 0, 2: 0, 3: 0 };
 
-  for (const q of studentQuizzes) {
+  for (const q of firstQuizzes) {
     const lvl = q.levelId;
     if (lvl === 1 || lvl === 2 || lvl === 3) {
       levelAttempts[lvl]++;
@@ -954,7 +1034,7 @@ export const getStudentAnalytics = async (studentId: string) => {
     currentBadge = badgeMap[dominantLevel] || "-";
   }
 
-  // Radar Literacy (Student vs Class)
+  // Radar Literacy (Student vs Class) - select additional fields for filtering
   const classQuizzes = await prisma.quizAttempt.findMany({
     where: {
       user: {
@@ -965,15 +1045,30 @@ export const getStudentAnalytics = async (studentId: string) => {
     },
     select: {
       userId: true,
+      islandSlug: true,
+      topicSlug: true,
       levelId: true,
       percentageScore: true,
-      topicSlug: true
+      startedAt: true
+    },
+    orderBy: {
+      startedAt: "asc"
     }
   });
 
+  // Filter class-wide attempts to keep only the first attempt per student and level
+  const firstClassQuizzesMap = new Map<string, typeof classQuizzes[0]>();
+  for (const q of classQuizzes) {
+    const key = `${q.userId}::${q.islandSlug}::${q.topicSlug}::${q.levelId}`;
+    if (!firstClassQuizzesMap.has(key)) {
+      firstClassQuizzesMap.set(key, q);
+    }
+  }
+  const firstClassQuizzes = Array.from(firstClassQuizzesMap.values());
+
   const studentLvlSums = { 1: 0, 2: 0, 3: 0 };
   const studentLvlCnts = { 1: 0, 2: 0, 3: 0 };
-  for (const q of studentQuizzes) {
+  for (const q of firstQuizzes) {
     const lvl = q.levelId as 1 | 2 | 3;
     if (lvl in studentLvlSums) {
       studentLvlSums[lvl] += q.percentageScore;
@@ -983,7 +1078,7 @@ export const getStudentAnalytics = async (studentId: string) => {
 
   const classLvlSums = { 1: 0, 2: 0, 3: 0 };
   const classLvlCnts = { 1: 0, 2: 0, 3: 0 };
-  for (const q of classQuizzes) {
+  for (const q of firstClassQuizzes) {
     const lvl = q.levelId as 1 | 2 | 3;
     if (lvl in classLvlSums) {
       classLvlSums[lvl] += q.percentageScore;
@@ -1012,34 +1107,34 @@ export const getStudentAnalytics = async (studentId: string) => {
     }
   ];
 
-  // Cultural Interest
+  // Cultural Interest (Frequency of play based on all completed attempts)
   const topics = ["Makanan Tradisional", "Rumah Adat", "Tarian & Alat Musik"];
 
-  const studentTopicSums: Record<string, number> = { "Makanan Tradisional": 0, "Rumah Adat": 0, "Tarian & Alat Musik": 0 };
-  const studentTopicCnts: Record<string, number> = { "Makanan Tradisional": 0, "Rumah Adat": 0, "Tarian & Alat Musik": 0 };
+  const studentTopicCounts: Record<string, number> = { "Makanan Tradisional": 0, "Rumah Adat": 0, "Tarian & Alat Musik": 0 };
   for (const q of studentQuizzes) {
     const topicLabel = normalizeTopicLabel(q.topicSlug);
-    if (topicLabel in studentTopicSums) {
-      studentTopicSums[topicLabel] += q.percentageScore;
-      studentTopicCnts[topicLabel]++;
+    if (topicLabel in studentTopicCounts) {
+      studentTopicCounts[topicLabel]++;
     }
   }
 
-  const classTopicSums: Record<string, number> = { "Makanan Tradisional": 0, "Rumah Adat": 0, "Tarian & Alat Musik": 0 };
-  const classTopicCnts: Record<string, number> = { "Makanan Tradisional": 0, "Rumah Adat": 0, "Tarian & Alat Musik": 0 };
+  const classTopicCounts: Record<string, number> = { "Makanan Tradisional": 0, "Rumah Adat": 0, "Tarian & Alat Musik": 0 };
   for (const q of classQuizzes) {
     const topicLabel = normalizeTopicLabel(q.topicSlug);
-    if (topicLabel in classTopicSums) {
-      classTopicSums[topicLabel] += q.percentageScore;
-      classTopicCnts[topicLabel]++;
+    if (topicLabel in classTopicCounts) {
+      classTopicCounts[topicLabel]++;
     }
   }
 
+  // Calculate unique students in the class/grade to get average attempts per student
+  const uniqueClassStudents = new Set(classQuizzes.map(q => q.userId)).size || 1;
+
   const culturalInterest = topics.map(topic => {
+    const classAvgAttempts = classTopicCounts[topic] / uniqueClassStudents;
     return {
       name: topic,
-      "Skor Siswa": studentTopicCnts[topic] > 0 ? Math.round(studentTopicSums[topic] / studentTopicCnts[topic]) : 0,
-      "Rata-rata Kelas": classTopicCnts[topic] > 0 ? Math.round(classTopicSums[topic] / classTopicCnts[topic]) : 0
+      "Jumlah Dimainkan": studentTopicCounts[topic],
+      "Rata-rata Kelas": parseFloat(classAvgAttempts.toFixed(1))
     };
   });
 
