@@ -73,12 +73,12 @@ export const QUIZ_DATA = {
           },
           {
             "type": "multiple_choice",
-            "text": "Mengapa tiang-tiang penyangga Rumah Gadang tidak ditanamkan langsung ke dalam tanah, tetapi diletakkan di atas batu datar yang disebut Batu Sandi?",
+            "text": "Jika hujan deras terjadi, bagian rumah mana yang membantu melindungi penghuni?",
             "options": [
-              "Agar rumah bisa dipindahkan dengan mudah ke lokasi lain",
-              "Supaya getaran gempa diredam oleh batu sebelum sampai ke bangunan",
-              "Karena tanah di Sumatera Barat terlalu keras untuk digali",
-              "Agar akar pohon tidak merusak pondasi rumah"
+              "Atap Gonjong",
+              "Tiang rumah yang tinggi",
+              "Ukiran rumah",
+              "Pintu rumah"
             ],
             "correctIndex": 1,
             "xp": 20
@@ -88,7 +88,7 @@ export const QUIZ_DATA = {
       "2": {
         "literacy": {
           "image": "/assets/budayana/islands/level2 sumatra.png",
-          "text": "Rumah Gadang dibangun dengan kecerdasan tinggi. Tahukah kamu? Tiang-tiang rumah ini tidak ditanam ke tanah, melainkan diletakkan di atas batu datar yang disebut Batu Sandi. Tujuannya agar getaran gempa diredam oleh batu sebelum sampai ke bangunan. Kayu yang dipilih pun sangat kuat, seperti Kayu Surian atau Kayu Ulin yang sudah tua. \n\n Hebatnya, rumah ini dibangun tanpa paku besi, melainkan menggunakan pasak kayu agar bangunan menjadi lentur dan tidak mudah roboh saat gempa. Setiap ukiran bunga di dinding melambangkan kekayaan alam, sementara atap runcingnya melambangkan kemenangan dan semangat."
+          "text": "Rumah Gadang dibangun dengan kecerdasan tinggi. Tahukah kamu? Tiang-tiang rumah ini tidak ditanam ke tanah, melainkan diletakkan di atas batu datar yang disebut Batu Sandi. Tujuannya agar getaran gempa diredam oleh batu sebelum sampai ke bangunan. Kayu yang dipilih pun sangat kuat, seperti Kayu Surian dan kayu pilihan yang sudah tua dan kuat. \n\n Hebatnya, rumah ini dibangun tanpa paku besi, melainkan menggunakan pasak kayu agar bangunan menjadi lentur dan tidak mudah roboh saat gempa. Banyak ukiran pada Rumah Gadang terinspirasi dari tumbuhan dan menggambarkan hubungan masyarakat dengan alam, sementara atap runcing atau Gonjong menjadi simbol identitas dan semangat masyarakat Minangkabau."
         },
         "questions": [
           {
@@ -144,10 +144,10 @@ export const QUIZ_DATA = {
           },
           {
             "type": "multiple_choice",
-            "text": "Jika kamu ingin membangun Rumah Gadang yang kuat, jenis kayu apa yang digunakan untuk tiang utama sesuai tradisi?",
+            "text": "Jika ingin membangun Rumah Gadang yang kuat, bahan kayu seperti apa yang digunakan untuk tiangnya?",
             "options": [
               "Kayu Sengon yang ringan",
-              "Kayu ulin atau kayu surian yang sudah tua dan keras",
+              "Kayu surian atau kayu yang sudah tua dan keras",
               "Batang pohon kelapa",
               "Papan kayu lapis (triplek)"
             ],
@@ -186,11 +186,11 @@ export const QUIZ_DATA = {
             "dropZones": [
               {
                 "id": "z1",
-                "label": "Melambangkan kemenangan dan semangat"
+                "label": "Simbol identitas dan semangat masyarakat Minangkabau"
               },
               {
                 "id": "z2",
-                "label": "Melambangkan kekayaan alam Sumatera Barat"
+                "label": "Menggambarkan hubungan masyarakat dengan alam"
               }
             ],
             "correctOrder": [
@@ -252,7 +252,7 @@ export const QUIZ_DATA = {
           },
           {
             "type": "opinion_reason",
-            "text": "Menurutmu, mengganti atap ijuk menjadi atap seng pada Rumah Gadang adalah tindakan yang...",
+            "text": "Menurutmu, mengganti atap ijuk menjadi atap seng pada Rumah Gadang menurutmu keputusan yang...",
             "opinions": [
               {
                 "id": "op1",
@@ -285,10 +285,6 @@ export const QUIZ_DATA = {
               {
                 "opinionId": "op1",
                 "reasonId": "r1"
-              },
-              {
-                "opinionId": "op1",
-                "reasonId": "r3"
               },
               {
                 "opinionId": "op2",
@@ -333,17 +329,17 @@ export const QUIZ_DATA = {
               },
               {
                 "id": "w7",
-                "text": "kuat",
+                "text": "budaya",
                 "color": "#D5F4E6"
               },
               {
                 "id": "w8",
-                "text": "tanpa",
+                "text": "lestarikan",
                 "color": "#FFC2C2"
               },
               {
                 "id": "w9",
-                "text": "paku",
+                "text": "bangga",
                 "color": "#B9FBC0"
               },
               {
@@ -372,7 +368,8 @@ export const QUIZ_DATA = {
             "minWords": 4,
             "requiredWords": [
               "Rumah Gadang"
-            ]
+            ],
+            "example": "Ayo kenali Rumah Gadang bersama!"
           }
         ]
       }
@@ -381,7 +378,7 @@ export const QUIZ_DATA = {
       "1": {
         "literacy": {
           "image": "/assets/budayana/islands/makanan1 sumatra.png",
-          "text": "Salah satu makanan tradisional yang paling terkenal dari Sumatera Barat adalah Rendang. Makanan ini berbahan dasar daging sapi yang dimasak dengan santan kelapa dan aneka rempah. Rendang memiliki warna cokelat gelap yang khas. Untuk mendapatkan rasa yang lezat, Rendang harus dimasak dalam waktu lama, sekitar 4 sampai 8 jam. \n\n Karena proses memasak yang lama ini, Rendang bisa awet dan tahan lama hingga beberapa minggu meskipun tidak disimpan di dalam kulkas, berkat minyak santan dan rempah-rempah yang bertindak sebagai pengawet alami."
+          "text": "Salah satu makanan tradisional yang paling terkenal dari Sumatera Barat adalah Rendang. Makanan ini berbahan dasar daging sapi yang dimasak dengan santan kelapa dan aneka rempah. Rendang memiliki warna cokelat gelap yang khas.\n\n Untuk mendapatkan rasa yang lezat, Rendang harus dimasak dalam waktu lama, selama beberapa jam hingga menghasilkan warna dan rasa yang khas. Karena proses memasak yang lama serta penggunaan santan dan rempah, Rendang dapat bertahan lebih lama dibanding banyak makanan lain."
         },
         "questions": [
           {
@@ -398,7 +395,7 @@ export const QUIZ_DATA = {
           },
           {
             "type": "picture_selection",
-            "text": "Pilih gambar bumbu cair yang membuat Rendang terasa gurih dan berminyak!",
+            "text": "Pilih bahan yang digunakan untuk membuat Rendang terasa gurih!",
             "options": [
               {
                 "text": "Minyak Goreng",
@@ -426,30 +423,6 @@ export const QUIZ_DATA = {
           },
           {
             "type": "multiple_choice",
-            "text": "Berapa lama waktu yang biasanya dibutuhkan untuk memasak Rendang hingga kering?",
-            "options": [
-              "15 - 30 Menit",
-              "24 Jam Full",
-              "1 Jam",
-              "4 - 8 Jam"
-            ],
-            "correctIndex": 3,
-            "xp": 20
-          },
-          {
-            "type": "multiple_choice",
-            "text": "Mengapa Rendang yang sudah dimasak hingga kering bisa tahan lama tanpa kulkas?",
-            "options": [
-              "Karena dagingnya dicampur dengan garam yang sangat banyak",
-              "Karena warna cokelat gelap menakuti kuman",
-              "Karena Rendang tidak disukai oleh bakteri",
-              "Karena proses masak yang lama membunuh bakteri dan santan menjadi pengawet"
-            ],
-            "correctIndex": 3,
-            "xp": 20
-          },
-          {
-            "type": "multiple_choice",
             "text": "Berdasarkan teks, warna khas dari Rendang yang sudah matang sempurna adalah...",
             "options": [
               "Merah Menyala",
@@ -459,13 +432,37 @@ export const QUIZ_DATA = {
             ],
             "correctIndex": 3,
             "xp": 20
+          },
+          {
+            "type": "multiple_choice",
+            "text": "Mengapa Rendang dimasak dalam waktu yang lama?",
+            "options": [
+              "Agar lebih cepat dingin",
+              "Agar lebih mudah dipotong",
+              "Agar lebih ringan",
+              "Agar menghasilkan rasa dan warna yang khas"
+            ],
+            "correctIndex": 3,
+            "xp": 20
+          },
+          {
+            "type": "multiple_choice",
+            "text": "Mengapa Rendang dapat bertahan lebih lama?",
+            "options": [
+              "Karena warnanya cokelat",
+              "Karena disimpan dalam kulkas",
+              "Karena dimasak lama dan menggunakan santan serta rempah",
+              "Karena dibuat tanpa daging"
+            ],
+            "correctIndex": 2,
+            "xp": 20
           }
         ]
       },
       "2": {
         "literacy": {
           "image": "/assets/budayana/islands/makanan2 sumatra.png",
-          "text": "Memasak Rendang membutuhkan kesabaran karena harus melewati beberapa tahapan: dimulai dari Gulai (yang masih banyak kuah), lalu menjadi Kalio (kuah yang mulai mengental), hingga akhirnya menjadi Rendang (kuah kering dan berminyak). \n\n Selain lezat, Rendang kaya akan simbol: Daging sapi melambangkan pemimpin adat (Niniak Mamak), Santan melambangkan kaum intelektual, dan Cabai melambangkan Alim Ulama yang tegas dalam menyampaikan ajaran agama, dan bumbu rempah melambangkan seluruh lapisan masyarakat yang bersatu padu."
+          "text": "Memasak Rendang membutuhkan kesabaran karena harus melewati beberapa tahapan: dimulai dari Gulai (yang masih banyak kuah), lalu menjadi Kalio (kuah yang mulai mengental), hingga akhirnya menjadi Rendang (kuah kering dan berminyak). \n\n Selain lezat, Rendang kaya akan simbol: Daging sapi melambangkan pemimpin adat (Niniak Mamak), Santan melambangkan golongan cerdik pandai yang memberi pemikiran bagi masyarakat, dan Cabai melambangkan Alim Ulama yang tegas dalam menyampaikan ajaran agama, dan bumbu rempah melambangkan seluruh lapisan masyarakat yang bersatu padu."
         },
         "questions": [
           {
@@ -511,7 +508,7 @@ export const QUIZ_DATA = {
           },
           {
             "type": "multiple_choice",
-            "text": "Jika kamu ingin membuat Rendang yang tidak terlalu pedas untuk anak kecil, bumbu mana yang harus dikurangi?",
+            "text": "Pada Rendang, bahan apa yang melambangkan golongan Alim Ulama?",
             "options": [
               "Santan",
               "Daging",
@@ -525,10 +522,10 @@ export const QUIZ_DATA = {
             "type": "multiple_choice",
             "text": "Apa perbedaan utama antara \"Kalio\" dan \"Rendang\" menurut teks?",
             "options": [
-              "Kalio dimasak 10 jam, sedangkan Rendang hanya 1 jam",
-              "Kalio rasanya manis, sedangkan Rendang rasanya sangat pahit",
-              "Kalio masih basah/berkuah kental, Rendang sudah kering dan gelap",
-              "Kalio menggunakan daging ayam, Rendang menggunakan sapi"
+              "KKalio dimasak lebih singkat dari Rendang",
+              "KKalio rasanya manis",
+              "Kalio masih berkuah kental, Rendang sudah lebih kering",
+              "Kalio memakai ayam"
             ],
             "correctIndex": 2,
             "xp": 25
@@ -557,7 +554,7 @@ export const QUIZ_DATA = {
               },
               {
                 "id": "z2",
-                "label": "Alim Ulama (Ulama yang Tegas)"
+                "label": "Alim Ulama (Tokoh agama)"
               }
             ],
             "correctOrder": [
@@ -571,7 +568,7 @@ export const QUIZ_DATA = {
       "3": {
         "literacy": {
           "image": "/assets/budayana/islands/makanan3 sumatra.png",
-          "text": "Saat ini, Rendang telah menjadi makanan terlezat di dunia. Banyak inovasi muncul, seperti Rendang Instan dalam kaleng agar bisa dikirim ke luar negeri dengan praktis. \n\n Namun, muncul sebuah diskusi: bolehkah kita mengganti daging sapi dengan daging ayam agar orang yang tidak makan sapi tetap bisa menikmati bumbunya? \n\n Selain itu, ada tantangan apakah Rendang yang dimasak cepat dan masih basah (Kalio) tetap bisa disebut Rendang yang asli. Kita harus bangga pada warisan kuliner ini agar cita rasanya tetap terjaga sesuai tradisi aslinya."
+          "text": "Saat ini, Rendang dikenal sebagai salah satu makanan Indonesia yang populer di berbagai negara. Banyak inovasi muncul, seperti Rendang Instan dalam kaleng agar bisa dikirim ke luar negeri dengan praktis. \n\n Namun, muncul sebuah diskusi: bolehkah kita mengganti daging sapi dengan daging ayam agar orang yang tidak makan sapi tetap bisa menikmati bumbunya? \n\n Selain itu, ada tantangan apakah Kalio yang masih berkuah dapat dianggap sama dengan Rendang yang dimasak lebih lama? Kita perlu menghargai warisan kuliner ini sambil memahami bahwa makanan juga dapat berkembang mengikuti kebutuhan masyarakat."
         },
         "questions": [
           {
@@ -598,7 +595,7 @@ export const QUIZ_DATA = {
               },
               {
                 "id": "r2",
-                "text": "C. Karena Rendang kalengan akan mengubah rasa asli bumbu rempahnya"
+                "text": "C. Karena sebagian orang ingin tetap mempertahankan cara penyajian tradisional"
               },
               {
                 "id": "r4",
@@ -645,7 +642,7 @@ export const QUIZ_DATA = {
               },
               {
                 "id": "r2",
-                "text": "D. Rendang asli secara tradisional harus menggunakan daging sapi agar tahan lama"
+                "text": "D. Karena sebagian orang ingin mempertahankan bahan tradisional Rendang"
               }
             ],
             "correctPairs": [
@@ -662,7 +659,7 @@ export const QUIZ_DATA = {
           },
           {
             "type": "drag_drop_sentence",
-            "text": "Kamu ingin mengajak teman-temanmu untuk bangga memasak dan menjaga resep Rendang. Susun kalimat ajakanmu menggunakan minimal 4 kata dari pilihan berikut!",
+            "text": "Kamu ingin mengajak teman-temanmu untuk mengenal dan menjaga warisan Rendang. Susun kalimat ajakanmu menggunakan minimal 4 kata dari pilihan berikut!",
             "draggables": [
               {
                 "id": "w1",
@@ -691,17 +688,17 @@ export const QUIZ_DATA = {
               },
               {
                 "id": "w6",
-                "text": "asli",
+                "text": "kenali",
                 "color": "#FFD6A5"
               },
               {
                 "id": "w7",
-                "text": "resep",
+                "text": "kuliner",
                 "color": "#D5F4E6"
               },
               {
                 "id": "w8",
-                "text": "tradisional",
+                "text": "lestarikan",
                 "color": "#FFC2C2"
               },
               {
@@ -740,7 +737,8 @@ export const QUIZ_DATA = {
             "minWords": 4,
             "requiredWords": [
               "Rendang"
-            ]
+            ],
+            "example": "Ayo kita jaga Rendang bersama!"
           }
         ]
       }
@@ -749,7 +747,7 @@ export const QUIZ_DATA = {
       "1": {
         "literacy": {
           "image": "/assets/budayana/islands/tarian1 sumatra.png",
-          "text": "Pernahkah kamu melihat tarian yang penarinya duduk berjejer dan bergerak sangat cepat? Itu adalah Tari Saman dari suku Gayo, Aceh. Berbeda dengan tarian lain yang diiringi banyak alat musik petik atau tiup, Tari Saman justru menggunakan suara dari gerakan tubuh para penarinya sendiri. \n\n Mereka menepuk dada, menepuk tangan, dan menepuk paha untuk menciptakan irama yang kompak. Karena keunikan dan kecepatannya, Tari Saman telah diakui oleh UNESCO sejak tahun 2011 sebagai Warisan Budaya Takbenda yang Memerlukan Perlindungan Mendesak — sebuah pengakuan dunia bahwa tarian ini sangat berharga dan harus kita jaga bersama."
+          "text": "Pernahkah kamu melihat tarian yang penarinya duduk berjejer dan bergerak sangat cepat? Itu adalah Tari Saman dari suku Gayo, Aceh. Tari ini dikenal karena iramanya banyak berasal dari suara dan gerakan para penarinya sendiri. \n\n Mereka menepuk dada, menepuk tangan, dan menepuk paha untuk menciptakan irama yang kompak. Karena keunikan dan kecepatannya, Tari Saman telah diakui oleh UNESCO sejak tahun 2011 sebagai Warisan Budaya Takbenda yang Memerlukan Perlindungan Mendesak — sebuah pengakuan dunia bahwa tarian ini sangat berharga dan harus kita jaga bersama."
         },
         "questions": [
           {
@@ -794,36 +792,36 @@ export const QUIZ_DATA = {
           },
           {
             "type": "multiple_choice",
-            "text": "Apa yang menjadi \"alat musik\" utama dalam mengiringi gerak Tari Saman?",
+            "text": "Bagian tubuh mana yang digunakan penari untuk menciptakan irama?",
             "options": [
-              "Seruling Bambu",
-              "Piano Elektrik",
+              "Kepala dan kaki",
+              "Bahu dan punggung",
               "Tepukan tangan, dada, dan paha",
-              "Gitar dan Bass"
+              "Lutut dan siku"
             ],
             "correctIndex": 2,
             "xp": 20
           },
           {
             "type": "multiple_choice",
-            "text": "Apa yang terjadi jika salah satu penari Saman tidak kompak atau salah melakukan gerakan?",
+            "text": "Bagaimana para penari menciptakan irama dalam Tari Saman?",
             "options": [
-              "Gerakan tari akan menjadi lebih lambat",
-              "Pakaian penari akan mudah lepas",
-              "Irama musik pengiring akan terganggu/rusak",
-              "Penonton akan ikut menari"
+              "Menggunakan alat musik petik",
+              "Menggunakan gerakan dan suara tubuh",
+              "Menggunakan musik elektronik",
+              "Menggunakan alat musik tiup"
             ],
-            "correctIndex": 2,
+            "correctIndex": 1,
             "xp": 20
           },
           {
             "type": "multiple_choice",
-            "text": "Pada tahun berapa UNESCO secara resmi mengakui Tari Saman sebagai Warisan Budaya Takbenda yang perlu dilindungi?",
+            "text": "Mengapa Tari Saman perlu dijaga bersama?",
             "options": [
-              "2008",
-              "2010",
-              "2011",
-              "2015"
+              "Karena hanya boleh ditampilkan di sekolah",
+              "Karena hanya boleh dimainkan anak-anak",
+              "Karena sudah diakui dunia sebagai budaya yang berharga",
+              "Karena harus memakai alat musik mahal"
             ],
             "correctIndex": 2,
             "xp": 20
@@ -935,7 +933,7 @@ export const QUIZ_DATA = {
               },
               {
                 "id": "z2",
-                "label": "Memberikan irama yang mengatur kecepatan dan kekompakan gerakan"
+                "label": "Mengatur kecepatan dan tempo gerakan"
               }
             ],
             "correctOrder": [
@@ -949,7 +947,7 @@ export const QUIZ_DATA = {
       "3": {
         "literacy": {
           "image": "/assets/budayana/islands/tarian3 sumatra.png",
-          "text": "Zaman sekarang, banyak Tari Saman ditampilkan dengan tambahan musik elektronik atau drum elektrik agar terdengar lebih modern dan 'seru'. Namun, muncul kekhawatiran bahwa suara asli tepukan tubuh yang menjadi ciri khas utama Saman akan tertutup oleh musik keras tersebut, sehingga identitas aslinya bisa hilang. \n\n Selain itu, ada pendapat bahwa Tari Saman harus terus dipelajari oleh banyak orang, bukan hanya suku Gayo saja, agar budaya Indonesia semakin dikenal luas. Hal ini memicu diskusi: apakah Tari Saman harus tetap menggunakan suara tubuh asli tanpa musik tambahan, atau boleh ditambahkan musik modern agar anak muda lebih tertarik? Kita harus bijak menjaga keaslian gerak dan bunyi ini agar tetap lestari."
+          "text": "Zaman sekarang, beberapa pertunjukan Tari Saman saat ini mulai menambahkan musik modern agar terasa berbeda dan menarik bagi penonton. Namun, muncul kekhawatiran bahwa suara asli tepukan tubuh yang menjadi ciri khas utama Saman akan tertutup oleh musik keras tersebut, sehingga ciri khas suara tubuh pada Tari Saman bisa menjadi kurang terasa. \n\n Selain itu, ada pendapat bahwa Tari Saman harus terus dipelajari oleh banyak orang, bukan hanya suku Gayo saja, agar budaya Indonesia semakin dikenal luas. Hal ini memicu diskusi: apakah Tari Saman harus tetap menggunakan suara tubuh asli tanpa musik tambahan, atau boleh ditambahkan musik modern agar anak muda lebih tertarik? Kita harus bijak menjaga keaslian gerak dan bunyi ini agar tetap lestari."
         },
         "questions": [
           {
@@ -980,7 +978,7 @@ export const QUIZ_DATA = {
               },
               {
                 "id": "r1",
-                "text": "D. Agar pertunjukan terlihat lebih keren di depan penonton luar negeri"
+                "text": "D. Agar pertunjukan terasa lebih menarik bagi sebagian penonton modern"
               }
             ],
             "correctPairs": [
@@ -1015,7 +1013,7 @@ export const QUIZ_DATA = {
               },
               {
                 "id": "r4",
-                "text": "B. Karena gerakan Tari Saman adalah milik eksklusif suku Gayo dan tidak boleh diajarkan kepada orang luar"
+                "text": "B. Karena saat mempelajarinya tetap perlu menghormati aturan dan nilai budaya asalnya"
               },
               {
                 "id": "r2",
@@ -1113,7 +1111,8 @@ export const QUIZ_DATA = {
             "minWords": 4,
             "requiredWords": [
               "Tari Saman"
-            ]
+            ],
+            "example": "Ayo belajar Tari Saman bersama!"
           }
         ]
       }
@@ -1124,7 +1123,7 @@ export const QUIZ_DATA = {
       "1": {
         "literacy": {
           "image": "/assets/budayana/islands/level1 kalimantan.png",
-          "text": "Di pedalaman Kalimantan, terdapat rumah adat yang sangat panjang bernama Rumah Betang. Sesuai namanya, rumah ini bisa memiliki panjang hingga 150 meter dan biasanya dihuni oleh 10 hingga 15 keluarga secara bersama-sama. Rumah Betang dibangun tinggi di atas tanah menggunakan kayu ulin yang sangat kuat. Untuk masuk ke dalam rumah, warga harus menaiki sebuah tangga kayu yang unik bernama Hejot. Kehidupan di Rumah Betang menunjukkan betapa eratnya rasa persaudaraan masyarakat Dayak."
+          "text": "Di pedalaman Kalimantan, terdapat rumah adat yang sangat panjang bernama Rumah Betang. Sesuai namanya, rumah ini bisa memiliki panjang hingga 150 meter dan biasanya dihuni oleh banyak keluarga secara bersama-sama. Rumah Betang dibangun tinggi di atas tanah menggunakan kayu ulin yang sangat kuat agar membantu melindungi penghuni dari banjir dan hewan liar. Untuk masuk ke dalam rumah, warga harus menaiki sebuah tangga kayu yang unik bernama Hejot. Kehidupan di Rumah Betang menunjukkan betapa eratnya rasa persaudaraan masyarakat Dayak."
         },
         "questions": [
           {
@@ -1208,31 +1207,31 @@ export const QUIZ_DATA = {
       "2": {
         "literacy": {
           "image": "/assets/budayana/islands/level2 kalimantan.png",
-          "text": "Mengapa Rumah Betang dibuat sangat panjang dan tinggi? Dahulu, tinggi rumah yang mencapai 3 hingga 5 meter bertujuan untuk melindungi warga dari banjir dan serangan musuh atau hewan buas. Bahkan pada malam hari, tangga Hejot akan ditarik ke atas agar rumah menjadi lebih aman dari gangguan luar. \n\n Di dalam rumah yang panjang ini terdapat pembagian ruangan yang adil. Bagian depan digunakan sebagai ruang bersama untuk rapat dan upacara adat, sementara bagian belakang dibagi menjadi kamar-kamar untuk setiap keluarga. Di sini, semua masalah diselesaikan dengan cara musyawarah, sehingga tercipta suasana yang damai."
+          "text": "Mengapa Rumah Betang dibuat sangat panjang dan tinggi? Dahulu, tinggi rumah yang dibuat beberapa meter di atas tanah bertujuan untuk melindungi warga dari banjir dan serangan musuh atau hewan buas. Bahkan pada malam hari, tangga Hejot akan ditarik ke atas agar rumah menjadi lebih aman dari gangguan luar. \n\n Di dalam rumah yang panjang ini terdapat pembagian ruangan yang adil. Bagian depan digunakan sebagai ruang bersama untuk rapat dan upacara adat, sementara bagian belakang dibagi menjadi kamar-kamar untuk setiap keluarga. Di sini, semua masalah diselesaikan dengan cara musyawarah, sehingga tercipta suasana yang damai."
         },
         "questions": [
           {
             "type": "drag_drop",
-            "text": "Urutkan posisi bagian Rumah Betang dari bawah ke atas!",
+            "text": "Urutkan kegiatan menjaga keamanan Rumah Betang berdasarkan cerita!",
             "draggables": [
               {
                 "id": "d1",
-                "text": "Tiang Kayu Ulin",
+                "text": "Rumah dibangun tinggi",
                 "color": "#FFF3B0"
               },
               {
                 "id": "d4",
-                "text": "Atap Tinggi",
+                "text": "Rumah lebih aman",
                 "color": "#ffd5c0"
               },
               {
                 "id": "d2",
-                "text": "Lantai Kayu",
+                "text": "Naik melalui Hejot",
                 "color": "#dbe0fd"
               },
               {
                 "id": "d3",
-                "text": "Ruang Kamar",
+                "text": "Malam hari Hejot ditarik",
                 "color": "#ffb2d8"
               }
             ],
@@ -1268,7 +1267,7 @@ export const QUIZ_DATA = {
             "options": [
               "Di dalam kamar pribadi masing-masing",
               "Di hutan belakang rumah",
-              "Di ruang bersama bagian depan (Serambi)",
+              "di ruang bersama bagian depan",
               "Di bawah tiang rumah"
             ],
             "correctIndex": 2,
@@ -1306,7 +1305,7 @@ export const QUIZ_DATA = {
             "dropZones": [
               {
                 "id": "z1",
-                "label": "Tempat Musyawarah Bersama"
+                "label": "Tempat rapat dan musyawarah"
               },
               {
                 "id": "z2",
@@ -1324,38 +1323,38 @@ export const QUIZ_DATA = {
       "3": {
         "literacy": {
           "image": "/assets/budayana/islands/level3 kalimantan.png",
-          "text": "Kini, banyak keluarga yang mulai meninggalkan Rumah Betang dan membangun rumah pribadi yang terpisah-pisah. Hal ini dikarenakan sulitnya merawat bangunan kayu yang sangat luas dan risiko kebakaran yang tinggi. \n\n Namun, jika Rumah Betang ditinggalkan, semangat gotong royong dan kebersamaan antar keluarga dikhawatirkan akan memudar. Apakah kita harus mempertahankan tradisi tinggal bersama di satu rumah panjang, atau cukup menyimpan Rumah Betang sebagai simbol budaya saja? Ini adalah tantangan besar bagi pelestarian budaya Dayak."
+          "text": "Kini, banyak keluarga yang mulai meninggalkan Rumah Betang dan membangun rumah pribadi yang terpisah-pisah. Hal ini dikarenakan sulitnya merawat bangunan kayu yang sangat luas dan tantangan perawatan bangunan kayu yang cukup besar. \n\n Namun, jika Rumah Betang ditinggalkan, semangat gotong royong dan kebersamaan antar keluarga dikhawatirkan akan memudar. Apakah kita harus mempertahankan tradisi tinggal bersama di satu rumah panjang, atau cukup menyimpan Rumah Betang sebagai simbol budaya saja? Ini adalah tantangan besar bagi pelestarian budaya Dayak."
         },
         "questions": [
           {
             "type": "opinion_reason",
-            "text": "Jika kamu tinggal di Rumah Betang dan melihat salah satu bagian kayu mulai rapuh, tindakan apa yang paling tepat?",
+            "text": "Menurutmu, jika semakin banyak keluarga pindah dari Rumah Betang, apa yang perlu tetap dijaga?",
             "opinions": [
               {
                 "id": "op1",
-                "text": "Lapor Ketua Adat"
+                "text": "Tetap menjaga kebersamaan"
               },
               {
                 "id": "op2",
-                "text": "Perbaiki Sendiri"
+                "text": "Fokus pada rumah masing-masing"
               }
             ],
             "reasons": [
               {
                 "id": "r1",
-                "text": "A. Agar bisa dikerjakan bersama-sama (gotong royong) oleh semua warga"
-              },
-              {
-                "id": "r4",
-                "text": "B. Agar kayu yang rusak bisa dijual ke tempat lain"
-              },
-              {
-                "id": "r3",
-                "text": "C. Biar orang lain tidak tahu ada kerusakan di rumah"
+                "text": "A. Karena semangat gotong royong adalah bagian penting budaya Dayak"
               },
               {
                 "id": "r2",
-                "text": "D. Supaya tidak merepotkan orang lain dan cepat selesai"
+                "text": "B. Agar hubungan antar keluarga tetap terjaga"
+              },
+              {
+                "id": "r3",
+                "text": "C. Karena rumah bersama sudah tidak dibutuhkan lagi"
+              },
+              {
+                "id": "r4",
+                "text": "D. Karena setiap keluarga bisa lebih mandiri mengatur rumahnya sendiri"
               }
             ],
             "correctPairs": [
@@ -1364,12 +1363,21 @@ export const QUIZ_DATA = {
                 "reasonId": "r1"
               },
               {
-                "opinionId": "op2",
+                "opinionId": "op1",
                 "reasonId": "r2"
+              },
+              {
+                "opinionId": "op2",
+                "reasonId": "r3"
+              },
+              {
+                "opinionId": "op2",
+                "reasonId": "r4"
               }
             ],
             "xp": 30
           },
+
           {
             "type": "opinion_reason",
             "text": "Setujukah kamu jika Rumah Betang diubah menjadi penginapan turis agar tetap terawat?",
@@ -1386,19 +1394,19 @@ export const QUIZ_DATA = {
             "reasons": [
               {
                 "id": "r1",
-                "text": "A. Agar ada biaya untuk perbaikan dan budaya dikenal dunia"
+                "text": "A. Agar ada biaya untuk perbaikan dan budaya dikenal lebih luas"
               },
               {
                 "id": "r2",
-                "text": "B. Karena rumah adat harusnya hanya untuk tempat tinggal warga asli"
+                "text": "B. Karena rumah adat juga perlu tetap menjaga fungsi dan nilai budayanya"
               },
               {
                 "id": "r3",
-                "text": "C. Karena warga asli tidak boleh lagi menjadikannya tempat tinggal jika sudah jadi penginapan"
+                "text": "C. Karena perubahan fungsi yang berlebihan bisa mengurangi suasana tinggal bersama"
               },
               {
                 "id": "r4",
-                "text": "D. Agar biaya listrik dan air di Rumah Betang bisa ditanggung oleh wisatawan"
+                "text": "D. Agar bangunan tetap digunakan dan tidak terbengkalai"
               }
             ],
             "correctPairs": [
@@ -1407,8 +1415,16 @@ export const QUIZ_DATA = {
                 "reasonId": "r1"
               },
               {
+                "opinionId": "op1",
+                "reasonId": "r4"
+              },
+              {
                 "opinionId": "op2",
                 "reasonId": "r2"
+              },
+              {
+                "opinionId": "op2",
+                "reasonId": "r3"
               }
             ],
             "xp": 30
@@ -1488,7 +1504,8 @@ export const QUIZ_DATA = {
             "minWords": 4,
             "requiredWords": [
               "Rumah Betang"
-            ]
+            ],
+            "example": "Ayo kita hidup rukun seperti Rumah Betang!"
           }
         ]
       }
@@ -1514,7 +1531,7 @@ export const QUIZ_DATA = {
           },
           {
             "type": "picture_selection",
-            "text": "Pilih gambar rempah yang memberikan aroma harum yang khas pada Soto Banjar!",
+            "text": "Pilih salah satu rempah yang membuat Soto Banjar memiliki aroma khas!",
             "options": [
               {
                 "text": "Cabai Merah",
@@ -1554,19 +1571,7 @@ export const QUIZ_DATA = {
           },
           {
             "type": "multiple_choice",
-            "text": "Mengapa kuah Soto Banjar memiliki rasa yang gurih dan sedikit kental meskipun tanpa santan?",
-            "options": [
-              "Karena dicampur dengan tepung terigu yang banyak",
-              "Karena dicampur dengan sedikit susu cair atau kuning telur",
-              "Karena air rebusannya diambil dari air kelapa",
-              "Karena dimasak bersama dengan kulit pisang"
-            ],
-            "correctIndex": 1,
-            "xp": 20
-          },
-          {
-            "type": "multiple_choice",
-            "text": "Berdasarkan teks, Soto Banjar biasanya disajikan bersama pelengkap berupa...",
+            "text": "Selain ketupat, pelengkap apa yang biasanya disajikan bersama Soto Banjar?",
             "options": [
               "Kerupuk Udang dan Tempe",
               "Perkedel Kentang dan Soun (Bihun)",
@@ -1575,13 +1580,25 @@ export const QUIZ_DATA = {
             ],
             "correctIndex": 1,
             "xp": 20
+          },
+          {
+            "type": "multiple_choice",
+            "text": "Apa yang membuat Soto Banjar berbeda dari beberapa jenis soto lainnya menurut teks?",
+            "options": [
+              "Disajikan dengan ketupat",
+              "Menggunakan daging sapi",
+              "Tidak menggunakan rempah",
+              "Disajikan dingin"
+            ],
+            "correctIndex": 0,
+            "xp": 20
           }
         ]
       },
       "2": {
         "literacy": {
           "image": "/assets/budayana/islands/makanan2 kalimantan.png",
-          "text": "Mengapa kuah Soto Banjar terasa sangat gurih dan harum? Hal ini karena dalam resep tradisionalnya, kuah soto direbus bersama rempah Kayu Manis dan Cengkih agar menghasilkan aroma yang sangat wangi. Selain itu, kuahnya dicampur dengan sedikit susu cair atau kuning telur rebus yang dihaluskan agar terasa kental tanpa santan.\n\nCara menyajikannya pun ada urutannya: pertama, masukkan potongan Ketupat ke dalam mangkuk, lalu beri suwiran daging Ayam di atasnya. Setelah itu, siram dengan kuah panas yang kaya rempah, dan terakhir beri perasan Jeruk Nipis untuk menghilangkan bau amis ayam dan menambah kesegaran rasa. Rempah kayu manis di dalamnya bukan hanya untuk pengharum, tetapi juga membantu menghangatkan tubuh."
+          "text": "Mengapa kuah Soto Banjar terasa sangat gurih dan harum? Hal ini karena dalam resep tradisionalnya, kuah soto direbus bersama rempah Kayu Manis dan Cengkih agar menghasilkan aroma yang sangat wangi. Selain itu, beberapa resep Soto Banjar menggunakan campuran susu cair atau kuning telur rebus yang dihaluskan agar kuah terasa lebih lembut.\n\nCara menyajikannya pun ada urutannya: pertama, masukkan potongan Ketupat ke dalam mangkuk, lalu beri suwiran daging Ayam di atasnya. Setelah itu, siram dengan kuah panas yang kaya rempah, dan terakhir beri perasan Jeruk Nipis untuk menghilangkan bau amis ayam dan menambah kesegaran rasa. Rempah kayu manis di dalamnya juga membuat kuah terasa hangat saat dinikmati."
         },
         "questions": [
           {
@@ -1661,7 +1678,7 @@ export const QUIZ_DATA = {
           },
           {
             "type": "drag_drop",
-            "text": "Pasangkan bahan Soto Banjar dengan ciri khasnya!",
+            "text": "Pasangkan bagian Soto Banjar dengan perannya!",
             "draggables": [
               {
                 "id": "m1",
@@ -1679,11 +1696,11 @@ export const QUIZ_DATA = {
             "dropZones": [
               {
                 "id": "z1",
-                "label": "Gurih karena campuran susu/telur"
+                "label": "Memberikan rasa lembut pada kuah"
               },
               {
                 "id": "z2",
-                "label": "Wangi karena Kayu Manis"
+                "label": "Memberikan aroma harum khas Soto Banjar"
               }
             ],
             "correctOrder": [
@@ -1697,7 +1714,7 @@ export const QUIZ_DATA = {
       "3": {
         "literacy": {
           "image": "/assets/budayana/islands/makanan3 kalimantan.png",
-          "text": "Saat ini, Soto Banjar mulai dijual di berbagai daerah dengan modifikasi, seperti mengganti ketupat dengan nasi atau menghilangkan perkedel kentangnya agar lebih murah. Muncul perdebatan: apakah Soto Banjar tanpa ketupat dan kayu manis masih bisa disebut Soto Banjar yang asli? Kita harus mengenal bahan-bahan aslinya agar keunikan rasa kuliner dari Suku Banjar ini tetap terjaga kemurniannya hingga masa depan."
+          "text": "Saat ini, Soto Banjar mulai dijual di berbagai daerah dengan beberapa penyesuaian, seperti mengganti ketupat dengan nasi atau mengurangi beberapa pelengkap. Muncul perdebatan: apakah Soto Banjar tanpa ketupat dan kayu manis masih bisa disebut Soto Banjar yang asli? Kita perlu mengenal bahan-bahan khasnya agar ciri rasa Soto Banjar tetap dikenal hingga masa depan."
         },
         "questions": [
           {
@@ -1728,7 +1745,7 @@ export const QUIZ_DATA = {
               },
               {
                 "id": "r2",
-                "text": "D. Karena Soto Banjar asli identik dengan ketupat, menggantinya akan merubah ciri khasnya"
+                "text": "D. Karena ketupat merupakan salah satu ciri penyajian Soto Banjar, menggantinya akan merubah ciri khasnya"
               }
             ],
             "correctPairs": [
@@ -1745,33 +1762,33 @@ export const QUIZ_DATA = {
           },
           {
             "type": "opinion_reason",
-            "text": "Menurutmu, apakah penggunaan susu dalam kuah Soto Banjar adalah inovasi yang baik?",
+            "text": "Menurutmu, apakah Soto Banjar tanpa kayu manis masih boleh disebut Soto Banjar?",
             "opinions": [
               {
                 "id": "op1",
-                "text": "Baik"
+                "text": "Boleh"
               },
               {
                 "id": "op2",
-                "text": "Kurang Baik"
+                "text": "Kurang Tepat"
               }
             ],
             "reasons": [
               {
                 "id": "r1",
-                "text": "A. Ya, karena memberikan rasa gurih yang unik tanpa lemak dari santan"
+                "text": "A. Karena kayu manis merupakan salah satu ciri aroma khas Soto Banjar"
               },
               {
                 "id": "r2",
-                "text": "B. Tidak, karena rasa susu akan merusak rasa asli kaldu ayam"
+                "text": "B. Agar memasaknya lebih cepat"
               },
               {
                 "id": "r3",
-                "text": "C. Ya, supaya kuah soto bisa lebih kental seperti sup krim modern"
+                "text": "C. Karena rasa makanan bisa menyesuaikan selera daerah"
               },
               {
                 "id": "r4",
-                "text": "D. Tidak, karena susu sulit didapatkan di pasar tradisional"
+                "text": "D. Karena rempah tidak memengaruhi rasa makanan"
               }
             ],
             "correctPairs": [
@@ -1861,7 +1878,8 @@ export const QUIZ_DATA = {
             "minWords": 4,
             "requiredWords": [
               "Soto Banjar"
-            ]
+            ],
+            "example": "Ayo cicipi Soto Banjar lezat bersama!"
           }
         ]
       }
@@ -1870,7 +1888,7 @@ export const QUIZ_DATA = {
       "1": {
         "literacy": {
           "image": "/assets/budayana/islands/tarian1 kalimantan.png",
-          "text": "Pernahkah kamu mendengar suara petikan dawai yang sangat merdu dari sebuah kayu yang diukir indah? Alat musik itu bernama Sape, alat musik petik tradisional dari Suku Dayak Kenyah, Kalimantan Timur. Sape dimainkan dengan cara dipetik, mirip dengan gitar namun memiliki bentuk yang lebih lebar dan penuh dengan ukiran khas. \n\nMusik Sape biasanya digunakan untuk mengiringi Tari Enggang. Dalam tarian ini, para penari mengenakan bulu burung Enggang di tangan mereka dan bergerak melambai-lambai, meniru gerakan burung yang sedang terbang di atas hutan Kalimantan."
+          "text": "Pernahkah kamu mendengar suara petikan dawai yang sangat merdu dari sebuah kayu yang diukir indah? Alat musik itu bernama Sape, alat musik petik tradisional dari Suku Dayak Kenyah, Kalimantan Timur. Sape dimainkan dengan cara dipetik, mirip dengan gitar namun memiliki bentuk yang lebih lebar dan penuh dengan ukiran khas. \n\n Musik Sape biasanya digunakan untuk mengiringi Tari Enggang. Dalam tarian ini, para penari mengenakan bulu burung Enggang di tangan mereka dan bergerak melambai-lambai, meniru gerakan burung yang sedang terbang di atas hutan Kalimantan."
         },
         "questions": [
           {
@@ -1939,14 +1957,14 @@ export const QUIZ_DATA = {
           },
           {
             "type": "multiple_choice",
-            "text": "Berdasarkan teks, burung Enggang bagi masyarakat Dayak merupakan simbol dari...",
+            "text": "Dalam Tari Enggang, apa yang dikenakan penari di tangan mereka?",
             "options": [
-              "Kekayaan dan Uang",
-              "Keberanian dan Kesetiaan",
-              "Kecepatan dan Kekuatan",
-              "Kemandirian dan Kesendirian"
+              "Bulu burung Enggang",
+              "Selendang panjang",
+              "Kipas bambu",
+              "Tongkat kayu"
             ],
-            "correctIndex": 1,
+            "correctIndex": 0,
             "xp": 20
           }
         ]
@@ -1954,7 +1972,7 @@ export const QUIZ_DATA = {
       "2": {
         "literacy": {
           "image": "/assets/budayana/islands/tarian2 kalimantan.png",
-          "text": "Persiapan tari ini dimulai dengan menyetel dawai Sape, memakai kostum, mengikat bulu burung Enggang di tangan, baru kemudian menari. Bagi masyarakat Dayak, burung Enggang adalah simbol keberanian dan kesetiaan. Gerakan tangan yang naik turun melambangkan hubungan manusia dengan langit dan bumi, sementara musik Sape berfungsi sebagai penghantar perasaan. \n\n Dahulu, Sape digunakan mengiringi ritual penyembuhan (Balian) untuk berkomunikasi dengan roh leluhur. Keunikan tari ini ada pada koordinasinya; jika Sape dimainkan dengan tempo pelan dan sedih, penari akan bergerak melambai sangat halus dan ringan seolah sedang melayang di udara."
+          "text": "Persiapan tari ini dimulai dengan menyetel dawai Sape, memakai kostum, mengikat bulu burung Enggang di tangan, baru kemudian menari. Bagi masyarakat Dayak, burung Enggang sering dianggap sebagai simbol kehormatan dan nilai-nilai kehidupan. Gerakan tangan yang naik turun melambangkan hubungan manusia dengan langit dan bumi, sementara musik Sape berfungsi sebagai penghantar perasaan. \n\n Dahulu, Sape juga digunakan dalam beberapa kegiatan adat dan ritual masyarakat Dayak. Keunikan tari ini ada pada koordinasinya; jika Sape dimainkan dengan tempo pelan dan sedih, penari akan bergerak melambai sangat halus dan ringan seolah sedang melayang di udara."
         },
         "questions": [
           {
@@ -2022,14 +2040,14 @@ export const QUIZ_DATA = {
           },
           {
             "type": "multiple_choice",
-            "text": "Mengapa penggunaan bulu burung Enggang asli sekarang mulai diganti dengan bulu buatan (sintetis)?",
+            "text": "Apa fungsi musik Sape dalam pertunjukan Tari Enggang menurut teks?",
             "options": [
-              "Karena bulu asli tidak bisa dicuci jika kotor",
-              "Agar warna kostum menjadi lebih mengkilap",
-              "Untuk melindungi burung Enggang agar tidak punah di hutan",
-              "Karena bulu buatan jauh lebih ringan daripada bulu asli"
+              "Sebagai penghantar perasaan",
+              "Untuk membuat penari bergerak lebih cepat",
+              "Untuk menggantikan suara penonton",
+              "Untuk menentukan warna kostum"
             ],
-            "correctIndex": 2,
+            "correctIndex": 0,
             "xp": 25
           },
           {
@@ -2070,7 +2088,7 @@ export const QUIZ_DATA = {
       "3": {
         "literacy": {
           "image": "/assets/budayana/islands/tarian3 kalimantan.png",
-          "text": "Saat ini, kelestarian alam menjadi perhatian utama masyarakat Dayak. Penggunaan bulu burung Enggang asli kini mulai dilarang dan diganti dengan bulu buatan (sintetis) untuk melindungi burung tersebut agar tidak punah di hutan. Selain itu, muncul tantangan baru dengan adanya Sape elektrik yang suaranya lebih keras untuk panggung besar.\n\nHal ini memicu diskusi: apakah penggunaan bulu buatan dan Sape elektrik mengurangi nilai budaya kita? Beberapa orang tua khawatir suara elektrik akan menghilangkan kesakralan dan kelembutan suara kayu aslinya. Kita harus kreatif melestarikan seni ini, seperti mempertimbangkan apakah Sape boleh dimainkan dengan musik modern agar lebih dikenal anak muda, tanpa merusak makna aslinya."
+          "text": "Saat ini, kelestarian alam menjadi perhatian utama masyarakat Dayak. Penggunaan bulu burung Enggang asli kini mulai banyak diganti dengan bulu buatan (sintetis) sebagai bentuk kepedulian terhadap kelestarian burung tersebut. Selain itu, muncul tantangan baru dengan adanya Sape elektrik yang suaranya lebih keras untuk panggung besar.\n\n Hal ini memicu diskusi: apakah penggunaan bulu buatan dan Sape elektrik mengurangi nilai budaya kita? Beberapa orang khawatir suara elektrik dapat mengubah nuansa lembut dari suara kayu tradisional. Kita harus kreatif melestarikan seni ini, seperti mempertimbangkan apakah Sape boleh dimainkan dengan musik modern agar lebih dikenal anak muda, tanpa merusak makna aslinya."
         },
         "questions": [
           {
@@ -2132,19 +2150,19 @@ export const QUIZ_DATA = {
             "reasons": [
               {
                 "id": "r1",
-                "text": "A. Karena melestarikan budaya tidak harus menyakiti hewan di alam"
+                "text": "A. Karena melestarikan budaya juga bisa dilakukan sambil menjaga alam"
               },
               {
                 "id": "r2",
-                "text": "B. Karena keindahan tarian hanya bisa terlihat jika menggunakan bahan yang asli"
+                "text": "B. Karena sebagian orang merasa bahan tradisional memberi pengalaman yang berbeda"
               },
               {
                 "id": "r3",
-                "text": "C. Supaya biaya membuat kostum menjadi lebih murah"
+                "text": "C. Supaya kostum menjadi lebih murah"
               },
               {
                 "id": "r4",
-                "text": "D. Agar turis tidak protes saat melihat pertunjukan kita"
+                "text": "D. Agar pertunjukan terlihat lebih modern"
               }
             ],
             "correctPairs": [
@@ -2235,7 +2253,8 @@ export const QUIZ_DATA = {
             "requiredWords": [
               "Sape",
               "Tari Enggang"
-            ]
+            ],
+            "example": "Ayo dengarkan petikan Sape dan Tari Enggang!"
           }
         ]
       }
@@ -2246,7 +2265,7 @@ export const QUIZ_DATA = {
       "1": {
         "literacy": {
           "image": "/assets/budayana/islands/rumah1 sulawesi.png",
-          "text": "Di Sulawesi Selatan, terdapat rumah adat yang sangat megah bernama Rumah Tongkonan. Rumah ini memiliki atap yang melengkung indah menyerupai bentuk perahu atau tanduk kerbau. Tongkonan dibangun sebagai rumah panggung dari kayu yang kuat. \n\n Hal yang paling unik adalah bagian depan rumah yang dihiasi dengan deretan Tanduk Kerbau. Semakin banyak tanduk kerbau yang dipasang, menunjukkan semakin tinggi kedudukan atau status sosial keluarga yang tinggal di sana."
+          "text": "Di Sulawesi Selatan, terdapat rumah adat yang sangat megah bernama Rumah Tongkonan. Rumah ini memiliki atap yang melengkung indah menyerupai bentuk perahu atau tanduk kerbau. Tongkonan dibangun sebagai rumah panggung dari kayu yang kuat. \n\n Hal yang paling unik adalah bagian depan rumah yang dihiasi dengan deretan Tanduk Kerbau. Deretan tanduk kerbau menjadi simbol penghormatan dan sering dikaitkan dengan kedudukan serta sejarah keluarga."
         },
         "questions": [
           {
@@ -2291,19 +2310,19 @@ export const QUIZ_DATA = {
           },
           {
             "type": "multiple_choice",
-            "text": "Ke arah manakah Rumah Tongkonan selalu dibangun menghadap?",
+            "text": "Bagaimana bentuk Rumah Tongkonan dibangun menurut teks?",
             "options": [
-              "Timur",
-              "Selatan",
-              "Utara",
-              "Barat"
+              "Rumah bawah tanah",
+              "Rumah panggung dari kayu",
+              "Rumah bertingkat dari beton",
+              "Rumah berbentuk kubah"
             ],
-            "correctIndex": 2,
+            "correctIndex": 1,
             "xp": 20
           },
           {
             "type": "multiple_choice",
-            "text": "Apa yang ditunjukkan oleh banyaknya jumlah tanduk kerbau di depan sebuah Rumah Tongkonan?",
+            "text": "Menurut teks, deretan tanduk kerbau di depan Rumah Tongkonan berkaitan dengan...",
             "options": [
               "Usia bangunan rumah tersebut",
               "Luasnya lahan sawah yang dimiliki",
@@ -2315,14 +2334,14 @@ export const QUIZ_DATA = {
           },
           {
             "type": "multiple_choice",
-            "text": "Apa kegunaan utama dari kolong rumah (bagian bawah) pada Rumah Tongkonan?",
+            "text": "Bagian Rumah Tongkonan yang memiliki bentuk menyerupai perahu adalah...",
             "options": [
-              "Tempat untuk tidur anggota keluarga",
-              "Tempat menyambut tamu resmi",
-              "Tempat untuk memasak makanan",
-              "Tempat ternak atau alat pertanian"
+              "Atap rumah",
+              "Tangga rumah",
+              "Jendela rumah",
+              "Kolong rumah"
             ],
-            "correctIndex": 3,
+            "correctIndex": 0,
             "xp": 20
           }
         ]
@@ -2330,32 +2349,28 @@ export const QUIZ_DATA = {
       "2": {
         "literacy": {
           "image": "/assets/budayana/islands/rumah2 sulawesi.png",
-          "text": "Rumah Tongkonan selalu dibangun menghadap ke arah Utara. Bagi masyarakat Toraja, arah Utara melambangkan asal-usul leluhur dan kehidupan. Di dinding rumah, terdapat ukiran khas bernama Passura' yang memiliki empat warna utama: merah, hitam, kuning, dan putih. Setiap warna memiliki arti tersendiri: merah melambangkan kehidupan, hitam melambangkan kematian, kuning melambangkan berkah dari Tuhan, dan putih melambangkan kemurnian. Ukiran ini tidak hanya hiasan, tapi menceritakan tentang hubungan manusia dengan Tuhan, sesama, dan alam semesta. Selain itu, kolong rumah yang tinggi biasanya digunakan sebagai tempat untuk memelihara hewan ternak atau menyimpan alat pertanian."
+          "text": "Secara tradisional, banyak Rumah Tongkonan dibangun menghadap ke arah Utara. Bagi masyarakat Toraja, arah Utara melambangkan asal-usul leluhur dan kehidupan. Di dinding rumah, terdapat ukiran khas bernama Passura' yang memiliki empat warna utama: merah, hitam, kuning, dan putih. Setiap warna memiliki arti tersendiri: merah melambangkan kehidupan, hitam melambangkan kematian, kuning melambangkan berkah dari Tuhan, dan putih melambangkan kemurnian. Ukiran ini tidak hanya hiasan, tapi menceritakan tentang hubungan manusia dengan Tuhan, sesama, dan alam semesta. Selain itu, kolong rumah yang tinggi biasanya digunakan sebagai tempat untuk memelihara hewan ternak atau menyimpan alat pertanian."
         },
         "questions": [
           {
             "type": "drag_drop",
-            "text": "Urutkan posisi bagian Rumah Tongkonan dari paling bawah hingga paling atas!",
+            "text": "Urutkan informasi tentang Rumah Tongkonan sesuai urutan yang muncul pada bacaan!",
             "draggables": [
               {
                 "id": "d1",
-                "text": "Kolong Rumah",
-                "color": "#FFF3B0"
-              },
-              {
-                "id": "d3",
-                "text": "Dinding Ukiran",
-                "color": "#ffb2d8"
+                "text": "Arah Utara"
               },
               {
                 "id": "d2",
-                "text": "Badan Kayu",
-                "color": "#dbe0fd"
+                "text": "Ukiran Passura'"
+              },
+              {
+                "id": "d3",
+                "text": "Makna Warna"
               },
               {
                 "id": "d4",
-                "text": "Atap Perahu",
-                "color": "#ffd5c0"
+                "text": "Fungsi Kolong Rumah"
               }
             ],
             "dropZones": [
@@ -2428,11 +2443,11 @@ export const QUIZ_DATA = {
             "dropZones": [
               {
                 "id": "z1",
-                "label": "Simbol Kemakmuran/Status"
+                "label": "Berkaitan dengan kedudukan dan sejarah keluarga"
               },
               {
                 "id": "z2",
-                "label": "Simbol Kehidupan/Leluhur"
+                "label": "Melambangkan asal-usul leluhur dan kehidupan"
               }
             ],
             "correctOrder": [
@@ -2446,7 +2461,7 @@ export const QUIZ_DATA = {
       "3": {
         "literacy": {
           "image": "/assets/budayana/islands/rumah3 sulawesi.png",
-          "text": "Membangun dan merawat Rumah Tongkonan membutuhkan biaya yang sangat besar dan waktu yang lama karena ukirannya harus dibuat dengan tangan. Saat ini, banyak generasi muda Toraja yang merantau ke kota dan membangun rumah modern yang lebih sederhana. \n\n Muncul sebuah pemikiran: apakah Rumah Tongkonan harus tetap dibangun dengan banyak tanduk kerbau asli yang mahal, atau boleh diganti dengan hiasan lain yang lebih terjangkau? Kita harus mencari cara agar tradisi Tongkonan tetap terjaga di tengah dunia yang terus berubah."
+          "text": "Membangun dan merawat Rumah Tongkonan membutuhkan biaya yang sangat besar dan waktu yang lama karena ukirannya harus dibuat dengan tangan. Saat ini, banyak generasi muda Toraja yang merantau ke kota dan membangun rumah modern yang lebih sederhana. \n\n Muncul sebuah pemikiran: apakah simbol tanduk kerbau pada Rumah Tongkonan harus tetap menggunakan bahan asli atau boleh diganti dengan bentuk lain yang lebih terjangkau. Kita harus mencari cara agar tradisi Tongkonan tetap terjaga di tengah dunia yang terus berubah."
         },
         "questions": [
           {
@@ -2465,7 +2480,7 @@ export const QUIZ_DATA = {
             "reasons": [
               {
                 "id": "r3",
-                "text": "A. Agar nenek moyang kita tidak merasa tersinggung dengan perubahan ini"
+                "text": "A. Karena simbol budaya perlu tetap dipikirkan sebelum diubah"
               },
               {
                 "id": "r2",
@@ -2610,7 +2625,8 @@ export const QUIZ_DATA = {
             "minWords": 4,
             "requiredWords": [
               "Rumah Tongkonan"
-            ]
+            ],
+            "example": "Contoh kalimat ajakan: Ayo hargai budaya kita bersama!"
           }
         ]
       }
@@ -2619,7 +2635,7 @@ export const QUIZ_DATA = {
       "1": {
         "literacy": {
           "image": "/assets/budayana/islands/makan1 sulawesi.png",
-          "text": "Pernahkah kamu mendengar tentang sup daging yang sangat gurih dari Sulawesi Selatan? Namanya adalah Coto Makassar. Makanan ini berbahan dasar daging sapi dan jeroan (bagian dalam sapi seperti hati dan limpa) yang direbus dalam waktu lama. Kuah Coto Makassar terlihat kental dan berwarna kecokelatan karena dicampur dengan Kacang Tanah yang telah disangrai dan dihaluskan. Berbeda dengan sup lainnya, Coto Makassar tidak dimakan bersama nasi, melainkan bersama Ketupat yang dibungkus daun pandan atau daun kelapa."
+          "text": "Pernahkah kamu mendengar tentang sup daging yang sangat gurih dari Sulawesi Selatan? Namanya adalah Coto Makassar. Makanan ini berbahan dasar daging sapi dan jeroan (bagian dalam sapi seperti hati dan limpa) yang direbus dalam waktu lama. Kuah Coto Makassar terlihat kental dan berwarna kecokelatan karena dicampur dengan Kacang Tanah yang telah disangrai dan dihaluskan. Berbeda dengan sup lainnya, Coto Makassar tidak dimakan bersama nasi, melainkan bersama Ketupat yang dibungkus daun kelapa atau janur."
         },
         "questions": [
           {
@@ -2688,12 +2704,12 @@ export const QUIZ_DATA = {
           },
           {
             "type": "multiple_choice",
-            "text": "Ke manakah Coto Makassar biasanya disajikan pada zaman dahulu menurut sejarahnya?",
+            "text": "Bagaimana cara Coto Makassar biasanya disajikan menurut teks?",
             "options": [
-              "Hanya untuk makanan di rumah sendiri",
-              "Disajikan di istana kerajaan untuk tamu kehormatan",
-              "Untuk dijual di pasar-pasar malam",
-              "Untuk bekal para pelaut saat pergi jauh"
+              "Disajikan bersama nasi putih",
+              "Disajikan bersama ketupat",
+              "Disajikan bersama roti",
+              "Disajikan tanpa pelengkap"
             ],
             "correctIndex": 1,
             "xp": 20
@@ -2819,7 +2835,7 @@ export const QUIZ_DATA = {
       "3": {
         "literacy": {
           "image": "/assets/budayana/islands/makan3 sulawesi.png",
-          "text": "Saat ini, Coto Makassar sudah banyak dijual di luar Sulawesi, bahkan hingga ke luar negeri. Namun, karena bahan rempahnya yang mencapai 40 jenis, banyak penjual yang mulai mengurangi jumlah bumbu agar lebih praktis dan murah. \n\n Tantangannya adalah: apakah Coto Makassar yang bumbunya tidak lengkap tetap bisa disebut Coto asli? Jika kita terus membiarkan resep asli ini hilang, maka kekayaan rasa rempah asli Sulawesi mungkin akan terlupakan oleh generasi masa depan."
+          "text": "Saat ini, Coto Makassar sudah banyak dijual di luar Sulawesi, bahkan hingga ke luar negeri. Namun, karena menggunakan banyak jenis rempah khas, banyak penjual yang mulai mengurangi jumlah bumbu agar lebih praktis dan murah. \n\n Tantangannya adalah: apakah Coto Makassar yang bumbunya tidak lengkap tetap bisa disebut Coto asli? Jika kita terus membiarkan resep asli ini hilang, maka kekayaan rasa rempah asli Sulawesi mungkin akan terlupakan oleh generasi masa depan."
         },
         "questions": [
           {
@@ -2837,15 +2853,15 @@ export const QUIZ_DATA = {
             ],
             "reasons": [
               {
-                "id": "r2",
-                "text": "A. Karena akan merusak keaslian rasa dan nilai sejarah 40 bumbu"
-              },
-              {
-                "id": "r4",
-                "text": "B. Karena pelanggan tidak akan tahu jika bumbunya dikurangi"
-              },
-              {
                 "id": "r1",
+                "text": "A. Karena dapat mengubah cita rasa khas yang ingin dijaga"
+              },
+              {
+                "id": "r2",
+                "text": "B. Karena beberapa orang lebih memilih versi yang lebih sederhana"
+              },
+              {
+                "id": "r3",
                 "text": "C. Agar lebih banyak orang yang mampu membeli Coto Makassar"
               },
               {
@@ -2881,18 +2897,18 @@ export const QUIZ_DATA = {
             "reasons": [
               {
                 "id": "r1",
-                "text": "A. Menjaga cara makan tradisional yang sudah ada sejak zaman kerajaan"
+                "text": "A. Menjaga cara penyajian khas yang menjadi bagian dari identitas Coto Makassar"
               },
               {
                 "id": "r2",
                 "text": "B. Nasi lebih mudah didapat dan lebih mengenyangkan bagi banyak orang"
               },
               {
-                "id": "r4",
-                "text": "C. Agar Coto Makassar bisa dimakan lebih cepat saat istirahat sekolah"
+                "id": "r3",
+                "text": "C. Agar penyajiannya menjadi lebih praktis"
               },
               {
-                "id": "r3",
+                "id": "r4",
                 "text": "D. Agar tampilan Coto terlihat lebih modern dan berbeda"
               }
             ],
@@ -2983,7 +2999,8 @@ export const QUIZ_DATA = {
             "minWords": 4,
             "requiredWords": [
               "Coto Makassar"
-            ]
+            ],
+            "example": "Contoh kalimat ajakan: Ayo lestarikan budaya kita bersama!"
           }
         ]
       }
@@ -2992,7 +3009,7 @@ export const QUIZ_DATA = {
       "1": {
         "literacy": {
           "image": "/assets/budayana/islands/tarian1 sulawesi.png",
-          "text": "Pernahkah kamu melihat tarian di mana para penarinya membawa kipas dan bergerak dengan sangat lambat? Itu adalah Tari Kipas Pakarena dari Gowa, Sulawesi Selatan. Penarinya adalah perempuan yang mengenakan pakaian adat bernama Baju Bodo. \n\n Keunikan tarian ini adalah gerakannya yang sangat lembut meski musik pengiringnya terdengar sangat keras dan cepat. Penari tidak boleh membuka mata terlalu lebar dan tidak boleh mengangkat kaki terlalu tinggi, karena tarian ini melambangkan kesantunan dan kelembutan perempuan."
+          "text": "Pernahkah kamu melihat tarian di mana para penarinya membawa kipas dan bergerak dengan sangat lambat? Itu adalah Tari Kipas Pakarena dari Gowa, Sulawesi Selatan. Penarinya adalah perempuan yang mengenakan pakaian adat bernama Baju Bodo. \n\n Keunikan tarian ini adalah gerakannya yang sangat lembut meski irama musik pengiringnya terdengar cepat dan bersemangat. Musik pengiring Tari Kipas Pakarena biasanya menggunakan alat musik tradisional seperti Ganrang (gendang) yang menjaga tempo tarian. Penari tidak boleh membuka mata terlalu lebar dan tidak boleh mengangkat kaki terlalu tinggi, karena tarian ini melambangkan kesantunan dan kelembutan perempuan."
         },
         "questions": [
           {
@@ -3061,12 +3078,12 @@ export const QUIZ_DATA = {
           },
           {
             "type": "multiple_choice",
-            "text": "Berdasarkan teks, gerakan berputar searah jarum jam dalam tarian ini melambangkan...",
+            "text": "Bagaimana gerakan Tari Kipas Pakarena menurut bacaan?",
             "options": [
-              "Perputaran roda kendaraan",
-              "Siklus atau perjalanan hidup manusia",
-              "Waktu yang berjalan sangat cepat",
-              "Arah mata angin yang berbeda-beda"
+              "Cepat dan melompat tinggi",
+              "Lembut dan perlahan",
+              "Banyak gerakan akrobat",
+              "Selalu berlari mengelilingi panggung"
             ],
             "correctIndex": 1,
             "xp": 20
@@ -3076,31 +3093,31 @@ export const QUIZ_DATA = {
       "2": {
         "literacy": {
           "image": "/assets/budayana/islands/tarian1 sulawesi.png",
-          "text": "Mengapa musik pengiring Tari Kipas Pakarena sangat bersemangat sementara penarinya bergerak sangat lambat? Alat musik utamanya adalah Ganrang (gendang) dan Puik-puik (alat musik tiup khas Sulawesi Selatan). Irama gendang yang cepat melambangkan ketegasan dan semangat kaum laki-laki, sedangkan gerakan penari yang lembut melambangkan sifat perempuan yang sabar dan patuh. Setiap gerakan tari, seperti gerakan berputar searah jarum jam, melambangkan siklus hidup manusia yang selalu berputar. Tarian ini mengajarkan kita tentang keseimbangan dalam hidup: bahwa kekuatan dan kelembutan, ketegasan dan kesabaran, harus berjalan bersama secara harmonis."
+          "text": "Mengapa musik pengiring Tari Kipas Pakarena sangat bersemangat sementara penarinya bergerak sangat lambat? Alat musik utamanya adalah Ganrang (gendang) dan Puik-puik (alat musik tiup khas Sulawesi Selatan). Irama gendang yang cepat melambangkan ketegasan dan semangat kaum laki-laki, sedangkan gerakan penari yang lembut melambangkan sifat perempuan yang lembut dan sabar. Setiap gerakan tari, seperti gerakan berputar searah jarum jam, melambangkan siklus hidup manusia yang selalu berputar. Tarian ini mengajarkan kita tentang keseimbangan dalam hidup: bahwa kekuatan dan kelembutan, ketegasan dan kesabaran, harus berjalan bersama secara harmonis."
         },
         "questions": [
           {
             "type": "drag_drop",
-            "text": "Urutkan jalannya pertunjukan Tari Kipas Pakarena!",
+            "text": "Urutkan informasi pada pertunjukan Tari Kipas Pakarena dari suara hingga maknanya!",
             "draggables": [
               {
                 "id": "d1",
-                "text": "Duduk Bersimpuh (Awal)",
+                "text": "Musik Ganrang dan Puik-puik",
                 "color": "#FFF3B0"
               },
               {
                 "id": "d3",
-                "text": "Berputar Searah Jarum Jam",
+                "text": "Gerakan lembut",
                 "color": "#ffb2d8"
               },
               {
                 "id": "d2",
-                "text": "Mengayunkan Kipas Perlahan",
+                "text": "Irama cepat",
                 "color": "#dbe0fd"
               },
               {
                 "id": "d4",
-                "text": "Duduk Kembali (Akhir)",
+                "text": "Keseimbangan hidup",
                 "color": "#ffd5c0"
               }
             ],
@@ -3240,7 +3257,7 @@ export const QUIZ_DATA = {
           },
           {
             "type": "opinion_reason",
-            "text": "Haruskah alat musik tiup \"Puin-puin\" diganti dengan rekaman musik dari handphone saat pertunjukan di sekolah?",
+            "text": "Menurutmu, apakah Tari Pakarena boleh ditampilkan dengan gerakan yang sedikit lebih modern agar menarik bagi penonton?",
             "opinions": [
               {
                 "id": "op1",
@@ -3253,20 +3270,20 @@ export const QUIZ_DATA = {
             ],
             "reasons": [
               {
-                "id": "r4",
-                "text": "A. Karena handphone memiliki pilihan musik yang lebih banyak"
-              },
-              {
                 "id": "r1",
-                "text": "B. Agar lebih praktis dan tidak perlu mencari pemain musik profesional"
-              },
-              {
-                "id": "r3",
-                "text": "C. Supaya suara musik bisa diatur volumenya menjadi sangat keras"
+                "text": "A. Agar lebih menarik dan membuat lebih banyak orang mengenal budaya"
               },
               {
                 "id": "r2",
-                "text": "D. Menjaga keaslian suara alat musik tradisional dan menghargai para seniman musik daerah"
+                "text": "B. Karena gerakan lambat merupakan bagian dari makna dan keindahan tarian"
+              },
+              {
+                "id": "r3",
+                "text": "C. Agar penari bisa bergerak lebih cepat dari musik"
+              },
+              {
+                "id": "r4",
+                "text": "D. Supaya pertunjukan selesai lebih singkat"
               }
             ],
             "correctPairs": [
@@ -3317,7 +3334,7 @@ export const QUIZ_DATA = {
               },
               {
                 "id": "w7",
-                "text": "perempuan",
+                "text": "kelembutan",
                 "color": "#D5F4E6"
               },
               {
@@ -3356,7 +3373,8 @@ export const QUIZ_DATA = {
             "minWords": 4,
             "requiredWords": [
               "Tari Pakarena"
-            ]
+            ],
+            "example": "Ayo kita kagumi keanggunan Tari Pakarena!"
           }
         ]
       }
@@ -3367,7 +3385,7 @@ export const QUIZ_DATA = {
       "1": {
         "literacy": {
           "image": "/assets/budayana/islands/rumah1 maluku.png",
-          "text": "Di Kepulauan Maluku, terdapat rumah adat yang sangat penting bernama Rumah Baileo. Rumah ini bukanlah rumah tinggal biasa, melainkan tempat pertemuan warga dan upacara adat. Baileo berbentuk panggung dan memiliki ukuran yang cukup besar. \n\n Hal yang paling mencolok adalah Rumah Baileo seringkali dibuat tanpa dinding. Hal ini dilakukan agar roh para leluhur bebas keluar masuk dan masyarakat bisa melihat kegiatan di dalam rumah dengan jelas."
+          "text": "Di Kepulauan Maluku, terdapat rumah adat yang sangat penting bernama Rumah Baileo. Rumah ini bukanlah rumah tinggal biasa, melainkan tempat pertemuan warga dan upacara adat. Baileo berbentuk panggung dan memiliki ukuran yang cukup besar. \n\n Hal yang paling mencolok adalah Rumah Baileo seringkali dibuat tanpa dinding. Hal ini melambangkan keterbukaan dalam kehidupan masyarakat dan dipercaya memudahkan pelaksanaan kegiatan adat serta penghormatan kepada leluhur."
         },
         "questions": [
           {
@@ -3417,7 +3435,7 @@ export const QUIZ_DATA = {
               "Agar warga tidak perlu membuat pintu dan jendela",
               "Supaya biaya pembangunan menjadi sangat murah",
               "Karena kekurangan bahan kayu untuk dinding",
-              "Agar roh leluhur bebas keluar masuk dan menjaga keterbukaan"
+              "Melambangkan keterbukaan dan mendukung kegiatan adat masyarakat"
             ],
             "correctIndex": 3,
             "xp": 20
@@ -3451,31 +3469,31 @@ export const QUIZ_DATA = {
       "2": {
         "literacy": {
           "image": "/assets/budayana/islands/rumah2 maluku.png",
-          "text": "Struktur Rumah Baileo memiliki aturan yang sangat kuat terkait adat. Tiang-tiang rumah ini berjumlah sembilan di bagian depan dan belakang, serta lima tiang di sisi kiri dan kanan, yang bersama-sama melambangkan persatuan seluruh kelompok desa di Maluku, yang disebut Siwa Lima. Di dalam Baileo, terdapat banyak ukiran bermakna, seperti ukiran dua ekor ayam yang saling berhadapan dan diapit oleh dua ekor anjing di sebelah kiri dan kanannya. Ukiran ini melambangkan kemakmuran dan kedamaian yang dijaga oleh roh nenek moyang. Karena tidak berdinding, angin laut yang sejuk bebas masuk ke dalam ruangan, menciptakan suasana yang tenang untuk bermusyawarah."
+          "text": "Struktur Rumah Baileo memiliki aturan yang sangat kuat terkait adat. Tiang-tiang rumah ini berjumlah sembilan di bagian depan dan belakang, serta lima tiang di sisi kiri dan kanan, yang dikaitkan dengan filosofi Siwa Lima sebagai simbol persatuan masyarakat Maluku. Di dalam Baileo, terdapat banyak ukiran bermakna, seperti ukiran dua ekor ayam yang saling berhadapan dan diapit oleh dua ekor anjing di sebelah kiri dan kanannya. Ukiran ini melambangkan kemakmuran dan kedamaian yang dijaga oleh roh nenek moyang. Karena tidak berdinding, angin laut yang sejuk bebas masuk ke dalam ruangan, menciptakan suasana yang tenang untuk bermusyawarah."
         },
         "questions": [
           {
             "type": "drag_drop",
-            "text": "Urutkan bagian Rumah Baileo dari bagian pondasi hingga atap!",
+            "text": "Urutkan informasi tentang Rumah Baileo sesuai urutan pada bacaan!",
             "draggables": [
               {
                 "id": "d1",
-                "text": "Tiang Kayu",
+                "text": "Jumlah Tiang",
                 "color": "#FFF3B0"
               },
               {
                 "id": "d2",
-                "text": "Lantai Panggung",
+                "text": "Filosofi Siwa Lima",
                 "color": "#dbe0fd"
               },
               {
                 "id": "d3",
-                "text": "Panel Ukiran Dinding",
+                "text": "Ukiran Rumah",
                 "color": "#ffb2d8"
               },
               {
                 "id": "d4",
-                "text": "Atap Rumbia",
+                "text": "Angin Laut Masuk",
                 "color": "#ffd5c0"
               }
             ],
@@ -3507,12 +3525,12 @@ export const QUIZ_DATA = {
           },
           {
             "type": "multiple_choice",
-            "text": "Jika kamu ingin mengadakan rapat warga di Baileo, kapan waktu yang paling tepat agar tidak terganggu panas matahari?",
+            "text": "Mengapa suasana di dalam Rumah Baileo terasa nyaman untuk bermusyawarah?",
             "options": [
-              "Sore hari saat angin laut mulai masuk ke ruang terbuka",
-              "Saat turun hujan deras tanpa angin",
-              "Siang hari saat matahari tepat di atas atap",
-              "Tengah malam saat tidak ada orang lain"
+              "Karena angin laut dapat masuk ke ruang terbuka",
+              "Karena semua warga membawa kipas",
+              "Karena ruangan selalu memakai pendingin udara",
+              "Karena atapnya terbuat dari kaca"
             ],
             "correctIndex": 0,
             "xp": 25
@@ -3531,7 +3549,7 @@ export const QUIZ_DATA = {
           },
           {
             "type": "drag_drop",
-            "text": "Pasangkan bagian rumah dengan jumlah tiangnya!",
+            "text": "Pasangkan ciri Rumah Baileo dengan maknanya!",
             "draggables": [
               {
                 "id": "m2",
@@ -3629,11 +3647,11 @@ export const QUIZ_DATA = {
             "reasons": [
               {
                 "id": "r2",
-                "text": "A. Atap rumbia menjaga suhu tetap dingin dan lebih bernilai seni"
+                "text": "Atap rumbia dianggap lebih sesuai dengan bentuk dan nilai tradisi Baileo"
               },
               {
                 "id": "r4",
-                "text": "B. Karena atap rumbia sudah tidak bisa ditemukan di hutan Maluku lagi"
+                "text": "Karena atap rumbia lebih cepat rusak akibat cuaca laut"
               },
               {
                 "id": "r1",
@@ -3731,7 +3749,8 @@ export const QUIZ_DATA = {
             "minWords": 4,
             "requiredWords": [
               "Baileo"
-            ]
+            ],
+            "example": "Ayo kita bersatu seperti Baileo!"
           }
         ]
       }
@@ -4105,7 +4124,8 @@ export const QUIZ_DATA = {
             "requiredWords": [
               "pohon pala",
               "Ikan Kuah Pala"
-            ]
+            ],
+            "example": "Ayo kita jaga pohon pala agar Ikan Kuah Pala tetap lestari!"
           }
         ]
       }
@@ -4478,7 +4498,8 @@ export const QUIZ_DATA = {
             "minWords": 4,
             "requiredWords": [
               "Lenso"
-            ]
+            ],
+            "example": "Ayo kita menari Lenso bersama!"
           }
         ]
       }
@@ -4853,7 +4874,8 @@ export const QUIZ_DATA = {
             "minWords": 4,
             "requiredWords": [
               "Rumah Honai"
-            ]
+            ],
+            "example": "Ayo kita kagumi keunikan Rumah Honai!"
           }
         ]
       }
@@ -5236,7 +5258,8 @@ export const QUIZ_DATA = {
             "minWords": 4,
             "requiredWords": [
               "Papeda"
-            ]
+            ],
+            "example": "Ayo kita makan Papeda bersama!"
           }
         ]
       }
@@ -5609,7 +5632,8 @@ export const QUIZ_DATA = {
             "minWords": 4,
             "requiredWords": [
               "Tifa"
-            ]
+            ],
+            "example": "Ayo ikuti irama Tifa menari bersama!"
           }
         ]
       }
@@ -5984,7 +6008,8 @@ export const QUIZ_DATA = {
             "minWords": 4,
             "requiredWords": [
               "Candi Bentar"
-            ]
+            ],
+            "example": "Ayo kita pahami makna Candi Bentar!"
           }
         ]
       }
@@ -6024,12 +6049,11 @@ export const QUIZ_DATA = {
               },
               {
                 "text": "Ditimbun dalam bara sekam padi",
-                "emoji": "🔥",
+                "emoji": "🔥"
               },
               {
                 "text": "Dibakar sate",
-                "emoji": "🍢",
-
+                "emoji": "🍢"
               }
             ],
             "correctIndex": 2,
@@ -6356,7 +6380,8 @@ export const QUIZ_DATA = {
             "minWords": 4,
             "requiredWords": [
               "Ayam Betutu"
-            ]
+            ],
+            "example": "Ayo masak Ayam Betutu lezat bersama!"
           }
         ]
       }
@@ -6542,7 +6567,7 @@ export const QUIZ_DATA = {
                 "text": "Formasi Melingkar",
                 "color": "#D4DCFF",
                 "image": "/assets/budayana/islands/lingkaran penari.png"
-              },
+              }
             ],
             "dropZones": [
               {
@@ -6729,7 +6754,8 @@ export const QUIZ_DATA = {
             "minWords": 4,
             "requiredWords": [
               "Tari Kecak"
-            ]
+            ],
+            "example": "Ayo kita jaga budaya Tari Kecak bersama!"
           }
         ]
       }
@@ -7114,7 +7140,8 @@ export const QUIZ_DATA = {
             "minWords": 4,
             "requiredWords": [
               "Mbaru Niang"
-            ]
+            ],
+            "example": "Ayo kita rawat Mbaru Niang bersama!"
           }
         ]
       }
@@ -7497,7 +7524,8 @@ export const QUIZ_DATA = {
             "minWords": 4,
             "requiredWords": [
               "Se'i"
-            ]
+            ],
+            "example": "Ayo kita jaga Se'i asap asli Timor!"
           }
         ]
       }
@@ -7881,7 +7909,8 @@ export const QUIZ_DATA = {
             "requiredWords": [
               "Sasando",
               "Tari Caci"
-            ]
+            ],
+            "example": "Ayo dengar petikan Sasando dan saksikan Tari Caci!"
           }
         ]
       }
@@ -8256,7 +8285,8 @@ export const QUIZ_DATA = {
             "minWords": 4,
             "requiredWords": [
               "Rumah Joglo"
-            ]
+            ],
+            "example": "Ayo kita lestarikan Rumah Joglo bersama!"
           }
         ]
       }
@@ -8629,7 +8659,8 @@ export const QUIZ_DATA = {
             "minWords": 4,
             "requiredWords": [
               "Gudeg"
-            ]
+            ],
+            "example": "Ayo cicipi Gudeg manis asli Jogja!"
           }
         ]
       }
@@ -9002,7 +9033,8 @@ export const QUIZ_DATA = {
             "minWords": 4,
             "requiredWords": [
               "Gamelan"
-            ]
+            ],
+            "example": "Ayo dengarkan harmoni suara Gamelan bersama!"
           }
         ]
       }
