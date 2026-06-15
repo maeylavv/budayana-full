@@ -3759,7 +3759,7 @@ export const QUIZ_DATA = {
       "1": {
         "literacy": {
           "image": "/assets/budayana/islands/makanan1 maluku.png",
-          "text": "Pernahkah kamu membayangkan rasa sup ikan yang segar sekaligus hangat? Di Kepulauan Banda, Maluku, terdapat makanan khas bernama Ikan Kuah Pala. Bahan utamanya adalah ikan laut segar yang dimasak dengan kuah kuning. Keunikan makanan ini terletak pada penggunaan Buah Pala sebagai bumbu utamanya. Rasa sup ini sangat segar dengan sedikit rasa asam dan aroma rempah yang harum. Dahulu, makanan istimewa ini sering disajikan untuk menjamu tamu-tamu penting dan para pejabat yang datang ke Kepulauan Banda sejak ratusan tahun lalu."
+          "text": "Pernahkah kamu membayangkan rasa sup ikan yang segar sekaligus hangat? Di Kepulauan Banda, Maluku, terdapat makanan khas bernama Ikan Kuah Pala. Bahan utamanya adalah ikan laut segar yang dimasak dengan kuah kuning. Keunikan makanan ini terletak pada penggunaan buah pala yang memberi aroma rempah khas pada kuahnya. Rasa sup ini sangat segar dengan sedikit rasa asam dan aroma rempah yang harum. Dahulu, makanan istimewa ini sering disajikan untuk menjamu tamu-tamu penting dan para pejabat yang datang ke Kepulauan Banda sejak ratusan tahun lalu."
         },
         "questions": [
           {
@@ -3776,7 +3776,7 @@ export const QUIZ_DATA = {
           },
           {
             "type": "picture_selection",
-            "text": "Pilih gambar Ikan Kuah Pala yang biasanya memiliki warna kuah yang segar!",
+            "text": "Pilih gambar warna kuah yang sesuai dengan Ikan Kuah Pala!",
             "options": [
               {
                 "text": "Kuah Putih Susu",
@@ -3818,7 +3818,7 @@ export const QUIZ_DATA = {
             "type": "multiple_choice",
             "text": "Mengapa buah pala digunakan dalam masakan ikan laut menurut teks?",
             "options": [
-              "Untuk memberikan aroma harum dan menghilangkan bau amis",
+              "Untuk memberikan aroma rempah yang harum pada kuah",
               "Supaya ikan menjadi lebih keras saat dimakan",
               "Agar warna ikan berubah menjadi ungu",
               "Agar air kuah berubah menjadi sangat manis"
@@ -3848,45 +3848,45 @@ export const QUIZ_DATA = {
         "questions": [
           {
             "type": "drag_drop",
-            "text": "Urutkan proses pembuatan Ikan Kuah Pala yang benar!",
+            "text": "Urutkan bahan yang disebutkan dalam narasi dari bumbu utama hingga pelengkap rempah!",
             "draggables": [
               {
-                "id": "d2",
-                "text": "Haluskan Rempah & Pala",
-                "color": "#dbe0fd"
-              },
-              {
-                "id": "d4",
-                "text": "Masukkan Ikan hingga Matang",
-                "color": "#ffd5c0"
-              },
-              {
                 "id": "d1",
-                "text": "Bersihkan Ikan Segar",
+                "text": "Buah Pala",
                 "color": "#FFF3B0"
               },
               {
+                "id": "d2",
+                "text": "Serai",
+                "color": "#dbe0fd"
+              },
+              {
                 "id": "d3",
-                "text": "Rebus Air dan Bumbu",
+                "text": "Merica",
                 "color": "#ffb2d8"
+              },
+              {
+                "id": "d4",
+                "text": "Daun Jeruk",
+                "color": "#ffd5c0"
               }
             ],
             "dropZones": [
               {
                 "id": "z1",
-                "label": "Tahap 1"
+                "label": "Urutan 1"
               },
               {
                 "id": "z2",
-                "label": "Tahap 2"
+                "label": "Urutan 2"
               },
               {
                 "id": "z3",
-                "label": "Tahap 3"
+                "label": "Urutan 3"
               },
               {
                 "id": "z4",
-                "label": "Tahap 4"
+                "label": "Urutan 4"
               }
             ],
             "correctOrder": [
@@ -3899,12 +3899,12 @@ export const QUIZ_DATA = {
           },
           {
             "type": "multiple_choice",
-            "text": "Jika kamu ingin membuat Ikan Kuah Pala yang rasanya asli dan hangat, bagian manakah dari tanaman pala yang paling tepat digunakan?",
+            "text": "Mengapa buah pala digunakan dalam masakan Ikan Kuah Pala?",
             "options": [
-              "Daunnya yang sudah kering",
-              "Daging buah atau biji palanya",
-              "Kulit luar buah pala yang masih keras",
-              "Kulit batangnya"
+              "Untuk membuat kuah menjadi lebih manis",
+              "Untuk memberikan aroma harum dan menghilangkan bau amis",
+              "Supaya warna ikan menjadi lebih merah",
+              "Agar ikan menjadi lebih keras saat dimasak"
             ],
             "correctIndex": 1,
             "xp": 25
@@ -3945,7 +3945,7 @@ export const QUIZ_DATA = {
               },
               {
                 "id": "z2",
-                "label": "Sumber Protein Utama"
+                "label": "Bahan Utama Masakan"
               }
             ],
             "correctOrder": [
@@ -3978,7 +3978,7 @@ export const QUIZ_DATA = {
             "reasons": [
               {
                 "id": "r2",
-                "text": "A. Karena akan menghilangkan manfaat kesehatan dan keaslian rasa rempahnya"
+                "text": "A. Karena dapat mengurangi keaslian rasa dan ciri khas rempah asli Maluku"
               },
               {
                 "id": "r3",
@@ -4007,33 +4007,33 @@ export const QUIZ_DATA = {
           },
           {
             "type": "opinion_reason",
-            "text": "Haruskah setiap sekolah di Maluku memiliki taman pohon pala sebagai tempat belajar siswa?",
+            "text": "Menurutmu, apakah menanam pohon pala di lingkungan sekitar bisa membantu menjaga kuliner khas Maluku?",
             "opinions": [
               {
                 "id": "op1",
-                "text": "Harus"
+                "text": "Bisa Membantu"
               },
               {
                 "id": "op2",
-                "text": "Tidak Perlu"
+                "text": "Kurang Membantu"
               }
             ],
             "reasons": [
               {
-                "id": "r4",
-                "text": "A. Karena pohon pala sangat cocok dijadikan tempat berteduh saat olahraga"
-              },
-              {
                 "id": "r1",
-                "text": "B. Agar siswa mengenal rempah asli daerahnya dan menjaga kelestariannya"
+                "text": "A. Agar rempah asli tetap tersedia dan tidak mudah hilang"
               },
               {
                 "id": "r2",
-                "text": "C. Karena sekolah tidak memiliki lahan dan waktu yang cukup untuk merawat pohon pala yang butuh bertahun-tahun tumbuh"
+                "text": "B. Karena menanam pohon membutuhkan waktu lama untuk tumbuh"
               },
               {
                 "id": "r3",
-                "text": "D. Supaya siswa bisa langsung memasak Ikan Kuah Pala di kantin sekolah setiap hari"
+                "text": "C. Supaya semua orang bisa menjual pala setiap hari"
+              },
+              {
+                "id": "r4",
+                "text": "D. Agar tidak perlu lagi memasak makanan tradisional"
               }
             ],
             "correctPairs": [
@@ -4179,7 +4179,7 @@ export const QUIZ_DATA = {
           },
           {
             "type": "multiple_choice",
-            "text": "Apa arti dari kata \"Lenso\" dalam bahasa masyarakat Maluku?",
+            "text": "Apa arti dari kata \"Lenso\" yang berasal dari bahasa Portugis?",
             "options": [
               "Sapu Tangan",
               "Musik Merdu",
@@ -4191,24 +4191,24 @@ export const QUIZ_DATA = {
           },
           {
             "type": "multiple_choice",
-            "text": "Mengapa Tari Lenso biasanya dilakukan secara bersama-sama oleh banyak orang?",
+            "text": "Dalam acara apa Tari Lenso biasanya ditampilkan menurut teks?",
             "options": [
-              "Karena gerakannya sangat sulit jika dilakukan sendiri",
-              "Karena kostumnya harus dipakai beramai-ramai",
-              "Agar panggung pertunjukan tidak terlihat kosong",
-              "Melambangkan persahabatan dan keterbukaan masyarakat"
+              "Menyambut tamu atau merayakan pesta rakyat",
+              "Latihan bela diri",
+              "Perlombaan olahraga",
+              "Upacara panen padi"
             ],
-            "correctIndex": 3,
+            "correctIndex": 0,
             "xp": 20
           },
           {
             "type": "multiple_choice",
-            "text": "Perpaduan suara kayu dari Tifa dan suara logam dari Totobuang melambangkan...",
+            "text": "Bagaimana suasana irama musik yang mengiringi Tari Lenso menurut teks?",
             "options": [
-              "Alat musik yang harganya sangat mahal",
-              "Persatuan dan kedamaian antar masyarakat Maluku",
-              "Bunyi yang sangat berisik dan mengganggu",
-              "Perbedaan yang membuat perkelahian"
+              "Pelan dan tenang",
+              "Ceria dan bersemangat",
+              "Sedih dan lambat",
+              "Sangat sunyi"
             ],
             "correctIndex": 1,
             "xp": 20
@@ -4223,63 +4223,43 @@ export const QUIZ_DATA = {
         "questions": [
           {
             "type": "drag_drop",
-            "text": "Urutkan jalannya gerakan dalam Tari Lenso!",
+            "text": "Pasangkan gerakan Tari Lenso dengan cirinya!",
             "draggables": [
               {
-                "id": "d4",
-                "text": "Melangkah Mundur (Penutup)",
-                "color": "#ffd5c0"
-              },
-              {
-                "id": "d1",
-                "text": "Berdiri Berjejer",
+                "id": "m1",
+                "text": "Gerakan Kaki",
                 "color": "#FFF3B0"
               },
               {
-                "id": "d3",
-                "text": "Melompat Kecil",
-                "color": "#ffb2d8"
-              },
-              {
-                "id": "d2",
-                "text": "Mengayun Sapu Tangan",
-                "color": "#dbe0fd"
+                "id": "m2",
+                "text": "Ayunan Sapu Tangan",
+                "color": "#D4DCFF"
               }
             ],
             "dropZones": [
               {
                 "id": "z1",
-                "label": "Tahap 1"
+                "label": "Melompat kecil mengikuti irama"
               },
               {
                 "id": "z2",
-                "label": "Tahap 2"
-              },
-              {
-                "id": "z3",
-                "label": "Tahap 3"
-              },
-              {
-                "id": "z4",
-                "label": "Tahap 4"
+                "label": "Melambai mengikuti musik"
               }
             ],
             "correctOrder": [
-              "d1",
-              "d2",
-              "d3",
-              "d4"
+              "m1",
+              "m2"
             ],
             "xp": 25
           },
           {
             "type": "multiple_choice",
-            "text": "Jika irama musik Tifa Totobuang menjadi semakin cepat, apa yang harus dilakukan oleh para penari Lenso?",
+            "text": "Apa yang dilakukan penari Tari Lenso saat mengikuti irama Tifa Totobuang?",
             "options": [
-              "Mengayunkan sapu tangan dan melompat lebih lincah",
-              "Mengganti gerakan menjadi tarian lambat",
-              "Membuang sapu tangan ke lantai",
-              "Berhenti menari dan duduk"
+              "Mengayunkan sapu tangan dan bergerak mengikuti musik",
+              "Duduk diam sambil mendengarkan musik",
+              "Berjalan meninggalkan panggung",
+              "Mengganti alat musik menjadi modern"
             ],
             "correctIndex": 0,
             "xp": 25
@@ -4316,11 +4296,11 @@ export const QUIZ_DATA = {
             "dropZones": [
               {
                 "id": "z1",
-                "label": "Terbuat dari Kayu dan Kulit Hewan"
+                "label": "Menghasilkan ketukan kuat dari alat berbahan kayu"
               },
               {
                 "id": "z2",
-                "label": "Terbuat dari Logam Kuningan/Perunggu"
+                "label": "Menghasilkan nada indah dari alat berbahan logam"
               }
             ],
             "correctOrder": [
@@ -4339,7 +4319,7 @@ export const QUIZ_DATA = {
         "questions": [
           {
             "type": "opinion_reason",
-            "text": "Setujukah kamu jika Tari Lenso diiringi musik DJ agar lebih disukai oleh wisatawan mancanegara?",
+            "text": "Setujukah kamu jika Tari Lenso diiringi alat musik modern agar lebih menarik bagi penonton masa kini?",
             "opinions": [
               {
                 "id": "op1",
@@ -4382,7 +4362,7 @@ export const QUIZ_DATA = {
           },
           {
             "type": "opinion_reason",
-            "text": "Apakah menurutmu sapu tangan dalam Tari Lenso boleh diganti dengan selendang yang panjang?",
+            "text": "Menurutmu, bolehkah sapu tangan Tari Lenso dibuat dari bahan yang lebih praktis tetapi tetap mempertahankan bentuk aslinya?",
             "opinions": [
               {
                 "id": "op1",
@@ -4395,20 +4375,20 @@ export const QUIZ_DATA = {
             ],
             "reasons": [
               {
-                "id": "r4",
-                "text": "A. Agar tarian Lenso terlihat mirip dengan tarian dari daerah lain"
-              },
-              {
-                "id": "r3",
-                "text": "B. Supaya penari tidak kesulitan memegang sapu tangan yang kecil"
+                "id": "r1",
+                "text": "A. Agar tarian tetap dapat digunakan dengan mudah tanpa menghilangkan ciri utamanya"
               },
               {
                 "id": "r2",
-                "text": "C. Karena nama tariannya adalah 'Lenso' (Sapu Tangan), sehingga ciri khasnya harus dijaga"
+                "text": "B. Karena sapu tangan tradisional memiliki nilai budaya dan ketulusan yang perlu dijaga"
               },
               {
-                "id": "r1",
-                "text": "D. Karena dalam beberapa pertunjukan Tari Lenso, selendang sudah digunakan sebagai variasi yang diterima secara adat"
+                "id": "r3",
+                "text": "C. Supaya penari tidak perlu membawa properti lagi"
+              },
+              {
+                "id": "r4",
+                "text": "D. Agar semua tarian daerah menjadi sama bentuknya"
               }
             ],
             "correctPairs": [
@@ -4572,7 +4552,7 @@ export const QUIZ_DATA = {
               "Agar penghuni rumah tidak bisa dilihat orang luar",
               "Supaya rumah terlihat lebih gelap",
               "Karena jendela sulit dibuat di dalam hutan",
-              "Untuk menahan udara dingin masuk ke dalam rumah"
+              "Untuk menjaga bagian dalam rumah tetap hangat dari suhu dingin pegunungan"
             ],
             "correctIndex": 3,
             "xp": 20
@@ -4599,26 +4579,26 @@ export const QUIZ_DATA = {
         "questions": [
           {
             "type": "drag_drop",
-            "text": "Urutkan bagian Rumah Honai dari bagian paling luar hingga ke bagian tengah dalam rumah!",
+            "text": "Urutkan bagaimana panas dari tungku tetap terjaga di dalam Rumah Honai!",
             "draggables": [
               {
-                "id": "d3",
-                "text": "Lantai Rumah",
-                "color": "#ffb2d8"
-              },
-              {
-                "id": "d2",
-                "text": "Dinding Kayu Melingkar",
-                "color": "#dbe0fd"
-              },
-              {
                 "id": "d1",
-                "text": "Atap Jerami",
+                "text": "Api Menyala di Tungku",
                 "color": "#FFF3B0"
               },
               {
+                "id": "d2",
+                "text": "Panas Menyebar ke Dalam Rumah",
+                "color": "#dbe0fd"
+              },
+              {
+                "id": "d3",
+                "text": "Atap Jerami Menahan Panas",
+                "color": "#ffb2d8"
+              },
+              {
                 "id": "d4",
-                "text": "Tungku Api",
+                "text": "Rumah Tetap Hangat Lebih Lama",
                 "color": "#ffd5c0"
               }
             ],
@@ -4655,7 +4635,7 @@ export const QUIZ_DATA = {
               "Di bawah atap jerami yang rendah",
               "Menempel pada dinding kayu",
               "Di pojok pintu masuk",
-              "Di tengah lantai dalam lingkaran khusus"
+              "Di bagian tengah rumah pada tungku api"
             ],
             "correctIndex": 3,
             "xp": 25
@@ -4718,30 +4698,30 @@ export const QUIZ_DATA = {
             "text": "Jika kamu adalah seorang arsitek di Papua, apakah kamu setuju jika atap jerami diganti dengan seng yang lebih tahan api?",
             "opinions": [
               {
-                "id": "op1",
-                "text": "Setuju"
-              },
-              {
                 "id": "op2",
                 "text": "Tidak Setuju"
+              },
+              {
+                "id": "op1",
+                "text": "Setuju"
               }
             ],
             "reasons": [
               {
                 "id": "r4",
-                "text": "A. Karena seng lebih mudah dibersihkan daripada jerami"
-              },
-              {
-                "id": "r2",
-                "text": "B. Karena seng akan membuat rumah terasa sangat dingin di malam hari"
-              },
-              {
-                "id": "r3",
-                "text": "C. Supaya rumah terlihat lebih modern seperti di kota"
+                "text": "A. Karena bahan seng lebih mudah dipasang dan dirawat"
               },
               {
                 "id": "r1",
-                "text": "D. Agar rumah lebih aman dari bahaya kebakaran"
+                "text": "B. Agar rumah lebih aman dan tidak mudah terbakar"
+              },
+              {
+                "id": "r3",
+                "text": "C. Agar Rumah Honai terlihat lebih modern"
+              },
+              {
+                "id": "r2",
+                "text": "D. Karena atap jerami membantu menjaga kehangatan rumah di daerah dingin"
               }
             ],
             "correctPairs": [
@@ -4761,30 +4741,30 @@ export const QUIZ_DATA = {
             "text": "Haruskah Rumah Honai modern mulai memiliki jendela kecil untuk sirkulasi udara?",
             "opinions": [
               {
-                "id": "op1",
-                "text": "Harus Ada"
-              },
-              {
                 "id": "op2",
                 "text": "Tetap Tanpa Jendela"
+              },
+              {
+                "id": "op1",
+                "text": "Harus Ada"
               }
             ],
             "reasons": [
               {
-                "id": "r2",
-                "text": "A. Menjaga tradisi asli agar suhu di dalam tetap sangat hangat"
+                "id": "r3",
+                "text": "A. Agar ruangan terlihat lebih terang pada siang hari"
               },
               {
-                "id": "r3",
-                "text": "B. Supaya cahaya matahari bisa masuk ke dalam ruangan"
+                "id": "r2",
+                "text": "B. Karena desain tanpa jendela membantu menjaga suhu tetap hangat"
               },
               {
                 "id": "r4",
-                "text": "C. Agar penghuni bisa melihat pemandangan di luar rumah"
+                "text": "C. Supaya penghuni bisa melihat pemandangan pegunungan"
               },
               {
                 "id": "r1",
-                "text": "D. Agar asap dari api unggun bisa keluar dan lebih sehat"
+                "text": "D. Agar udara dan asap dari api unggun dapat keluar lebih baik"
               }
             ],
             "correctPairs": [
@@ -4941,9 +4921,9 @@ export const QUIZ_DATA = {
           },
           {
             "type": "multiple_choice",
-            "text": "Mengapa Papeda memiliki tekstur yang lengket dan sangat kental?",
+            "text": "Mengapa Papeda memiliki tekstur yang kenyal dan lengket saat dimasak?",
             "options": [
-              "Hasil dari tepung sagu yang disiram air mendidih",
+              "Karena tepung sagu dicampur dengan air panas hingga mengental",
               "Karena tepung sagu dicampur dengan susu",
               "Karena dimasak terlalu lama di atas api",
               "Karena dicampur dengan lem makanan"
@@ -5046,10 +5026,10 @@ export const QUIZ_DATA = {
           },
           {
             "type": "multiple_choice",
-            "text": "Apa yang akan terjadi jika tepung sagu disiram dengan air yang tidak mendidih (hanya hangat)?",
+            "text": "Apa yang kemungkinan terjadi jika tepung sagu disiram dengan air yang tidak cukup panas saat membuat Papeda?",
             "options": [
-              "Papeda akan berubah menjadi batu yang keras",
-              "Tepung sagu tidak akan mengental dan tetap cair",
+              "Papeda akan menjadi sangat keras",
+              "Tepung sagu tidak akan mengental dengan baik",
               "Papeda akan menjadi sangat manis",
               "Papeda akan berubah warna menjadi merah"
             ],
@@ -5076,11 +5056,11 @@ export const QUIZ_DATA = {
             "dropZones": [
               {
                 "id": "z1",
-                "label": "Sumber Tepung Sagu"
+                "label": "Diolah menjadi Tepung Sagu"
               },
               {
                 "id": "z2",
-                "label": "Atap Rumah Tradisional"
+                "label": "Dimanfaatkan sebagai bahan bangunan tradisional"
               }
             ],
             "correctOrder": [
@@ -5102,30 +5082,30 @@ export const QUIZ_DATA = {
             "text": "Jika kamu adalah kepala sekolah di Papua, setujukah kamu jika kantin sekolah diwajibkan menjual Papeda seminggu sekali?",
             "opinions": [
               {
-                "id": "op1",
-                "text": "Setuju"
-              },
-              {
                 "id": "op2",
                 "text": "Tidak Setuju"
+              },
+              {
+                "id": "op1",
+                "text": "Setuju"
               }
             ],
             "reasons": [
               {
-                "id": "r2",
-                "text": "A. Karena anak-anak lebih suka makan nasi dan makanan instan"
-              },
-              {
-                "id": "r3",
-                "text": "B. Supaya sekolah terlihat lebih tradisional dibandingkan sekolah lain"
+                "id": "r4",
+                "text": "A. Agar pilihan makanan di kantin tetap lebih beragam"
               },
               {
                 "id": "r1",
-                "text": "C. Agar anak-anak tetap mengenal dan mencintai makanan asli daerahnya"
+                "text": "B. Agar anak-anak tetap mengenal dan menghargai makanan khas daerahnya"
               },
               {
-                "id": "r4",
-                "text": "D. Agar persediaan nasi di kantin tidak cepat habis"
+                "id": "r2",
+                "text": "C. Karena setiap siswa memiliki pilihan makanan yang berbeda"
+              },
+              {
+                "id": "r3",
+                "text": "D. Supaya sekolah terlihat lebih tradisional dibandingkan sekolah lain"
               }
             ],
             "correctPairs": [
@@ -5142,33 +5122,33 @@ export const QUIZ_DATA = {
           },
           {
             "type": "opinion_reason",
-            "text": "Apakah menurutmu membuat \"Papeda Instan\" (langsung seduh) adalah cara yang baik untuk melestarikan sagu?",
+            "text": "Menurutmu, apakah Papeda sebaiknya tetap dikenalkan di sekolah meskipun banyak anak lebih sering makan nasi?",
             "opinions": [
               {
                 "id": "op1",
-                "text": "Ide Bagus"
+                "text": "Perlu"
               },
               {
                 "id": "op2",
-                "text": "Kurang Bagus"
+                "text": "Tidak Perlu"
               }
             ],
             "reasons": [
               {
+                "id": "r4",
+                "text": "A. Karena sekolah memiliki banyak materi lain yang dipelajari"
+              },
+              {
                 "id": "r1",
-                "text": "A. Ya, agar masyarakat di luar Papua bisa menikmati Papeda dengan praktis"
+                "text": "B. Agar generasi muda tetap mengenal makanan khas dan menjaga hutan sagu"
               },
               {
                 "id": "r3",
-                "text": "B. Ya, supaya kita tidak perlu lagi menjaga pohon sagu di hutan"
-              },
-              {
-                "id": "r4",
-                "text": "C. Tidak, karena harga Papeda instan pasti akan sangat mahal"
+                "text": "C. Supaya semua siswa nantinya hanya makan Papeda setiap hari"
               },
               {
                 "id": "r2",
-                "text": "D. Tidak, karena proses tradisional mengaduk Papeda adalah bagian dari keunikan budaya"
+                "text": "D. Karena siswa tetap bisa mengenal budaya daerah di luar sekolah"
               }
             ],
             "correctPairs": [
@@ -5285,7 +5265,7 @@ export const QUIZ_DATA = {
           },
           {
             "type": "picture_selection",
-            "text": "Pilih gambar permukaan Tifa yang digunakan untuk menghasilkan suara!",
+            "text": "Pilih gambar permukaan Tifa yang dipukul untuk menghasilkan suara!",
             "options": [
               {
                 "text": "Kulit Hewan yang Kencang",
@@ -5325,26 +5305,26 @@ export const QUIZ_DATA = {
           },
           {
             "type": "multiple_choice",
-            "text": "Mengapa tarian tradisional Papua, seperti Sajojo, biasanya dilakukan oleh banyak orang secara bersama-sama?",
+            "text": "Untuk acara apakah Tifa biasanya digunakan berdasarkan teks?",
             "options": [
-              "Melambangkan kebersamaan dan kegembiraan masyarakat",
-              "Karena panggungnya terlalu luas jika menari sendiri",
-              "Karena kostum tarian sangat berat sehingga butuh bantuan orang lain",
-              "Agar tarian terlihat sangat membingungkan penonton"
+              "Mengiringi tarian tradisional seperti Tari Sajojo",
+              "Mengiringi pertandingan olahraga",
+              "Sebagai alat komunikasi di laut",
+              "Untuk memanggil hewan dari hutan"
             ],
             "correctIndex": 0,
             "xp": 20
           },
           {
             "type": "multiple_choice",
-            "text": "Berdasarkan teks, apa yang dilakukan pemain Tifa agar suara Tifa menjadi lebih nyaring sebelum dimainkan?",
+            "text": "Apa ciri khas bentuk Tifa dari Papua yang disebutkan dalam teks?",
             "options": [
-              "Mengecat Tifa dengan warna-warni",
-              "Mengisi bagian dalam Tifa dengan pasir",
-              "Memanaskan bagian kulitnya di dekat api",
-              "Merendam Tifa di dalam air sungai"
+              "Memiliki pegangan di bagian samping",
+              "Memiliki banyak senar seperti gitar",
+              "Ditiup dari bagian ujung",
+              "Berbentuk kotak dan pendek"
             ],
-            "correctIndex": 2,
+            "correctIndex": 0,
             "xp": 20
           }
         ]
@@ -5357,27 +5337,27 @@ export const QUIZ_DATA = {
         "questions": [
           {
             "type": "drag_drop",
-            "text": "Urutkan proses pembuatan Tifa sederhana!",
+            "text": "Urutkan proses menyiapkan Tifa hingga siap dimainkan!",
             "draggables": [
               {
-                "id": "d4",
-                "text": "Ikat dengan Rotan",
-                "color": "#ffd5c0"
-              },
-              {
-                "id": "d2",
-                "text": "Ukir Sisi Kayu",
-                "color": "#dbe0fd"
-              },
-              {
                 "id": "d1",
-                "text": "Lubangi Batang Kayu",
+                "text": "Pilih Kayu Lenggua",
                 "color": "#FFF3B0"
               },
               {
+                "id": "d2",
+                "text": "Lubangi dan Bentuk Badan Tifa",
+                "color": "#dbe0fd"
+              },
+              {
                 "id": "d3",
-                "text": "Pasang Kulit Hewan",
+                "text": "Tambahkan Ukiran Bermakna",
                 "color": "#ffb2d8"
+              },
+              {
+                "id": "d4",
+                "text": "Panaskan Kulit Sebelum Dimainkan",
+                "color": "#ffd5c0"
               }
             ],
             "dropZones": [
@@ -5420,12 +5400,12 @@ export const QUIZ_DATA = {
           },
           {
             "type": "multiple_choice",
-            "text": "Apa fungsi utama dari ukiran-ukiran yang ada pada badan kayu Tifa?",
+            "text": "Mengapa ukiran pada badan Tifa dianggap penting bagi masyarakat Papua?",
             "options": [
-              "Agar Tifa tidak licin saat dipegang",
-              "Supaya suara yang dihasilkan menjadi lebih pelan",
-              "Sebagai hiasan yang memiliki makna cerita atau simbol suku",
-              "Sebagai tempat untuk menyimpan makanan kecil"
+              "Agar Tifa tidak licin saat dimainkan",
+              "Supaya suara yang dihasilkan lebih pelan",
+              "Karena ukiran menggambarkan cerita kehidupan dan simbol marga",
+              "Sebagai tempat menyimpan benda kecil"
             ],
             "correctIndex": 2,
             "xp": 25
@@ -5473,33 +5453,33 @@ export const QUIZ_DATA = {
         "questions": [
           {
             "type": "opinion_reason",
-            "text": "Setujukah kamu jika kulit biawak atau rusa pada Tifa diganti dengan bahan modern seperti plastik agar hewan di hutan Papua tetap lestari?",
+            "text": "Setujukah kamu jika kulit biawak atau rusa pada Tifa diganti dengan bahan modern agar hewan di hutan Papua tetap lestari?",
             "opinions": [
-              {
-                "id": "op1",
-                "text": "Setuju"
-              },
               {
                 "id": "op2",
                 "text": "Tidak Setuju"
+              },
+              {
+                "id": "op1",
+                "text": "Setuju"
               }
             ],
             "reasons": [
               {
-                "id": "r3",
-                "text": "A. Supaya harga Tifa menjadi jauh lebih mahal bagi turis"
-              },
-              {
-                "id": "r1",
-                "text": "B. Agar alam dan hewan di Papua tetap terjaga kelestariannya"
+                "id": "r4",
+                "text": "A. Karena Tifa akan terlihat lebih kecil jika memakai bahan buatan"
               },
               {
                 "id": "r2",
-                "text": "C. Karena suara dari plastik tidak akan senyaring dan seindah kulit asli"
+                "text": "B. Karena suara dan karakter bunyi Tifa asli bisa berubah jika tidak menggunakan kulit tradisional"
               },
               {
-                "id": "r4",
-                "text": "D. Karena plastik jauh lebih sulit dibersihkan daripada kulit hewan"
+                "id": "r1",
+                "text": "C. Agar kelestarian hewan di hutan Papua tetap terjaga"
+              },
+              {
+                "id": "r3",
+                "text": "D. Supaya Tifa bisa dijual lebih cepat kepada wisatawan"
               }
             ],
             "correctPairs": [
@@ -5516,33 +5496,33 @@ export const QUIZ_DATA = {
           },
           {
             "type": "opinion_reason",
-            "text": "Haruskah tarian Papua diajarkan di seluruh sekolah di Indonesia, bukan hanya di Papua saja?",
+            "text": "Haruskah tarian Papua dikenalkan dan dipelajari di sekolah-sekolah seluruh Indonesia?",
             "opinions": [
               {
-                "id": "op1",
-                "text": "Harus Diajarkan"
+                "id": "op2",
+                "text": "Tidak Harus"
               },
               {
-                "id": "op2",
-                "text": "Di Papua Saja"
+                "id": "op1",
+                "text": "Harus"
               }
             ],
             "reasons": [
               {
-                "id": "r1",
-                "text": "A. Agar seluruh anak Indonesia mengenal dan bangga pada kekayaan budaya Papua"
-              },
-              {
-                "id": "r3",
-                "text": "B. Supaya semua siswa bisa menjadi pemain Tifa profesional"
+                "id": "r2",
+                "text": "A. Karena setiap daerah sudah memiliki budaya masing-masing untuk dipelajari lebih dahulu"
               },
               {
                 "id": "r4",
-                "text": "C. Karena gerakan tarian Papua terlalu sulit untuk dipelajari orang luar"
+                "text": "B. Agar semua siswa bisa tampil di festival tari setiap minggu"
               },
               {
-                "id": "r2",
-                "text": "D. Karena tarian Papua hanya boleh ditarikan di tanah Papua saja"
+                "id": "r1",
+                "text": "C. Agar seluruh anak Indonesia mengenal dan menghargai budaya Papua"
+              },
+              {
+                "id": "r3",
+                "text": "D. Supaya semua siswa dapat memainkan Tifa dengan sempurna"
               }
             ],
             "correctPairs": [
@@ -5689,14 +5669,14 @@ export const QUIZ_DATA = {
           },
           {
             "type": "multiple_choice",
-            "text": "Apa nama tembok keliling yang berfungsi sebagai pelindung rumah adat Bali?",
+            "text": "Apa nama dinding pembatas setelah melewati Gapura Candi Bentar yang berfungsi melindungi rumah dari pandangan langsung?",
             "options": [
               "Panyengker",
-              "Pura (tempat ibadah)",
-              "Pendopo (balai di Jawa)",
-              "Aling-aling (dinding penghalang setelah gapura)"
+              "Aling-aling",
+              "Pendopo",
+              "Pura"
             ],
-            "correctIndex": 0,
+            "correctIndex": 1,
             "xp": 20
           },
           {
@@ -5713,14 +5693,14 @@ export const QUIZ_DATA = {
           },
           {
             "type": "multiple_choice",
-            "text": "Berdasarkan teks, rumah adat Bali terdiri dari...",
+            "text": "Bagaimana susunan rumah adat Bali berdasarkan fungsinya?",
             "options": [
-              "Rumah yang digantung di atas pohon besar",
-              "Satu gedung besar untuk semua orang",
-              "Kamar-kamar yang disusun secara memanjang",
-              "Beberapa bangunan terpisah dengan fungsi berbeda"
+              "Semua kegiatan dilakukan di satu bangunan utama",
+              "Rumah dibangun di atas pohon agar lebih aman",
+              "Terdiri dari beberapa bangunan dengan fungsi yang berbeda",
+              "Setiap keluarga tinggal di rumah berbentuk menara"
             ],
-            "correctIndex": 3,
+            "correctIndex": 2,
             "xp": 20
           }
         ]
@@ -5733,45 +5713,45 @@ export const QUIZ_DATA = {
         "questions": [
           {
             "type": "drag_drop",
-            "text": "Urutkan posisi tamu dari luar hingga masuk ke halaman rumah Bali!",
+            "text": "Urutkan proses sederhana merancang rumah adat Bali berdasarkan Asta Kosala Kosali!",
             "draggables": [
               {
-                "id": "d4",
-                "text": "Halaman Rumah",
-                "color": "#ffd5c0"
-              },
-              {
                 "id": "d2",
-                "text": "Gapura Candi Bentar",
+                "text": "Mengukur Tubuh Pemilik Rumah",
                 "color": "#dbe0fd"
               },
               {
-                "id": "d3",
-                "text": "Aling-aling (Dinding Penghalang)",
-                "color": "#ffb2d8"
+                "id": "d4",
+                "text": "Mulai Membangun Rumah",
+                "color": "#ffd5c0"
               },
               {
                 "id": "d1",
-                "text": "Jalan Raya",
+                "text": "Menentukan Lokasi Rumah",
                 "color": "#FFF3B0"
+              },
+              {
+                "id": "d3",
+                "text": "Menentukan Ukuran Ruangan",
+                "color": "#ffb2d8"
               }
             ],
             "dropZones": [
               {
                 "id": "z1",
-                "label": "Langkah 1"
+                "label": "Tahap 1"
               },
               {
                 "id": "z2",
-                "label": "Langkah 2"
+                "label": "Tahap 2"
               },
               {
                 "id": "z3",
-                "label": "Langkah 3"
+                "label": "Tahap 3"
               },
               {
                 "id": "z4",
-                "label": "Langkah 4"
+                "label": "Tahap 4"
               }
             ],
             "correctOrder": [
@@ -5784,14 +5764,14 @@ export const QUIZ_DATA = {
           },
           {
             "type": "multiple_choice",
-            "text": "Jika kamu ingin mengukur luas kamar menggunakan aturan Asta Kosala Kosali, alat apa yang harus kamu gunakan?",
+            "text": "Jika keluarga ingin mengukur rumah dengan aturan Asta Kosala Kosali, ukuran apa yang digunakan?",
             "options": [
-              "Penggaris plastik 30 cm",
-              "Meteran gulung milik tukang",
-              "Tali jemuran yang panjang",
-              "Jengkal tangan atau langkah kaki pemilik rumah"
+              "Ukuran tubuh pemilik rumah seperti Hasta dan Depa",
+              "Ukuran standar bangunan modern",
+              "Panjang bayangan rumah saat siang",
+              "Jumlah anggota keluarga"
             ],
-            "correctIndex": 3,
+            "correctIndex": 0,
             "xp": 25
           },
           {
@@ -5808,29 +5788,29 @@ export const QUIZ_DATA = {
           },
           {
             "type": "drag_drop",
-            "text": "Pasangkan bagian rumah dengan tujuannya!",
+            "text": "Pasangkan konsep Tri Hita Karana dengan maknanya!",
             "draggables": [
               {
                 "id": "m1",
-                "text": "Asta Kosala Kosali",
+                "text": "Parahyangan",
                 "color": "#FFF3B0",
-                "image": "/assets/budayana/islands/asta kosala.png"
+                "image": "/assets/budayana/islands/parahyangan.png"
               },
               {
                 "id": "m2",
-                "text": "Panyengker (Tembok)",
+                "text": "Palemahan",
                 "color": "#D4DCFF",
-                "image": "/assets/budayana/islands/tembok panyengker.png"
+                "image": "/assets/budayana/islands/palemahan.png"
               }
             ],
             "dropZones": [
               {
                 "id": "z1",
-                "label": "Menciptakan keseimbangan dan kenyamanan penghuni"
+                "label": "Hubungan manusia dengan Tuhan"
               },
               {
                 "id": "z2",
-                "label": "Memberikan rasa aman dan batas rumah"
+                "label": "Hubungan manusia dengan alam"
               }
             ],
             "correctOrder": [
@@ -5849,33 +5829,33 @@ export const QUIZ_DATA = {
         "questions": [
           {
             "type": "opinion_reason",
-            "text": "Jika sebuah hotel besar membangun Candi Bentar raksasa hanya untuk hiasan foto tanpa mengikuti aturan adat, bagaimana pendapatmu?",
+            "text": "Jika sebuah hotel membangun Gapura Candi Bentar hanya sebagai dekorasi tanpa memperhatikan makna adatnya, bagaimana pendapatmu?",
             "opinions": [
-              {
-                "id": "op1",
-                "text": "Boleh Saja"
-              },
               {
                 "id": "op2",
                 "text": "Kurang Setuju"
+              },
+              {
+                "id": "op1",
+                "text": "Boleh Saja"
               }
             ],
             "reasons": [
               {
-                "id": "r1",
-                "text": "A. Agar budaya Bali semakin dikenal banyak orang lewat foto di internet"
+                "id": "r3",
+                "text": "A. Karena bangunan besar akan terlihat lebih menarik bagi wisatawan"
               },
               {
-                "id": "r2",
-                "text": "B. Karena bangunan adat harus memiliki makna filosofi, bukan cuma hiasan"
+                "id": "r1",
+                "text": "B. Agar budaya Bali bisa lebih dikenal oleh banyak orang"
               },
               {
                 "id": "r4",
-                "text": "C. Karena turis memang menyukai bangunan yang terlihat tradisional"
+                "text": "C. Supaya hotel terlihat lebih mewah dibanding bangunan lain"
               },
               {
-                "id": "r3",
-                "text": "D. Supaya hotel tersebut terlihat lebih mahal dan mewah"
+                "id": "r2",
+                "text": "D. Karena bangunan adat sebaiknya tetap menjaga makna dan filosofi aslinya"
               }
             ],
             "correctPairs": [
@@ -5892,33 +5872,33 @@ export const QUIZ_DATA = {
           },
           {
             "type": "opinion_reason",
-            "text": "Haruskah anak muda Bali tetap belajar cara mengukir batu padas, padahal sekarang sudah ada mesin cetak otomatis?",
+            "text": "Menurutmu, apakah anak muda Bali tetap perlu belajar membuat ukiran tradisional meskipun sekarang sudah ada mesin modern?",
             "opinions": [
               {
-                "id": "op1",
-                "text": "Harus Belajar"
+                "id": "op2",
+                "text": "Tidak Harus"
               },
               {
-                "id": "op2",
-                "text": "Gunakan Mesin Saja"
+                "id": "op1",
+                "text": "Tetap Perlu"
               }
             ],
             "reasons": [
               {
-                "id": "r4",
-                "text": "A. Agar semua dinding rumah di Bali memiliki motif yang sama persis"
+                "id": "r2",
+                "text": "A. Karena mesin dapat membuat ukiran lebih cepat dan jumlahnya banyak"
               },
               {
-                "id": "r2",
-                "text": "B. Karena menggunakan mesin jauh lebih cepat dan hasilnya sangat rapi"
+                "id": "r4",
+                "text": "B. Supaya semua rumah memiliki bentuk yang sama"
               },
               {
                 "id": "r1",
-                "text": "C. Agar sentuhan seni asli dan keunikan tangan manusia tidak hilang"
+                "text": "C. Agar keterampilan dan nilai seni tradisional tetap diwariskan"
               },
               {
                 "id": "r3",
-                "text": "D. Supaya anak muda bisa menjual ukiran dengan harga yang murah"
+                "text": "D. Karena membuat ukiran dengan tangan selalu lebih murah"
               }
             ],
             "correctPairs": [
@@ -6018,7 +5998,7 @@ export const QUIZ_DATA = {
       "1": {
         "literacy": {
           "image": "/assets/budayana/islands/makanan1 bali.png",
-          "text": "Pernahkah kamu mencicipi masakan ayam yang bumbunya sangat kaya dan pedas dari Bali? Namanya adalah Ayam Betutu. Sebenarnya, selain ayam, masyarakat Bali juga sering menggunakan daging bebek (Bebek Betutu). Makanan ini terbuat dari ayam atau bebek utuh yang bagian perutnya diisi dengan bumbu rempah super lengkap yang disebut Base Genep. Daging kemudian dibungkus daun pisang dan pelepah pinang agar bumbunya tidak bocor saat dimasak. Rasanya gurih, pedas, dan aromanya sangat harum."
+          "text": "Pernahkah kamu mencicipi masakan ayam yang bumbunya sangat kaya dan pedas dari Bali? Namanya adalah Ayam Betutu. Sebenarnya, selain ayam, masyarakat Bali juga sering menggunakan daging bebek (Bebek Betutu). Makanan ini terbuat dari ayam atau bebek utuh yang bagian perutnya diisi dengan bumbu rempah super lengkap yang disebut Base Genep. Daging kemudian dibungkus daun pisang dan pelepah pinang agar bumbunya tidak bocor saat dimasak. \n\n\ Secara tradisional, Betutu dimasak sangat lama menggunakan teknik menimbun (Menyantok), yaitu menaruh bungkusan daging di dalam bara panas agar matang perlahan dan bumbunya meresap hingga ke dalam. Karena dimasak dalam waktu lama, daging Betutu menjadi sangat lembut dan harum. Ayam Betutu sering disajikan bersama sambal matah dan pelengkap lainnya sehingga rasanya semakin nikmat."
         },
         "questions": [
           {
@@ -6073,24 +6053,24 @@ export const QUIZ_DATA = {
           },
           {
             "type": "multiple_choice",
-            "text": "Mengapa daging Ayam Betutu bisa terasa sangat lembut hingga ke tulang?",
+            "text": "Mengapa Ayam Betutu memiliki rasa yang gurih dan aroma yang sangat harum?",
             "options": [
-              "Karena ayam tersebut diberi makan buah-buahan",
-              "Karena daging ayamnya dipukul-pukul sebelum dimasak",
-              "Karena dimasak dalam waktu yang sangat lama (semalam suntuk)",
-              "Karena ayamnya direndam dalam air es selama tiga hari"
+              "Karena dimasak dengan banyak gula",
+              "Karena menggunakan bumbu Base Genep yang kaya rempah",
+              "Karena ayam disimpan di lemari pendingin",
+              "Karena menggunakan saus tambahan"
             ],
-            "correctIndex": 2,
+            "correctIndex": 1,
             "xp": 20
           },
           {
             "type": "multiple_choice",
-            "text": "Berdasarkan teks, apa pelengkap yang biasanya disajikan bersama Ayam Betutu?",
+            "text": "Apa fungsi daun pisang dan pelepah pinang saat memasak Betutu?",
             "options": [
-              "Mayones dan Saus Tomat",
-              "Selai Nanas dan Mentega",
-              "Sambal Matah dan Kacang Goreng",
-              "Keju dan Roti"
+              "Menambah warna daging menjadi merah",
+              "Membuat ayam terasa lebih manis",
+              "Menjaga bumbu tetap di dalam dan membantu aroma tetap harum",
+              "Supaya ayam bisa matang lebih cepat"
             ],
             "correctIndex": 2,
             "xp": 20
@@ -6168,14 +6148,14 @@ export const QUIZ_DATA = {
           },
           {
             "type": "multiple_choice",
-            "text": "Apa keuntungan menggunakan teknik \"tanam dalam tanah\" dengan bara sekam saat memasak Ayam Betutu?",
+            "text": "Apa keuntungan menggunakan teknik menimbun dengan bara sekam saat memasak Ayam Betutu?",
             "options": [
-              "Supaya bumbu rempah di dalam perut ayam bisa berubah menjadi emas",
-              "Agar ayam terlindungi dari debu dan kotoran",
-              "Agar ayam tidak bisa ditemukan oleh orang lain saat dimasak",
-              "Memberikan suhu panas yang stabil agar daging empuk dan beraroma khas"
+              "Membuat suhu panas lebih stabil sehingga daging empuk dan bumbu meresap",
+              "Membuat warna ayam berubah menjadi lebih cerah",
+              "Membantu ayam matang dalam beberapa menit saja",
+              "Membuat ukuran ayam menjadi lebih besar"
             ],
-            "correctIndex": 3,
+            "correctIndex": 0,
             "xp": 25
           },
           {
@@ -6221,33 +6201,33 @@ export const QUIZ_DATA = {
         "questions": [
           {
             "type": "opinion_reason",
-            "text": "Jika kamu memiliki restoran, setujukah kamu menggunakan panci presto agar Ayam Betutu matang hanya dalam 30 menit?",
+            "text": "Jika kamu memiliki restoran, setujukah kamu menggunakan panci presto agar Ayam Betutu bisa disajikan lebih cepat?",
             "opinions": [
-              {
-                "id": "op1",
-                "text": "Setuju"
-              },
               {
                 "id": "op2",
                 "text": "Tidak Setuju"
+              },
+              {
+                "id": "op1",
+                "text": "Setuju"
               }
             ],
             "reasons": [
               {
-                "id": "r2",
-                "text": "A. Karena teknik presto akan menghilangkan aroma asap asli dan tekstur khas Betutu"
+                "id": "r4",
+                "text": "A. Karena panci presto membuat warna ayam terlihat lebih menarik"
               },
               {
                 "id": "r1",
-                "text": "B. Agar pelanggan tidak menunggu terlalu lama dan pelayanan lebih cepat"
+                "text": "B. Agar pelanggan tidak perlu menunggu terlalu lama"
               },
               {
                 "id": "r3",
-                "text": "C. Supaya daging ayam menjadi hancur dan mudah dimakan"
+                "text": "C. Supaya restoran tidak perlu menggunakan daun pembungkus lagi"
               },
               {
-                "id": "r4",
-                "text": "D. Karena panci presto jauh lebih murah daripada membeli sekam padi"
+                "id": "r2",
+                "text": "D. Karena cara modern dapat mengurangi aroma asap dan cita rasa khas Betutu tradisional"
               }
             ],
             "correctPairs": [
@@ -6264,33 +6244,33 @@ export const QUIZ_DATA = {
           },
           {
             "type": "opinion_reason",
-            "text": "Haruskah resep \"Base Genep\" Bali disederhanakan agar anak muda lebih mudah memasaknya?",
+            "text": "Menurutmu, apakah bumbu Base Genep perlu disederhanakan agar lebih mudah dimasak oleh generasi muda?",
             "opinions": [
-              {
-                "id": "op1",
-                "text": "Sederhanakan"
-              },
               {
                 "id": "op2",
                 "text": "Tetap Lengkap"
+              },
+              {
+                "id": "op1",
+                "text": "Sederhanakan"
               }
             ],
             "reasons": [
               {
-                "id": "r3",
-                "text": "A. Karena bumbu yang terlalu banyak bisa membuat perut menjadi sakit"
-              },
-              {
                 "id": "r1",
-                "text": "B. Agar lebih banyak anak muda yang mau belajar memasak masakan tradisional"
-              },
-              {
-                "id": "r2",
-                "text": "C. Menjaga kekayaan rasa dan keaslian bumbu warisan leluhur Bali"
+                "text": "A. Agar lebih banyak orang tertarik mencoba memasak makanan tradisional Bali"
               },
               {
                 "id": "r4",
-                "text": "D. Supaya biaya membeli rempah-rempah menjadi lebih hemat"
+                "text": "B. Supaya waktu memasak menjadi lebih singkat"
+              },
+              {
+                "id": "r2",
+                "text": "C. Menjaga kekayaan rasa dan warisan rempah khas Bali"
+              },
+              {
+                "id": "r3",
+                "text": "D. Karena semua rempah memiliki rasa yang sama"
               }
             ],
             "correctPairs": [
@@ -6390,7 +6370,7 @@ export const QUIZ_DATA = {
       "1": {
         "literacy": {
           "image": "/assets/budayana/islands/tarian1 bali.png",
-          "text": "Pernahkah kamu melihat tarian Bali yang tidak menggunakan alat musik sama sekali? Itulah Tari Kecak. Pertunjukan ini sangat megah dan biasanya dimainkan oleh puluhan penari laki-laki yang duduk melingkar. Mereka menyerukan bunyi 'cak-cak-cak' sambil mengangkat tangan dengan kompak. Suara seruan penari itulah yang menjadi musik pengiring tarian ini. Di tengah lingkaran penari, dimainkan kisah drama Ramayana, terutama adegan penyelamatan putri Sinta oleh pangeran Rama."
+          "text": "Pernahkah kamu melihat tarian Bali yang diiringi oleh puluhan suara manusia tanpa alat musik utama? Itulah Tari Kecak. Pertunjukan ini biasanya dimainkan oleh puluhan penari laki-laki yang duduk melingkar sambil menyerukan bunyi “cak-cak-cak” secara berirama. Suara para penari menjadi pengiring utama pertunjukan. Di tengah lingkaran penari, ditampilkan kisah Ramayana, terutama perjuangan Rama menyelamatkan Sinta dengan bantuan Hanoman."
         },
         "questions": [
           {
@@ -6459,12 +6439,12 @@ export const QUIZ_DATA = {
           },
           {
             "type": "multiple_choice",
-            "text": "Apa yang dilambangkan oleh formasi penari laki-laki yang duduk melingkar dalam Tari Kecak?",
+            "text": "Apa makna dari banyak penari yang duduk melingkar dan bergerak bersama dalam Tari Kecak?",
             "options": [
-              "Pasukan tentara kera",
-              "Dinding benteng istana",
-              "Kobaran api yang menyala",
-              "Danau yang tenang"
+              "Melambangkan kekompakan dan kerja sama dalam cerita",
+              "Menunjukkan bentuk gunung di Bali",
+              "Menggantikan panggung pertunjukan",
+              "Sebagai tempat menyimpan api"
             ],
             "correctIndex": 0,
             "xp": 20
@@ -6488,17 +6468,17 @@ export const QUIZ_DATA = {
               },
               {
                 "id": "d3",
-                "text": "Muncul Tokoh Utama (Rama/Shinta)",
+                "text": "Adegan Rama dan Sinta Dimainkan",
                 "color": "#ffb2d8"
               },
               {
                 "id": "d4",
-                "text": "Atraksi Api di Akhir",
+                "text": "Adegan Puncak dan Penutup",
                 "color": "#ffd5c0"
               },
               {
                 "id": "d1",
-                "text": "Penari Masuk Lingkaran",
+                "text": "Penari Membentuk Lingkaran",
                 "color": "#FFF3B0"
               }
             ],
@@ -6595,33 +6575,33 @@ export const QUIZ_DATA = {
         "questions": [
           {
             "type": "opinion_reason",
-            "text": "Setujukah kamu jika Tari Kecak ditambahkan iringan musik drum agar suaranya lebih keras di panggung besar?",
+            "text": "Setujukah kamu jika Tari Kecak diberi tambahan musik modern agar terdengar lebih megah di panggung wisata?",
             "opinions": [
-              {
-                "id": "op1",
-                "text": "Setuju"
-              },
               {
                 "id": "op2",
                 "text": "Tidak Setuju"
+              },
+              {
+                "id": "op1",
+                "text": "Setuju"
               }
             ],
             "reasons": [
               {
-                "id": "r4",
-                "text": "A. Karena drum bisa membantu memanggil lebih banyak turis untuk datang"
+                "id": "r2",
+                "text": "A. Karena kekuatan Tari Kecak berasal dari harmoni suara manusia sebagai ciri khasnya"
               },
               {
                 "id": "r3",
-                "text": "B. Supaya penari tidak perlu lelah berteriak 'cak-cak-cak' sepanjang waktu"
+                "text": "B. Supaya penari tidak perlu menghafal pola suara"
               },
               {
                 "id": "r1",
-                "text": "C. Agar pertunjukan terasa lebih modern dan semangat seperti konser musik"
+                "text": "C. Agar pertunjukan terasa lebih modern dan menarik bagi penonton"
               },
               {
-                "id": "r2",
-                "text": "D. Karena keunikan Kecak justru terletak pada suara manusia tanpa alat musik apa pun"
+                "id": "r4",
+                "text": "D. Karena alat musik selalu lebih penting daripada penari"
               }
             ],
             "correctPairs": [
@@ -6638,33 +6618,33 @@ export const QUIZ_DATA = {
           },
           {
             "type": "opinion_reason",
-            "text": "Apakah menurutmu pementasan Kecak di siang hari (terik matahari) tetap sebagus pementasan di waktu senja?",
+            "text": "Menurutmu, apakah pertunjukan Tari Kecak boleh ditampilkan setiap hari untuk wisata selama tetap menghormati aturan budaya?",
             "opinions": [
               {
                 "id": "op1",
-                "text": "Tetap Bagus"
+                "text": "Boleh"
               },
               {
                 "id": "op2",
-                "text": "Lebih Bagus Senja"
+                "text": "Perlu Dibatasi"
               }
             ],
             "reasons": [
               {
+                "id": "r4",
+                "text": "A. Agar penonton bisa datang kapan saja"
+              },
+              {
                 "id": "r2",
-                "text": "A. Waktu senja memberikan suasana magis dan mendukung filosofi cahaya api"
+                "text": "B. Karena terlalu sering dipentaskan bisa mengurangi nilai sakral dan penghormatan budaya"
               },
               {
                 "id": "r1",
-                "text": "B. Siang hari membuat gerakan penari terlihat lebih jelas oleh penonton"
-              },
-              {
-                "id": "r4",
-                "text": "C. Waktu senja sangat berbahaya karena banyak nyamuk di area terbuka"
+                "text": "C. Karena pertunjukan juga membantu ekonomi masyarakat dan mengenalkan budaya Bali"
               },
               {
                 "id": "r3",
-                "text": "D. Siang hari membuat penari lebih semangat karena cuaca panas"
+                "text": "D. Supaya penari tidak perlu latihan terlalu sering"
               }
             ],
             "correctPairs": [
@@ -6766,7 +6746,7 @@ export const QUIZ_DATA = {
       "1": {
         "literacy": {
           "image": "/assets/budayana/islands/rumah1 nusa .png",
-          "text": "Di Kampung Adat Wae Rebo, Kabupaten Manggarai Barat, Pulau Flores, NTT, suku Manggarai membangun rumah adat unik bernama Mbaru Niang. Rumah ini berbentuk kerucut tinggi dan menjulang ke atas seperti gunung. Atapnya dibuat dari daun lontar yang disusun tebal hingga hampir menyentuh tanah, agar kuat menahan hujan dan angin pegunungan. Ijuk digunakan untuk membungkus tiang pondasi di dalam tanah agar tidak cepat lapuk. \n\n Rumah Mbaru Niang memiliki lima tingkat di dalamnya. Setiap tingkat memiliki kegunaan yang berbeda, mulai dari tempat tinggal hingga tempat menyimpan cadangan makanan."
+          "text": "Di Kampung Adat Wae Rebo, Kabupaten Manggarai Barat, Pulau Flores, NTT, suku Manggarai membangun rumah adat unik bernama Mbaru Niang. Rumah ini berbentuk kerucut tinggi dan menjulang ke atas seperti gunung. Atapnya dibuat dari daun lontar yang disusun tebal hingga hampir menyentuh tanah, agar kuat menahan hujan dan angin pegunungan. Ijuk digunakan untuk membungkus bagian bawah tiang agar lebih tahan terhadap kelembapan tanah dan tidak cepat rusak. \n\n Rumah Mbaru Niang memiliki lima tingkat di dalamnya. Setiap tingkat memiliki kegunaan yang berbeda, mulai dari tempat tinggal hingga tempat menyimpan cadangan makanan."
         },
         "questions": [
           {
@@ -6928,12 +6908,12 @@ export const QUIZ_DATA = {
           },
           {
             "type": "multiple_choice",
-            "text": "Mengapa masyarakat Mbaru Niang menyimpan benih tanaman di tingkat yang cukup tinggi (tingkat ketiga)?",
+            "text": "Mengapa benih tanaman disimpan di tingkat ketiga (Lentar)?",
             "options": [
-              "Agar benih tetap kering dan aman dari gangguan tikus atau banjir",
-              "Supaya benih lebih dekat dengan sinar matahari di atap",
-              "Karena tradisi melarang benih ditaruh di lantai bawah",
-              "Agar benih tidak bisa diambil oleh anak-anak"
+              "Agar benih tetap aman dan siap digunakan saat musim tanam berikutnya",
+              "Supaya benih terkena lebih banyak udara pegunungan",
+              "Karena tingkat bawah hanya untuk orang dewasa",
+              "Agar rumah terlihat lebih tinggi"
             ],
             "correctIndex": 0,
             "xp": 25
@@ -6981,33 +6961,33 @@ export const QUIZ_DATA = {
         "questions": [
           {
             "type": "opinion_reason",
-            "text": "Jika turis yang datang ke Waerebo semakin banyak, setujukah kamu jika dibangun tangga besi di luar Mbaru Niang agar tamu lebih mudah naik ke tingkat atas?",
+            "text": "Jika wisatawan semakin banyak datang ke Wae Rebo, apakah menurutmu fasilitas tambahan boleh dibuat selama bentuk utama Mbaru Niang tetap dijaga?",
             "opinions": [
               {
-                "id": "op1",
-                "text": "Setuju"
+                "id": "op2",
+                "text": "Perlu Dibatasi"
               },
               {
-                "id": "op2",
-                "text": "Tidak Setuju"
+                "id": "op1",
+                "text": "Boleh"
               }
             ],
             "reasons": [
               {
-                "id": "r4",
-                "text": "A. Agar rumah terlihat lebih modern dan canggih bagi wisatawan asing"
-              },
-              {
-                "id": "r2",
-                "text": "B. Karena tangga besi akan merusak bentuk asli dan keaslian bahan kayu Mbaru Niang"
-              },
-              {
                 "id": "r3",
-                "text": "C. Supaya warga desa tidak perlu capek memanjat tangga kayu lagi"
+                "text": "A. Supaya rumah bisa terlihat seperti hotel modern"
               },
               {
                 "id": "r1",
-                "text": "D. Agar lebih banyak orang tua bisa berkunjung dan melihat keindahan rumah"
+                "text": "B. Agar lebih banyak pengunjung dapat menikmati budaya dengan nyaman"
+              },
+              {
+                "id": "r4",
+                "text": "C. Karena rumah tradisional tidak boleh dikunjungi wisatawan"
+              },
+              {
+                "id": "r2",
+                "text": "D. Karena perubahan berlebihan bisa mengurangi keaslian Mbaru Niang"
               }
             ],
             "correctPairs": [
@@ -7066,82 +7046,47 @@ export const QUIZ_DATA = {
             "xp": 30
           },
           {
-            "type": "drag_drop_sentence",
-            "text": "Kamu ingin mengajak teman untuk merawat dan bangga pada Mbaru Niang warisan UNESCO. Susun kalimat ajakanmu menggunakan minimal 4 kata dari pilihan berikut!",
-            "draggables": [
+            "type": "opinion_reason",
+            "text": "Menurutmu, apakah bahan modern boleh digunakan pada bagian tertentu Mbaru Niang jika tetap menjaga bentuk dan nilai budayanya?",
+            "opinions": [
               {
-                "id": "w1",
-                "text": "Ayo",
-                "color": "#F6E78A"
+                "id": "op1",
+                "text": "Boleh Digunakan"
               },
               {
-                "id": "w2",
-                "text": "rawat",
-                "color": "#FFC6D8"
-              },
-              {
-                "id": "w3",
-                "text": "kita",
-                "color": "#AEE5A1"
-              },
-              {
-                "id": "w4",
-                "text": "banggakan",
-                "color": "#BFD1FF"
-              },
-              {
-                "id": "w5",
-                "text": "Mbaru Niang",
-                "color": "#CDB4FF"
-              },
-              {
-                "id": "w6",
-                "text": "warisan",
-                "color": "#FFD6A5"
-              },
-              {
-                "id": "w7",
-                "text": "UNESCO",
-                "color": "#D5F4E6"
-              },
-              {
-                "id": "w8",
-                "text": "Flores",
-                "color": "#FFC2C2"
-              },
-              {
-                "id": "w9",
-                "text": "dunia",
-                "color": "#B9FBC0"
-              },
-              {
-                "id": "w10",
-                "text": "bersama",
-                "color": "#FFE29A"
-              },
-              {
-                "id": "w11",
-                "text": "jaga",
-                "color": "#A8D8FF"
-              },
-              {
-                "id": "w12",
-                "text": "budaya",
-                "color": "#D9C6FF"
-              },
-              {
-                "id": "w13",
-                "text": "kerucut",
-                "color": "#FAD6A5"
+                "id": "op2",
+                "text": "Lebih Baik Tradisional"
               }
             ],
-            "xp": 40,
-            "mode": "creative",
-            "minWords": 4,
-            "requiredWords": [
-              "Mbaru Niang"
+            "reasons": [
+              {
+                "id": "r2",
+                "text": "A. Karena penggunaan bahan tradisional membantu menjaga keaslian warisan budaya"
+              },
+              {
+                "id": "r4",
+                "text": "B. Supaya rumah terlihat seperti bangunan kota"
+              },
+              {
+                "id": "r1",
+                "text": "C. Agar rumah lebih tahan lama dan tetap bisa digunakan masyarakat"
+              },
+              {
+                "id": "r3",
+                "text": "D. Karena semua rumah tradisional harus diganti total"
+              }
             ],
-            "example": "Ayo kita rawat Mbaru Niang bersama!"
+            "correctPairs": [
+              {
+                "opinionId": "op1",
+                "reasonId": "r1"
+              },
+              {
+                "opinionId": "op2",
+                "reasonId": "r2"
+              }
+            ],
+            "xp": 30
           }
         ]
       }
@@ -7150,7 +7095,7 @@ export const QUIZ_DATA = {
       "1": {
         "literacy": {
           "image": "/assets/budayana/islands/makanan1 nusa.png",
-          "text": "Pernahkah kamu mencoba daging asap dari Nusa Tenggara Timur? Namanya adalah Se'i. Kata 'Se'i' berasal dari bahasa Rote yang artinya 'daging yang disayat tipis memanjang dan diasapi'. \n\n Se'i biasanya terbuat dari daging sapi atau daging babi yang dibumbui dengan garam dan rempah. Keunikan Se'i adalah cara memasaknya yang menggunakan asap, bukan dibakar langsung di atas api. Daging Se'i memiliki aroma yang sangat harum dan warna kemerahan yang menggugah selera."
+          "text": "Pernahkah kamu mencoba daging asap dari Nusa Tenggara Timur? Namanya adalah Se'i. Kata 'Se'i' berasal dari bahasa Rote yang artinya 'daging yang disayat tipis memanjang dan diasapi'. \n\n Se'i biasanya terbuat dari daging sapi atau daging babi yang dibumbui dengan garam dan rempah. Daging kemudian diasapi perlahan menggunakan kayu khusus agar aroma khasnya muncul dan daging dapat bertahan lebih lama. Keunikan Se'i adalah cara memasaknya yang menggunakan asap, bukan dibakar langsung di atas api. Daging Se'i memiliki aroma yang sangat harum dan warna kemerahan yang menggugah selera."
         },
         "questions": [
           {
@@ -7219,12 +7164,12 @@ export const QUIZ_DATA = {
           },
           {
             "type": "multiple_choice",
-            "text": "Sayuran apa yang biasanya menjadi pendamping khas saat memakan Se'i?",
+            "text": "Apa keunikan utama cara memasak Se'i dibanding daging bakar biasa?",
             "options": [
-              "Tumis Bunga Pepaya",
-              "Wortel Rebus",
-              "Sayur Lodeh",
-              "Sayur Bayam Benar"
+              "Diasapi perlahan tanpa terkena api langsung",
+              "Direbus dalam kuah rempah",
+              "Digoreng sampai renyah",
+              "Dikukus dengan daun"
             ],
             "correctIndex": 0,
             "xp": 20
@@ -7312,12 +7257,12 @@ export const QUIZ_DATA = {
           },
           {
             "type": "multiple_choice",
-            "text": "Mengapa daging Se'i tidak boleh terkena api langsung saat proses pengasapan?",
+            "text": "Mengapa daging Se'i diasapi dari jarak tertentu dan tidak terkena api langsung?",
             "options": [
-              "Supaya daging matang perlahan oleh asap dan tidak gosong",
-              "Agar asap tidak keluar dari tempat panggangan",
-              "Karena api langsung bisa merusak rasa garam",
-              "Agar daging tidak menjadi terlalu manis"
+              "Agar matang perlahan dan aroma asap meresap",
+              "Agar warna daging menjadi putih",
+              "Supaya garam cepat hilang",
+              "Agar daun kosambi tidak terbakar"
             ],
             "correctIndex": 0,
             "xp": 25
@@ -7365,33 +7310,33 @@ export const QUIZ_DATA = {
         "questions": [
           {
             "type": "opinion_reason",
-            "text": "Jika kayu kosambi semakin langka, setujukah kamu jika penjual menggunakan \"asap cair\" buatan agar tetap bisa memproduksi Se'i?",
+            "text": "Jika kayu kosambi mulai sulit didapat, apakah menurutmu penggunaan metode pengasapan lain boleh dilakukan agar produksi Se'i tetap berjalan?",
             "opinions": [
               {
-                "id": "op1",
-                "text": "Setuju"
+                "id": "op2",
+                "text": "Lebih Baik Tetap Tradisional"
               },
               {
-                "id": "op2",
-                "text": "Tidak Setuju"
+                "id": "op1",
+                "text": "Boleh Menggunakan Alternatif"
               }
             ],
             "reasons": [
               {
-                "id": "r4",
-                "text": "A. Karena bahan kimia jauh lebih sehat daripada asap kayu asli"
-              },
-              {
                 "id": "r2",
-                "text": "B. Karena asap cair tidak akan bisa menyamai aroma dan kualitas kayu asli"
+                "text": "A. Karena aroma khas Se'i berasal dari proses dan kayu tradisional yang perlu dijaga"
               },
               {
-                "id": "r3",
-                "text": "C. Supaya penjual tidak perlu repot mencari kayu ke hutan"
+                "id": "r4",
+                "text": "B. Agar semua Se'i memiliki rasa yang sama di seluruh Indonesia"
               },
               {
                 "id": "r1",
-                "text": "D. Agar harga Se'i tetap murah dan mudah dibeli oleh semua orang"
+                "text": "C. Agar produksi tetap berjalan tanpa terus menebang pohon kosambi"
+              },
+              {
+                "id": "r3",
+                "text": "D. Supaya proses memasak tidak perlu diawasi"
               }
             ],
             "correctPairs": [
@@ -7408,33 +7353,33 @@ export const QUIZ_DATA = {
           },
           {
             "type": "opinion_reason",
-            "text": "Haruskah pemerintah mewajibkan setiap pengusaha Se'i untuk menanam kembali pohon kosambi?",
+            "text": "Menurutmu, apakah penjual Se'i sebaiknya ikut menanam kembali pohon kosambi yang digunakan?",
             "opinions": [
               {
-                "id": "op1",
-                "text": "Harus Wajib"
+                "id": "op2",
+                "text": "Tidak Harus"
               },
               {
-                "id": "op2",
-                "text": "Tidak Perlu"
+                "id": "op1",
+                "text": "Sebaiknya Ikut Menanam"
               }
             ],
             "reasons": [
               {
-                "id": "r1",
-                "text": "A. Untuk menjaga kelestarian alam dan memastikan bumbu asli Se'i tetap ada"
+                "id": "r4",
+                "text": "A. Supaya tempat usaha terlihat lebih hijau"
               },
               {
-                "id": "r4",
-                "text": "B. Agar lingkungan restoran menjadi lebih sejuk dan hijau"
+                "id": "r1",
+                "text": "B. Agar pohon kosambi tetap tersedia untuk generasi berikutnya"
               },
               {
                 "id": "r3",
-                "text": "C. Supaya pengusaha memiliki banyak tabungan kayu di masa depan"
+                "text": "C. Karena semua restoran harus memiliki kebun sendiri"
               },
               {
                 "id": "r2",
-                "text": "D. Karena menanam pohon adalah tugas petani, bukan pengusaha makanan"
+                "text": "D. Karena menjaga hutan adalah tanggung jawab pemerintah saja"
               }
             ],
             "correctPairs": [
@@ -7534,7 +7479,7 @@ export const QUIZ_DATA = {
       "1": {
         "literacy": {
           "image": "/assets/budayana/islands/tarian1 nusa.png",
-          "text": "Pernahkah kamu melihat alat musik yang terbuat dari daun lontar dan memiliki banyak senar? Alat musik itu bernama Sasando dari Pulau Rote, Nusa Tenggara Timur. Sasando dimainkan dengan cara dipetik menggunakan kedua tangan. Wadah melengkung dari daun lontar kering bernama 'Haik' berfungsi sebagai ruang resonansi (gema suara) agar petikan senar terdengar lebih merdu. Selain Sasando, NTT juga terkenal dengan Tari Caci dari Flores. Nama 'Caci' berasal dari kata 'Ca' (satu) dan 'Ci' (uji) yang berarti 'uji satu lawan satu'. Tarian ini dilakukan oleh dua kelompok laki-laki yang saling menguji keberanian menggunakan cambuk (pecut) dan perisai."
+          "text": "Pernahkah kamu melihat alat musik yang terbuat dari daun lontar dan memiliki banyak senar? Alat musik itu bernama Sasando dari Pulau Rote, Nusa Tenggara Timur. Sasando dimainkan dengan cara dipetik menggunakan kedua tangan. Wadah melengkung dari daun lontar kering bernama 'Haik' berfungsi sebagai ruang resonansi (gema suara) agar petikan senar terdengar lebih merdu. Selain Sasando, NTT juga terkenal dengan Tari Caci dari Flores. Nama 'Caci' berasal dari kata 'Ca' (satu) dan 'Ci' (uji) yang berarti 'uji satu lawan satu'. Tarian ini dilakukan oleh dua kelompok laki-laki yang saling menguji keberanian menggunakan cambuk (pecut) dan perisai. \n\n Walaupun terlihat seperti pertarungan, Tari Caci sebenarnya merupakan bagian dari upacara syukur hasil panen (Hang Woja) dan menjadi simbol kedewasaan, keberanian, serta sportivitas masyarakat Manggarai."
         },
         "questions": [
           {
@@ -7627,28 +7572,23 @@ export const QUIZ_DATA = {
             "draggables": [
               {
                 "id": "d1",
-                "text": "Bersihkan Daun Lontar",
+                "text": "Siapkan Bambu dan Senar",
                 "color": "#FFF3B0"
               },
               {
                 "id": "d2",
-                "text": "Jemur Daun Hingga Kering",
+                "text": "Pasang Senar pada Bambu",
                 "color": "#dbe0fd"
               },
               {
                 "id": "d3",
-                "text": "Anyam Menjadi Wadah Haik",
+                "text": "Buat Wadah Haik dari Daun Lontar",
                 "color": "#ffb2d8"
               },
               {
                 "id": "d4",
-                "text": "Pasang Bambu dengan Senar",
+                "text": "Pasang Haik Mengelilingi Sasando",
                 "color": "#ffd5c0"
-              },
-              {
-                "id": "d5",
-                "text": "Pasang Wadah Haik Mengelilingi Bambu",
-                "color": "#bca89eff"
               }
             ],
             "dropZones": [
@@ -7667,10 +7607,6 @@ export const QUIZ_DATA = {
               {
                 "id": "z4",
                 "label": "Tahap 4"
-              },
-              {
-                "id": "z5",
-                "label": "Tahap 5"
               }
             ],
             "correctOrder": [
@@ -7678,7 +7614,6 @@ export const QUIZ_DATA = {
               "d2",
               "d3",
               "d4",
-              "d5"
             ],
             "xp": 25
           },
@@ -7792,33 +7727,33 @@ export const QUIZ_DATA = {
           },
           {
             "type": "opinion_reason",
-            "text": "Haruskah Tari Caci tetap menggunakan cambuk asli meskipun berisiko melukai penari?",
+            "text": "Menurutmu, untuk pertunjukan Tari Caci di sekolah atau acara wisata, apakah perlengkapan tari boleh disesuaikan agar lebih aman bagi penari?",
             "opinions": [
               {
-                "id": "op1",
-                "text": "Tetap Cambuk Asli"
+                "id": "op2",
+                "text": "Tetap Gunakan Perlengkapan Tradisional"
               },
               {
-                "id": "op2",
-                "text": "Ganti Cambuk Kain"
+                "id": "op1",
+                "text": "Boleh Disesuaikan"
               }
             ],
             "reasons": [
               {
-                "id": "r1",
-                "text": "A. Menjaga nilai sejarah, makna sportivitas, dan keberanian asli dari tarian tersebut"
+                "id": "r3",
+                "text": "A. Supaya pertunjukan berlangsung lebih cepat"
               },
               {
                 "id": "r2",
-                "text": "B. Agar penari lebih aman dan tidak terluka, terutama untuk pertunjukan wisata"
-              },
-              {
-                "id": "r3",
-                "text": "C. Supaya tarian bisa diikuti oleh anak-anak kecil di sekolah"
+                "text": "B. Karena perlengkapan tradisional membantu menjaga nilai keberanian dan makna budaya Tari Caci"
               },
               {
                 "id": "r4",
-                "text": "D. Karena cambuk kain jauh lebih murah daripada cambuk kulit asli"
+                "text": "C. Karena perlengkapan modern selalu terlihat lebih menarik"
+              },
+              {
+                "id": "r1",
+                "text": "D. Agar penari tetap aman tanpa menghilangkan semangat pertunjukan"
               }
             ],
             "correctPairs": [
@@ -8061,12 +7996,12 @@ export const QUIZ_DATA = {
           },
           {
             "type": "multiple_choice",
-            "text": "Jika kamu ingin membangun Rumah Joglo yang sangat kokoh dan tahan lama, jenis kayu apa yang paling tepat dipilih sesuai tradisi?",
+            "text": "Jika ada pertunjukan wayang kulit di Rumah Joglo, bagian rumah mana yang paling tepat digunakan?",
             "options": [
-              "Kayu Sengon yang ringan",
-              "Kayu Jati tua yang kuat",
-              "Batang pohon kelapa",
-              "Papan kayu lapis (triplek)"
+              "Pendopo",
+              "Pringgitan",
+              "Omah Dalem",
+              "Krobongan"
             ],
             "correctIndex": 1,
             "xp": 25
@@ -8126,76 +8061,76 @@ export const QUIZ_DATA = {
         "questions": [
           {
             "type": "opinion_reason",
-            "text": "Jika kamu tinggal di lahan sempit namun ingin memiliki nuansa Joglo, apakah kamu setuju jika ukuran Pendopo dibuat sangat kecil?",
+            "text": "Jika kayu jati besar semakin sulit didapat, apakah penggunaan tiang beton pada Rumah Joglo masih boleh dilakukan agar bentuk rumah tetap lestari?",
             "opinions": [
               {
-                "id": "op1",
-                "text": "Setuju"
+                "id": "op2",
+                "text": "Kurang Setuju"
               },
               {
-                "id": "op2",
-                "text": "Tidak Setuju"
+                "id": "op1",
+                "text": "Boleh Digunakan"
               }
             ],
             "reasons": [
               {
-                "id": "r4",
-                "text": "A. Karena yang penting adalah bentuk atapnya untuk menjaga identitas"
-              },
-              {
-                "id": "r1",
-                "text": "B. Pendopo harus luas agar fungsi kebersamaan tidak hilang"
+                "id": "r3",
+                "text": "A. Supaya pembangunan rumah selesai lebih cepat"
               },
               {
                 "id": "r2",
-                "text": "C. Supaya biaya pembangunan menjadi lebih murah"
+                "text": "B. Karena Soko Guru kayu memiliki nilai tradisi dan karakter asli Rumah Joglo"
               },
               {
-                "id": "r3",
-                "text": "D. Agar bagian dalam rumah menjadi lebih luas"
+                "id": "r1",
+                "text": "C. Agar masyarakat tetap bisa membangun dan mengenal bentuk Rumah Joglo di masa sekarang"
+              },
+              {
+                "id": "r4",
+                "text": "D. Karena beton lebih mudah dicat"
               }
             ],
             "correctPairs": [
               {
                 "opinionId": "op1",
-                "reasonId": "r4"
+                "reasonId": "r1"
               },
               {
                 "opinionId": "op2",
-                "reasonId": "r1"
+                "reasonId": "r2"
               }
             ],
             "xp": 30
           },
           {
             "type": "opinion_reason",
-            "text": "Apakah penggunaan keramik modern untuk lantai Rumah Joglo saat ini lebih baik daripada lantai tanah/semen biasa?",
+            "text": "Haruskah pembangunan Rumah Joglo modern tetap mempertimbangkan filosofi dan tata ruang tradisional meskipun menggunakan alat ukur modern?",
             "opinions": [
               {
                 "id": "op1",
-                "text": "Lebih Baik"
+                "text": "Tetap Dipertahankan"
               },
               {
                 "id": "op2",
-                "text": "Kurang Baik"
+                "text": "Tidak Harus"
               }
             ],
             "reasons": [
               {
-                "id": "r1",
-                "text": "A. Agar rumah lebih bersih, mudah dirawat, dan terlihat modern"
-              },
-              {
                 "id": "r4",
-                "text": "B. Lantai semen/tanah menjaga kesan alami dan tradisional"
+                "text": "A. Agar rumah terlihat lebih modern"
               },
               {
-                "id": "r2",
-                "text": "C. Supaya rumah terlihat seperti rumah di kota besar"
+                "id": "r1",
+                "text": "B. Karena filosofi rumah adalah bagian penting dari warisan budaya Jawa"
               },
               {
                 "id": "r3",
-                "text": "D. Keramik sangat sulit pecah jika terkena tiang kayu"
+                "text": "C. Supaya desain rumah bisa berubah setiap saat"
+              },
+              {
+                "id": "r2",
+                "text": "D. Karena ukuran modern lebih praktis dan cepat digunakan"
               }
             ],
             "correctPairs": [
@@ -8205,7 +8140,7 @@ export const QUIZ_DATA = {
               },
               {
                 "opinionId": "op2",
-                "reasonId": "r4"
+                "reasonId": "r2"
               }
             ],
             "xp": 30
@@ -8295,7 +8230,7 @@ export const QUIZ_DATA = {
       "1": {
         "literacy": {
           "image": "/assets/budayana/islands/makanan2 jawa.png",
-          "text": "Pernahkah kamu mencicipi makanan manis berwarna cokelat dari Yogyakarta? Namanya adalah Gudeg. Bahan utama Gudeg adalah Nangka Muda yang dipotong kecil-kecil. Nangka ini dimasak bersama santan, gula jawa, dan daun jati agar warnanya menjadi cokelat gelap yang cantik. \n\n Gudeg biasanya disajikan dengan nasi, telur pindang, dan ayam. Rasa utama dari Gudeg adalah manis dan gurih, yang sangat disukai oleh masyarakat di Pulau Jawa."
+          "text": "Pernahkah kamu mencicipi makanan manis berwarna cokelat dari Yogyakarta? Namanya adalah Gudeg. Bahan utama Gudeg adalah Nangka Muda yang dipotong kecil-kecil. Nangka ini dimasak bersama santan, gula jawa, dan daun jati. Gula jawa membantu memberi rasa manis, sedangkan daun jati digunakan sebagai pewarna alami agar Gudeg berwarna cokelat gelap yang cantik. \n\n Gudeg biasanya disajikan dengan nasi, telur pindang, dan ayam. Rasa utama dari Gudeg adalah manis dan gurih, yang sangat disukai oleh masyarakat di Pulau Jawa."
         },
         "questions": [
           {
@@ -8379,7 +8314,7 @@ export const QUIZ_DATA = {
       "2": {
         "literacy": {
           "image": "/assets/budayana/islands/makanan2 jawa.png",
-          "text": "Mengapa memasak Gudeg membutuhkan waktu yang sangat lama, bahkan bisa seharian? Ternyata, api yang digunakan harus kecil agar bumbu santan dan gula jawa meresap sempurna ke dalam serat nangka muda. Proses ini melambangkan kesabaran dan ketelitian masyarakat Jawa dalam mengerjakan sesuatu. \n\n Selain itu, daun jati yang dimasukkan saat memasak bukan untuk dimakan, melainkan berfungsi sebagai pewarna alami agar Gudeg terlihat cokelat kemerahan tanpa bahan kimia."
+          "text": "Mengapa memasak Gudeg membutuhkan waktu yang sangat lama, bahkan bisa seharian? Ternyata, api yang digunakan harus kecil agar bumbu santan dan gula jawa meresap sempurna ke dalam serat nangka muda. Proses ini melambangkan kesabaran dan ketelitian masyarakat Jawa dalam mengerjakan sesuatu. \n\n Selain itu, daun jati yang dimasukkan saat memasak bukan untuk dimakan, melainkan berfungsi sebagai pewarna alami agar Gudeg terlihat cokelat kemerahan tanpa bahan kimia. Secara tradisional, Gudeg juga sering dimasak menggunakan kendil (wadah dari tanah liat) karena panasnya lebih stabil untuk memasak dalam waktu lama."
         },
         "questions": [
           {
@@ -8495,38 +8430,38 @@ export const QUIZ_DATA = {
       "3": {
         "literacy": {
           "image": "/assets/budayana/islands/makanan3 jawa.png",
-          "text": "Saat ini, Gudeg tidak hanya dijual di kendil (panci tanah liat), tetapi juga sudah ada yang dikemas dalam kaleng agar bisa dibawa sebagai oleh-oleh ke luar negeri. Namun, ada yang merasa bahwa Gudeg kalengan rasanya berbeda dengan Gudeg segar yang baru matang. \n\n nMuncul sebuah diskusi: apakah kita harus tetap mempertahankan cara menjual Gudeg secara tradisional di warung lesehan, atau fokus pada penjualan Gudeg kemasan modern agar lebih terkenal? Kita harus menjaga agar cita rasa asli Gudeg tetap dicintai oleh generasi mendatang."
+          "text": "Saat ini, Gudeg tidak hanya dijual di kendil (panci tanah liat), tetapi juga sudah ada yang dikemas dalam kaleng agar bisa dibawa sebagai oleh-oleh ke luar negeri. Namun, ada yang merasa bahwa Gudeg kalengan rasanya berbeda dengan Gudeg segar yang baru matang. \n\n Muncul sebuah diskusi: apakah kita harus tetap mempertahankan cara menjual Gudeg secara tradisional di warung lesehan, atau fokus pada penjualan Gudeg kemasan modern agar lebih terkenal? Kita harus menjaga agar cita rasa asli Gudeg tetap dicintai oleh generasi mendatang."
         },
         "questions": [
           {
             "type": "opinion_reason",
-            "text": "Setujukah kamu jika resep Gudeg diubah menjadi sangat pedas agar disukai anak muda zaman sekarang?",
+            "text": "Menurutmu, apakah Gudeg kemasan modern tetap bisa menjadi cara yang baik untuk mengenalkan kuliner Jawa ke lebih banyak orang?",
             "opinions": [
+              {
+                "id": "op2",
+                "text": "Kurang Setuju"
+              },
               {
                 "id": "op1",
                 "text": "Setuju"
-              },
-              {
-                "id": "op2",
-                "text": "Tidak Setuju"
               }
             ],
             "reasons": [
               {
-                "id": "r4",
-                "text": "A. Agar Gudeg bisa bersaing dengan makanan luar negeri yang pedas"
+                "id": "r2",
+                "text": "A. Karena cita rasa dan pengalaman makan Gudeg segar tetap memiliki nilai tersendiri"
               },
               {
                 "id": "r3",
-                "text": "B. Supaya orang tidak lagi menganggap Gudeg sebagai makanan manis"
-              },
-              {
-                "id": "r2",
-                "text": "C. Karena rasa asli Gudeg adalah manis, mengubahnya akan menghilangkan ciri khasnya"
+                "text": "B. Supaya Gudeg bisa dibuat lebih cepat"
               },
               {
                 "id": "r1",
-                "text": "D. Agar Gudeg lebih modern dan mengikuti selera pasar saat ini"
+                "text": "C. Agar lebih banyak orang bisa mengenal dan mencoba Gudeg"
+              },
+              {
+                "id": "r4",
+                "text": "D. Karena kemasan selalu lebih enak daripada makanan segar"
               }
             ],
             "correctPairs": [
@@ -8543,42 +8478,42 @@ export const QUIZ_DATA = {
           },
           {
             "type": "opinion_reason",
-            "text": "Apakah menjual Gudeg dalam kemasan kaleng adalah ide yang bagus untuk melestarikan budaya?",
+            "text": "Jika Gudeg dijual ke luar negeri dalam kemasan modern, apakah resep dan rasa aslinya tetap perlu dijaga?",
             "opinions": [
               {
                 "id": "op1",
-                "text": "Bagus"
+                "text": "Tetap Dijaga"
               },
               {
                 "id": "op2",
-                "text": "Kurang Bagus"
+                "text": "Boleh Disesuaikan"
               }
             ],
             "reasons": [
               {
-                "id": "r1",
-                "text": "A. Ya, karena dengan begitu Gudeg bisa dinikmati oleh orang di seluruh dunia"
+                "id": "r4",
+                "text": "A. Supaya rasa Gudeg bisa berubah mengikuti setiap negara"
               },
               {
-                "id": "r2",
-                "text": "B. Tidak, karena suasana makan Gudeg yang asli adalah di warung lesehan"
+                "id": "r1",
+                "text": "B. Karena cita rasa asli adalah bagian dari identitas kuliner Jawa"
               },
               {
                 "id": "r3",
-                "text": "C. Ya, agar kita tidak perlu lagi belajar cara memasak Gudeg sendiri"
+                "text": "C. Agar warna Gudeg menjadi lebih menarik"
               },
               {
-                "id": "r4",
-                "text": "D. Tidak, karena kaleng besi bisa merusak rasa nangka muda"
+                "id": "r2",
+                "text": "D. Karena menyesuaikan rasa bisa membantu lebih banyak orang mencoba Gudeg"
               }
             ],
             "correctPairs": [
               {
-                "opinionId": "op1",
+                "id": "op1",
                 "reasonId": "r1"
               },
               {
-                "opinionId": "op2",
+                "id": "op2",
                 "reasonId": "r2"
               }
             ],
@@ -8669,7 +8604,7 @@ export const QUIZ_DATA = {
       "1": {
         "literacy": {
           "image": "/assets/budayana/islands/tarian1 jawa.png",
-          "text": "Pernahkah kamu mendengar suara dentuman alat musik dari perunggu atau besi di pertunjukan wayang? Alat musik itu disebut Gamelan. Gamelan terdiri dari berbagai instrumen seperti Gong, Kenong, Saron, dan Bonang. \n\n Cara memainkannya adalah dengan cara dipukul menggunakan pemukul khusus. Gamelan biasanya digunakan untuk mengiringi tarian tradisional Jawa, seperti Tari Serimpi atau Tari Wayang. Gerakan tari Jawa dikenal sangat halus dan mengikuti tempo suara gamelan yang tenang."
+          "text": "Pernahkah kamu mendengar suara dentuman alat musik dari perunggu atau besi di pertunjukan wayang? Alat musik itu disebut Gamelan. Gamelan terdiri dari berbagai instrumen seperti Gong, Kenong, Saron, dan Bonang. \n\n Cara memainkannya adalah dengan cara dipukul menggunakan pemukul khusus. Gamelan biasanya digunakan untuk mengiringi tarian tradisional Jawa, seperti Tari Serimpi atau Tari Wayang. Dalam pertunjukan, setiap alat musik memiliki peran yang berbeda sehingga penari dapat mengikuti irama dengan gerakan yang halus dan teratur. Gerakan tari Jawa dikenal sangat halus dan mengikuti tempo suara gamelan yang tenang."
         },
         "questions": [
           {
@@ -8758,46 +8693,34 @@ export const QUIZ_DATA = {
         "questions": [
           {
             "type": "drag_drop",
-            "text": "Urutkan alat musik gamelan dari yang ukurannya terkecil hingga terbesar!",
+            "text": "Urutkan alur pemain mengikuti irama dalam pertunjukan gamelan dan tari!",
             "draggables": [
               {
-                "id": "d4",
-                "text": "Gong",
-                "color": "#ffd5c0"
-              },
-              {
-                "id": "d3",
-                "text": "Kenong",
-                "color": "#ffb2d8"
+                "id": "d1",
+                "text": "Kendang Mengatur Tempo",
+                "color": "#FFF3B0"
               },
               {
                 "id": "d2",
-                "text": "Bonang",
+                "text": "Instrumen Lain Mengikuti",
                 "color": "#dbe0fd"
               },
               {
-                "id": "d1",
-                "text": "Saron",
-                "color": "#FFF3B0"
+                "id": "d3",
+                "text": "Penari Menyesuaikan Gerakan",
+                "color": "#ffb2d8"
+              },
+              {
+                "id": "d4",
+                "text": "Gong Menandai Akhir Irama",
+                "color": "#ffd5c0"
               }
             ],
             "dropZones": [
-              {
-                "id": "z1",
-                "label": "Terkecil"
-              },
-              {
-                "id": "z2",
-                "label": "Sedang"
-              },
-              {
-                "id": "z3",
-                "label": "Besar"
-              },
-              {
-                "id": "z4",
-                "label": "Terbesar"
-              }
+              { "id": "z1", "label": "Tahap 1" },
+              { "id": "z2", "label": "Tahap 2" },
+              { "id": "z3", "label": "Tahap 3" },
+              { "id": "z4", "label": "Tahap 4" }
             ],
             "correctOrder": [
               "d1",
@@ -8805,18 +8728,6 @@ export const QUIZ_DATA = {
               "d3",
               "d4"
             ],
-            "xp": 25
-          },
-          {
-            "type": "multiple_choice",
-            "text": "Jika penari ingin mempercepat gerakannya, alat musik gamelan mana yang harus memberikan kode melalui suaranya?",
-            "options": [
-              "Gong",
-              "Kendang",
-              "Gambang",
-              "Suling"
-            ],
-            "correctIndex": 1,
             "xp": 25
           },
           {
@@ -8874,33 +8785,33 @@ export const QUIZ_DATA = {
         "questions": [
           {
             "type": "opinion_reason",
-            "text": "Setujukah kamu jika alat musik gamelan diganti dengan piano atau keyboard agar lebih praktis?",
+            "text": "Menurutmu, apakah sekolah boleh menggunakan gamelan digital untuk latihan jika belum memiliki gamelan asli?",
             "opinions": [
               {
-                "id": "op1",
-                "text": "Setuju"
+                "id": "op2",
+                "text": "Kurang Setuju"
               },
               {
-                "id": "op2",
-                "text": "Tidak Setuju"
+                "id": "op1",
+                "text": "Boleh"
               }
             ],
             "reasons": [
               {
-                "id": "r2",
-                "text": "A. Karena piano tidak bisa menghasilkan suara dan getaran khas dari logam perunggu gamelan"
-              },
-              {
-                "id": "r4",
-                "text": "B. Karena piano lebih mudah dipelajari daripada memainkan bonang"
-              },
-              {
                 "id": "r3",
-                "text": "C. Supaya pemain musik tidak perlu lagi membawa banyak alat yang berat"
+                "text": "A. Karena alat digital tidak membutuhkan ruang penyimpanan besar"
               },
               {
                 "id": "r1",
-                "text": "D. Agar musik tradisional Jawa terdengar lebih seperti musik modern/pop"
+                "text": "B. Agar lebih banyak siswa tetap bisa belajar meskipun alat asli terbatas"
+              },
+              {
+                "id": "r4",
+                "text": "C. Karena suara digital selalu lebih bagus daripada gamelan asli"
+              },
+              {
+                "id": "r2",
+                "text": "D. Karena getaran dan pengalaman memainkan gamelan asli tetap memiliki nilai budaya tersendiri"
               }
             ],
             "correctPairs": [
@@ -8917,33 +8828,33 @@ export const QUIZ_DATA = {
           },
           {
             "type": "opinion_reason",
-            "text": "Haruskah setiap siswa di sekolah belajar menari Jawa meskipun mereka merasa gerakannya terlalu lambat?",
+            "text": "Haruskah sekolah tetap mencoba menghadirkan pengalaman bermain gamelan asli meskipun sudah memiliki rekaman musik?",
             "opinions": [
               {
                 "id": "op1",
-                "text": "Harus Belajar"
+                "text": "Harus"
               },
               {
                 "id": "op2",
-                "text": "Tidak Perlu"
+                "text": "Cukup Rekaman"
               }
             ],
             "reasons": [
               {
                 "id": "r4",
-                "text": "A. Agar jam pelajaran seni di sekolah menjadi lebih lama"
+                "text": "A. Karena rekaman lebih mudah diputar kapan saja"
               },
               {
                 "id": "r2",
-                "text": "B. Karena tarian modern jauh lebih seru dan membuat tubuh lebih berkeringat"
-              },
-              {
-                "id": "r1",
-                "text": "C. Untuk melatih kesabaran, kehalusan budi, dan melestarikan budaya asli"
+                "text": "B. Karena pengalaman mendengar dan merasakan getaran gamelan asli tidak tergantikan"
               },
               {
                 "id": "r3",
-                "text": "D. Supaya semua siswa bisa menjadi penari profesional di masa depan"
+                "text": "C. Supaya siswa tidak perlu belajar memainkan alat musik"
+              },
+              {
+                "id": "r1",
+                "text": "D. Agar siswa mengenal langsung cara memainkan warisan budaya"
               }
             ],
             "correctPairs": [
@@ -8953,7 +8864,7 @@ export const QUIZ_DATA = {
               },
               {
                 "opinionId": "op2",
-                "reasonId": "r2"
+                "reasonId": "r4"
               }
             ],
             "xp": 30
