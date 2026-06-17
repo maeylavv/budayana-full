@@ -24620,8 +24620,9 @@ const getClassSummary = async (grade, classLabel) => {
 		countClassImprovement++;
 	}
 	const averageImprovement = countClassImprovement > 0 ? Math.round(sumClassImprovement / countClassImprovement) : 0;
-	const sevenDaysAgo = /* @__PURE__ */ new Date();
-	sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+	const engagementWindowDays = 14;
+	const activityThreshold = /* @__PURE__ */ new Date();
+	activityThreshold.setDate(activityThreshold.getDate() - engagementWindowDays);
 	const activeStories = await prisma.storyAttempt.findMany({
 		where: {
 			user: {
@@ -24632,7 +24633,7 @@ const getClassSummary = async (grade, classLabel) => {
 					mode: "insensitive"
 				} } : {}
 			},
-			startedAt: { gte: sevenDaysAgo },
+			startedAt: { gte: activityThreshold },
 			OR: [{ totalTimeSeconds: { gt: 0 } }, { totalXpGained: { gt: 0 } }]
 		},
 		select: { userId: true }
@@ -24647,7 +24648,7 @@ const getClassSummary = async (grade, classLabel) => {
 					mode: "insensitive"
 				} } : {}
 			},
-			startedAt: { gte: sevenDaysAgo },
+			startedAt: { gte: activityThreshold },
 			OR: [{ totalTimeSeconds: { gt: 0 } }, { xpGained: { gt: 0 } }]
 		},
 		select: { userId: true }
@@ -24763,7 +24764,7 @@ const getClassSummary = async (grade, classLabel) => {
 					mode: "insensitive"
 				} } : {}
 			},
-			startedAt: { gte: sevenDaysAgo }
+			startedAt: { gte: activityThreshold }
 		},
 		select: {
 			totalTimeSeconds: true,
@@ -24780,7 +24781,7 @@ const getClassSummary = async (grade, classLabel) => {
 					mode: "insensitive"
 				} } : {}
 			},
-			startedAt: { gte: sevenDaysAgo }
+			startedAt: { gte: activityThreshold }
 		},
 		select: {
 			totalTimeSeconds: true,
@@ -25046,7 +25047,8 @@ const getStudentAnalytics = async (studentId) => {
 			topicSlug: true,
 			levelId: true,
 			percentageScore: true,
-			startedAt: true
+			startedAt: true,
+			completed: true
 		},
 		orderBy: { startedAt: "asc" }
 	});
@@ -25115,12 +25117,14 @@ const getStudentAnalytics = async (studentId) => {
 		"Rumah Adat",
 		"Tarian & Alat Musik"
 	];
+	const completedStudentAttempts = studentQuizzes.filter((a) => a.completed === true);
+	const completedClassAttempts = classQuizzes.filter((a) => a.completed === true);
 	const studentTopicCounts = {
 		"Makanan Tradisional": 0,
 		"Rumah Adat": 0,
 		"Tarian & Alat Musik": 0
 	};
-	for (const q of studentQuizzes) {
+	for (const q of completedStudentAttempts) {
 		const topicLabel = normalizeTopicLabel(q.topicSlug);
 		if (topicLabel in studentTopicCounts) studentTopicCounts[topicLabel]++;
 	}
@@ -25129,16 +25133,16 @@ const getStudentAnalytics = async (studentId) => {
 		"Rumah Adat": 0,
 		"Tarian & Alat Musik": 0
 	};
-	for (const q of classQuizzes) {
+	for (const q of completedClassAttempts) {
 		const topicLabel = normalizeTopicLabel(q.topicSlug);
 		if (topicLabel in classTopicCounts) classTopicCounts[topicLabel]++;
 	}
-	const uniqueClassStudents = new Set(classQuizzes.map((q) => q.userId)).size || 1;
+	const uniqueClassStudents = new Set(completedClassAttempts.map((q) => q.userId)).size || 1;
 	const culturalInterest = topics.map((topic) => {
 		const classAvgAttempts = classTopicCounts[topic] / uniqueClassStudents;
 		return {
 			name: topic,
-			"Jumlah Dimainkan": studentTopicCounts[topic],
+			"Siswa Ini": studentTopicCounts[topic],
 			"Rata-rata Kelas": parseFloat(classAvgAttempts.toFixed(1))
 		};
 	});
@@ -25274,7 +25278,7 @@ const StudentAnalyticsResponseSchema = t.Object({
 		})),
 		culturalInterest: t.Array(t.Object({
 			name: t.String(),
-			"Jumlah Dimainkan": t.Number(),
+			"Siswa Ini": t.Number(),
 			"Rata-rata Kelas": t.Number()
 		})),
 		history: t.Array(t.Object({
@@ -25636,6 +25640,8 @@ const ALLOWED_SORT_FIELDS = [
 * Also increments user.totalXp
 */
 async function submitQuizAttempt(userId, data) {
+	if (data.score > data.totalQuestions) throw new Error("Score cannot be greater than total questions");
+	if (data.xpGained < 0) throw new Error("xpGained cannot be negative");
 	const percentageScore = data.totalQuestions > 0 ? data.score / data.totalQuestions * 100 : 0;
 	const resolvedQuizType = data.quizType ?? {
 		1: "Ingatan",
@@ -25649,7 +25655,7 @@ async function submitQuizAttempt(userId, data) {
 		levelId: data.levelId,
 		completed: true
 	} });
-	const finalXpGained = existingAttempt ? 0 : data.xpGained;
+	const finalXpGained = existingAttempt ? 0 : 100;
 	const [attempt] = await prisma.$transaction([prisma.quizAttempt.create({ data: {
 		userId,
 		islandSlug: data.islandSlug,

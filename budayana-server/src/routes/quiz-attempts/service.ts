@@ -41,6 +41,14 @@ export async function submitQuizAttempt(
   userId: string,
   data: SubmitQuizAttemptData
 ) {
+  if (data.score > data.totalQuestions) {
+    throw new Error("Score cannot be greater than total questions")
+  }
+
+  if (data.xpGained < 0) {
+    throw new Error("xpGained cannot be negative")
+  }
+
   const percentageScore =
     data.totalQuestions > 0
       ? (data.score / data.totalQuestions) * 100
@@ -65,7 +73,8 @@ export async function submitQuizAttempt(
     },
   })
 
-  const finalXpGained = existingAttempt ? 0 : data.xpGained
+  const QUIZ_XP = 100
+  const finalXpGained = existingAttempt ? 0 : QUIZ_XP
 
   // Create the attempt and increment XP in a transaction
   const [attempt] = await prisma.$transaction([

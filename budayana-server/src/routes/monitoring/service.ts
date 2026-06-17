@@ -452,8 +452,9 @@ export const getClassSummary = async (grade: number, classLabel?: string) => {
     : 0;
 
   // 3. Active vs Inactive Students
-  const sevenDaysAgo = new Date();
-  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+  const engagementWindowDays = 14;
+  const activityThreshold = new Date();
+  activityThreshold.setDate(activityThreshold.getDate() - engagementWindowDays);
 
   const activeStories = await prisma.storyAttempt.findMany({
     where: {
@@ -469,7 +470,7 @@ export const getClassSummary = async (grade: number, classLabel?: string) => {
             }
           : {})
       },
-      startedAt: { gte: sevenDaysAgo },
+      startedAt: { gte: activityThreshold },
       OR: [
         { totalTimeSeconds: { gt: 0 } },
         { totalXpGained: { gt: 0 } }
@@ -494,7 +495,7 @@ export const getClassSummary = async (grade: number, classLabel?: string) => {
             }
           : {})
       },
-      startedAt: { gte: sevenDaysAgo },
+      startedAt: { gte: activityThreshold },
       OR: [
         { totalTimeSeconds: { gt: 0 } },
         { xpGained: { gt: 0 } }
@@ -660,7 +661,7 @@ export const getClassSummary = async (grade: number, classLabel?: string) => {
             }
           : {})
       },
-      startedAt: { gte: sevenDaysAgo }
+      startedAt: { gte: activityThreshold }
     },
     select: {
       totalTimeSeconds: true,
@@ -682,7 +683,7 @@ export const getClassSummary = async (grade: number, classLabel?: string) => {
             }
           : {})
       },
-      startedAt: { gte: sevenDaysAgo }
+      startedAt: { gte: activityThreshold }
     },
     select: {
       totalTimeSeconds: true,
