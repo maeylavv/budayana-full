@@ -367,3 +367,42 @@
   visibility: visible;
   opacity: 1;
 }
+
+/* Responsive Mobile Layout (max-width: 768px) */
+@media (max-width: 768px) {
+  .quiz-topic-header {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+
+  .quiz-topic-info {
+    flex: 1 !important;
+    min-width: 0 !important;
+  }
+
+  .quiz-topic-info h3 {
+    line-height: 1.25 !important;
+    word-break: keep-all !important;
+    overflow-wrap: break-word !important;
+  }
+
+  .quiz-topic-info p {
+    margin-top: 4px !important;
+  }
+
+  .attempt-badge-wrapper {
+    align-self: flex-start !important;
+    flex-shrink: 0 !important;
+    margin-top: 2px !important;
+  }
+
+  .quiz-attempt-badge {
+    font-size: 11px !important;
+    padding: 4px 10px !important;
+    border-radius: 16px !important;
+    white-space: nowrap !important;
+  }
+}
+
+

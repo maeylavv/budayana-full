@@ -27,6 +27,7 @@ export default function QuizIslandPage() {
   const [infoPopup, setInfoPopup] = useState(null);
   const [replaySelectionPopup, setReplaySelectionPopup] = useState(null);
   const [replayConfirmPopup, setReplayConfirmPopup] = useState(null);
+  const [justCompletedMap, setJustCompletedMap] = useState({});
 
   // Initialize from Local Storage defensively
   // Key is user-specific to prevent progress sharing between accounts.
@@ -71,42 +72,94 @@ export default function QuizIslandPage() {
     fetchAttempts();
   }, [islandSlug, userId]);
 
-  // Sync to local storage continuously on any progress validation shift
+  // Re-load / re-initialize progress state from localStorage when userId or islandSlug changes
   useEffect(() => {
-    localStorage.setItem(`budayana_progress_${userId}_${islandSlug}`, JSON.stringify(progress));
+    // Logged-in: wait until fetch is completed to avoid flickering
+    if (userId !== 'guest' && loadingAttempts) return;
+
+    const defaultProgress = {
+      rumah: { 1: 'unlocked', 2: 'locked', 3: 'locked' },
+      makanan: { 1: 'unlocked', 2: 'locked', 3: 'locked' },
+      tarian: { 1: 'unlocked', 2: 'locked', 3: 'locked' }
+    };
+
+    const saved = localStorage.getItem(`budayana_progress_${userId}_${islandSlug}`);
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed && typeof parsed === 'object') {
+          setProgress(parsed);
+          return;
+        }
+      } catch (err) {
+        console.error('Failed to parse saved progress', err);
+      }
+    }
+
+    setProgress(defaultProgress);
+  }, [userId, islandSlug, loadingAttempts]);
+
+  // Reconcile database attempts with progress state for logged-in users
+  useEffect(() => {
+    if (userId === 'guest' || loadingAttempts || completedAttempts == null) return;
+
+    const derived = {
+      rumah: { 1: 'unlocked', 2: 'locked', 3: 'locked' },
+      makanan: { 1: 'unlocked', 2: 'locked', 3: 'locked' },
+      tarian: { 1: 'unlocked', 2: 'locked', 3: 'locked' }
+    };
+
+    const topics = ['rumah', 'makanan', 'tarian'];
+    topics.forEach(topicId => {
+      const attemptsForTopic = completedAttempts.filter(a => a.completed === true && a.topicSlug === topicId);
+      const completedLevels = new Set(attemptsForTopic.map(a => a.levelId));
+
+      completedLevels.forEach(lvl => {
+        derived[topicId][lvl] = 'completed';
+      });
+
+      for (let lvl = 1; lvl <= 3; lvl++) {
+        if (derived[topicId][lvl] === 'completed') {
+          const nextLvl = lvl + 1;
+          if (nextLvl <= 3 && derived[topicId][nextLvl] !== 'completed') {
+            derived[topicId][nextLvl] = 'unlocked';
+          }
+        }
+      }
+    });
+
+    setProgress(derived);
+    localStorage.setItem(`budayana_progress_${userId}_${islandSlug}`, JSON.stringify(derived));
+  }, [completedAttempts, userId, islandSlug, loadingAttempts]);
+
+  // Sync to local storage for guest session progress
+  useEffect(() => {
+    if (userId === 'guest') {
+      localStorage.setItem(`budayana_progress_${userId}_${islandSlug}`, JSON.stringify(progress));
+    }
   }, [progress, islandSlug, userId]);
 
+  // Read and clean up first-time completion flags on session/island load (only when loading finished)
   useEffect(() => {
-    const completedTopic = searchParams.get('completedTopic');
-    const completedLevel = parseInt(searchParams.get('completedLevel'), 10);
-    if (completedTopic && completedLevel) {
-      setTimeout(() => {
-        let isReplay = false;
-        setProgress(prev => {
-          const topicProgress = prev[completedTopic];
-          if (!topicProgress) return prev;
+    if (loadingAttempts) return;
 
-          // Safeguard: If level is already completed (a replay), do not change progress or unlock next level
-          if (topicProgress[completedLevel] === 'completed') {
-            isReplay = true;
-            return prev;
-          }
+    const map = {};
+    TOPICS.forEach(topic => {
+      const sessionKey = `budayana_just_completed_${userId}_${islandSlug}_${topic.id}`;
+      if (sessionStorage.getItem(sessionKey) === 'true') {
+        map[topic.id] = true;
+        sessionStorage.removeItem(sessionKey);
+      }
+    });
+    setJustCompletedMap(map);
+  }, [userId, islandSlug, loadingAttempts]);
 
-          const newProgress = { ...topicProgress, [completedLevel]: 'completed' };
-          if (completedLevel + 1 <= 3 && newProgress[completedLevel + 1] !== 'completed') {
-             newProgress[completedLevel + 1] = 'unlocked';
-          }
-          return { ...prev, [completedTopic]: newProgress };
-        });
-
-        // Trigger completed attempts reload
-        fetchAttempts();
-
-        // Clear out the query string to prevent looping if reloaded
-        setSearchParams({}, { replace: true });
-      }, 0);
+  // Security cleanup: Immediately clear any completedTopic / completedLevel params from the URL
+  useEffect(() => {
+    if (searchParams.has('completedTopic') || searchParams.has('completedLevel')) {
+      setSearchParams({}, { replace: true });
     }
-  }, [searchParams, setSearchParams, userId, islandSlug, completedAttempts]);
+  }, [searchParams, setSearchParams]);
 
   const handleLevelClick = (topicId, levelId) => {
     playClick();
@@ -208,6 +261,7 @@ export default function QuizIslandPage() {
             completedAttempts={completedAttempts}
             onLevelClick={(levelId) => handleLevelClick(topic.id, levelId)} 
             setReplayConfirmPopup={setReplayConfirmPopup}
+            justCompleted={justCompletedMap[topic.id]}
           />
         ))}
       </div>
@@ -430,7 +484,7 @@ export default function QuizIslandPage() {
 }
 
 // Nested Components
-function TopicCard({ topic, progressMap = {}, completedAttempts = [], onLevelClick, setReplayConfirmPopup }) {
+function TopicCard({ topic, progressMap = {}, completedAttempts = [], onLevelClick, setReplayConfirmPopup, justCompleted }) {
   const completedCount = [1, 2, 3].reduce((acc, lvl) => acc + (progressMap?.[lvl] === 'completed' ? 1 : 0), 0);
 
   // Compute attempts specifically completed for this topic
@@ -454,8 +508,8 @@ function TopicCard({ topic, progressMap = {}, completedAttempts = [], onLevelCli
   }
   const progressLabel = `${completedCount} dari 3 level selesai${progressSuffix}`;
 
-  const showGreenBanner = completedCount === 3 && attemptCount <= 1;
-  const showYellowBanner = completedCount === 3 && attemptCount > 1;
+  const showGreenBanner = completedCount === 3 && attemptCount === 1 && justCompleted;
+  const showYellowBanner = completedCount === 3 && (attemptCount > 1 || (attemptCount === 1 && !justCompleted));
 
   return (
     <div className='quiz-topic-card'>

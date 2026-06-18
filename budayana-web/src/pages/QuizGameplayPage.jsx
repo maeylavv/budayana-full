@@ -44,6 +44,8 @@ export default function QuizGameplayPage() {
   const [showHeartPopup, setShowHeartPopup] = useState(false);
   const [wrongAttempts, setWrongAttempts] = useState(() => getSavedValue('wrongAttempts', 0));
   const [attemptResult, setAttemptResult] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
   // Track if attempt has been submitted to prevent double-submit on re-render
   const attemptSubmittedRef = useRef(false);
   
@@ -162,6 +164,81 @@ export default function QuizGameplayPage() {
     }
   };
 
+  const updateProgressLocally = () => {
+    try {
+      const progressKey = `budayana_progress_${userId}_${islandSlug}`;
+      const localSaved = localStorage.getItem(progressKey);
+      let localProgress = {
+        rumah: { 1: 'unlocked', 2: 'locked', 3: 'locked' },
+        makanan: { 1: 'unlocked', 2: 'locked', 3: 'locked' },
+        tarian: { 1: 'unlocked', 2: 'locked', 3: 'locked' }
+      };
+      if (localSaved) {
+        const parsed = JSON.parse(localSaved);
+        if (parsed && typeof parsed === 'object') {
+          localProgress = parsed;
+        }
+      }
+      const topicProgress = localProgress[topicId] || { 1: 'unlocked', 2: 'locked', 3: 'locked' };
+      
+      const previousCompletedCount = [1, 2, 3].reduce((acc, lvl) => acc + (topicProgress[lvl] === 'completed' ? 1 : 0), 0);
+
+      // Update only if not already completed (to avoid messing up replay mode)
+      if (topicProgress[levelId] !== 'completed') {
+        topicProgress[levelId] = 'completed';
+        const nextLvl = parseInt(levelId, 10) + 1;
+        if (nextLvl <= 3 && topicProgress[nextLvl] !== 'completed') {
+          topicProgress[nextLvl] = 'unlocked';
+        }
+        localProgress[topicId] = topicProgress;
+        localStorage.setItem(progressKey, JSON.stringify(localProgress));
+
+        const afterUpdateCount = [1, 2, 3].reduce((acc, lvl) => acc + (topicProgress[lvl] === 'completed' ? 1 : 0), 0);
+        if (afterUpdateCount === 3 && previousCompletedCount < 3) {
+          sessionStorage.setItem(`budayana_just_completed_${userId}_${islandSlug}_${topicId}`, 'true');
+        }
+      }
+    } catch (e) {
+      console.error('Failed to update progress locally', e);
+    }
+  };
+
+  const submitQuizResult = (now) => {
+    setIsSubmitting(true);
+    setSubmitError(null);
+    const durationSeconds = Math.floor((now - startTime) / 1000);
+    const finalScore = Math.max(0, questions.length - wrongAttempts);
+    const finalXP = questions.reduce((acc, q) => acc + q.xp, 0);
+
+    quizAttemptsApi
+      .submit({
+        islandSlug,
+        topicSlug: topicId,
+        levelId: parseInt(levelId, 10),
+        totalTimeSeconds: durationSeconds,
+        xpGained: finalXP,
+        score: finalScore,
+        totalQuestions: questions.length,
+        wrongAttempts,
+        heartsLeft: hearts,
+      })
+      .then((res) => {
+        setAttemptResult(res);
+        updateProgressLocally();
+        setIsSubmitting(false);
+        setGameState('success');
+      })
+      .catch((err) => {
+        console.error('[Quiz] Failed to submit attempt:', err);
+        setIsSubmitting(false);
+        setSubmitError(err.message || 'Koneksi terputus atau server bermasalah');
+      });
+  };
+
+  const retrySubmit = () => {
+    submitQuizResult(endTime || Date.now());
+  };
+
   const handleSelanjutnya = () => {
     playClick();
     if (safeQuestionIndex < questions.length - 1) {
@@ -169,32 +246,12 @@ export default function QuizGameplayPage() {
     } else {
       const now = Date.now();
       setEndTime(now);
-      setGameState('success');
-      // Submit attempt to API (only once per session)
-      if (!attemptSubmittedRef.current) {
-        attemptSubmittedRef.current = true;
-        const durationSeconds = Math.floor((now - startTime) / 1000);
-        const finalScore = Math.max(0, questions.length - wrongAttempts);
-        const finalXP = questions.reduce((acc, q) => acc + q.xp, 0);
-        quizAttemptsApi
-          .submit({
-            islandSlug,
-            topicSlug: topicId,
-            levelId: parseInt(levelId, 10),
-            totalTimeSeconds: durationSeconds,
-            xpGained: finalXP,
-            score: finalScore,
-            totalQuestions: questions.length,
-            wrongAttempts,
-            heartsLeft: hearts,
-          })
-          .then((res) => {
-            setAttemptResult(res);
-          })
-          .catch((err) => {
-            // Non-blocking: log error but don't interrupt user flow
-            console.error('[Quiz] Failed to submit attempt:', err);
-          });
+      
+      if (userId === 'guest') {
+        updateProgressLocally();
+        setGameState('success');
+      } else {
+        submitQuizResult(now);
       }
     }
   };
@@ -268,6 +325,66 @@ export default function QuizGameplayPage() {
       />
 
       {/* Views */}
+      {isSubmitting && (
+        <div className='popup-overlay' style={{ zIndex: 10000 }}>
+          <div className='quiz-detail-page-loading' style={{
+            backgroundColor: 'rgba(253, 246, 236, 0.95)',
+            padding: '40px',
+            borderRadius: '20px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            fontFamily: "'Fredoka', sans-serif",
+            color: '#5C3A1E'
+          }}>
+            <div style={{ fontSize: '3rem', marginBottom: '16px', animation: 'bounce 1.2s infinite' }}>🚀</div>
+            <div style={{ fontSize: '1.4rem', fontWeight: 600, fontFamily: "'Fredoka One', 'Fredoka', sans-serif" }}>Mengirim hasil kuis...</div>
+            <p style={{ marginTop: '10px', fontSize: '0.95rem', color: '#8F5A07' }}>Mohon jangan tutup halaman ini ya ✨</p>
+          </div>
+        </div>
+      )}
+
+      {submitError && (
+        <div className='popup-overlay' style={{ zIndex: 10000 }}>
+          <div className='quit-feedback-card' style={{ border: '2px solid #E27C7C', padding: '30px', maxWidth: '400px' }}>
+            <span style={{ fontSize: '4rem', marginBottom: '15px', display: 'block', textAlign: 'center' }}>⚠️</span>
+            <p className='quit-title' style={{ color: '#C93B3B', fontFamily: "'Fredoka One', 'Fredoka', sans-serif", fontSize: '1.6rem', marginBottom: '10px' }}>
+              Gagal Mengirim Hasil
+            </p>
+            <p style={{ fontFamily: "'Fredoka', sans-serif", fontSize: '1.05rem', fontWeight: '500', color: '#7B4F2E', margin: '0 0 25px 0', padding: '0 10px', lineHeight: '1.4' }}>
+              Koneksi internet terputus atau server sedang bermasalah. Jangan khawatir, progres bermainmu tetap aman! Silakan coba kirim lagi atau simpan draf untuk dikirim nanti.
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%' }}>
+              <button 
+                className='btn-continue-pill' 
+                onClick={() => { playClick(); retrySubmit(); }}
+                style={{ backgroundColor: '#ffaa00', color: '#fff', border: 'none', boxShadow: '0 4px 0px #d99100', width: '100%', padding: '12px', borderRadius: '30px', fontSize: '1.2rem', fontFamily: "'Fredoka', sans-serif", fontWeight: '700' }}
+              >
+                Coba Kirim Lagi
+              </button>
+              <button
+                onClick={() => {
+                  playClick();
+                  navigate(`/islands/${islandSlug}/quiz`);
+                }}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#955C2E',
+                  marginTop: '5px',
+                  fontFamily: "'Fredoka', sans-serif",
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  textDecoration: 'underline'
+                }}
+              >
+                Simpan Draf & Keluar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {gameState === 'literacy' && (
         <div className='gameplay-literacy-view'>
           <div className='literacy-image-container'>
@@ -430,7 +547,7 @@ export default function QuizGameplayPage() {
             <div className='success-feedback-card'>
               {isReplayMode ? (
                 <>
-                  <span style={{ fontSize: '4.5rem', marginBottom: '15px', display: 'block', textAlign: 'center' }}>🎉</span>
+                  <span style={{ fontSize: '4.5rem', transform: 'translateY(14px)', display: 'block', textAlign: 'center' }}>🎉</span>
                   <h1 className='success-title'>Keren banget!</h1>
                   <p className='success-subtitle'>
                     XP kamu sudah terkumpul sebelumnya 🌟<br />Tapi semangat kamu main lagi itu yang paling penting!
@@ -481,7 +598,7 @@ export default function QuizGameplayPage() {
                 <button className='btn-pill-primary' onClick={() => {
                   playClick();
                   localStorage.removeItem(STORAGE_KEY);
-                  navigate(`/islands/${islandSlug}/quiz?completedTopic=${topicId}&completedLevel=${levelId}`);
+                  navigate(`/islands/${islandSlug}/quiz`);
                 }}>
                   ← Kembali ke Topik
                 </button>
