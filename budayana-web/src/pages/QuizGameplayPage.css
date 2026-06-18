@@ -649,7 +649,7 @@
   width: 90%;
   position: relative;
   display: flex;
-  margin-top: 120px;
+  margin-top: 0px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -830,8 +830,8 @@
 
   /* Success Card Responsive adjustments */
   .success-feedback-card {
-    padding: 30px 15px 20px 15px;
-    margin-top: 80px;
+    padding: 20px 15px 20px 15px;
+    margin-top: 20px;
     width: 95%;
   }
 
@@ -842,13 +842,13 @@
 
   .success-title {
     font-size: 1.6rem;
-    margin-top: 20px;
+    margin-top: 0px;
     margin-bottom: 10px;
   }
 
   .success-subtitle {
     font-size: 0.9rem;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
 
   .success-stats {
