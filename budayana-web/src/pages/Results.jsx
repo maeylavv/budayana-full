@@ -5,12 +5,14 @@ import { useResults } from "../hooks/useResults"
 import { useQuizResults } from "../hooks/useQuizResults"
 import { islands } from "../data/islands"
 import { islandsApi } from "../lib/api"
+import { getJourneyContent } from "../utils/xpJourney"
 import "./Results.css"
 
 
 export default function Results() {
   const { stats, attempts, isLoading } = useResults()
   const { quizStats, attempts: quizAttempts, isLoading: quizLoading } = useQuizResults()
+  const journey = getJourneyContent(quizStats?.totalXpFromQuiz || 0)
   const [storyIslandMap, setStoryIslandMap] = useState({})
   const [selectedEssay, setSelectedEssay] = useState(null)
   const [activeTab, setActiveTab] = useState("ceritaRakyat")
@@ -322,10 +324,13 @@ export default function Results() {
                 <div className='stat-label'>Total XP Quiz</div>
               </div>
               <div className='stat-card pink' style={{ border: 'none', borderRadius: '24px', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                <div className='stat-value' style={{ fontSize: '2rem' }}>
-                  {quizStats?.currentBadge && quizStats?.currentBadge !== "-" ? `🏅 ${quizStats.currentBadge}` : "-"}
+                <div className='stat-value' style={{ fontSize: '2.5rem', display: 'block', marginBottom: '4px' }}>
+                  {journey.emoji}
                 </div>
-                <div className='stat-label' style={{ fontSize: '1.2rem' }}>Peringkat Petualang</div>
+                <div className='stat-value' style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
+                  {journey.title}
+                </div>
+                <div className='stat-label' style={{ fontSize: '1.1rem', marginTop: '6px' }}>Peringkat Petualang</div>
               </div>
               <div className='stat-card orange'>
                 <div className='stat-value'>{quizStats?.averageScore ?? 0}%</div>
