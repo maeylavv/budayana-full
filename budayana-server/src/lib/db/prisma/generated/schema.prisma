@@ -74,6 +74,7 @@ model User {
   classLabel      String?
   guardianEmail   String?
   totalXp         Int?      @default(0)
+  gender          String?
   sessions        Session[]
   accounts        Account[]
 

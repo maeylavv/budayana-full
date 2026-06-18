@@ -55,6 +55,13 @@ export const auth = betterAuth({
         fieldName: "guardianEmail",
       },
 
+      gender: {
+        type: "string",
+        input: true,
+        required: false,
+        fieldName: "gender",
+      },
+
       totalXp: {
         type: "number",
         input: false,

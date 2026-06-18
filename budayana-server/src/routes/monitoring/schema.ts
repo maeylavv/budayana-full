@@ -7,6 +7,7 @@ export const UpdateStudentSchema = t.Partial(
     username: t.String(),
     guardianEmail: t.String(),
     classLabel: t.String(),
+    gender: t.String(),
   })
 )
 
@@ -23,6 +24,7 @@ export const StudentResponseSchema = t.Object({
   totalXp: t.Nullable(t.Number()),
   learningImprovement: t.Optional(t.Nullable(t.Number())),
   averageLiteracyScore: t.Optional(t.Nullable(t.Number())),
+  gender: t.Nullable(t.String()),
 })
 
 export const StudentListResponseSchema = t.Array(StudentResponseSchema)

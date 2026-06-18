@@ -6007,6 +6007,7 @@ export namespace Prisma {
     classLabel: string | null
     guardianEmail: string | null
     totalXp: number | null
+    gender: string | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -6024,6 +6025,7 @@ export namespace Prisma {
     classLabel: string | null
     guardianEmail: string | null
     totalXp: number | null
+    gender: string | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -6041,6 +6043,7 @@ export namespace Prisma {
     classLabel: number
     guardianEmail: number
     totalXp: number
+    gender: number
     _all: number
   }
 
@@ -6070,6 +6073,7 @@ export namespace Prisma {
     classLabel?: true
     guardianEmail?: true
     totalXp?: true
+    gender?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -6087,6 +6091,7 @@ export namespace Prisma {
     classLabel?: true
     guardianEmail?: true
     totalXp?: true
+    gender?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -6104,6 +6109,7 @@ export namespace Prisma {
     classLabel?: true
     guardianEmail?: true
     totalXp?: true
+    gender?: true
     _all?: true
   }
 
@@ -6208,6 +6214,7 @@ export namespace Prisma {
     classLabel: string | null
     guardianEmail: string | null
     totalXp: number | null
+    gender: string | null
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
     _sum: UserSumAggregateOutputType | null
@@ -6244,6 +6251,7 @@ export namespace Prisma {
     classLabel?: boolean
     guardianEmail?: boolean
     totalXp?: boolean
+    gender?: boolean
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     accounts?: boolean | User$accountsArgs<ExtArgs>
     userProgress?: boolean | User$userProgressArgs<ExtArgs>
@@ -6267,6 +6275,7 @@ export namespace Prisma {
     classLabel?: boolean
     guardianEmail?: boolean
     totalXp?: boolean
+    gender?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -6284,6 +6293,7 @@ export namespace Prisma {
     classLabel?: boolean
     guardianEmail?: boolean
     totalXp?: boolean
+    gender?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -6301,9 +6311,10 @@ export namespace Prisma {
     classLabel?: boolean
     guardianEmail?: boolean
     totalXp?: boolean
+    gender?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "role" | "name" | "email" | "emailVerified" | "image" | "createdAt" | "updatedAt" | "username" | "displayUsername" | "grade" | "classLabel" | "guardianEmail" | "totalXp", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "role" | "name" | "email" | "emailVerified" | "image" | "createdAt" | "updatedAt" | "username" | "displayUsername" | "grade" | "classLabel" | "guardianEmail" | "totalXp" | "gender", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     accounts?: boolean | User$accountsArgs<ExtArgs>
@@ -6339,6 +6350,7 @@ export namespace Prisma {
       classLabel: string | null
       guardianEmail: string | null
       totalXp: number | null
+      gender: string | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -6781,6 +6793,7 @@ export namespace Prisma {
     readonly classLabel: FieldRef<"User", 'String'>
     readonly guardianEmail: FieldRef<"User", 'String'>
     readonly totalXp: FieldRef<"User", 'Int'>
+    readonly gender: FieldRef<"User", 'String'>
   }
     
 
@@ -19893,7 +19906,8 @@ export namespace Prisma {
     grade: 'grade',
     classLabel: 'classLabel',
     guardianEmail: 'guardianEmail',
-    totalXp: 'totalXp'
+    totalXp: 'totalXp',
+    gender: 'gender'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -20512,6 +20526,7 @@ export namespace Prisma {
     classLabel?: StringNullableFilter<"User"> | string | null
     guardianEmail?: StringNullableFilter<"User"> | string | null
     totalXp?: IntNullableFilter<"User"> | number | null
+    gender?: StringNullableFilter<"User"> | string | null
     sessions?: SessionListRelationFilter
     accounts?: AccountListRelationFilter
     userProgress?: UserProgressListRelationFilter
@@ -20534,6 +20549,7 @@ export namespace Prisma {
     classLabel?: SortOrderInput | SortOrder
     guardianEmail?: SortOrderInput | SortOrder
     totalXp?: SortOrderInput | SortOrder
+    gender?: SortOrderInput | SortOrder
     sessions?: SessionOrderByRelationAggregateInput
     accounts?: AccountOrderByRelationAggregateInput
     userProgress?: UserProgressOrderByRelationAggregateInput
@@ -20559,6 +20575,7 @@ export namespace Prisma {
     classLabel?: StringNullableFilter<"User"> | string | null
     guardianEmail?: StringNullableFilter<"User"> | string | null
     totalXp?: IntNullableFilter<"User"> | number | null
+    gender?: StringNullableFilter<"User"> | string | null
     sessions?: SessionListRelationFilter
     accounts?: AccountListRelationFilter
     userProgress?: UserProgressListRelationFilter
@@ -20581,6 +20598,7 @@ export namespace Prisma {
     classLabel?: SortOrderInput | SortOrder
     guardianEmail?: SortOrderInput | SortOrder
     totalXp?: SortOrderInput | SortOrder
+    gender?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -20606,6 +20624,7 @@ export namespace Prisma {
     classLabel?: StringNullableWithAggregatesFilter<"User"> | string | null
     guardianEmail?: StringNullableWithAggregatesFilter<"User"> | string | null
     totalXp?: IntNullableWithAggregatesFilter<"User"> | number | null
+    gender?: StringNullableWithAggregatesFilter<"User"> | string | null
   }
 
   export type SessionWhereInput = {
@@ -21665,6 +21684,7 @@ export namespace Prisma {
     classLabel?: string | null
     guardianEmail?: string | null
     totalXp?: number | null
+    gender?: string | null
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     userProgress?: UserProgressCreateNestedManyWithoutUserInput
@@ -21687,6 +21707,7 @@ export namespace Prisma {
     classLabel?: string | null
     guardianEmail?: string | null
     totalXp?: number | null
+    gender?: string | null
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     userProgress?: UserProgressUncheckedCreateNestedManyWithoutUserInput
@@ -21709,6 +21730,7 @@ export namespace Prisma {
     classLabel?: NullableStringFieldUpdateOperationsInput | string | null
     guardianEmail?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: NullableIntFieldUpdateOperationsInput | number | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     userProgress?: UserProgressUpdateManyWithoutUserNestedInput
@@ -21731,6 +21753,7 @@ export namespace Prisma {
     classLabel?: NullableStringFieldUpdateOperationsInput | string | null
     guardianEmail?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: NullableIntFieldUpdateOperationsInput | number | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     userProgress?: UserProgressUncheckedUpdateManyWithoutUserNestedInput
@@ -21753,6 +21776,7 @@ export namespace Prisma {
     classLabel?: string | null
     guardianEmail?: string | null
     totalXp?: number | null
+    gender?: string | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -21770,6 +21794,7 @@ export namespace Prisma {
     classLabel?: NullableStringFieldUpdateOperationsInput | string | null
     guardianEmail?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: NullableIntFieldUpdateOperationsInput | number | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -21787,6 +21812,7 @@ export namespace Prisma {
     classLabel?: NullableStringFieldUpdateOperationsInput | string | null
     guardianEmail?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: NullableIntFieldUpdateOperationsInput | number | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type SessionCreateInput = {
@@ -23129,6 +23155,7 @@ export namespace Prisma {
     classLabel?: SortOrder
     guardianEmail?: SortOrder
     totalXp?: SortOrder
+    gender?: SortOrder
   }
 
   export type UserAvgOrderByAggregateInput = {
@@ -23151,6 +23178,7 @@ export namespace Prisma {
     classLabel?: SortOrder
     guardianEmail?: SortOrder
     totalXp?: SortOrder
+    gender?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -23168,6 +23196,7 @@ export namespace Prisma {
     classLabel?: SortOrder
     guardianEmail?: SortOrder
     totalXp?: SortOrder
+    gender?: SortOrder
   }
 
   export type UserSumOrderByAggregateInput = {
@@ -25166,6 +25195,7 @@ export namespace Prisma {
     classLabel?: string | null
     guardianEmail?: string | null
     totalXp?: number | null
+    gender?: string | null
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     userProgress?: UserProgressCreateNestedManyWithoutUserInput
@@ -25187,6 +25217,7 @@ export namespace Prisma {
     classLabel?: string | null
     guardianEmail?: string | null
     totalXp?: number | null
+    gender?: string | null
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     userProgress?: UserProgressUncheckedCreateNestedManyWithoutUserInput
@@ -25311,6 +25342,7 @@ export namespace Prisma {
     classLabel?: NullableStringFieldUpdateOperationsInput | string | null
     guardianEmail?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: NullableIntFieldUpdateOperationsInput | number | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     userProgress?: UserProgressUpdateManyWithoutUserNestedInput
@@ -25332,6 +25364,7 @@ export namespace Prisma {
     classLabel?: NullableStringFieldUpdateOperationsInput | string | null
     guardianEmail?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: NullableIntFieldUpdateOperationsInput | number | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     userProgress?: UserProgressUncheckedUpdateManyWithoutUserNestedInput
@@ -26022,6 +26055,7 @@ export namespace Prisma {
     classLabel?: string | null
     guardianEmail?: string | null
     totalXp?: number | null
+    gender?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     userProgress?: UserProgressCreateNestedManyWithoutUserInput
     storyAttempts?: StoryAttemptCreateNestedManyWithoutUserInput
@@ -26043,6 +26077,7 @@ export namespace Prisma {
     classLabel?: string | null
     guardianEmail?: string | null
     totalXp?: number | null
+    gender?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     userProgress?: UserProgressUncheckedCreateNestedManyWithoutUserInput
     storyAttempts?: StoryAttemptUncheckedCreateNestedManyWithoutUserInput
@@ -26080,6 +26115,7 @@ export namespace Prisma {
     classLabel?: NullableStringFieldUpdateOperationsInput | string | null
     guardianEmail?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: NullableIntFieldUpdateOperationsInput | number | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     userProgress?: UserProgressUpdateManyWithoutUserNestedInput
     storyAttempts?: StoryAttemptUpdateManyWithoutUserNestedInput
@@ -26101,6 +26137,7 @@ export namespace Prisma {
     classLabel?: NullableStringFieldUpdateOperationsInput | string | null
     guardianEmail?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: NullableIntFieldUpdateOperationsInput | number | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     userProgress?: UserProgressUncheckedUpdateManyWithoutUserNestedInput
     storyAttempts?: StoryAttemptUncheckedUpdateManyWithoutUserNestedInput
@@ -26122,6 +26159,7 @@ export namespace Prisma {
     classLabel?: string | null
     guardianEmail?: string | null
     totalXp?: number | null
+    gender?: string | null
     sessions?: SessionCreateNestedManyWithoutUserInput
     userProgress?: UserProgressCreateNestedManyWithoutUserInput
     storyAttempts?: StoryAttemptCreateNestedManyWithoutUserInput
@@ -26143,6 +26181,7 @@ export namespace Prisma {
     classLabel?: string | null
     guardianEmail?: string | null
     totalXp?: number | null
+    gender?: string | null
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     userProgress?: UserProgressUncheckedCreateNestedManyWithoutUserInput
     storyAttempts?: StoryAttemptUncheckedCreateNestedManyWithoutUserInput
@@ -26180,6 +26219,7 @@ export namespace Prisma {
     classLabel?: NullableStringFieldUpdateOperationsInput | string | null
     guardianEmail?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: NullableIntFieldUpdateOperationsInput | number | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     sessions?: SessionUpdateManyWithoutUserNestedInput
     userProgress?: UserProgressUpdateManyWithoutUserNestedInput
     storyAttempts?: StoryAttemptUpdateManyWithoutUserNestedInput
@@ -26201,6 +26241,7 @@ export namespace Prisma {
     classLabel?: NullableStringFieldUpdateOperationsInput | string | null
     guardianEmail?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: NullableIntFieldUpdateOperationsInput | number | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     userProgress?: UserProgressUncheckedUpdateManyWithoutUserNestedInput
     storyAttempts?: StoryAttemptUncheckedUpdateManyWithoutUserNestedInput
@@ -26332,6 +26373,7 @@ export namespace Prisma {
     classLabel?: string | null
     guardianEmail?: string | null
     totalXp?: number | null
+    gender?: string | null
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     storyAttempts?: StoryAttemptCreateNestedManyWithoutUserInput
@@ -26353,6 +26395,7 @@ export namespace Prisma {
     classLabel?: string | null
     guardianEmail?: string | null
     totalXp?: number | null
+    gender?: string | null
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     storyAttempts?: StoryAttemptUncheckedCreateNestedManyWithoutUserInput
@@ -26413,6 +26456,7 @@ export namespace Prisma {
     classLabel?: NullableStringFieldUpdateOperationsInput | string | null
     guardianEmail?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: NullableIntFieldUpdateOperationsInput | number | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     storyAttempts?: StoryAttemptUpdateManyWithoutUserNestedInput
@@ -26434,6 +26478,7 @@ export namespace Prisma {
     classLabel?: NullableStringFieldUpdateOperationsInput | string | null
     guardianEmail?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: NullableIntFieldUpdateOperationsInput | number | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     storyAttempts?: StoryAttemptUncheckedUpdateManyWithoutUserNestedInput
@@ -26769,6 +26814,7 @@ export namespace Prisma {
     classLabel?: string | null
     guardianEmail?: string | null
     totalXp?: number | null
+    gender?: string | null
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     userProgress?: UserProgressCreateNestedManyWithoutUserInput
@@ -26790,6 +26836,7 @@ export namespace Prisma {
     classLabel?: string | null
     guardianEmail?: string | null
     totalXp?: number | null
+    gender?: string | null
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     userProgress?: UserProgressUncheckedCreateNestedManyWithoutUserInput
@@ -26827,6 +26874,7 @@ export namespace Prisma {
     classLabel?: NullableStringFieldUpdateOperationsInput | string | null
     guardianEmail?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: NullableIntFieldUpdateOperationsInput | number | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     userProgress?: UserProgressUpdateManyWithoutUserNestedInput
@@ -26848,6 +26896,7 @@ export namespace Prisma {
     classLabel?: NullableStringFieldUpdateOperationsInput | string | null
     guardianEmail?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: NullableIntFieldUpdateOperationsInput | number | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     userProgress?: UserProgressUncheckedUpdateManyWithoutUserNestedInput
