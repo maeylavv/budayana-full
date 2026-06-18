@@ -44,7 +44,7 @@ export default function ProtectedRoute({ allowedRoles = ["STUDENT"] }) {
     )
   }
 
-  if (isPending) {
+  if (isPending && !session) {
     return (
       <div className='auth-loading'>
         <span>Loading...</span>
@@ -91,7 +91,7 @@ export function TeacherProtectedRoute() {
   const location = useLocation()
   const hasLocalToken = !!localStorage.getItem("ba_token")
 
-  if (isPending) {
+  if (isPending && !session) {
     return (
       <div className='auth-loading'>
         <span>Loading...</span>
@@ -125,7 +125,7 @@ export function ParentProtectedRoute() {
   const location = useLocation()
   const hasLocalToken = !!localStorage.getItem("ba_token")
 
-  if (isPending) {
+  if (isPending && !session) {
     return (
       <div className='auth-loading'>
         <span>Loading...</span>

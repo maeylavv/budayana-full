@@ -459,6 +459,8 @@ function IslandPopup({ activeIsland, onClose, isMobile }) {
 
   const [lockedStageWarning, setLockedStageWarning] = useState(null)
   const [completedStageWarning, setCompletedStageWarning] = useState(false)
+  const [showResumePrompt, setShowResumePrompt] = useState(false)
+  const [hasPrompted, setHasPrompted] = useState(false)
 
   const handleStageClick = (stage, status, index) => {
     playClick()
@@ -561,6 +563,37 @@ function IslandPopup({ activeIsland, onClose, isMobile }) {
       (a) => (a.storyId === mainStoryId || a.story?.id === mainStoryId) && !a.finishedAt
     )
   }, [attempts, mainStoryId])
+
+  useEffect(() => {
+    if (activeAttempt && !hasPrompted) {
+      setShowResumePrompt(true)
+      setHasPrompted(true)
+    }
+  }, [activeAttempt, hasPrompted])
+
+  const handleResumeActiveStage = () => {
+    if (!activeAttempt || !stages || stages.length === 0) return
+
+    let activeStageIndex = 0
+    const hasFinishedPreTest = activeAttempt.preTestScore !== null
+    const hasFinishedStory = activeAttempt.stageAttempts?.some((s) => s.stageType === "STORY")
+
+    if (hasFinishedPreTest) {
+      if (hasFinishedStory) {
+        activeStageIndex = 2 // Post-Test
+      } else {
+        activeStageIndex = 1 // Story/Game
+      }
+    } else {
+      activeStageIndex = 0 // Pre-Test
+    }
+
+    const stage = stages[activeStageIndex]
+    if (stage) {
+      handleStageClick(stage, activeStageIndex === 1 ? "resume" : "unlocked", activeStageIndex)
+    }
+    setShowResumePrompt(false)
+  }
 
   const latestFinishedAttempt = useMemo(() => {
     if (!mainStoryId || !attempts?.items) return null
@@ -746,6 +779,35 @@ function IslandPopup({ activeIsland, onClose, isMobile }) {
                     </p>
                     <button className='ok-btn' onClick={() => setCompletedStageWarning(false)}>
                       Oke!
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* RESUME PROGRESS POPUP */}
+            {showResumePrompt && (
+              <div className='popup-overlay' style={{ zIndex: 1000 }}>
+                <div className='popup popup-locked' style={{ position: 'relative', border: '3px solid #955c2e', backgroundColor: '#fff4d6', padding: '40px', borderRadius: '32px', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '420px', maxWidth: '90vw' }}>
+                  <button className='popup-close' onClick={() => setShowResumePrompt(false)} style={{ position: 'absolute', top: '15px', right: '15px', border: 'none', background: 'transparent' }}>
+                    <img 
+                      src='/assets/budayana/islands/close button.png' 
+                      alt='close' 
+                      style={{ width: '40px', height: '40px' }} 
+                    />
+                  </button>
+                  <div className='lockedpopup' style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <img
+                      src='/assets/budayana/islands/bocah.png'
+                      className='notif-kid'
+                      alt='Explorer'
+                      style={{ width: '130px', height: 'auto', marginBottom: '10px' }}
+                    />
+                    <p className='locked-msg' style={{ color: '#5c3a1e', textAlign: 'center', fontSize: '18px', margin: '15px 0', lineHeight: '1.5', fontFamily: "'Fredoka One', sans-serif" }}>
+                      Data permainan telah disimpan,<br />apakah kamu ingin melanjutkan?
+                    </p>
+                    <button className='ok-btn cursor-pointer' onClick={handleResumeActiveStage} style={{ backgroundColor: '#8b5cf6', borderColor: '#7c3aed' }}>
+                      Lanjutkan!
                     </button>
                   </div>
                 </div>
