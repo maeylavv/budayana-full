@@ -29,6 +29,7 @@ export default function SignIn() {
   const [classLabel, setClassLabel] = useState("")
   const [username, setUsername] = useState("")
   const [guardianEmail, setGuardianEmail] = useState("")
+  const [gender, setGender] = useState("")
   const [fieldErrors, setFieldErrors] = useState({})
 
   // Progress initialization hook
@@ -44,6 +45,7 @@ export default function SignIn() {
         grade: formData.grade,
         classLabel: formData.classLabel,
         guardianEmail: formData.guardianEmail,
+        gender: formData.gender,
       })
 
       if (error) {
@@ -107,6 +109,13 @@ export default function SignIn() {
       return;
     }
 
+    if (!gender) {
+      setPopupType("error")
+      setPopupMessage("Jenis kelamin wajib dipilih.")
+      setPopupOpen(true)
+      return;
+    }
+
     let finalEmail = email.trim();
     if (!finalEmail) {
       // Auto-generate dummy email if left blank (for SD students without email)
@@ -121,6 +130,7 @@ export default function SignIn() {
       username: username,
       password: passwordValue,
       guardianEmail: guardianEmail.trim(),
+      gender: gender,
     })
   }
 
@@ -169,27 +179,6 @@ export default function SignIn() {
           </div>
 
           <div className='field'>
-            <label htmlFor='email'>Email <span style={{ fontWeight: 'normal', fontSize: '0.9em', opacity: 0.8 }}>(Opsional)</span></label>
-            <input
-              type='email'
-              id='email'
-              placeholder='Email Kamu'
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value)
-                if (fieldErrors.email) {
-                  setFieldErrors(prev => ({ ...prev, email: "" }))
-                }
-              }}
-            />
-            {fieldErrors.email && (
-              <div style={{ marginTop: '4px' }}>
-                <span className="inline-error">⚠️ {fieldErrors.email}</span>
-              </div>
-            )}
-          </div>
-
-          <div className='field'>
             <label htmlFor='kelas'>Kelas</label>
             <input
               type='number'
@@ -211,6 +200,54 @@ export default function SignIn() {
               value={classLabel}
               onChange={(e) => setClassLabel(e.target.value)}
             />
+          </div>
+
+          <div className='field'>
+            <label htmlFor='gender'>Jenis Kelamin</label>
+            <select
+              id='gender'
+              required
+              value={gender}
+              onChange={(e) => setGender(e.target.value)}
+              style={{
+                height: '50px',
+                padding: '4px 16px',
+                borderRadius: '10px',
+                fontFamily: "'Fredoka One', sans-serif",
+                color: '#000000',
+                fontWeight: '650',
+                fontSize: '1.2rem',
+                border: '1px solid #ccc',
+                width: '100%',
+                boxSizing: 'border-box',
+                backgroundColor: '#ffffff'
+              }}
+            >
+              <option value="" disabled>Pilih Jenis Kelamin</option>
+              <option value="Laki-laki">Laki-laki</option>
+              <option value="Perempuan">Perempuan</option>
+            </select>
+          </div>
+
+          <div className='field'>
+            <label htmlFor='email'>Email <span style={{ fontWeight: 'normal', fontSize: '0.9em', opacity: 0.8 }}>(Opsional)</span></label>
+            <input
+              type='email'
+              id='email'
+              placeholder='Email Kamu'
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value)
+                if (fieldErrors.email) {
+                  setFieldErrors(prev => ({ ...prev, email: "" }))
+                }
+              }}
+            />
+            {fieldErrors.email && (
+              <div style={{ marginTop: '4px' }}>
+                <span className="inline-error">⚠️ {fieldErrors.email}</span>
+              </div>
+            )}
           </div>
 
           <div className='field'>

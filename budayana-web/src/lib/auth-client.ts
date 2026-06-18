@@ -24,6 +24,9 @@ export const authClient = createAuthClient({
       grade: {
         type: "number",
       },
+      gender: {
+        type: "string",
+      },
     },
   },
 })
