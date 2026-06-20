@@ -6,6 +6,8 @@ import { useQuizResults } from "../hooks/useQuizResults"
 import { islands } from "../data/islands"
 import { islandsApi } from "../lib/api"
 import { getJourneyContent } from "../utils/xpJourney"
+import InfoIcon from "../components/InfoIcon"
+import { PARENT_INFO } from "../components/infoContent/parentInfoContent"
 import "./Results.css"
 
 
@@ -139,15 +141,15 @@ export default function Results() {
           <section>
             <h2 className='results-section-title'>Statistik</h2>
             <div className='stats-grid'>
-              <div className='stat-card green'>
+              <div className='stat-card green' style={{ borderRadius: '24px' }}>
                 <div className='stat-value'>{stats?.storiesCompleted || 0}</div>
                 <div className='stat-label'>Cerita Rakyat Selesai</div>
               </div>
-              <div className='stat-card purple'>
+              <div className='stat-card purple' style={{ borderRadius: '24px' }}>
                 <div className='stat-value'>{stats?.totalXp || 0}</div>
                 <div className='stat-label'>Total XP</div>
               </div>
-              <div className='stat-card pink'>
+              <div className='stat-card pink' style={{ borderRadius: '24px' }}>
                 <div className='stat-value'>
                   <p>
                     {stats?.averagePreTestScore !== undefined
@@ -157,7 +159,7 @@ export default function Results() {
                 </div>
                 <div className='stat-label'>Rata-rata Pre Test</div>
               </div>
-              <div className='stat-card orange'>
+              <div className='stat-card orange' style={{ borderRadius: '24px' }}>
                 <div className='stat-value'>
                   <p>
                     {stats?.averagePostTestScore !== undefined
@@ -313,26 +315,31 @@ export default function Results() {
         <>
           {/* Quiz Statistics Section */}
           <section>
-            <h2 className='results-section-title'>Statistik Quiz Budaya</h2>
+            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '12px', gap: '8px' }}>
+              <h2 className="results-section-title" style={{ fontSize: '1.2rem', color: '#7B4F2E', margin: 0 }}>Statistik Quiz Budaya</h2>
+              <InfoIcon {...PARENT_INFO.statistikQuiz} />
+            </div>
             <div className='stats-grid'>
-              <div className='stat-card green'>
-                <div className='stat-value'>{quizStats?.islandsFullyCompleted ?? 0}</div>
+              <div className='stat-card green' style={{ borderRadius: '24px' }}>
+                <div className='stat-value'>{Math.round(((quizStats?.islandsFullyCompleted ?? 0) / 8) * 100)}%</div>
                 <div className='stat-label'>Eksplorasi Budaya</div>
               </div>
-              <div className='stat-card purple'>
+              <div className='stat-card purple' style={{ borderRadius: '24px' }}>
                 <div className='stat-value'>{quizStats?.totalXpFromQuiz ?? 0}</div>
-                <div className='stat-label'>Total XP Quiz</div>
+                <div className='stat-label'>XP Quiz Budaya</div>
               </div>
-              <div className='stat-card pink' style={{ border: 'none', borderRadius: '24px', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                <div className='stat-value' style={{ fontSize: '2.5rem', display: 'block', marginBottom: '4px' }}>
-                  {journey.emoji}
+              <div className='stat-card pink' style={{ borderRadius: '24px', border: '3px solid #d986a1', borderBottom: '6px solid #d986a1', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                  <div className='stat-value' style={{ fontSize: '2.5rem', display: 'block', marginBottom: '4px' }}>
+                    {journey.emoji}
+                  </div>
+                  <div className='stat-value' style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
+                    {journey.title}
+                  </div>
                 </div>
-                <div className='stat-value' style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
-                  {journey.title}
-                </div>
-                <div className='stat-label' style={{ fontSize: '1.1rem', marginTop: '6px' }}>Peringkat Petualang</div>
+                <div className='stat-label' style={{ fontSize: '1.2rem', marginTop: '6px' }}>Peringkat Petualang</div>
               </div>
-              <div className='stat-card orange'>
+              <div className='stat-card orange' style={{ borderRadius: '24px' }}>
                 <div className='stat-value'>{quizStats?.averageScore ?? 0}%</div>
                 <div className='stat-label'>Rata-rata Nilai Quiz</div>
               </div>

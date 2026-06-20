@@ -1,10 +1,87 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import MonitoringSidebar from "../../../components/MonitoringSidebar";
 import { authClient } from "../../../lib/auth-client";
+import { monitoringApi } from "../../../lib/api";
 import "../../../pages/Profile.css";
 import "../../../pages/Results.css";
 
+function ConfirmationModal({ open, title, message, onCancel, onConfirm, confirmText, cancelText = "Cancel", isDestructive = false }) {
+  if (!open) return null;
+
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div 
+        onClick={onCancel}
+        style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(92,53,25,0.35)', backdropFilter: 'blur(2px)' }}
+      />
+      <div style={{
+        position: 'relative',
+        backgroundColor: '#FFF5E6',
+        border: '3px solid #C8935A',
+        borderRadius: '20px',
+        width: '450px',
+        maxWidth: '92vw',
+        padding: '24px',
+        boxSizing: 'border-box',
+        fontFamily: "'Fredoka One', sans-serif",
+        textAlign: 'center',
+        boxShadow: '0 10px 25px rgba(123, 79, 46, 0.25)',
+        animation: 'scaleIn 200ms ease-out'
+      }}>
+        <h3 style={{ fontSize: '1.4rem', color: isDestructive ? '#c53030' : '#7B4F2E', margin: '0 0 12px 0', fontWeight: 'bold' }}>
+          {title}
+        </h3>
+        <p style={{ fontSize: '1rem', color: '#5C3A1E', margin: '0 0 24px 0', lineHeight: '1.5' }}>
+          {message}
+        </p>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '16px' }}>
+          <button 
+            onClick={onCancel}
+            style={{
+              backgroundColor: '#A0AEC0',
+              color: 'white',
+              border: 'none',
+              borderRadius: '999px',
+              padding: '10px 24px',
+              fontSize: '1rem',
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              transition: 'background-color 0.2s'
+            }}
+          >
+            {cancelText}
+          </button>
+          <button 
+            onClick={onConfirm}
+            style={{
+              backgroundColor: isDestructive ? '#c53030' : '#955C2E',
+              color: 'white',
+              border: 'none',
+              borderRadius: '999px',
+              padding: '10px 24px',
+              fontSize: '1rem',
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              transition: 'background-color 0.2s'
+            }}
+          >
+            {confirmText}
+          </button>
+        </div>
+        <style>{`
+          @keyframes scaleIn { 
+            from { transform: scale(0.95); opacity: 0; } 
+            to { transform: scale(1); opacity: 1; } 
+          }
+        `}</style>
+      </div>
+    </div>
+  );
+}
+
 export default function MonitoringOrtuProfil() {
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -13,6 +90,11 @@ export default function MonitoringOrtuProfil() {
     username: "",
     email: ""
   });
+  
+  const [errors, setErrors] = useState({ name: "", username: "" });
+  const [success, setSuccess] = useState("");
+  const [showEditConfirm, setShowEditConfirm] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -38,21 +120,75 @@ export default function MonitoringOrtuProfil() {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (errors[e.target.name]) {
+      setErrors(prev => ({ ...prev, [e.target.name]: "" }));
+    }
   };
 
-  const handleUpdate = async () => {
+  const validate = () => {
+    const newErrors = { name: "", username: "" };
+    let isValid = true;
+    if (!formData.name.trim()) {
+      newErrors.name = "Nama tidak boleh kosong.";
+      isValid = false;
+    }
+    if (!formData.username.trim()) {
+      newErrors.username = "Username tidak boleh kosong.";
+      isValid = false;
+    }
+    setErrors(newErrors);
+    return isValid;
+  };
+
+  const handleUpdate = () => {
     if (isEditing) {
-      try {
-        await authClient.updateUser({
-          name: formData.name,
-          username: formData.username
-        });
-        setIsEditing(false);
-      } catch (err) {
-        alert("Gagal memperbarui profil: " + (err.message ?? err));
-      }
+      if (!validate()) return;
+      setShowEditConfirm(true);
     } else {
       setIsEditing(true);
+      setSuccess("");
+      setErrors({ name: "", username: "" });
+    }
+  };
+
+  const confirmSave = async () => {
+    setShowEditConfirm(false);
+    if (!validate()) return;
+
+    try {
+      await authClient.updateUser({
+        name: formData.name,
+        username: formData.username
+      });
+      setIsEditing(false);
+      setSuccess("Profile updated successfully!");
+    } catch (err) {
+      alert("Gagal memperbarui profil: " + (err.message ?? err));
+    }
+  };
+
+  const handleDeleteClick = () => {
+    setShowDeleteConfirm(true);
+  };
+
+  const confirmDelete = async () => {
+    setShowDeleteConfirm(false);
+    try {
+      // Call custom self deletion endpoint
+      await monitoringApi.deleteSelf();
+
+      // Clear sessions
+      localStorage.removeItem("ba_token");
+      localStorage.removeItem("ba_user_id");
+      await authClient.signOut();
+
+      // Set success message for redirect login screen
+      sessionStorage.setItem("logout_success_message", "Akun Anda berhasil dihapus.");
+
+      // Redirect
+      navigate("/monitoring-login-ortu");
+    } catch (err) {
+      alert("Gagal menghapus akun: " + (err.message ?? err));
     }
   };
 
@@ -66,52 +202,118 @@ export default function MonitoringOrtuProfil() {
       
       <main className="flex-1 p-10 box-border overflow-x-hidden">
         <section className="profile-top">
-          <div className="profile-avatar-circle" style={{ borderColor: '#7B4F2E', backgroundColor: '#F2E5D3', overflow: 'hidden' }}>
-            <img 
-              src="/monitoring/avatar-parent.png" 
-              alt="Avatar" 
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              onError={(e) => { e.target.src = "https://api.dicebear.com/7.x/adventurer/svg?seed=Rosidah"; }}
-            />
+          <div className="profile-avatar-circle" style={{ borderColor: '#7B4F2E', backgroundColor: '#FDE8C0', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ fontSize: '3.1rem', display: 'block', lineHeight: 1, userSelect: 'none' }}>👤</span>
           </div>
           <div className="profile-top-text">
             <h1 className="profile-name" style={{ color: '#7B4F2E', fontWeight: '800' }}>{formData.name}</h1>
             <div className="profile-grade-badge" style={{ backgroundColor: '#be94e3', color: 'white', border: '2px solid #955C2E' }}>
               Orang Tua
             </div>
-          </div>
+          </div> 
         </section>
 
         <hr className="profile-divider" style={{ borderTop: '2px solid #E8D9C0', margin: '30px 0' }} />
 
         <div className="form_profile">
           <section className="profile-form">
+            {success && (
+              <div style={{ backgroundColor: '#E8F5E9', border: '2px solid #4CAF50', color: '#2E7D32', padding: '12px 20px', borderRadius: '16px', marginBottom: '8px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span>✅</span> {success}
+              </div>
+            )}
+            
             <div className="profile-field" style={{ marginBottom: '24px' }}>
               <label style={{ color: '#955C2E', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '8px', display: 'block' }}>Nama</label>
-              <input name="name" type="text" value={formData.name} onChange={handleChange} readOnly={!isEditing} style={{ border: '2px solid #E8D9C0', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: '#ffffff' }} />
+              <input 
+                name="name" 
+                type="text" 
+                value={formData.name} 
+                onChange={handleChange} 
+                readOnly={!isEditing} 
+                style={{ 
+                  border: errors.name ? '2px solid #c53030' : '2px solid #E8D9C0', 
+                  color: '#7B4F2E', 
+                  fontWeight: 'bold', 
+                  outline: 'none', 
+                  backgroundColor: isEditing ? '#ffffff' : '#f0f0f0' 
+                }} 
+              />
+              {errors.name && <span style={{ color: '#c53030', fontSize: '0.9rem', marginTop: '6px', display: 'block', fontWeight: 'bold' }}>⚠️ {errors.name}</span>}
             </div>
+            
             <div className="profile-field" style={{ marginBottom: '24px' }}>
               <label style={{ color: '#955C2E', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '8px', display: 'block' }}>Username</label>
-              <input name="username" type="text" value={formData.username} onChange={handleChange} readOnly={!isEditing} style={{ border: '2px solid #E8D9C0', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: '#ffffff' }} />
+              <input 
+                name="username" 
+                type="text" 
+                value={formData.username} 
+                onChange={handleChange} 
+                readOnly={!isEditing} 
+                style={{ 
+                  border: errors.username ? '2px solid #c53030' : '2px solid #E8D9C0', 
+                  color: '#7B4F2E', 
+                  fontWeight: 'bold', 
+                  outline: 'none', 
+                  backgroundColor: isEditing ? '#ffffff' : '#f0f0f0' 
+                }} 
+              />
+              {errors.username && <span style={{ color: '#c53030', fontSize: '0.9rem', marginTop: '6px', display: 'block', fontWeight: 'bold' }}>⚠️ {errors.username}</span>}
             </div>
+            
             <div className="profile-field" style={{ marginBottom: '24px' }}>
               <label style={{ color: '#955C2E', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '8px', display: 'block' }}>Email</label>
-              <input name="email" type="text" value={formData.email} onChange={handleChange} readOnly={!isEditing} style={{ border: '2px solid #E8D9C0', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: '#ffffff' }} />
+              <input 
+                name="email" 
+                type="text" 
+                value={formData.email} 
+                readOnly 
+                style={{ 
+                  border: '2px solid #E8D9C0', 
+                  color: '#7B4F2E', 
+                  fontWeight: 'bold', 
+                  outline: 'none', 
+                  backgroundColor: '#f0f0f0' 
+                }} 
+              />
             </div>
 
             <div className="profile-btn-container">
-              <button style={{ backgroundColor: '#c53030', color: 'white', padding: '12px 30px', borderRadius: '999px', fontSize: '1.1rem', fontWeight: 'bold', border: 'none', cursor: 'pointer' }}>
-                Hapus Akun
+              <button 
+                onClick={handleDeleteClick}
+                style={{ backgroundColor: '#c53030', color: 'white', padding: '12px 30px', borderRadius: '999px', fontSize: '1.1rem', fontWeight: 'bold', border: 'none', cursor: 'pointer' }}>
+                Delete Profile
               </button>
               <button 
                 onClick={handleUpdate}
                 style={{ backgroundColor: '#955C2E', color: 'white', padding: '12px 30px', borderRadius: '999px', fontSize: '1.1rem', fontWeight: 'bold', border: 'none', cursor: 'pointer' }}>
-                {isEditing ? 'Simpan Data' : 'Ubah Data'}
+                {isEditing ? 'Save Changes' : 'Ubah Data'}
               </button>
             </div>
           </section>
         </div>
       </main>
+
+      <ConfirmationModal 
+        open={showEditConfirm}
+        title="Confirm Profile Update"
+        message="Are you sure you want to save these profile changes?"
+        confirmText="Save Changes"
+        cancelText="Cancel"
+        onConfirm={confirmSave}
+        onCancel={() => setShowEditConfirm(false)}
+      />
+
+      <ConfirmationModal 
+        open={showDeleteConfirm}
+        title="Delete Account?"
+        message="This action cannot be undone. Your profile and associated access will be permanently removed."
+        confirmText="Delete Account"
+        cancelText="Cancel"
+        isDestructive={true}
+        onConfirm={confirmDelete}
+        onCancel={() => setShowDeleteConfirm(false)}
+      />
     </div>
   );
 }

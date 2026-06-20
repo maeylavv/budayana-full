@@ -335,4 +335,13 @@ export const monitoringApi = {
     apiRequest(`/monitoring/students/${id}`, {
       method: "DELETE",
     }),
+
+  /**
+   * Delete own parent profile account
+   * @returns {Promise<object>}
+   */
+  deleteSelf: () =>
+    apiRequest(`/monitoring/profile`, {
+      method: "DELETE",
+    }),
 }

@@ -22,11 +22,18 @@ export default function MonitoringLogin({ role }) {
     targetPath: "",
     targetLabel: ""
   });
+  const [success, setSuccess] = useState("");
 
   useEffect(() => {
     const trigger = sessionStorage.getItem("portal_mismatch_popup_trigger");
     if (trigger === "true") {
       setShowRedirectPopup(true);
+    }
+
+    const msg = sessionStorage.getItem("logout_success_message");
+    if (msg) {
+      setSuccess(msg);
+      sessionStorage.removeItem("logout_success_message");
     }
   }, []);
 
@@ -184,6 +191,13 @@ export default function MonitoringLogin({ role }) {
       </div>
 
       <div className='signin_form' style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        {success && (
+          <div style={{ display: 'flex', justifyContent: 'center', width: '100%', marginBottom: '15px' }}>
+            <div className="inline-error" style={{ backgroundColor: '#E8F5E9', border: '2px solid #4CAF50', color: '#2E7D32', borderRadius: '10px', padding: '12px 20px', width: '100%', boxSizing: 'border-box', textAlign: 'center', fontWeight: 'bold' }}>
+              <span>✅ {success}</span>
+            </div>
+          </div>
+        )}
         {error && (
           <div style={{ display: 'flex', justifyContent: 'center', width: '100%', marginBottom: '15px' }}>
             <div className="inline-error">
