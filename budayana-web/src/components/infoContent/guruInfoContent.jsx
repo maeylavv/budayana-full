@@ -59,7 +59,7 @@ export const GURU_INFO = {
     exampleBox: "10 siswa, 10 selesai cerita, 5 selesai kuis → (10+5)/(10×2) = 75%."
   },
   analisisWaktu: {
-    tooltipText: "Total waktu belajar seluruh siswa dalam 7 hari terakhir.",
+    tooltipText: "Total waktu belajar seluruh siswa dalam 14 hari terakhir.",
     modalTitle: "Bagaimana nilai ini dihitung?",
     modalMetricName: "Analisis Waktu",
     modalContent: "Grafik menghitung total durasi belajar seluruh siswa lalu mengelompokkannya per hari.",

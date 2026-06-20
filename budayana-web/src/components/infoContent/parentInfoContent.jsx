@@ -47,7 +47,7 @@ export const PARENT_INFO = {
     exampleBox: "Jika garis radar siswa pada sudut 'Analisis (L2)' berada lebih luar dibanding garis abu-abu kelas, berarti kemampuan analisis siswa ini di atas rata-rata!"
   },
   analisisWaktu: {
-    tooltipText: "Total waktu belajar seluruh siswa dalam 7 hari terakhir.",
+    tooltipText: "Total waktu belajar seluruh siswa dalam 14 hari terakhir.",
     modalTitle: "Bagaimana nilai ini dihitung?",
     modalMetricName: "Analisis Waktu",
     modalContent: "Grafik menghitung total durasi belajar siswa lalu mengelompokkannya per hari.",
