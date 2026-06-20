@@ -168,7 +168,8 @@ exports.Prisma.UserScalarFieldEnum = {
   grade: 'grade',
   classLabel: 'classLabel',
   guardianEmail: 'guardianEmail',
-  totalXp: 'totalXp'
+  totalXp: 'totalXp',
+  gender: 'gender'
 };
 
 exports.Prisma.SessionScalarFieldEnum = {

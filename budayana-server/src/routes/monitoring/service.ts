@@ -13,7 +13,7 @@ const calculateNGain = (pre: number, post: number): number => {
 /**
  * Get students filtered by grade
  */
-export const getStudentsByGrade = async (grade: number, classLabel?: string, search?: string) => {
+export const getStudentsByGrade = async (grade: number, classLabel?: string, search?: string, gender?: string) => {
   const students = await prisma.user.findMany({
     where: {
       grade: grade,
@@ -22,6 +22,14 @@ export const getStudentsByGrade = async (grade: number, classLabel?: string, sea
         ? {
             classLabel: {
               equals: classLabel,
+              mode: "insensitive"
+            }
+          }
+        : {}),
+      ...(gender
+        ? {
+            gender: {
+              equals: gender,
               mode: "insensitive"
             }
           }
@@ -56,6 +64,7 @@ export const getStudentsByGrade = async (grade: number, classLabel?: string, sea
       guardianEmail: true,
       role: true,
       totalXp: true,
+      gender: true,
       storyAttempts: {
         where: {
           preTestScore: { not: null },
@@ -125,6 +134,7 @@ export const getStudentsByGrade = async (grade: number, classLabel?: string, sea
       guardianEmail: s.guardianEmail,
       role: s.role,
       totalXp: s.totalXp,
+      gender: s.gender,
       learningImprovement,
       averageLiteracyScore
     };
@@ -148,6 +158,7 @@ export const getStudentById = async (id: string) => {
       guardianEmail: true,
       role: true,
       totalXp: true,
+      gender: true,
     }
   })
 }
@@ -203,6 +214,7 @@ export const getStudentsByGuardianEmail = async (email: string, search?: string)
       guardianEmail: true,
       role: true,
       totalXp: true,
+      gender: true,
       storyAttempts: {
         where: {
           preTestScore: { not: null },
@@ -272,6 +284,7 @@ export const getStudentsByGuardianEmail = async (email: string, search?: string)
       guardianEmail: s.guardianEmail,
       role: s.role,
       totalXp: s.totalXp,
+      gender: s.gender,
       learningImprovement,
       averageLiteracyScore
     };
@@ -346,7 +359,7 @@ function deriveStudentTitle(totalXp: number, maxLevelCompleted: number): string 
 /**
  * Get class-wide analytics summary for teachers
  */
-export const getClassSummary = async (grade: number, classLabel?: string) => {
+export const getClassSummary = async (grade: number, classLabel?: string, gender?: string) => {
   // 1. Get all students in the class
   const students = await prisma.user.findMany({
     where: {
@@ -356,6 +369,14 @@ export const getClassSummary = async (grade: number, classLabel?: string) => {
         ? {
             classLabel: {
               equals: classLabel,
+              mode: "insensitive"
+            }
+          }
+        : {}),
+      ...(gender
+        ? {
+            gender: {
+              equals: gender,
               mode: "insensitive"
             }
           }
@@ -468,6 +489,14 @@ export const getClassSummary = async (grade: number, classLabel?: string) => {
                 mode: "insensitive"
               }
             }
+          : {}),
+        ...(gender
+          ? {
+              gender: {
+                equals: gender,
+                mode: "insensitive"
+              }
+            }
           : {})
       },
       startedAt: { gte: activityThreshold },
@@ -490,6 +519,14 @@ export const getClassSummary = async (grade: number, classLabel?: string) => {
           ? {
               classLabel: {
                 equals: classLabel,
+                mode: "insensitive"
+              }
+            }
+          : {}),
+        ...(gender
+          ? {
+              gender: {
+                equals: gender,
                 mode: "insensitive"
               }
             }
@@ -527,6 +564,14 @@ export const getClassSummary = async (grade: number, classLabel?: string) => {
                 mode: "insensitive"
               }
             }
+          : {}),
+        ...(gender
+          ? {
+              gender: {
+                equals: gender,
+                mode: "insensitive"
+              }
+            }
           : {})
       },
       finishedAt: { not: null }
@@ -555,6 +600,14 @@ export const getClassSummary = async (grade: number, classLabel?: string) => {
           ? {
               classLabel: {
                 equals: classLabel,
+                mode: "insensitive"
+              }
+            }
+          : {}),
+        ...(gender
+          ? {
+              gender: {
+                equals: gender,
                 mode: "insensitive"
               }
             }
@@ -659,6 +712,14 @@ export const getClassSummary = async (grade: number, classLabel?: string) => {
                 mode: "insensitive"
               }
             }
+          : {}),
+        ...(gender
+          ? {
+              gender: {
+                equals: gender,
+                mode: "insensitive"
+              }
+            }
           : {})
       },
       startedAt: { gte: activityThreshold }
@@ -678,6 +739,14 @@ export const getClassSummary = async (grade: number, classLabel?: string) => {
           ? {
               classLabel: {
                 equals: classLabel,
+                mode: "insensitive"
+              }
+            }
+          : {}),
+        ...(gender
+          ? {
+              gender: {
+                equals: gender,
                 mode: "insensitive"
               }
             }
@@ -725,6 +794,14 @@ export const getClassSummary = async (grade: number, classLabel?: string) => {
           ? {
               classLabel: {
                 equals: classLabel,
+                mode: "insensitive"
+              }
+            }
+          : {}),
+        ...(gender
+          ? {
+              gender: {
+                equals: gender,
                 mode: "insensitive"
               }
             }

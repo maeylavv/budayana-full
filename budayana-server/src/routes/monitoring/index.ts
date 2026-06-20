@@ -53,11 +53,12 @@ export const monitoringRoutes = new Elysia({ prefix: "/monitoring" })
       let students: any[] = []
       const classLabel = query.classLabel
       const search = query.search
+      const gender = query.gender
       
       if (user.role === "TEACHER") {
         const targetGrade = Number(user.grade)
-        console.log(`[Monitoring] Fetching students for grade: ${targetGrade}, classLabel: ${classLabel}, search: ${search}`)
-        students = await monitoringService.getStudentsByGrade(targetGrade, classLabel, search)
+        console.log(`[Monitoring] Fetching students for grade: ${targetGrade}, classLabel: ${classLabel}, search: ${search}, gender: ${gender}`)
+        students = await monitoringService.getStudentsByGrade(targetGrade, classLabel, search, gender)
       } else if (user.role === "PARENT") {
         console.log(`[Monitoring] Fetching children for parent: ${user.email}, search: ${search}`)
         students = await monitoringService.getStudentsByGuardianEmail(user.email, search)
@@ -77,6 +78,7 @@ export const monitoringRoutes = new Elysia({ prefix: "/monitoring" })
       query: t.Object({
         classLabel: t.Optional(t.String()),
         search: t.Optional(t.String()),
+        gender: t.Optional(t.String()),
       }),
       response: {
         200: StudentListResponseSchema,
@@ -232,8 +234,9 @@ export const monitoringRoutes = new Elysia({ prefix: "/monitoring" })
 
       const targetGrade = Number(user.grade)
       const classLabel = query.classLabel
+      const gender = query.gender
       
-      const summary = await monitoringService.getClassSummary(targetGrade, classLabel)
+      const summary = await monitoringService.getClassSummary(targetGrade, classLabel, gender)
       return summary
     },
     {
@@ -242,7 +245,8 @@ export const monitoringRoutes = new Elysia({ prefix: "/monitoring" })
         summary: "Get class-wide aggregated analytics",
       },
       query: t.Object({
-        classLabel: t.Optional(t.String())
+        classLabel: t.Optional(t.String()),
+        gender: t.Optional(t.String()),
       }),
       response: {
         200: ClassSummaryResponseSchema,
