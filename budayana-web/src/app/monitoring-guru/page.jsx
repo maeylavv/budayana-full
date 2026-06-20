@@ -21,6 +21,8 @@ export default function MonitoringGuruDashboard() {
   const [tableLoading, setTableLoading] = useState(false);
   const [error, setError] = useState(null);
   const [selectedClass, setSelectedClass] = useState("");
+  const [selectedGender, setSelectedGender] = useState("");
+  const [sortOption, setSortOption] = useState("name_asc");
 
   const [classSummary, setClassSummary] = useState({
     averageImprovement: 0,
@@ -50,7 +52,7 @@ export default function MonitoringGuruDashboard() {
     const fetchStudents = async () => {
       try {
         setTableLoading(true);
-        const data = await monitoringApi.listStudents(selectedClass, debouncedSearch, {
+        const data = await monitoringApi.listStudents(selectedClass, debouncedSearch, selectedGender, {
           signal: controller.signal
         });
         if (active) {
@@ -78,7 +80,7 @@ export default function MonitoringGuruDashboard() {
       active = false;
       controller.abort();
     };
-  }, [selectedClass, debouncedSearch]);
+  }, [selectedClass, debouncedSearch, selectedGender]);
 
   // Fetch class summary
   useEffect(() => {
@@ -88,7 +90,7 @@ export default function MonitoringGuruDashboard() {
     const fetchSummary = async () => {
       try {
         setSummaryLoading(true);
-        const data = await monitoringApi.getClassSummary(selectedClass, {
+        const data = await monitoringApi.getClassSummary(selectedClass, selectedGender, {
           signal: controller.signal
         });
         if (active && data) {
@@ -118,7 +120,7 @@ export default function MonitoringGuruDashboard() {
       active = false;
       controller.abort();
     };
-  }, [selectedClass]);
+  }, [selectedClass, selectedGender]);
 
   if (initialLoading || summaryLoading) {
     if (error) {
@@ -163,7 +165,35 @@ export default function MonitoringGuruDashboard() {
     );
   }
 
-  const filteredStudents = students;
+  const sortedStudents = [...students].sort((a, b) => {
+    if (sortOption === "name_asc") {
+      return a.name.localeCompare(b.name);
+    }
+    if (sortOption === "name_desc") {
+      return b.name.localeCompare(a.name);
+    }
+    if (sortOption === "xp_desc") {
+      return (b.totalXp ?? b.totalXP ?? 0) - (a.totalXp ?? a.totalXP ?? 0);
+    }
+    if (sortOption === "xp_asc") {
+      return (a.totalXp ?? a.totalXP ?? 0) - (b.totalXp ?? b.totalXP ?? 0);
+    }
+    if (sortOption === "improvement_desc") {
+      return (b.learningImprovement ?? 0) - (a.learningImprovement ?? 0);
+    }
+    if (sortOption === "improvement_asc") {
+      return (a.learningImprovement ?? 0) - (b.learningImprovement ?? 0);
+    }
+    if (sortOption === "literacy_desc") {
+      return (b.averageLiteracyScore ?? 0) - (a.averageLiteracyScore ?? 0);
+    }
+    if (sortOption === "literacy_asc") {
+      return (a.averageLiteracyScore ?? 0) - (b.averageLiteracyScore ?? 0);
+    }
+    return 0;
+  });
+
+  const filteredStudents = sortedStudents;
   const donutData = [
     { name: "Aktif", value: classSummary.activeStudents, color: "#4CAF50" },
     { name: "Tidak Aktif", value: classSummary.inactiveStudents, color: "#F44336" }
@@ -182,6 +212,32 @@ export default function MonitoringGuruDashboard() {
         <section>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
               <h2 className="results-section-title" style={{ fontSize: '1.2rem', margin: 0 }}>Statistik Kelas</h2>
+             <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+              <select
+                value={selectedGender}
+                onChange={(e) => setSelectedGender(e.target.value)}
+                  style={{
+                    padding: '8px 40px 8px 16px',
+                    borderRadius: '999px',
+                    border: '2px solid #955C2E',
+                    backgroundColor: 'white',
+                    color: '#5C3A1E',
+                    fontFamily: "'Fredoka One', sans-serif",
+                    fontWeight: 'bold',
+                    outline: 'none',
+                    cursor: 'pointer',
+                    fontSize: '1rem',
+                    appearance: 'none',
+                    WebkitAppearance: 'none',
+                    backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23955C2E' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e")`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'right 16px center'
+                  }}
+              >
+                <option value="">Semua Gender</option>
+                <option value="Laki-laki">Laki-laki</option>
+                <option value="Perempuan">Perempuan</option>
+              </select>
               <select
                 value={selectedClass}
                 onChange={(e) => setSelectedClass(e.target.value)}
@@ -208,6 +264,7 @@ export default function MonitoringGuruDashboard() {
                 <option value="B">Kelas B</option>
                 <option value="C">Kelas C</option>
               </select>
+             </div>
             </div>
             
             {/* Top 3 Charts */}
@@ -358,6 +415,36 @@ export default function MonitoringGuruDashboard() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
               <h2 className="results-section-title" style={{ fontSize: '1.2rem', margin: 0, display: 'flex', alignItems: 'center', whiteSpace: 'nowrap' }}>Tabel Siswa <InfoIcon {...GURU_INFO.tabelSiswa} /></h2>
               <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+                <select
+                  value={sortOption}
+                  onChange={(e) => setSortOption(e.target.value)}
+                  style={{
+                    padding: '8px 40px 8px 16px',
+                    borderRadius: '999px',
+                    border: '2px solid #955C2E',
+                    backgroundColor: 'white',
+                    color: '#5C3A1E',
+                    fontFamily: "'Fredoka One', sans-serif",
+                    fontWeight: 'bold',
+                    outline: 'none',
+                    cursor: 'pointer',
+                    fontSize: '1rem',
+                    appearance: 'none',
+                    WebkitAppearance: 'none',
+                    backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23955C2E' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e")`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'right 16px center'
+                  }}
+                >
+                  <option value="name_asc">Nama (A - Z)</option>
+                  <option value="name_desc">Nama (Z - A)</option>
+                  <option value="xp_desc">XP Tertinggi</option>
+                  <option value="xp_asc">XP Terendah</option>
+                  <option value="improvement_desc">Peningkatan Cerita Tertinggi</option>
+                  <option value="improvement_asc">Peningkatan Cerita Terendah</option>
+                  <option value="literacy_desc">Literasi Budaya Tertinggi</option>
+                  <option value="literacy_asc">Literasi Budaya Terendah</option>
+                </select>
                 <div style={{ position: 'relative', width: '250px' }}>
                   <input 
                     type="text" 

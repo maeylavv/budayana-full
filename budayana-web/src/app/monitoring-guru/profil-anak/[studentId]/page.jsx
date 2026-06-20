@@ -28,7 +28,8 @@ export default function MonitoringGuruProfilAnakDetail() {
     kelas: "",
     username: "",
     password: "*****",
-    emailWali: ""
+    emailWali: "",
+    jenisKelamin: ""
   });
 
   const [originalData, setOriginalData] = useState(null);
@@ -43,7 +44,8 @@ export default function MonitoringGuruProfilAnakDetail() {
           kelas: data.grade.toString(),
           username: data.username || "",
           password: "*****",
-          emailWali: data.guardianEmail || ""
+          emailWali: data.guardianEmail || "",
+          jenisKelamin: data.gender || ""
         });
       } catch (err) {
         console.error("Gagal mengambil detail siswa:", err);
@@ -80,11 +82,21 @@ export default function MonitoringGuruProfilAnakDetail() {
 
   const handleSave = async () => {
     try {
-        await monitoringApi.updateStudent(studentId, {
+        const updated = await monitoringApi.updateStudent(studentId, {
             name: formData.nama,
             grade: parseInt(formData.kelas),
             username: formData.username,
-            guardianEmail: formData.emailWali
+            guardianEmail: formData.emailWali,
+            gender: formData.jenisKelamin
+        });
+        setOriginalData(updated);
+        setFormData({
+          nama: updated.name,
+          kelas: updated.grade.toString(),
+          username: updated.username || "",
+          password: "*****",
+          emailWali: updated.guardianEmail || "",
+          jenisKelamin: updated.gender || ""
         });
         setIsEditing(false);
     } catch (err) {
@@ -109,7 +121,8 @@ export default function MonitoringGuruProfilAnakDetail() {
       kelas: originalData.grade.toString(),
       username: originalData.username || "",
       password: "*****",
-      emailWali: originalData.guardianEmail || ""
+      emailWali: originalData.guardianEmail || "",
+      jenisKelamin: originalData.gender || ""
     });
     setIsEditing(false);
   };
@@ -171,6 +184,31 @@ export default function MonitoringGuruProfilAnakDetail() {
                 style={{ border: '2px solid #E8D9C0', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: isEditing ? '#ffffff' : '#f0f0f0' }} 
               />
             </div>
+
+            <div className="profile-field" style={{ marginBottom: '24px' }}>
+              <label style={{ color: '#955C2E', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '8px', display: 'block' }}>Jenis Kelamin</label>
+              {isEditing ? (
+                <select
+                  name="jenisKelamin"
+                  value={formData.jenisKelamin}
+                  onChange={handleChange}
+                  style={{ width: '100%', padding: '12px 16px', borderRadius: '10px', border: '2px solid #E8D9C0', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: '#ffffff', fontFamily: "'Fredoka One', sans-serif" }}
+                >
+                  <option value="" disabled>Pilih Jenis Kelamin</option>
+                  <option value="Laki-laki">Laki-laki</option>
+                  <option value="Perempuan">Perempuan</option>
+                </select>
+              ) : (
+                <input 
+                  type="text" 
+                  name="jenisKelamin"
+                  value={formData.jenisKelamin || ""} 
+                  readOnly 
+                  style={{ border: '2px solid #E8D9C0', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: '#f0f0f0' }} 
+                />
+              )}
+            </div>
+
             <div className="profile-field" style={{ marginBottom: '24px' }}>
               <label style={{ color: '#955C2E', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '8px', display: 'block' }}>Username</label>
               <input 

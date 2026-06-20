@@ -29,6 +29,11 @@ export default function Profile() {
                 <label>Label Kelas</label>
                 <input type='text' value={user.classLabel ?? ""} readOnly />
               </div>
+
+              <div className='profile-field'>
+                <label>Jenis Kelamin</label>
+                <input type='text' value={user.gender ?? ""} readOnly />
+              </div>
             </>
           )}
 

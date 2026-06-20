@@ -272,21 +272,35 @@ export const quizStatisticsApi = {
  * API methods for Monitoring (Teacher/Parent)
  */
 export const monitoringApi = {
-  listStudents: (classLabel, search, options = {}) => {
+  listStudents: (classLabel, search, gender, options = {}) => {
+    let actualGender = gender;
+    let actualOptions = options;
+    if (gender && typeof gender === "object") {
+      actualOptions = gender;
+      actualGender = undefined;
+    }
     const params = new URLSearchParams();
     if (classLabel) params.append("classLabel", classLabel);
     if (search) params.append("search", search);
+    if (actualGender) params.append("gender", actualGender);
     const queryString = params.toString();
     const url = queryString ? `/monitoring/students?${queryString}` : "/monitoring/students";
-    return apiRequest(url, options);
+    return apiRequest(url, actualOptions);
   },
 
-  getClassSummary: (classLabel, options = {}) => {
+  getClassSummary: (classLabel, gender, options = {}) => {
+    let actualGender = gender;
+    let actualOptions = options;
+    if (gender && typeof gender === "object") {
+      actualOptions = gender;
+      actualGender = undefined;
+    }
     const params = new URLSearchParams();
     if (classLabel) params.append("classLabel", classLabel);
+    if (actualGender) params.append("gender", actualGender);
     const queryString = params.toString();
     const url = queryString ? `/monitoring/analytics/class-summary?${queryString}` : "/monitoring/analytics/class-summary";
-    return apiRequest(url, options);
+    return apiRequest(url, actualOptions);
   },
 
   getStudentAnalytics: (studentId, options = {}) => {

@@ -29,7 +29,8 @@ export default function MonitoringOrtuProfilAnakDetail() {
     classLabel: "",
     username: "",
     password: "*****",
-    guardianEmail: ""
+    guardianEmail: "",
+    gender: ""
   });
 
   useEffect(() => {
@@ -44,7 +45,8 @@ export default function MonitoringOrtuProfilAnakDetail() {
           classLabel: data.classLabel || "",
           username: data.displayUsername || data.username || "",
           password: "*****",
-          guardianEmail: data.guardianEmail || ""
+          guardianEmail: data.guardianEmail || "",
+          gender: data.gender || ""
         });
       } catch (err) {
         console.error("Gagal mengambil data anak:", err);
@@ -115,6 +117,11 @@ export default function MonitoringOrtuProfilAnakDetail() {
             <div className="profile-field" style={{ marginBottom: '24px' }}>
               <label style={{ color: '#955C2E', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '8px', display: 'block' }}>Label Kelas</label>
               <input name="classLabel" type="text" value={formData.classLabel} onChange={handleChange} readOnly style={{ border: '2px solid #E8D9C0', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: '#f0f0f0' }} />
+            </div>
+
+            <div className="profile-field" style={{ marginBottom: '24px' }}>
+              <label style={{ color: '#955C2E', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '8px', display: 'block' }}>Jenis Kelamin</label>
+              <input name="gender" type="text" value={formData.gender || ""} readOnly style={{ border: '2px solid #E8D9C0', color: '#7B4F2E', fontWeight: 'bold', outline: 'none', backgroundColor: '#f0f0f0' }} />
             </div>
 
             <div className="profile-field" style={{ marginBottom: '24px' }}>
