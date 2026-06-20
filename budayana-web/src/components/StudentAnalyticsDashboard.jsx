@@ -9,6 +9,7 @@ import "../pages/Profile.css";
 import "../pages/Results.css";
 import InfoIcon from "./InfoIcon";
 import { PARENT_INFO } from "./infoContent/parentInfoContent";
+import { getJourneyContent } from "../utils/xpJourney";
 
 // Half Pie/Donut Chart Colors
 const GAUGE_COLORS = ["#4CAF50", "#E8D9C0"];
@@ -143,19 +144,19 @@ function StoryAnalyticsPanel({ storyAnalytics, studentInfo }) {
           <InfoIcon {...PARENT_INFO.statistikCerita} />
         </div>
         <div className="stats-grid">
-          <div className="stat-card green" style={{ border: 'none', borderRadius: '24px' }}>
+          <div className="stat-card green" style={{ borderRadius: '24px' }}>
             <div className="stat-value">{stats.storiesCompleted}</div>
             <div className="stat-label">Sesi Cerita Selesai</div>
           </div>
-          <div className="stat-card purple" style={{ border: 'none', borderRadius: '24px' }}>
+          <div className="stat-card purple" style={{ borderRadius: '24px' }}>
             <div className="stat-value">{stats.totalXp}</div>
             <div className="stat-label">XP Cerita Rakyat</div>
           </div>
-          <div className="stat-card pink" style={{ border: 'none', borderRadius: '24px' }}>
+          <div className="stat-card pink" style={{ borderRadius: '24px' }}>
             <div className="stat-value">{stats.averagePreTest}%</div>
             <div className="stat-label">Rata-rata Pre-Test</div>
           </div>
-          <div className="stat-card orange" style={{ border: 'none', borderRadius: '24px' }}>
+          <div className="stat-card orange" style={{ borderRadius: '24px' }}>
             <div className="stat-value">{stats.averagePostTest}%</div>
             <div className="stat-label">Rata-rata Post-Test</div>
           </div>
@@ -296,6 +297,9 @@ function QuizAnalyticsPanel({ quizAnalytics, studentInfo }) {
   const hasInterestData = culturalInterest && culturalInterest.length > 0;
   console.log('Cultural interest data:', culturalInterest);
 
+  // Synchronize dynamic journey milestone title and emoji with the student portal
+  const journey = getJourneyContent(stats.totalXp || 0);
+
   // Format score in history to make sure it renders beautifully as string or percentage
   const formattedHistory = (history || []).map(item => ({
     ...item,
@@ -312,21 +316,26 @@ function QuizAnalyticsPanel({ quizAnalytics, studentInfo }) {
           <InfoIcon {...PARENT_INFO.statistikQuiz} />
         </div>
         <div className="stats-grid">
-          <div className="stat-card green" style={{ border: 'none', borderRadius: '24px' }}>
+          <div className="stat-card green" style={{ borderRadius: '24px' }}>
             <div className="stat-value">{stats.explorationProgress}%</div>
             <div className="stat-label">Eksplorasi Budaya</div>
           </div>
-          <div className="stat-card purple" style={{ border: 'none', borderRadius: '24px' }}>
+          <div className="stat-card purple" style={{ borderRadius: '24px' }}>
             <div className="stat-value">{stats.totalXp}</div>
             <div className="stat-label">XP Quiz Budaya</div>
           </div>
-          <div className="stat-card pink" style={{ border: 'none', borderRadius: '24px', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-            <div className="stat-value" style={{ fontSize: '2rem' }}>
-              {studentInfo.title && studentInfo.title !== "-" ? `🏅 ${studentInfo.title}` : "-"}
-            </div>
-            <div className="stat-label" style={{ fontSize: '1.2rem' }}>Peringkat Petualang</div>
+          <div className="stat-card pink" style={{ borderRadius: '24px', border: '3px solid #d986a1', borderBottom: '6px solid #d986a1', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <div className="stat-value" style={{ fontSize: '2.5rem', display: 'block', marginBottom: '4px' }}>
+                {journey.emoji}
+              </div>
+              <div className="stat-value" style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
+                {journey.title}
+              </div>
+               </div>
+            <div className="stat-label" style={{ fontSize: '1.2rem', marginTop: '6px' }}>Peringkat Petualang</div>
           </div>
-          <div className="stat-card orange" style={{ border: 'none', borderRadius: '24px' }}>
+          <div className="stat-card orange" style={{ borderRadius: '24px' }}>
             <div className="stat-value">{stats.averageScore}%</div>
             <div className="stat-label">Rata-rata Nilai Quiz</div>
           </div>
@@ -345,10 +354,10 @@ function QuizAnalyticsPanel({ quizAnalytics, studentInfo }) {
               Berdasarkan percobaan pertama siswa
             </div>
           </div>
-          <div className="chart-wrapper-responsive" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '260px' }}>
+          <div className="chart-wrapper-responsive" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '280px' }}>
             {hasRadarData && formattedHistory.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
-                <RadarChart cx="50%" cy="50%" outerRadius="60%" data={radarLiteracy}>
+                <RadarChart cx="50%" cy="50%" outerRadius="75%" data={radarLiteracy}>
                   <PolarGrid />
                   <PolarAngleAxis dataKey="subject" tick={{ fontSize: 9, fill: '#7B4F2E', fontWeight: 'bold' }} />
                   <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fontSize: 9 }} />

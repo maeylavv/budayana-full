@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
-import { Search, RotateCcw, ArrowUpDown, AlertTriangle, ArrowRight } from "lucide-react";
+import { Search, RotateCcw, ArrowUpDown, AlertTriangle, ArrowRight, ChevronUp, ChevronDown } from "lucide-react";
 import MonitoringSidebar from "../../components/MonitoringSidebar";
 import { monitoringApi } from "../../lib/api";
 import {
@@ -41,6 +41,19 @@ function getLiterasiColor(val) {
   if (val >= 75) return '#3B6D11'; // Sangat baik
   if (val >= 50) return '#B45309'; // Cukup (contrast amber)
   return '#A32D2D'; // Perlu bimbingan
+}
+
+function SortIndicator({ active, asc }) {
+  // panah atas (up chevron) = nilai paling besar = descending (asc === false)
+  // panah bawah (down chevron) = nilai paling kecil = ascending (asc === true)
+  const upColor = active && !asc ? "#FFE082" : "rgba(255, 255, 255, 0.4)";
+  const downColor = active && asc ? "#FFE082" : "rgba(255, 255, 255, 0.4)";
+  return (
+    <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0px', marginLeft: '6px', transform: 'translateY(1px)' }}>
+      <ChevronUp size={12} strokeWidth={3} style={{ color: upColor, transition: 'color 0.2s', marginBottom: '-5px' }} />
+      <ChevronDown size={12} strokeWidth={3} style={{ color: downColor, transition: 'color 0.2s' }} />
+    </div>
+  );
 }
 
 export default function MonitoringGuruDashboard() {
@@ -567,9 +580,17 @@ export default function MonitoringGuruDashboard() {
                         setSortAsc(true);
                       }
                     }}
-                    style={{ textAlign: 'left', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', userSelect: 'none' }}
+                    style={{ 
+                      textAlign: 'left', 
+                      cursor: 'pointer', 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: '6px', 
+                      userSelect: 'none',
+                      color: sortField === "name" ? "#FFE082" : "white"
+                    }}
                   >
-                    Nama <ArrowUpDown size={16} strokeWidth={3} style={{ opacity: sortField === "name" ? 1 : 0.6 }} />
+                    Nama <SortIndicator active={sortField === "name"} asc={sortAsc} />
                   </div>
                   
                   {/* Column Kelas (Not Sortable) */}
@@ -585,9 +606,18 @@ export default function MonitoringGuruDashboard() {
                         setSortAsc(false); // Default to highest first
                       }
                     }}
-                    style={{ textAlign: 'center', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', userSelect: 'none' }}
+                    style={{ 
+                      textAlign: 'center', 
+                      cursor: 'pointer', 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center', 
+                      gap: '6px', 
+                      userSelect: 'none',
+                      color: sortField === "xp" ? "#FFE082" : "white"
+                    }}
                   >
-                    Total XP <ArrowUpDown size={16} strokeWidth={3} style={{ opacity: sortField === "xp" ? 1 : 0.6 }} />
+                    Total XP <SortIndicator active={sortField === "xp"} asc={sortAsc} />
                   </div>
                   
                   {/* Column Cerita (Sortable) */}
@@ -600,9 +630,18 @@ export default function MonitoringGuruDashboard() {
                         setSortAsc(false); // Default to highest first
                       }
                     }}
-                    style={{ textAlign: 'center', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', userSelect: 'none' }}
+                    style={{ 
+                      textAlign: 'center', 
+                      cursor: 'pointer', 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center', 
+                      gap: '6px', 
+                      userSelect: 'none',
+                      color: sortField === "story" ? "#FFE082" : "white"
+                    }}
                   >
-                    Peningkatan Cerita <ArrowUpDown size={16} strokeWidth={3} style={{ opacity: sortField === "story" ? 1 : 0.6 }} />
+                    Peningkatan Cerita <SortIndicator active={sortField === "story"} asc={sortAsc} />
                   </div>
                   
                   {/* Column Literasi (Sortable) */}
@@ -615,9 +654,18 @@ export default function MonitoringGuruDashboard() {
                         setSortAsc(false); // Default to highest first
                       }
                     }}
-                    style={{ textAlign: 'center', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', userSelect: 'none' }}
+                    style={{ 
+                      textAlign: 'center', 
+                      cursor: 'pointer', 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center', 
+                      gap: '6px', 
+                      userSelect: 'none',
+                      color: sortField === "literacy" ? "#FFE082" : "white"
+                    }}
                   >
-                    Literasi Budaya <ArrowUpDown size={16} strokeWidth={3} style={{ opacity: sortField === "literacy" ? 1 : 0.6 }} />
+                    Literasi Budaya <SortIndicator active={sortField === "literacy"} asc={sortAsc} />
                   </div>
                   
                   {/* Column Aksi (Not Sortable) */}
