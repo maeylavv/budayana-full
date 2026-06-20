@@ -7,6 +7,41 @@ import { islands as staticIslands } from "../data/islands"
 import MusicToggleButton from "../components/MusicToggleButton"
 import { useQuizResults } from "../hooks/useQuizResults"
 import { getJourneyContent } from "../utils/xpJourney"
+import { Compass } from "lucide-react"
+
+const getNextLevelInfo = (xp) => {
+  if (xp >= 7200) {
+    return null;
+  }
+  if (xp >= 6500) {
+    return {
+      nextTitle: "Penjelajah Budaya Nusantara",
+      xpNeeded: 7200 - xp
+    };
+  }
+  if (xp >= 4500) {
+    return {
+      nextTitle: "Penjelajah Hebat",
+      xpNeeded: 6500 - xp
+    };
+  }
+  if (xp >= 2500) {
+    return {
+      nextTitle: "Ahli Budaya",
+      xpNeeded: 4500 - xp
+    };
+  }
+  if (xp >= 1000) {
+    return {
+      nextTitle: "Petualang Nusantara",
+      xpNeeded: 2500 - xp
+    };
+  }
+  return {
+    nextTitle: "Penjelajah Muda",
+    xpNeeded: 1000 - xp
+  };
+};
 
 export default function QuizKulturPage() {
   const navigate = useNavigate()
@@ -89,7 +124,13 @@ export default function QuizKulturPage() {
             className="achievement-preview-btn-top"
             onClick={() => setShowXpJourneyModal(true)}
           >
-            🏆 Perjalanan Budayaku
+            <Compass size={18} style={{ color: '#955C2E' }} />
+            <div className="achievement-btn-content">
+              <span className="achievement-btn-label">Perjalanan Budayaku</span>
+              <div className="achievement-btn-progress-bg">
+                <div className="achievement-btn-progress-fill" style={{ width: `${Math.min((totalXP / 7200) * 100, 100)}%` }} />
+              </div>
+            </div>
           </button>
 
           <div className='profile' onClick={handleProfileClick} title="Buka Profil">
@@ -120,7 +161,13 @@ export default function QuizKulturPage() {
           className="achievement-preview-btn-top"
           onClick={() => setShowXpJourneyModal(true)}
         >
-          🏆 Perjalanan Budayaku
+          <Compass size={18} style={{ color: '#955C2E' }} />
+          <div className="achievement-btn-content">
+            <span className="achievement-btn-label">Perjalanan Budayaku</span>
+            <div className="achievement-btn-progress-bg">
+              <div className="achievement-btn-progress-fill" style={{ width: `${Math.min((totalXP / 7200) * 100, 100)}%` }} />
+            </div>
+          </div>
         </button>
         <ToggleMenu />
       </div>
@@ -248,13 +295,31 @@ export default function QuizKulturPage() {
                 })}
               </div>
 
+              {/* Next Level progress message */}
+              {(() => {
+                const nextInfo = getNextLevelInfo(totalXP);
+                if (!nextInfo) return null;
+                return (
+                  <p style={{
+                    fontFamily: "'Fredoka', sans-serif",
+                    fontWeight: 'bold',
+                    fontSize: '0.95rem',
+                    color: '#8F5A07',
+                    marginBottom: '16px',
+                    textAlign: 'center'
+                  }}>
+                    {nextInfo.xpNeeded} XP lagi untuk naik ke "{nextInfo.nextTitle}"
+                  </p>
+                );
+              })()}
+
               {/* Action Buttons */}
               <div className="achievement-actions">
                 <button 
                   className="achievement-btn-primary" 
                   onClick={handleCloseModal}
                 >
-                  Tutup
+                  Lanjut menjelajah
                 </button>
               </div>
             </div>

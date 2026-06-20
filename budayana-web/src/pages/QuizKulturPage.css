@@ -612,17 +612,20 @@
 }
 
 .achievement-preview-btn-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   background-color: #fff7e3;
   color: #5C3A1E;
-  border: 2px solid #5C3A1E;
-  border-radius: 20px;
-  padding: 8px 14px;
+  border: 2.5px solid #955C2E;
+  border-radius: 999px;
+  padding: 6px 18px;
   font-family: 'Fredoka', sans-serif;
-  font-weight: 600;
-  font-size: 13px;
   cursor: pointer;
-  box-shadow: 0 3px 0 #5C3A1E;
+  box-shadow: none;
   transition: transform 0.1s;
+  height: 48px;
+  box-sizing: border-box;
 }
 
 .achievement-preview-btn-top:hover {
@@ -630,14 +633,51 @@
 }
 
 .achievement-preview-btn-top:active {
-  transform: translateY(2px);
-  box-shadow: none;
+  transform: translateY(1px);
+}
+
+.achievement-btn-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.achievement-btn-label {
+  font-family: 'Fredoka One', 'Fredoka', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  color: #5C3A1E;
+  line-height: 1.1;
+  text-align: left;
+}
+
+.achievement-btn-progress-bg {
+  width: 70px;
+  height: 6px;
+  background-color: #edd8b8;
+  border-radius: 3px;
+  overflow: hidden;
+  border: 1px solid #5C3A1E;
+}
+
+.achievement-btn-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #F4A229, #E8701A);
+  border-radius: 2px;
 }
 
 @media (max-width: 768px) {
   .achievement-preview-btn-top {
+    height: 42px !important;
+    padding: 4px 12px !important;
+  }
+  .achievement-btn-label {
     font-size: 11px !important;
-    padding: 6px 10px !important;
+  }
+  .achievement-btn-progress-bg {
+    width: 60px !important;
+    height: 5px !important;
   }
 }
 

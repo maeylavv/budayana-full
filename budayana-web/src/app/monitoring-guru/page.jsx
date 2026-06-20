@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
-import { Search } from "lucide-react";
+import { Search, RotateCcw, ArrowUpDown, AlertTriangle, ArrowRight } from "lucide-react";
 import MonitoringSidebar from "../../components/MonitoringSidebar";
 import { monitoringApi } from "../../lib/api";
 import {
@@ -13,16 +14,50 @@ import "../../pages/Results.css";
 import InfoIcon from "../../components/InfoIcon";
 import { GURU_INFO } from "../../components/infoContent/guruInfoContent";
 
+function getWarningMessage(student) {
+  const zeroFields = [];
+  const totalXp = student.totalXp ?? 0;
+  const improvementVal = student.learningImprovement !== undefined && student.learningImprovement !== null ? Number(student.learningImprovement) : 0;
+  const literacyVal = student.averageLiteracyScore !== undefined && student.averageLiteracyScore !== null ? Number(student.averageLiteracyScore) : 0;
+
+  if (totalXp === 0) zeroFields.push("Total XP");
+  if (improvementVal <= 0) zeroFields.push("Peningkatan Cerita");
+  if (literacyVal <= 0) zeroFields.push("Literasi Budaya");
+
+  if (zeroFields.length === 0) return null;
+  if (zeroFields.length === 1) {
+    return `${zeroFields[0]} siswa ini masih 0 — kemungkinan belum mulai aktivitas`;
+  }
+  return `${zeroFields.join(", ")} siswa ini masih 0 — kemungkinan belum mulai aktivitas apa pun`;
+}
+
+function getCeritaColor(val) {
+  if (val > 70) return '#3B6D11'; // Sangat baik
+  if (val >= 40) return '#B45309'; // Cukup (contrast amber)
+  return '#A32D2D'; // Perlu bimbingan
+}
+
+function getLiterasiColor(val) {
+  if (val >= 75) return '#3B6D11'; // Sangat baik
+  if (val >= 50) return '#B45309'; // Cukup (contrast amber)
+  return '#A32D2D'; // Perlu bimbingan
+}
+
 export default function MonitoringGuruDashboard() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [students, setStudents] = useState([]);
   const [initialLoading, setInitialLoading] = useState(true);
   const [tableLoading, setTableLoading] = useState(false);
   const [error, setError] = useState(null);
   const [selectedClass, setSelectedClass] = useState("");
   const [selectedGender, setSelectedGender] = useState("");
-  const [sortOption, setSortOption] = useState("name_asc");
+
+  // Local table state (local filter, sorting, and pagination)
+  const [sortField, setSortField] = useState("name");
+  const [sortAsc, setSortAsc] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [activeWarningTarget, setActiveWarningTarget] = useState(null);
+  const [activeWarningStudent, setActiveWarningStudent] = useState(null);
 
   const [classSummary, setClassSummary] = useState({
     averageImprovement: 0,
@@ -34,17 +69,7 @@ export default function MonitoringGuruDashboard() {
   });
   const [summaryLoading, setSummaryLoading] = useState(true);
 
-  // Debounce search query
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedSearch(searchQuery);
-    }, 400);
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [searchQuery]);
-
-  // Fetch students with class filter and debounced search
+  // Fetch students with class filter and gender filter (search and sorting are client-side local)
   useEffect(() => {
     const controller = new AbortController();
     let active = true;
@@ -52,7 +77,7 @@ export default function MonitoringGuruDashboard() {
     const fetchStudents = async () => {
       try {
         setTableLoading(true);
-        const data = await monitoringApi.listStudents(selectedClass, debouncedSearch, selectedGender, {
+        const data = await monitoringApi.listStudents(selectedClass, "", selectedGender, {
           signal: controller.signal
         });
         if (active) {
@@ -80,7 +105,7 @@ export default function MonitoringGuruDashboard() {
       active = false;
       controller.abort();
     };
-  }, [selectedClass, debouncedSearch, selectedGender]);
+  }, [selectedClass, selectedGender]);
 
   // Fetch class summary
   useEffect(() => {
@@ -121,6 +146,53 @@ export default function MonitoringGuruDashboard() {
       controller.abort();
     };
   }, [selectedClass, selectedGender]);
+
+  // 1. Client-side search filtering (only filters names locally on the subset)
+  const searchedStudents = useMemo(() => {
+    return students.filter(student =>
+      (student.name || "").toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [students, searchQuery]);
+
+  // 2. Client-side sorting logic
+  const sortedStudents = useMemo(() => {
+    return [...searchedStudents].sort((a, b) => {
+      let valA, valB;
+      if (sortField === "name") {
+        valA = a.name || "";
+        valB = b.name || "";
+        return sortAsc ? valA.localeCompare(valB) : valB.localeCompare(valA);
+      } else if (sortField === "xp") {
+        valA = a.totalXp ?? 0;
+        valB = b.totalXp ?? 0;
+      } else if (sortField === "story") {
+        valA = a.learningImprovement ?? 0;
+        valB = b.learningImprovement ?? 0;
+      } else if (sortField === "literacy") {
+        valA = a.averageLiteracyScore ?? 0;
+        valB = b.averageLiteracyScore ?? 0;
+      } else {
+        return 0;
+      }
+      return sortAsc ? valA - valB : valB - valA;
+    });
+  }, [searchedStudents, sortField, sortAsc]);
+
+  // 3. Client-side pagination logic
+  const ITEMS_PER_PAGE = 5;
+  const totalPages = Math.ceil(sortedStudents.length / ITEMS_PER_PAGE) || 1;
+  const paginatedStudents = useMemo(() => {
+    return sortedStudents.slice(
+      (currentPage - 1) * ITEMS_PER_PAGE,
+      currentPage * ITEMS_PER_PAGE
+    );
+  }, [sortedStudents, currentPage]);
+
+  const filteredStudents = paginatedStudents;
+  const donutData = [
+    { name: "Aktif", value: classSummary.activeStudents, color: "#4CAF50" },
+    { name: "Tidak Aktif", value: classSummary.inactiveStudents, color: "#F44336" }
+  ];
 
   if (initialLoading || summaryLoading) {
     if (error) {
@@ -165,40 +237,6 @@ export default function MonitoringGuruDashboard() {
     );
   }
 
-  const sortedStudents = [...students].sort((a, b) => {
-    if (sortOption === "name_asc") {
-      return a.name.localeCompare(b.name);
-    }
-    if (sortOption === "name_desc") {
-      return b.name.localeCompare(a.name);
-    }
-    if (sortOption === "xp_desc") {
-      return (b.totalXp ?? b.totalXP ?? 0) - (a.totalXp ?? a.totalXP ?? 0);
-    }
-    if (sortOption === "xp_asc") {
-      return (a.totalXp ?? a.totalXP ?? 0) - (b.totalXp ?? b.totalXP ?? 0);
-    }
-    if (sortOption === "improvement_desc") {
-      return (b.learningImprovement ?? 0) - (a.learningImprovement ?? 0);
-    }
-    if (sortOption === "improvement_asc") {
-      return (a.learningImprovement ?? 0) - (b.learningImprovement ?? 0);
-    }
-    if (sortOption === "literacy_desc") {
-      return (b.averageLiteracyScore ?? 0) - (a.averageLiteracyScore ?? 0);
-    }
-    if (sortOption === "literacy_asc") {
-      return (a.averageLiteracyScore ?? 0) - (b.averageLiteracyScore ?? 0);
-    }
-    return 0;
-  });
-
-  const filteredStudents = sortedStudents;
-  const donutData = [
-    { name: "Aktif", value: classSummary.activeStudents, color: "#4CAF50" },
-    { name: "Tidak Aktif", value: classSummary.inactiveStudents, color: "#F44336" }
-  ];
-
   return (
     <div className="flex bg-[#FEF6DF] min-h-screen w-full" style={{ fontFamily: "'Fredoka One', sans-serif" }}>
       <MonitoringSidebar role="guru" />
@@ -210,12 +248,98 @@ export default function MonitoringGuruDashboard() {
         </div>
 
         <section>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '20px',
+              flexWrap: 'wrap',
+              gap: '16px'
+            }}>
               <h2 className="results-section-title" style={{ fontSize: '1.2rem', margin: 0 }}>Statistik Kelas</h2>
-             <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-              <select
-                value={selectedGender}
-                onChange={(e) => setSelectedGender(e.target.value)}
+              <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+                {/* Segmented Toggle untuk Gender */}
+                <div style={{
+                  display: 'flex',
+                  backgroundColor: 'white',
+                  padding: '2px',
+                  borderRadius: '999px',
+                  border: '2px solid #955C2E',
+                  boxSizing: 'border-box',
+                  gap: '4px'
+                }}>
+                  <button
+                    type="button"
+                    onClick={() => { setSelectedGender(""); setCurrentPage(1); }}
+                    style={{
+                      padding: '6px 16px',
+                      borderRadius: '999px',
+                      border: 'none',
+                      backgroundColor: selectedGender === "" ? '#955C2E' : 'transparent',
+                      color: selectedGender === "" ? 'white' : '#5C3A1E',
+                      fontFamily: "'Fredoka One', sans-serif",
+                      fontWeight: 'bold',
+                      cursor: 'pointer',
+                      fontSize: '1rem',
+                      transition: 'all 0.2s ease',
+                      whiteSpace: 'nowrap',
+                      textAlign: 'center'
+                    }}
+                  >
+                    Semua
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { setSelectedGender("Laki-laki"); setCurrentPage(1); }}
+                    style={{
+                      padding: '6px 16px',
+                      borderRadius: '999px',
+                      border: 'none',
+                      backgroundColor: selectedGender === "Laki-laki" ? '#955C2E' : 'transparent',
+                      color: selectedGender === "Laki-laki" ? 'white' : '#5C3A1E',
+                      fontFamily: "'Fredoka One', sans-serif",
+                      fontWeight: 'bold',
+                      cursor: 'pointer',
+                      fontSize: '1rem',
+                      transition: 'all 0.2s ease',
+                      whiteSpace: 'nowrap',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '6px'
+                    }}
+                  >
+                    <span style={{ fontSize: '1.1rem' }}>♂</span> Laki
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { setSelectedGender("Perempuan"); setCurrentPage(1); }}
+                    style={{
+                      padding: '6px 16px',
+                      borderRadius: '999px',
+                      border: 'none',
+                      backgroundColor: selectedGender === "Perempuan" ? '#955C2E' : 'transparent',
+                      color: selectedGender === "Perempuan" ? 'white' : '#5C3A1E',
+                      fontFamily: "'Fredoka One', sans-serif",
+                      fontWeight: 'bold',
+                      cursor: 'pointer',
+                      fontSize: '1rem',
+                      transition: 'all 0.2s ease',
+                      whiteSpace: 'nowrap',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '6px'
+                    }}
+                  >
+                    <span style={{ fontSize: '1.1rem' }}>♀</span> Perempuan
+                  </button>
+                </div>
+
+                {/* Dropdown Filter Kelas */}
+                <select
+                  value={selectedClass}
+                  onChange={(e) => { setSelectedClass(e.target.value); setCurrentPage(1); }}
                   style={{
                     padding: '8px 40px 8px 16px',
                     borderRadius: '999px',
@@ -233,38 +357,13 @@ export default function MonitoringGuruDashboard() {
                     backgroundRepeat: 'no-repeat',
                     backgroundPosition: 'right 16px center'
                   }}
-              >
-                <option value="">Semua Gender</option>
-                <option value="Laki-laki">Laki-laki</option>
-                <option value="Perempuan">Perempuan</option>
-              </select>
-              <select
-                value={selectedClass}
-                onChange={(e) => setSelectedClass(e.target.value)}
-                  style={{
-                    padding: '8px 40px 8px 16px',
-                    borderRadius: '999px',
-                    border: '2px solid #955C2E',
-                    backgroundColor: 'white',
-                    color: '#5C3A1E',
-                    fontFamily: "'Fredoka One', sans-serif",
-                    fontWeight: 'bold',
-                    outline: 'none',
-                    cursor: 'pointer',
-                    fontSize: '1rem',
-                    appearance: 'none',
-                    WebkitAppearance: 'none',
-                    backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23955C2E' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e")`,
-                    backgroundRepeat: 'no-repeat',
-                    backgroundPosition: 'right 16px center'
-                  }}
-              >
-                <option value="">Semua Kelas</option>
-                <option value="A">Kelas A</option>
-                <option value="B">Kelas B</option>
-                <option value="C">Kelas C</option>
-              </select>
-             </div>
+                >
+                  <option value="">Semua kelas</option>
+                  <option value="A">Kelas A</option>
+                  <option value="B">Kelas B</option>
+                  <option value="C">Kelas C</option>
+                </select>
+              </div>
             </div>
             
             {/* Top 3 Charts */}
@@ -413,44 +512,41 @@ export default function MonitoringGuruDashboard() {
 
         <section style={{ marginTop: '40px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
-              <h2 className="results-section-title" style={{ fontSize: '1.2rem', margin: 0, display: 'flex', alignItems: 'center', whiteSpace: 'nowrap' }}>Tabel Siswa <InfoIcon {...GURU_INFO.tabelSiswa} /></h2>
-              <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
-                <select
-                  value={sortOption}
-                  onChange={(e) => setSortOption(e.target.value)}
-                  style={{
-                    padding: '8px 40px 8px 16px',
-                    borderRadius: '999px',
-                    border: '2px solid #955C2E',
-                    backgroundColor: 'white',
-                    color: '#5C3A1E',
-                    fontFamily: "'Fredoka One', sans-serif",
-                    fontWeight: 'bold',
-                    outline: 'none',
-                    cursor: 'pointer',
-                    fontSize: '1rem',
-                    appearance: 'none',
-                    WebkitAppearance: 'none',
-                    backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23955C2E' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e")`,
-                    backgroundRepeat: 'no-repeat',
-                    backgroundPosition: 'right 16px center'
-                  }}
-                >
-                  <option value="name_asc">Nama (A - Z)</option>
-                  <option value="name_desc">Nama (Z - A)</option>
-                  <option value="xp_desc">XP Tertinggi</option>
-                  <option value="xp_asc">XP Terendah</option>
-                  <option value="improvement_desc">Peningkatan Cerita Tertinggi</option>
-                  <option value="improvement_asc">Peningkatan Cerita Terendah</option>
-                  <option value="literacy_desc">Literasi Budaya Tertinggi</option>
-                  <option value="literacy_asc">Literasi Budaya Terendah</option>
-                </select>
+              <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+                <h2 className="results-section-title" style={{ fontSize: '1.2rem', margin: 0, display: 'flex', alignItems: 'center', whiteSpace: 'nowrap' }}>
+                  Tabel Siswa <InfoIcon {...GURU_INFO.tabelSiswa} />
+                </h2>
+                {(() => {
+                  const genderSymbol = selectedGender === "Laki-laki" ? "♂ " : selectedGender === "Perempuan" ? "♀ " : "";
+                  const genderText = selectedGender ? selectedGender : "Semua Gender";
+                  const gradeVal = students.find(s => s.grade)?.grade || "";
+                  const classText = selectedClass ? `${gradeVal}${selectedClass}` : "Semua Kelas";
+                  return (
+                    <span style={{
+                      padding: '4px 12px',
+                      borderRadius: '999px',
+                      backgroundColor: 'white',
+                      color: '#5C3A1E',
+                      fontSize: '0.85rem',
+                      fontWeight: 'bold',
+                      fontFamily: "'Fredoka One', sans-serif",
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      border: '2px solid #955C2E'
+                    }}>
+                      {genderSymbol}{genderText} · {classText}
+                    </span>
+                  );
+                })()}
+              </div>
+              <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
                 <div style={{ position: 'relative', width: '250px' }}>
                   <input 
                     type="text" 
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Cari..." 
+                    onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
+                    placeholder="Cari nama siswa..." 
                     style={{ width: '100%', padding: '8px 16px', borderRadius: '999px', border: '2px solid #955C2E', outline: 'none', fontFamily: "'Fredoka One', sans-serif", color: '#5C3A1E' }}
                   />
                   <Search style={{ position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)', color: '#955C2E' }} size={18} />
@@ -461,13 +557,73 @@ export default function MonitoringGuruDashboard() {
             <div className="history-table-wrapper" style={{ overflowX: 'auto', width: '100%' }}>
               <div className="history-table-container" style={{ display: 'flex', flexDirection: 'column', minWidth: '900px', height: 'auto', overflowY: 'visible' }}>
                 <div className="history-header" style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr 1.5fr 1.5fr 1.2fr', backgroundColor: '#955C2E', color: 'white', padding: '16px 24px', alignItems: 'center' }}>
-                  <div style={{ textAlign: 'left' }}>Nama</div>
+                  {/* Column Nama (Sortable) */}
+                  <div 
+                    onClick={() => {
+                      if (sortField === "name") {
+                        setSortAsc(!sortAsc);
+                      } else {
+                        setSortField("name");
+                        setSortAsc(true);
+                      }
+                    }}
+                    style={{ textAlign: 'left', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', userSelect: 'none' }}
+                  >
+                    Nama <ArrowUpDown size={16} strokeWidth={3} style={{ opacity: sortField === "name" ? 1 : 0.6 }} />
+                  </div>
+                  
+                  {/* Column Kelas (Not Sortable) */}
                   <div style={{ textAlign: 'center' }}>Kelas</div>
-                  <div style={{ textAlign: 'center' }}>Total XP</div>
-                  <div style={{ textAlign: 'center' }}>Peningkatan Cerita</div>
-                  <div style={{ textAlign: 'center' }}>Literasi Budaya</div>
+                  
+                  {/* Column Total XP (Sortable) */}
+                  <div 
+                    onClick={() => {
+                      if (sortField === "xp") {
+                        setSortAsc(!sortAsc);
+                      } else {
+                        setSortField("xp");
+                        setSortAsc(false); // Default to highest first
+                      }
+                    }}
+                    style={{ textAlign: 'center', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', userSelect: 'none' }}
+                  >
+                    Total XP <ArrowUpDown size={16} strokeWidth={3} style={{ opacity: sortField === "xp" ? 1 : 0.6 }} />
+                  </div>
+                  
+                  {/* Column Cerita (Sortable) */}
+                  <div 
+                    onClick={() => {
+                      if (sortField === "story") {
+                        setSortAsc(!sortAsc);
+                      } else {
+                        setSortField("story");
+                        setSortAsc(false); // Default to highest first
+                      }
+                    }}
+                    style={{ textAlign: 'center', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', userSelect: 'none' }}
+                  >
+                    Peningkatan Cerita <ArrowUpDown size={16} strokeWidth={3} style={{ opacity: sortField === "story" ? 1 : 0.6 }} />
+                  </div>
+                  
+                  {/* Column Literasi (Sortable) */}
+                  <div 
+                    onClick={() => {
+                      if (sortField === "literacy") {
+                        setSortAsc(!sortAsc);
+                      } else {
+                        setSortField("literacy");
+                        setSortAsc(false); // Default to highest first
+                      }
+                    }}
+                    style={{ textAlign: 'center', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', userSelect: 'none' }}
+                  >
+                    Literasi Budaya <ArrowUpDown size={16} strokeWidth={3} style={{ opacity: sortField === "literacy" ? 1 : 0.6 }} />
+                  </div>
+                  
+                  {/* Column Aksi (Not Sortable) */}
                   <div style={{ textAlign: 'center' }}>Aksi</div>
                 </div>
+                
                 <div className="history-body">
                 {tableLoading ? (
                   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '200px', color: '#955C2E', fontSize: '1.2rem', fontWeight: 'bold', backgroundColor: '#FEF6DF' }}>
@@ -479,28 +635,77 @@ export default function MonitoringGuruDashboard() {
                   </div>
                 ) : filteredStudents.length === 0 ? (
                   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '200px', color: '#955C2E', fontSize: '1.2rem', fontWeight: 'bold', backgroundColor: '#FEF6DF' }}>
-                    {debouncedSearch ? "Tidak ada siswa ditemukan." : "Belum ada siswa di kelas ini."}
+                    {searchQuery ? "Tidak ada siswa ditemukan." : "Belum ada siswa di kelas ini."}
                   </div>
                 ) : (
                   filteredStudents.map((student) => {
                     const studentClass = student.class || (student.grade && student.classLabel ? `${student.grade}${student.classLabel}` : (student.grade ?? "-"));
-                    const totalXp = student.totalXp ?? student.totalXP ?? 0;
+                    const totalXp = student.totalXp ?? 0;
                     
-                    const learningImprovement = student.learningImprovement !== undefined && student.learningImprovement !== null 
-                      ? (Number(student.learningImprovement) > 0 ? `+${student.learningImprovement}%` : `${student.learningImprovement}%`) 
-                      : "0%";
+                    const improvementVal = student.learningImprovement !== undefined && student.learningImprovement !== null ? Number(student.learningImprovement) : 0;
+                    const literacyVal = student.averageLiteracyScore !== undefined && student.averageLiteracyScore !== null ? Number(student.averageLiteracyScore) : 0;
                     
-                    const averageLiteracyScore = student.averageLiteracyScore !== undefined && student.averageLiteracyScore !== null 
-                      ? (Number(student.averageLiteracyScore) > 0 ? `+${student.averageLiteracyScore}%` : `${student.averageLiteracyScore}%`) 
-                      : "0%";
+                    const needsAttention = totalXp === 0 || improvementVal <= 0 || literacyVal <= 0;
+                    const warningMsg = getWarningMessage(student);
 
                     return (
-                      <div key={student.id} className="history-row" style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr 1.5fr 1.5fr 1.2fr', padding: '16px 24px', borderBottom: '2px solid #955C2E', alignItems: 'center', backgroundColor: '#FEF6DF' }}>
-                        <div style={{ textAlign: 'left', fontWeight: '800', color: '#333' }}>{student.name}</div>
+                      <div key={student.id} className="history-row" style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr 1.5fr 1.5fr 1.2fr', padding: '16px 24px', borderBottom: '2px solid #955C2E', alignItems: 'center', backgroundColor: needsAttention ? '#FFEAEA' : '#FEF6DF' }}>
+                        {/* Name Column */}
+                        <div style={{ textAlign: 'left', fontWeight: '800', color: '#333', display: 'flex', alignItems: 'center' }}>
+                          {needsAttention && (
+                            <button
+                              type="button"
+                              onMouseEnter={(e) => {
+                                setActiveWarningTarget(e.currentTarget);
+                                setActiveWarningStudent(student);
+                              }}
+                              onMouseLeave={() => {
+                                setActiveWarningTarget(null);
+                                setActiveWarningStudent(null);
+                              }}
+                              onFocus={(e) => {
+                                setActiveWarningTarget(e.currentTarget);
+                                setActiveWarningStudent(student);
+                              }}
+                              onBlur={() => {
+                                setActiveWarningTarget(null);
+                                setActiveWarningStudent(null);
+                              }}
+                              style={{
+                                background: 'none',
+                                border: 'none',
+                                padding: 0,
+                                marginRight: '8px',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                outline: 'none'
+                              }}
+                              aria-label={warningMsg || undefined}
+                            >
+                              <AlertTriangle size={16} style={{ color: '#A32D2D', flexShrink: 0 }} />
+                            </button>
+                          )}
+                          {student.name}
+                        </div>
+                        
+                        {/* Class Column */}
                         <div style={{ textAlign: 'center', fontWeight: '800', color: '#333' }}>{studentClass}</div>
-                        <div style={{ textAlign: 'center', fontWeight: '800', color: '#333' }}>{totalXp}</div>
-                        <div style={{ textAlign: 'center', fontWeight: '800', color: '#333' }}>{learningImprovement}</div>
-                        <div style={{ textAlign: 'center', fontWeight: '800', color: '#333' }}>{averageLiteracyScore}</div>
+                        
+                        {/* Total XP Column */}
+                        <div style={{ textAlign: 'center', fontWeight: '800', color: totalXp === 0 ? '#A32D2D' : '#333' }}>{totalXp}</div>
+                        
+                        {/* Story Improvement Column */}
+                        <div style={{ textAlign: 'center', fontWeight: '800', color: getCeritaColor(improvementVal) }}>
+                          {improvementVal > 0 ? `+${improvementVal}%` : `${improvementVal}%`}
+                        </div>
+                        
+                        {/* Literacy Score Column */}
+                        <div style={{ textAlign: 'center', fontWeight: '800', color: getLiterasiColor(literacyVal) }}>
+                          {literacyVal > 0 ? `+${literacyVal}%` : `${literacyVal}%`}
+                        </div>
+                        
+                        {/* Action Column */}
                         <div style={{ display: 'flex', justifyContent: 'center' }}>
                             <Link to={`/monitoring-guru/hasil/${student.id}`} className="no-wrap-btn" style={{ backgroundColor: '#f3a64c', color: 'white', padding: '10px 16px', borderRadius: '12px', textDecoration: 'none', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '1rem', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
                                 Lihat Dashboard <Search size={16} />
@@ -510,11 +715,135 @@ export default function MonitoringGuruDashboard() {
                     );
                   })
                 )}
+                </div>
               </div>
             </div>
-            </div>
+            
+            {/* Table Footer with dynamic pagination */}
+            {!tableLoading && !error && students.length > 0 && (
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '16px', flexWrap: 'wrap', gap: '12px' }}>
+                <span style={{ color: '#5C3A1E', fontWeight: 'bold', fontSize: '0.95rem' }}>
+                  {(() => {
+                    const genderLabelText = selectedGender === "Laki-laki" ? "siswa laki-laki" : selectedGender === "Perempuan" ? "siswa perempuan" : "siswa laki-laki dan perempuan";
+                    const gradeVal = students.find(s => s.grade)?.grade || "";
+                    const classLabelText = selectedClass ? `di kelas ${gradeVal}${selectedClass}` : "di semua kelas";
+                    return `Menampilkan ${filteredStudents.length} dari ${students.length} ${genderLabelText} ${classLabelText}`;
+                  })()}
+                </span>
+                
+                {totalPages > 1 && (
+                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                    <button
+                      type="button"
+                      disabled={currentPage === 1}
+                      onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                      style={{
+                        width: '36px',
+                        height: '36px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderRadius: '8px',
+                        border: '2px solid #955C2E',
+                        backgroundColor: 'white',
+                        color: '#955C2E',
+                        cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
+                        opacity: currentPage === 1 ? 0.4 : 1,
+                        fontWeight: 'bold',
+                        fontSize: '1.2rem',
+                        outline: 'none',
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      &lt;
+                    </button>
+                    <span style={{ fontFamily: "'Fredoka One', sans-serif", color: '#5C3A1E', fontWeight: 'bold', fontSize: '0.95rem' }}>
+                      {currentPage} / {totalPages}
+                    </span>
+                    <button
+                      type="button"
+                      disabled={currentPage === totalPages}
+                      onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                      style={{
+                        width: '36px',
+                        height: '36px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderRadius: '8px',
+                        border: '2px solid #955C2E',
+                        backgroundColor: 'white',
+                        color: '#955C2E',
+                        cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
+                        opacity: currentPage === totalPages ? 0.4 : 1,
+                        fontWeight: 'bold',
+                        fontSize: '1.2rem',
+                        outline: 'none',
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      &gt;
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
         </section>
       </main>
+
+      {/* Portal Tooltip to bring Warning bubble to the front (avoid overflow: auto container cropping) */}
+      {activeWarningTarget && activeWarningStudent && (() => {
+        const rect = activeWarningTarget.getBoundingClientRect();
+        const warningMsg = getWarningMessage(activeWarningStudent);
+        if (!warningMsg) return null;
+        
+        const top = rect.top + window.scrollY - 8;
+        const left = rect.left + window.scrollX + rect.width / 2;
+        
+        return createPortal(
+          <div style={{
+            position: 'absolute',
+            top: `${top}px`,
+            left: `${left}px`,
+            transform: 'translate(-50%, -100%)',
+            backgroundColor: '#5C3A1E',
+            color: '#FFF5E6',
+            fontSize: '12px',
+            width: 'max-content',
+            maxWidth: '240px',
+            borderRadius: '10px',
+            padding: '8px 12px',
+            zIndex: 9999,
+            textAlign: 'center',
+            animation: 'fadeUp 180ms ease-out',
+            pointerEvents: 'none',
+            fontFamily: "'Fredoka One', sans-serif",
+            fontWeight: 'normal',
+            whiteSpace: 'normal',
+            lineHeight: '1.4',
+            boxShadow: '0 4px 6px rgba(0,0,0,0.2)'
+          }}>
+            {warningMsg}
+            <div style={{
+              position: 'absolute',
+              top: '100%',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              borderWidth: '5px',
+              borderStyle: 'solid',
+              borderColor: '#5C3A1E transparent transparent transparent'
+            }} />
+          </div>,
+          document.body
+        );
+      })()}
+
+      <style>{`
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translate(-50%, 4px); }
+          to { opacity: 1; transform: translate(-50%, 0); }
+        }
+      `}</style>
     </div>
   );
 }
