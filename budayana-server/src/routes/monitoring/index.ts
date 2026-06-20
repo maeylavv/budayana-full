@@ -217,6 +217,31 @@ export const monitoringRoutes = new Elysia({ prefix: "/monitoring" })
     }
   )
   /**
+   * DELETE /api/monitoring/profile - Delete own user profile
+   */
+  .delete(
+    "/profile",
+    async ({ user, set }) => {
+      if (!user) {
+        set.status = 401
+        return { error: "Unauthorized", code: "UNAUTHORIZED" }
+      }
+
+      await monitoringService.deleteStudent(user.id)
+      return { success: true, message: "Account deleted successfully" }
+    },
+    {
+      detail: {
+        tags: ["Monitoring"],
+        summary: "Delete own profile account",
+      },
+      response: {
+        200: SuccessResponseSchema,
+        401: ErrorResponseSchema,
+      },
+    }
+  )
+  /**
    * GET /api/monitoring/analytics/class-summary - Get class summary analytics (TEACHER only)
    */
   .get(
