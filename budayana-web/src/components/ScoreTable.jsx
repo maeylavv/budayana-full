@@ -16,10 +16,20 @@ export default function ScoreTable({ history }) {
     return "text-gray-600 bg-gray-50";
   };
 
-  const getScoreColor = (percent) => {
-    if (percent >= 80) return "text-green-600";
-    if (percent >= 60) return "text-yellow-600";
-    return "text-red-600";
+  const getScoreColor = (score, maxScore) => {
+    if (!maxScore) return '#8C8C8C';
+    const percent = (score / maxScore) * 100;
+    if (percent >= 80) return '#32B65E';
+    if (percent >= 50) return '#F2B84B';
+    return '#E64B4B';
+  };
+
+  const getMaxScore = (level) => {
+    const levelStr = String(level).toLowerCase();
+    if (levelStr.includes('1')) return 5;
+    if (levelStr.includes('2')) return 4;
+    if (levelStr.includes('3')) return 3;
+    return 0; // fallback
   };
 
   return (
@@ -35,30 +45,42 @@ export default function ScoreTable({ history }) {
       </div>
       <div className="history-body" style={{ overflowY: 'visible', flex: '1 1 0%' }}>
         {history.length > 0 ? (
-          history.map((item, index) => (
-            <div key={index} className="history-row" style={{ display: 'grid', gridTemplateColumns: '1.5fr 2fr 1fr 1fr 1fr 1fr 1.5fr', padding: '16px 24px', borderBottom: '1px solid #E8D9C0', alignItems: 'center', minWidth: '850px' }}>
-              <div style={{ textAlign: 'center' }}>
-                <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${ISLAND_COLORS[item.island] || 'bg-gray-100'}`}>
-                  {item.island}
-                </span>
+          history.map((item, index) => {
+            const rawScore = item.scorePercent; // The numerical score
+            const maxScore = getMaxScore(item.level);
+
+            return (
+              <div key={index} className="history-row" style={{ display: 'grid', gridTemplateColumns: '1.5fr 2fr 1fr 1fr 1fr 1fr 1.5fr', padding: '16px 24px', borderBottom: '1px solid #E8D9C0', alignItems: 'center', minWidth: '850px' }}>
+                <div style={{ textAlign: 'center' }}>
+                  <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${ISLAND_COLORS[item.island] || 'bg-gray-100'}`}>
+                    {item.island}
+                  </span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                  <span>{LOCAL_TOPIC_ICONS[item.topic] || TOPIC_ICONS[item.topic] || "📝"}</span>
+                  <span>{item.topic}</span>
+                </div>
+                <div style={{ textAlign: 'center' }}>{item.level}</div>
+                <div style={{ textAlign: 'center' }}>
+                  <span className={`px-2 py-1 rounded-md text-xs font-bold ${getBloomColor(item.bloom)}`}>
+                    {item.bloom}
+                  </span>
+                </div>
+                <div
+                  className="quiz-score"
+                  style={{
+                    textAlign: 'center',
+                    color: getScoreColor(rawScore, maxScore),
+                    fontWeight: '700'
+                  }}
+                >
+                  {rawScore}/{maxScore}
+                </div>
+                <div style={{ textAlign: 'center' }}>{item.time}</div>
+                <div style={{ textAlign: 'center' }}>{item.date}</div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-                <span>{LOCAL_TOPIC_ICONS[item.topic] || TOPIC_ICONS[item.topic] || "📝"}</span>
-                <span>{item.topic}</span>
-              </div>
-              <div style={{ textAlign: 'center' }}>{item.level}</div>
-              <div style={{ textAlign: 'center' }}>
-                <span className={`px-2 py-1 rounded-md text-xs font-bold ${getBloomColor(item.bloom)}`}>
-                  {item.bloom}
-                </span>
-              </div>
-              <div className={`text-center font-bold ${getScoreColor(item.scorePercent)}`}>
-                {item.score}
-              </div>
-              <div style={{ textAlign: 'center' }}>{item.time}</div>
-              <div style={{ textAlign: 'center' }}>{item.date}</div>
-            </div>
-          ))
+            );
+          })
         ) : (
           <div className="empty-message" style={{ textAlign: 'center', padding: '20px', minWidth: '850px' }}>
             Belum ada riwayat pengerjaan.
