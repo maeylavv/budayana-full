@@ -161,7 +161,7 @@ export default function MonitoringOrtuProfil() {
         username: formData.username
       });
       setIsEditing(false);
-      setSuccess("Profile updated successfully!");
+      setSuccess("Profil berhasil diperbarui!");
     } catch (err) {
       alert("Gagal memperbarui profil: " + (err.message ?? err));
     }
@@ -282,7 +282,7 @@ export default function MonitoringOrtuProfil() {
               <button 
                 onClick={handleDeleteClick}
                 style={{ backgroundColor: '#c53030', color: 'white', padding: '12px 30px', borderRadius: '999px', fontSize: '1.1rem', fontWeight: 'bold', border: 'none', cursor: 'pointer' }}>
-                Delete Profile
+                Delete Profil
               </button>
               <button 
                 onClick={handleUpdate}
@@ -296,20 +296,20 @@ export default function MonitoringOrtuProfil() {
 
       <ConfirmationModal 
         open={showEditConfirm}
-        title="Confirm Profile Update"
-        message="Are you sure you want to save these profile changes?"
-        confirmText="Save Changes"
-        cancelText="Cancel"
+        title="Konfirmasi Perubahan Data"
+        message="Apakah Anda yakin ingin menyimpan perubahan profil ini?"
+        confirmText="Simpan Data"
+        cancelText="Batal"
         onConfirm={confirmSave}
         onCancel={() => setShowEditConfirm(false)}
       />
 
       <ConfirmationModal 
         open={showDeleteConfirm}
-        title="Delete Account?"
-        message="This action cannot be undone. Your profile and associated access will be permanently removed."
-        confirmText="Delete Account"
-        cancelText="Cancel"
+        title="Hapus Akun?"
+        message="Tindakan ini tidak dapat dibatalkan. Profil Anda dan semua akses yang terkait akan dihapus secara permanen."
+        confirmText="Hapus Akun"
+        cancelText="Batal"
         isDestructive={true}
         onConfirm={confirmDelete}
         onCancel={() => setShowDeleteConfirm(false)}

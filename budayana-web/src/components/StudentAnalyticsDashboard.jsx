@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { BookOpen, Puzzle } from 'lucide-react';
 import {
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer,
   BarChart, Bar, XAxis, YAxis, Tooltip, Legend, PieChart, Pie, Cell
@@ -91,28 +92,50 @@ export default function StudentAnalyticsDashboard({
       <hr className="profile-divider" style={{ borderTop: '2px solid #E8D9C0', margin: '24px 0' }} />
 
       {/* Feature Switcher Tabs */}
-      <div className="flex items-center gap-2 md:gap-4 mb-6 pb-4 border-b-2 border-[#d3cbb8]">
+      <div style={{
+        display: 'inline-flex',
+        backgroundColor: '#FFFBEC',
+        padding: '4px',
+        borderRadius: '12px',
+        border: '2px solid #E8D9C0',
+        gap: '4px',
+        marginBottom: '24px'
+      }}>
         <button
           onClick={() => setActiveTab("ceritaRakyat")}
-          className={`px-4 py-2 rounded-xl font-bold text-lg md:text-xl transition-colors border-none cursor-pointer ${
-            activeTab === "ceritaRakyat"
-              ? "bg-[#955c2e] text-white"
-              : "bg-transparent text-[#955c2e] hover:bg-[#955c2e]/10"
-          }`}
-          style={{ fontFamily: "'Fredoka One', sans-serif" }}
+          className="transition-colors border-none cursor-pointer"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '10px 24px',
+            borderRadius: '12px',
+            backgroundColor: activeTab === "ceritaRakyat" ? '#7b4f2e' : 'transparent',
+            color: activeTab === "ceritaRakyat" ? 'white' : '#5C3A1E',
+            fontFamily: "'Fredoka One', sans-serif",
+            fontSize: '1.1rem',
+            fontWeight: 'bold'
+          }}
         >
-          Cerita Rakyat
+          <BookOpen size={20} /> Cerita Rakyat
         </button>
         <button
           onClick={() => setActiveTab("quizBudaya")}
-          className={`px-4 py-2 rounded-xl font-bold text-lg md:text-xl transition-colors border-none cursor-pointer ${
-            activeTab === "quizBudaya"
-              ? "bg-[#955c2e] text-white"
-              : "bg-transparent text-[#955c2e] hover:bg-[#955c2e]/10"
-          }`}
-          style={{ fontFamily: "'Fredoka One', sans-serif" }}
+          className="transition-colors border-none cursor-pointer"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '10px 24px',
+            borderRadius: '12px',
+            backgroundColor: activeTab === "quizBudaya" ? '#7b4f2e' : 'transparent',
+            color: activeTab === "quizBudaya" ? 'white' : '#5C3A1E',
+            fontFamily: "'Fredoka One', sans-serif",
+            fontSize: '1.1rem',
+            fontWeight: 'bold'
+          }}
         >
-          Quiz Budaya
+          <Puzzle size={20} /> Quiz Budaya
         </button>
       </div>
 
@@ -299,6 +322,9 @@ function QuizAnalyticsPanel({ quizAnalytics, studentInfo }) {
 
   // Synchronize dynamic journey milestone title and emoji with the student portal
   const journey = getJourneyContent(stats.totalXp || 0);
+  const isGuru = window.location.pathname.includes('/monitoring-guru');
+  const isParent = window.location.pathname.includes('/monitoring-ortu');
+  const isEmptyState = (stats.totalXp || 0) === 0;
 
   // Format score in history to make sure it renders beautifully as string or percentage
   const formattedHistory = (history || []).map(item => ({
@@ -325,15 +351,61 @@ function QuizAnalyticsPanel({ quizAnalytics, studentInfo }) {
             <div className="stat-label">XP Quiz Budaya</div>
           </div>
           <div className="stat-card pink" style={{ borderRadius: '24px', border: '3px solid #d986a1', borderBottom: '6px solid #d986a1', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <div className="stat-value" style={{ fontSize: '2.5rem', display: 'block', marginBottom: '4px' }}>
-                {journey.emoji}
-              </div>
-              <div className="stat-value" style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
-                {journey.title}
-              </div>
-               </div>
-            <div className="stat-label" style={{ fontSize: '1.2rem', marginTop: '6px' }}>Peringkat Petualang</div>
+            {isEmptyState && isGuru ? (
+              <>
+                <div
+                  className="stat-value"
+                  style={{
+                    fontSize: '4rem',
+                    opacity: 0.55
+                  }}
+                >
+                  —
+                </div>
+                <div
+                  className="stat-label"
+                  style={{
+                    marginTop: '8px'
+                  }}
+                >
+                  Peringkat Petualang
+                </div>
+              </>
+            ) : isEmptyState && isParent ? (
+              <>
+                <div
+                  className="stat-value"
+                  style={{
+                    fontSize: '4rem',
+                    lineHeight: 1,
+                    marginBottom: '12px'
+                  }}
+                >
+                  -
+                </div>
+                <div
+                  className="stat-label"
+                  style={{
+                    fontSize: '1.2rem',
+                    marginTop: '8px'
+                  }}
+                >
+                  Peringkat Petualang
+                </div>
+              </>
+            ) : (
+              <>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                  <div className="stat-value" style={{ fontSize: '2.5rem', display: 'block', marginBottom: '4px' }}>
+                    {journey.emoji}
+                  </div>
+                  <div className="stat-value" style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
+                    {journey.title}
+                  </div>
+                </div>
+                <div className="stat-label" style={{ fontSize: '1.2rem', marginTop: '6px' }}>Peringkat Petualang</div>
+              </>
+            )}
           </div>
           <div className="stat-card orange" style={{ borderRadius: '24px' }}>
             <div className="stat-value">{stats.averageScore}%</div>

@@ -17,6 +17,80 @@ const getAnimalAvatar = (seed) => {
   return `/assets/budayana/islands/${animals[index]}`;
 };
 
+function ConfirmationModal({ open, title, message, onCancel, onConfirm, confirmText, cancelText = "Batal", isDestructive = false }) {
+  if (!open) return null;
+
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div 
+        onClick={onCancel}
+        style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(92,53,25,0.35)', backdropFilter: 'blur(2px)' }}
+      />
+      <div style={{
+        position: 'relative',
+        backgroundColor: '#FFF5E6',
+        border: '3px solid #C8935A',
+        borderRadius: '20px',
+        width: '450px',
+        maxWidth: '92vw',
+        padding: '24px',
+        boxSizing: 'border-box',
+        fontFamily: "'Fredoka One', sans-serif",
+        textAlign: 'center',
+        boxShadow: '0 10px 25px rgba(123, 79, 46, 0.25)',
+        animation: 'scaleIn 200ms ease-out'
+      }}>
+        <h3 style={{ fontSize: '1.4rem', color: isDestructive ? '#c53030' : '#7B4F2E', margin: '0 0 12px 0', fontWeight: 'bold' }}>
+          {title}
+        </h3>
+        <p style={{ fontSize: '1rem', color: '#5C3A1E', margin: '0 0 24px 0', lineHeight: '1.5' }}>
+          {message}
+        </p>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '16px' }}>
+          <button 
+            onClick={onCancel}
+            style={{
+              backgroundColor: '#A0AEC0',
+              color: 'white',
+              border: 'none',
+              borderRadius: '999px',
+              padding: '10px 24px',
+              fontSize: '1rem',
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              transition: 'background-color 0.2s'
+            }}
+          >
+            {cancelText}
+          </button>
+          <button 
+            onClick={onConfirm}
+            style={{
+              backgroundColor: isDestructive ? '#c53030' : '#955C2E',
+              color: 'white',
+              border: 'none',
+              borderRadius: '999px',
+              padding: '10px 24px',
+              fontSize: '1rem',
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              transition: 'background-color 0.2s'
+            }}
+          >
+            {confirmText}
+          </button>
+        </div>
+        <style>{`
+          @keyframes scaleIn { 
+            from { transform: scale(0.95); opacity: 0; } 
+            to { transform: scale(1); opacity: 1; } 
+          }
+        `}</style>
+      </div>
+    </div>
+  );
+}
+
 export default function MonitoringGuruProfilAnakDetail() {
   const { studentId } = useParams();
   const navigate = useNavigate();
@@ -33,6 +107,8 @@ export default function MonitoringGuruProfilAnakDetail() {
   });
 
   const [originalData, setOriginalData] = useState(null);
+  const [showEditConfirm, setShowEditConfirm] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
     const fetchStudent = async () => {
@@ -80,7 +156,12 @@ export default function MonitoringGuruProfilAnakDetail() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSave = async () => {
+  const handleSave = () => {
+    setShowEditConfirm(true);
+  };
+
+  const confirmSave = async () => {
+    setShowEditConfirm(false);
     try {
         const updated = await monitoringApi.updateStudent(studentId, {
             name: formData.nama,
@@ -104,14 +185,17 @@ export default function MonitoringGuruProfilAnakDetail() {
     }
   };
 
-  const handleDelete = async () => {
-    if (window.confirm("Apakah Anda yakin ingin menghapus akun siswa ini?")) {
-        try {
-            await monitoringApi.deleteStudent(studentId);
-            navigate('/monitoring-guru/profil-anak');
-        } catch (err) {
-            alert("Gagal menghapus akun siswa");
-        }
+  const handleDelete = () => {
+    setShowDeleteConfirm(true);
+  };
+
+  const confirmDelete = async () => {
+    setShowDeleteConfirm(false);
+    try {
+        await monitoringApi.deleteStudent(studentId);
+        navigate('/monitoring-guru/profil-anak');
+    } catch (err) {
+        alert("Gagal menghapus akun siswa");
     }
   };
 
@@ -266,6 +350,27 @@ export default function MonitoringGuruProfilAnakDetail() {
           </section>
         </div>
       </main>
+
+      <ConfirmationModal 
+        open={showEditConfirm}
+        title="Konfirmasi Perubahan Data"
+        message="Apakah Anda yakin ingin menyimpan perubahan profil ini?"
+        confirmText="Simpan Data"
+        cancelText="Batal"
+        onConfirm={confirmSave}
+        onCancel={() => setShowEditConfirm(false)}
+      />
+
+      <ConfirmationModal 
+        open={showDeleteConfirm}
+        title="Hapus Akun Siswa?"
+        message="Tindakan ini tidak dapat dibatalkan. Profil siswa dan semua data yang terkait akan dihapus secara permanen."
+        confirmText="Hapus Akun"
+        cancelText="Batal"
+        isDestructive={true}
+        onConfirm={confirmDelete}
+        onCancel={() => setShowDeleteConfirm(false)}
+      />
     </div>
   );
 }
