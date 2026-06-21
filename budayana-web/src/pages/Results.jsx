@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react"
-import { X } from "lucide-react"
+import { X, BookOpen, Puzzle } from "lucide-react"
 import { useResults } from "../hooks/useResults"
 import { useQuizResults } from "../hooks/useQuizResults"
 import { islands } from "../data/islands"
@@ -120,19 +120,52 @@ export default function Results() {
   return (
     <div className='results-container'>
       {/* Tabs */}
-      <div className='flex items-center gap-2 md:gap-4 mb-4 pb-4 border-b-2 border-[#d3cbb8]'>
-        <button
+      <div className='flex items-center gap-2 md:gap-2'>
+        <div style={{
+          display: 'inline-flex',
+          backgroundColor: 'FFFBEC',
+          padding: '4px',
+          borderRadius: '12px',
+          border: '2px solid #E8D9C0',
+          gap: '4px'
+        }}>
+          <button
           onClick={() => setActiveTab("ceritaRakyat")}
-          className={`px-4 py-1.5 md:px-6 md:py-2 rounded-xl font-bold text-lg md:text-xl transition-colors ${activeTab === "ceritaRakyat" ? "bg-[#955c2e] text-white" : "text-[#955c2e] hover:bg-[#955c2e]/10"}`}
+          className="transition-colors border-none cursor-pointer"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '10px 24px',
+            borderRadius: '12px',
+            backgroundColor: activeTab === "ceritaRakyat" ? '#7b4f2e' : 'transparent',
+            color: activeTab === "ceritaRakyat" ? 'white' : '#5C3A1E',
+            fontFamily: "'Fredoka One', sans-serif",
+            fontSize: '1.1rem',
+            fontWeight: 'bold'
+          }}
         >
-          Cerita Rakyat
+          <BookOpen size={20} /> Cerita Rakyat
         </button>
         <button
           onClick={() => setActiveTab("quizBudaya")}
-          className={`px-4 py-1.5 md:px-6 md:py-2 rounded-xl font-bold text-lg md:text-xl transition-colors ${activeTab === "quizBudaya" ? "bg-[#955c2e] text-white" : "text-[#955c2e] hover:bg-[#955c2e]/10"}`}
+          className="transition-colors border-none cursor-pointer"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '10px 24px',
+            borderRadius: '12px',
+            backgroundColor: activeTab === "quizBudaya" ? '#7b4f2e' : 'transparent',
+            color: activeTab === "quizBudaya" ? 'white' : '#5C3A1E',
+            fontFamily: "'Fredoka One', sans-serif",
+            fontSize: '1.1rem',
+            fontWeight: 'bold'
+          }}
         >
-          Quiz Budaya
-        </button>
+          <Puzzle size={20} /> Quiz Budaya
+          </button>
+        </div>
       </div>
 
       {activeTab === "ceritaRakyat" ? (
