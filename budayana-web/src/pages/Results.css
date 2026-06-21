@@ -95,7 +95,7 @@
   display: grid;
   /* Columns: Tahap (flex), Pre, Post, XP, Date, Time, Esai */
   grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr 1fr 1fr;
-  padding: 16px 24px;
+  padding: 21px 24px;
   font-weight: 600;
   font-size: 1rem;
   align-items: center;
@@ -131,13 +131,31 @@
 .history-row {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr 1fr 1fr;
-  padding: 16px 24px;
+  padding: 20px 24px;
   border-bottom: 2px solid #ecdac4;
   align-items: center;
   color: #5b4631;
   font-weight: 500;
   font-size: 0.95rem;
   font-family: 'Fredoka One', sans-serif;
+}
+
+/* Center all columns (except the first column) in header and rows */
+.history-header > div:not(:first-child),
+.history-row > div:not(:first-child) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* Keep the first column left-aligned but vertically centered */
+.history-header > div:first-child,
+.history-row > div:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: left;
 }
 
 .history-row:last-child {
@@ -278,19 +296,32 @@
 }
 
 /* Essay Button */
-.essay-icon-btn {
-  background: none;
+.buka-esai-btn {
+  background-color: #d1b228; /* Dark Yellow */
+  color: #ffffff !important; /* White text, overriding inherited text colors */
   border: none;
+  border-radius: 12px;
+  padding: 5px 16px;
+  font-family: 'Fredoka One', sans-serif;
+  font-weight: 550;
+  font-size: 1rem;
+  line-height: 1.2;
   cursor: pointer;
-  padding: 4px;
-  display: flex;
+  transition: background-color 0.2s, transform 0.1s;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-shadow: none;
 }
 
-.essay-icon-btn:hover {
-  transform: scale(1.1);
+.buka-esai-btn:hover {
+  background-color: #9c7e00;
+  transform: translateY(-1px);
+}
+
+.buka-esai-btn:active {
+  transform: translateY(0);
 }
 
 /* Essay Modal */

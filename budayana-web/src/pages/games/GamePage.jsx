@@ -368,6 +368,35 @@ export default function GamePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pages, pendingLogs])
 
+  const [hasRedirectedToProgress, setHasRedirectedToProgress] = useState(false)
+
+  // Auto-redirect to first unanswered question once attempt loads
+  useEffect(() => {
+    if (
+      pages.length > 0 &&
+      startAttempt.isSuccess &&
+      !hasRedirectedToProgress &&
+      !isResultsPage
+    ) {
+      if (searchParams.get("resume") === "true") {
+        let nextUnansweredIndex = 0
+        for (let i = 0; i < pages.length; i++) {
+          const pageData = pages[i]
+          if (pageData.type === "question" && pageData.question) {
+            if (answers[pageData.question.id] === undefined) {
+              nextUnansweredIndex = i
+              break
+            }
+          }
+        }
+        if (nextUnansweredIndex > 0) {
+          setSearchParams({ page: String(nextUnansweredIndex + 1) }, { replace: true })
+        }
+      }
+      setHasRedirectedToProgress(true)
+    }
+  }, [pages, answers, startAttempt.isSuccess, hasRedirectedToProgress, isResultsPage, searchParams, setSearchParams])
+
   // Timer Logic
   const startTimeRef = useRef(null)
 
