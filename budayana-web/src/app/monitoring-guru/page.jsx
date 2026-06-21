@@ -43,11 +43,11 @@ function getLiterasiColor(val) {
   return '#A32D2D'; // Perlu bimbingan
 }
 
-function SortIndicator({ active, asc }) {
-  // panah atas (up chevron) = nilai paling besar = descending (asc === false)
-  // panah bawah (down chevron) = nilai paling kecil = ascending (asc === true)
-  const upColor = active && !asc ? "#FFE082" : "rgba(255, 255, 255, 0.4)";
-  const downColor = active && asc ? "#FFE082" : "rgba(255, 255, 255, 0.4)";
+function SortIndicator({ active, asc, reverseLogic = false }) {
+  const upActive = reverseLogic ? asc : !asc;
+  const downActive = reverseLogic ? !asc : asc;
+  const upColor = active && upActive ? "#FFE082" : "rgba(255, 255, 255, 0.4)";
+  const downColor = active && downActive ? "#FFE082" : "rgba(255, 255, 255, 0.4)";
   return (
     <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0px', marginLeft: '6px', transform: 'translateY(1px)' }}>
       <ChevronUp size={12} strokeWidth={3} style={{ color: upColor, transition: 'color 0.2s', marginBottom: '-5px' }} />
@@ -590,7 +590,7 @@ export default function MonitoringGuruDashboard() {
                       color: sortField === "name" ? "#FFE082" : "white"
                     }}
                   >
-                    Nama <SortIndicator active={sortField === "name"} asc={sortAsc} />
+                    Nama <SortIndicator active={sortField === "name"} asc={sortAsc} reverseLogic={true} />
                   </div>
                   
                   {/* Column Kelas (Not Sortable) */}

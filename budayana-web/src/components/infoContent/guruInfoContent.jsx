@@ -18,7 +18,7 @@ export const GURU_INFO = {
     noteText: "Persentase ini bukan kenaikan nilai langsung."
   },
   siswaAktif: {
-    tooltipText: "Jumlah siswa yang mengerjakan minimal 1 cerita atau kuis dalam 7 hari terakhir.",
+    tooltipText: "Jumlah siswa yang mengerjakan minimal 1 cerita atau kuis dalam 14 hari terakhir.",
     modalTitle: "Bagaimana nilai ini dihitung?",
     modalMetricName: "Siswa Aktif vs Tidak",
     modalContent: (

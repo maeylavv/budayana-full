@@ -2,6 +2,21 @@ export function getJourneyContent(totalXP) {
   const xp = totalXP || 0;
   const progress = Math.min((xp / 7200) * 100, 100);
 
+  if (xp === 0) {
+    return {
+      emoji: '❓',
+      title: 'Perjalanan Belum Dimulai',
+      subtitle: 'Yuk mulai kuis budaya pertamamu!',
+      button: 'Mulai Bermain',
+      tips: [
+        '✨ Main kuis pertama',
+        '🏝️ Pilih pulau favorit',
+        '📚 Mulai kumpulkan XP'
+      ],
+      progress
+    };
+  }
+
   if (xp >= 7200) {
     return {
       emoji: '🏆',
@@ -76,6 +91,7 @@ export function getJourneyContent(totalXP) {
     emoji: '🌱',
     title: 'Penjelajah Pemula',
     subtitle: 'Petualangan budaya dimulai!',
+    button: 'Lanjut Bermain',
     tips: [
       '✨ Main kuis',
       '🏝️ Jelajah pulau',
