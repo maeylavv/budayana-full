@@ -316,28 +316,13 @@ export default function Home() {
 
   // Handle island popup open/close with URL sync
   const handleOpenIsland = (island) => {
-    /*
-    ========================
-    TEMP TESTING MODE
-    RESTORE LOCK AFTER TEST
-    ========================
-    if (!island.isUnlocked) {
-      // Find the previous island in the sorted sequence
-      const sorted = [...allIslands].sort((a, b) => a.unlockOrder - b.unlockOrder)
-      const clickedIdx = sorted.findIndex((i) => i.id === island.id)
-      const prevIsland = clickedIdx > 0 ? sorted[clickedIdx - 1] : null
-      
-      if (prevIsland) {
-        setLockedIslandWarning(prevIsland.name)
-      }
-      return
-    }
-    */
+    sessionStorage.removeItem("hasPromptedStoryResume")
     setActiveIsland(island)
     setSearchParams({ island: island.slug }, { replace: true })
   }
 
   const handleCloseIsland = () => {
+    sessionStorage.removeItem("hasPromptedStoryResume")
     setActiveIsland(null)
     setSearchParams({}, { replace: true })
   }
@@ -460,10 +445,10 @@ function IslandPopup({ activeIsland, onClose, isMobile }) {
   const [lockedStageWarning, setLockedStageWarning] = useState(null)
   const [completedStageWarning, setCompletedStageWarning] = useState(false)
   const [showResumePrompt, setShowResumePrompt] = useState(false)
-  const [hasPrompted, setHasPrompted] = useState(false)
 
   const handleStageClick = (stage, status, index) => {
     playClick()
+    sessionStorage.setItem("hasPromptedStoryResume", "true")
     if (status === "locked") {
       if (index === 1) {
         setLockedStageWarning(1)
@@ -485,21 +470,33 @@ function IslandPopup({ activeIsland, onClose, isMobile }) {
 
     let finalRoute = stage.route
 
-    // If resuming, try to find last read page from localStorage
+    // If resuming, try to find last read page from localStorage or append resume=true
     if (status === "resume") {
-      try {
-        const storageKey = `budayana_story_${stage.id}_pagesRead`
-        const savedPages = localStorage.getItem(storageKey)
+      const isQuizOrInteractive = stage.route.includes("pre-test") || stage.route.includes("post-test") || stage.apiStageType === "INTERACTIVE";
+      const separator = finalRoute.includes('?') ? '&' : '?';
 
-        if (savedPages) {
-          const pages = JSON.parse(savedPages)
-          if (Array.isArray(pages) && pages.length > 0) {
-            const lastPage = Math.max(...pages)
-            finalRoute = `${finalRoute}?page=${lastPage}`
+      if (!isQuizOrInteractive && stage.apiStageType === "STATIC") {
+        try {
+          const storageKey = `budayana_story_${stage.id}_pagesRead`
+          const savedPages = localStorage.getItem(storageKey)
+
+          if (savedPages) {
+            const pages = JSON.parse(savedPages)
+            if (Array.isArray(pages) && pages.length > 0) {
+              const lastPage = Math.max(...pages)
+              finalRoute = `${finalRoute}${separator}page=${lastPage}&resume=true`
+            } else {
+              finalRoute = `${finalRoute}${separator}resume=true`
+            }
+          } else {
+            finalRoute = `${finalRoute}${separator}resume=true`
           }
+        } catch (e) {
+          console.warn("Failed to retrieve resume position", e)
+          finalRoute = `${finalRoute}${separator}resume=true`
         }
-      } catch (e) {
-        console.warn("Failed to retrieve resume position", e)
+      } else {
+        finalRoute = `${finalRoute}${separator}resume=true`
       }
     }
 
@@ -565,11 +562,11 @@ function IslandPopup({ activeIsland, onClose, isMobile }) {
   }, [attempts, mainStoryId])
 
   useEffect(() => {
-    if (activeAttempt && !hasPrompted) {
+    const alreadyPrompted = sessionStorage.getItem("hasPromptedStoryResume") === "true"
+    if (activeAttempt && !alreadyPrompted) {
       setShowResumePrompt(true)
-      setHasPrompted(true)
     }
-  }, [activeAttempt, hasPrompted])
+  }, [activeAttempt])
 
   const handleResumeActiveStage = () => {
     if (!activeAttempt || !stages || stages.length === 0) return
@@ -590,8 +587,13 @@ function IslandPopup({ activeIsland, onClose, isMobile }) {
 
     const stage = stages[activeStageIndex]
     if (stage) {
-      handleStageClick(stage, activeStageIndex === 1 ? "resume" : "unlocked", activeStageIndex)
+      handleStageClick(stage, "resume", activeStageIndex)
     }
+    setShowResumePrompt(false)
+  }
+
+  const handleCancelResume = () => {
+    sessionStorage.setItem("hasPromptedStoryResume", "true")
     setShowResumePrompt(false)
   }
 
@@ -789,7 +791,7 @@ function IslandPopup({ activeIsland, onClose, isMobile }) {
             {showResumePrompt && (
               <div className='popup-overlay' style={{ zIndex: 1000 }}>
                 <div className='popup popup-locked' style={{ position: 'relative', border: '3px solid #955c2e', backgroundColor: '#fff4d6', padding: '40px', borderRadius: '32px', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '420px', maxWidth: '90vw' }}>
-                  <button className='popup-close' onClick={() => setShowResumePrompt(false)} style={{ position: 'absolute', top: '15px', right: '15px', border: 'none', background: 'transparent' }}>
+                  <button className='popup-close' onClick={handleCancelResume} style={{ position: 'absolute', top: '15px', right: '15px', border: 'none', background: 'transparent' }}>
                     <img 
                       src='/assets/budayana/islands/close button.png' 
                       alt='close' 
@@ -804,10 +806,13 @@ function IslandPopup({ activeIsland, onClose, isMobile }) {
                       style={{ width: '130px', height: 'auto', marginBottom: '10px' }}
                     />
                     <p className='locked-msg' style={{ color: '#5c3a1e', textAlign: 'center', fontSize: '18px', margin: '15px 0', lineHeight: '1.5', fontFamily: "'Fredoka One', sans-serif" }}>
-                      Data permainan telah disimpan,<br />apakah kamu ingin melanjutkan?
+                      Data permainan telah disimpan,<br />apakah kamu ingin langsung melanjutkan dari tempat kamu berhenti?
                     </p>
                     <button className='ok-btn cursor-pointer' onClick={handleResumeActiveStage} style={{ backgroundColor: '#8b5cf6', borderColor: '#7c3aed' }}>
                       Lanjutkan!
+                    </button>
+                    <button className='ok-btn cursor-pointer' onClick={handleCancelResume} style={{ backgroundColor: '#eb705aff', borderColor: '#718096', marginTop: '12px' }}>
+                      Tidak
                     </button>
                   </div>
                 </div>

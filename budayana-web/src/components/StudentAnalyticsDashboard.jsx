@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { BookOpen, Puzzle } from 'lucide-react';
+import { BookOpen, Puzzle, X } from 'lucide-react';
 import {
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer,
   BarChart, Bar, XAxis, YAxis, Tooltip, Legend, PieChart, Pie, Cell
@@ -14,6 +14,33 @@ import { getJourneyContent } from "../utils/xpJourney";
 
 // Half Pie/Donut Chart Colors
 const GAUGE_COLORS = ["#4CAF50", "#E8D9C0"];
+
+const ESSAY_QUESTIONS = {
+  "bali": "Menurutmu, mengapa Bawang tidak mendapatkan emas seperti Kesuna?",
+  "sumatra": "Apa pesan moral yang bisa di ambil dari kisah Malin Kundang?",
+  "nusa tenggara": "Menurutmu, mengapa petani menyembunyikan Watu Maladong?",
+  "nusa-tenggara": "Menurutmu, mengapa petani menyembunyikan Watu Maladong?",
+  "sulawesi": "Menurutmu, mengapa Nenek Pakande menculik anak-anak yang bermain pada waktu sore hari?",
+}
+
+const getEssayQuestion = (islandName) => {
+  if (!islandName) return "Apa pesan moral yang bisa di ambil dari cerita tersebut?";
+  const key = islandName.toLowerCase().trim();
+  return ESSAY_QUESTIONS[key] || "Apa pesan moral yang bisa di ambil dari cerita tersebut?";
+}
+
+const getIslandNameFromTitle = (title) => {
+  if (!title) return "";
+  const lowerTitle = title.toLowerCase();
+  const knownIslands = ["sumatra", "jawa", "bali", "kalimantan", "sulawesi", "papua", "maluku", "nusa tenggara", "nusa-tenggara"];
+  for (const island of knownIslands) {
+    if (lowerTitle.includes(island)) {
+      if (island === "nusa-tenggara" || island === "nusa tenggara") return "Nusa Tenggara";
+      return island.charAt(0).toUpperCase() + island.slice(1);
+    }
+  }
+  return "";
+}
 
 const getAnimalAvatar = (seed) => {
   const animals = ["Buaya.png", "Badak.png", "Harimau.png", "Monyet.png"];
@@ -153,6 +180,7 @@ export default function StudentAnalyticsDashboard({
 // SUB-PANEL: CERITA RAKYAT
 // ==========================================
 function StoryAnalyticsPanel({ storyAnalytics, studentInfo }) {
+  const [selectedEssay, setSelectedEssay] = useState(null);
   if (!storyAnalytics) return null;
 
   const { stats, improvementGauge, storyInterest, history } = storyAnalytics;
@@ -293,7 +321,47 @@ function StoryAnalyticsPanel({ storyAnalytics, studentInfo }) {
                   <div style={{ textAlign: 'center' }}>{item.date}</div>
                   <div style={{ textAlign: 'center' }}>{item.time}</div>
                   <div style={{ textAlign: 'left', fontSize: '0.85rem', color: '#7B4F2E', maxHeight: '50px', overflowY: 'auto', paddingRight: '4px', wordBreak: 'break-word', whiteSpace: 'pre-wrap' }}>
-                    {item.essay || <span style={{ color: '#aaa', fontStyle: 'italic' }}>Tidak ada esai</span>}
+                    {item.essay ? (
+                      <button
+                        className="buka-esai-btn"
+                        style={{ display: 'inline-flex' }}
+                        onClick={() => {
+                          let rawTitle = item.storyTitle || "Cerita"
+                          if (rawTitle.toLowerCase().startsWith("cerita ")) {
+                            rawTitle = rawTitle.substring(7)
+                          }
+                          const lowerTitle = rawTitle.toLowerCase();
+                          const suffixesToRemove = [
+                            " sumatra",
+                            " sulawesi",
+                            " bali",
+                            " maluku",
+                            " nusa tenggara",
+                            " nusa-tenggara",
+                            " jawa",
+                            " kalimantan",
+                            " papua"
+                          ];
+                          for (const suffix of suffixesToRemove) {
+                            if (lowerTitle.endsWith(suffix)) {
+                              rawTitle = rawTitle.substring(0, rawTitle.length - suffix.length);
+                              break;
+                            }
+                          }
+                          const islandName = getIslandNameFromTitle(item.storyTitle);
+                          const essayQuestion = getEssayQuestion(islandName);
+                          setSelectedEssay({
+                            title: rawTitle,
+                            text: item.essay,
+                            question: essayQuestion,
+                          })
+                        }}
+                      >
+                        Buka Esai
+                      </button>
+                    ) : (
+                      <span style={{ color: '#aaa', fontStyle: 'italic' }}>Tidak ada esai</span>
+                    )}
                   </div>
                 </div>
               ))
@@ -305,6 +373,26 @@ function StoryAnalyticsPanel({ storyAnalytics, studentInfo }) {
           </div>
         </div>
       </section>
+
+      {/* Essay Modal */}
+      {selectedEssay && (
+        <div className='essay-modal-overlay' onClick={() => setSelectedEssay(null)}>
+          <div className='essay-modal-container' onClick={(e) => e.stopPropagation()}>
+            <div className='essay-modal-header'>
+              <div className='essay-modal-title-wrapper'>
+                <h3 className='essay-modal-title'>{selectedEssay.title}</h3>
+              </div>
+              <button className='essay-modal-close' onClick={() => setSelectedEssay(null)}>
+                <X size={24} color="#ffffff" />
+              </button>
+              <p className='essay-modal-question'>{selectedEssay.question}</p>
+            </div>
+            <div className='essay-modal-body'>
+              <p className='essay-modal-text'>{selectedEssay.text}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

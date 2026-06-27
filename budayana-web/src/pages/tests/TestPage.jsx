@@ -252,6 +252,32 @@ export default function TestPage({ testType = "pre" }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questions, pendingLogs])
 
+  const [hasRedirectedToProgress, setHasRedirectedToProgress] = useState(false)
+
+  // Auto-redirect to first unanswered question once attempt loads
+  useEffect(() => {
+    if (
+      questions.length > 0 &&
+      startAttempt.isSuccess &&
+      !hasRedirectedToProgress &&
+      !isResultMode
+    ) {
+      if (searchParams.get("resume") === "true") {
+        let nextUnanswered = 0
+        for (let i = 0; i < questions.length; i++) {
+          if (answers[i] === undefined) {
+            nextUnanswered = i
+            break
+          }
+        }
+        if (nextUnanswered > 0) {
+          setSearchParams({ page: String(nextUnanswered + 1) }, { replace: true })
+        }
+      }
+      setHasRedirectedToProgress(true)
+    }
+  }, [questions, answers, startAttempt.isSuccess, hasRedirectedToProgress, isResultMode, searchParams, setSearchParams])
+
   useEffect(() => {
     if (showResults) {
       playTada();

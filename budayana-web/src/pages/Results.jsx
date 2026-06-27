@@ -10,6 +10,37 @@ import InfoIcon from "../components/InfoIcon"
 import { PARENT_INFO } from "../components/infoContent/parentInfoContent"
 import "./Results.css"
 
+const ISLAND_TEXT_COLORS = {
+  "sumatra": "#5e79bfff",          
+  "jawa": "#9663b4ff",            
+  "kalimantan": "#2fa37bff",      
+  "sulawesi": "#bc5d83ff",       
+  "papua": "#ab7e02ff",            
+  "bali": "#918423ff",           
+  "maluku": "#64952cff",           
+  "nusa tenggara": "#cc643eff",    
+  "nusa-tenggara": "#cc643eff",
+}
+
+const getIslandTextColor = (islandName) => {
+  if (!islandName) return "#5b4631";
+  const key = islandName.toLowerCase().trim();
+  return ISLAND_TEXT_COLORS[key] || "#5b4631";
+}
+
+const ESSAY_QUESTIONS = {
+  "bali": "Menurutmu, mengapa Bawang tidak mendapatkan emas seperti Kesuna?",
+  "sumatra": "Apa pesan moral yang bisa di ambil dari kisah Malin Kundang?",
+  "nusa tenggara": "Menurutmu, mengapa petani menyembunyikan Watu Maladong?",
+  "nusa-tenggara": "Menurutmu, mengapa petani menyembunyikan Watu Maladong?",
+  "sulawesi": "Menurutmu, mengapa Nenek Pakande menculik anak-anak yang bermain pada waktu sore hari?",
+}
+
+const getEssayQuestion = (islandName) => {
+  if (!islandName) return "Apa pesan moral yang bisa di ambil dari cerita tersebut?";
+  const key = islandName.toLowerCase().trim();
+  return ESSAY_QUESTIONS[key] || "Apa pesan moral yang bisa di ambil dari cerita tersebut?";
+}
 
 export default function Results() {
   const { stats, attempts, isLoading } = useResults()
@@ -231,7 +262,7 @@ export default function Results() {
                   if (filteredAttempts.length === 0) {
                     return (
                       <div className='empty-message'>
-                        Belum ada riwayat permainan.
+                        Belum ada riwayat Cerita Rakyat. Ayo mulai petualanganmu! 🗺️
                       </div>
                     )
                   }
@@ -263,7 +294,7 @@ export default function Results() {
                       }
                     }
 
-                    const isInteractiveStory = ["sumatra", "sulawesi", "bali", "maluku"].some(
+                    const isInteractiveStory = ["sumatra", "sulawesi", "bali", "maluku", "nusa tenggara", "nusa-tenggara"].some(
                       i => displayTitle.toLowerCase().includes(i)
                     ) && !isTest
                     const essayLog = attempt.questionLogs?.find(
@@ -271,8 +302,11 @@ export default function Results() {
                     )
                     const hasEssay = isInteractiveStory && (attempt.essayAnswer || essayLog?.userAnswerText)
 
+                    const islandName = attempt.story?.island?.islandName || getIslandName(attempt)
+                    const rowColor = getIslandTextColor(islandName)
+
                     return (
-                      <div key={attempt.id} className='history-row'>
+                      <div key={attempt.id} className='history-row' style={{ color: rowColor, fontWeight: '600' }}>
                         <div>{displayTitle}</div>
                         <div>
                           {attempt.preTestScore !== null
@@ -290,28 +324,36 @@ export default function Results() {
                         <div>
                           {hasEssay ? (
                             <button
-                              className='essay-icon-btn'
+                              className='buka-esai-btn'
                               onClick={() => {
                                 let rawTitle = attempt.story?.title || "Cerita"
                                 if (rawTitle.toLowerCase().startsWith("cerita ")) {
                                   rawTitle = rawTitle.substring(7)
                                 }
-                                if (
-                                  rawTitle.toLowerCase().endsWith(" sumatra") ||
-                                  rawTitle.toLowerCase().endsWith(" sulawesi") ||
-                                  rawTitle.toLowerCase().endsWith(" bali") ||
-                                  rawTitle.toLowerCase().endsWith(" maluku")
-                                ) {
-                                  const islandIndex = rawTitle.lastIndexOf(" ")
-                                  rawTitle = rawTitle.substring(0, islandIndex)
+                                const lowerTitle = rawTitle.toLowerCase();
+                                const suffixesToRemove = [
+                                  " sumatra",
+                                  " sulawesi",
+                                  " bali",
+                                  " maluku",
+                                  " nusa tenggara",
+                                  " nusa-tenggara"
+                                ];
+                                for (const suffix of suffixesToRemove) {
+                                  if (lowerTitle.endsWith(suffix)) {
+                                    rawTitle = rawTitle.substring(0, rawTitle.length - suffix.length);
+                                    break;
+                                  }
                                 }
+                                const essayQuestion = getEssayQuestion(islandName);
                                 setSelectedEssay({
                                   title: rawTitle,
                                   text: attempt.essayAnswer || essayLog?.userAnswerText,
+                                  question: essayQuestion,
                                 })
                               }}
                             >
-                              <img src="/assets/budayana/islands/open.png" alt="Buka Esai" className="w-6 h-6 object-contain" />
+                              Buka Esai
                             </button>
                           ) : ""}
                         </div>
@@ -334,7 +376,7 @@ export default function Results() {
                   <button className='essay-modal-close' onClick={() => setSelectedEssay(null)}>
                     <X size={24} color="#ffffff" />
                   </button>
-                  <p className='essay-modal-question'>Apa pesan moral yang bisa di ambil dari cerita tersebut?</p>
+                  <p className='essay-modal-question'>{selectedEssay.question}</p>
                 </div>
                 <div className='essay-modal-body'>
                   <p className='essay-modal-text'>{selectedEssay.text}</p>
@@ -404,20 +446,24 @@ export default function Results() {
                         new Date(b.finishedAt || b.startedAt) -
                         new Date(a.finishedAt || a.startedAt)
                     )
-                    .map((attempt) => (
-                      <div
-                        key={attempt.id}
-                        className='history-row quiz-history-grid'
-                      >
-                        <div>{attempt.islandName}</div>
-                        <div>{attempt.topicName}</div>
-                        <div>{attempt.levelId}</div>
-                        <div>{attempt.quizTypeName}</div>
-                        <div>{attempt.score}/{attempt.totalQuestions}</div>
-                        <div>{formatDuration(attempt.totalTimeSeconds)}</div>
-                        <div>{formatDate(attempt.finishedAt)}</div>
-                      </div>
-                    ))
+                    .map((attempt) => {
+                      const rowColor = getIslandTextColor(attempt.islandName)
+                      return (
+                        <div
+                          key={attempt.id}
+                          className='history-row quiz-history-grid'
+                          style={{ color: rowColor, fontWeight: '600' }}
+                        >
+                          <div>{attempt.islandName}</div>
+                          <div>{attempt.topicName}</div>
+                          <div>{attempt.levelId}</div>
+                          <div>{attempt.quizTypeName}</div>
+                          <div>{attempt.score}/{attempt.totalQuestions}</div>
+                          <div>{formatDuration(attempt.totalTimeSeconds)}</div>
+                          <div>{formatDate(attempt.finishedAt)}</div>
+                        </div>
+                      )
+                    })
                 )}
               </div>
             </div>
