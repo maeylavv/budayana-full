@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { authClient } from "../../lib/auth-client";
 import "../../pages/auth/Sign_Up.css"; // Reuse the sign-up styling
 import PortalRedirectPopup from "../../components/PortalRedirectPopup";
 
 export default function MonitoringLogin({ role }) {
   const navigate = useNavigate();
-  const [isLoginMode, setIsLoginMode] = useState(true);
+  const location = useLocation();
+  const [isLoginMode, setIsLoginMode] = useState(location.state?.isSignup ? false : true);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);

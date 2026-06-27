@@ -9,7 +9,7 @@ import ScoreTable from "./ScoreTable";
 import "../pages/Profile.css";
 import "../pages/Results.css";
 import InfoIcon from "./InfoIcon";
-import { PARENT_INFO } from "./infoContent/parentInfoContent";
+import { PARENT_INFO, getStatistikQuizInfo } from "./infoContent/parentInfoContent";
 import { getJourneyContent } from "../utils/xpJourney";
 
 // Half Pie/Donut Chart Colors
@@ -427,7 +427,7 @@ function QuizAnalyticsPanel({ quizAnalytics, studentInfo }) {
       <section>
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '12px', gap: '8px' }}>
           <h2 className="results-section-title" style={{ fontSize: '1.2rem', color: '#7B4F2E', margin: 0 }}>Statistik Quiz Budaya</h2>
-          <InfoIcon {...PARENT_INFO.statistikQuiz} />
+          <InfoIcon {...getStatistikQuizInfo(isGuru ? 'guru' : isParent ? 'ortu' : 'siswa')} />
         </div>
         <div className="stats-grid">
           <div className="stat-card green" style={{ borderRadius: '24px' }}>
