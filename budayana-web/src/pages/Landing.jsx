@@ -35,7 +35,7 @@ export default function Landing() {
                 <MusicToggleButton />
                 <div className="lnd-navbar">
                     <img src="/assets/budayana/islands/Budayana text.png" alt="Budayana" className="lnd-logo" onClick={() => window.scrollTo(0, 0)} />
-                    
+
                     {/* Desktop Navigation */}
                     <div className="lnd-desktop-nav">
                         <nav className="lnd-links">
@@ -64,7 +64,7 @@ export default function Landing() {
                     </div>
 
                     {/* Mobile Hamburger Button */}
-                    <button 
+                    <button
                         className="lnd-mobile-menu-btn"
                         onClick={() => setIsMobileMenuOpen(true)}
                     >
@@ -76,7 +76,7 @@ export default function Landing() {
             {/* Mobile Sidebar Overlay */}
             {isMobileMenuOpen && (
                 <div className="fixed inset-0 z-[99999] bg-black/50" onClick={() => setIsMobileMenuOpen(false)}>
-                    <div 
+                    <div
                         className="absolute top-0 right-0 h-full w-64 bg-[#fdf5e6] shadow-2xl p-6 flex flex-col gap-6 transform transition-transform duration-300"
                         onClick={(e) => e.stopPropagation()}
                     >
@@ -119,9 +119,9 @@ export default function Landing() {
                             Daftar Akun
                         </button>
                         <div className={`absolute left-1/2 -translate-x-1/2 mt-2 w-56 bg-white border border-[#E8D9C0] rounded-xl shadow-lg py-2 transition-all duration-300 z-50 ${isRegisterOpen ? 'opacity-100 visible' : 'opacity-0 invisible group-hover:opacity-100 group-hover:visible'}`}>
-                            <button onClick={() => navigate('/sign-up')} className="w-full text-center px-4 py-2 hover:bg-[#FDF5E6] font-fredoka-one text-[#955C2E] font-semibold transition-colors">Daftar Siswa</button>
-                            <button onClick={() => navigate('/monitoring-login-guru')} className="w-full text-center px-4 py-2 hover:bg-[#FDF5E6] font-fredoka-one text-[#955C2E] font-semibold transition-colors">Daftar Guru</button>
-                            <button onClick={() => navigate('/monitoring-login-ortu')} className="w-full text-center px-4 py-2 hover:bg-[#FDF5E6] font-fredoka-one text-[#955C2E] font-semibold transition-colors">Daftar Orang Tua</button>
+                            <button onClick={() => navigate('/sign-up')} className="w-full text-center px-4 py-2 hover:bg-[#FDF5E6] font-fredoka-one text-[#955C2E] font-semibold transition-colors">Daftar sebagai Siswa</button>
+                            <button onClick={() => navigate('/monitoring-login-guru', { state: { isSignup: true } })} className="w-full text-center px-4 py-2 hover:bg-[#FDF5E6] font-fredoka-one text-[#955C2E] font-semibold transition-colors">Daftar sebagai Guru</button>
+                            <button onClick={() => navigate('/monitoring-login-ortu', { state: { isSignup: true } })} className="w-full text-center px-4 py-2 hover:bg-[#FDF5E6] font-fredoka-one text-[#955C2E] font-semibold transition-colors">Daftar sebagai Orang Tua</button>
                         </div>
                     </div>
                 </div>

@@ -1,3 +1,42 @@
+export const getStatistikQuizInfo = (pov = 'siswa') => {
+  let sub = "kamu"; // siswa pov
+  let gelar = "gelarmu";
+  if (pov === 'guru') {
+    sub = "siswa";
+    gelar = "gelar siswa";
+  }
+  if (pov === 'ortu') {
+    sub = "anak";
+    gelar = "gelar anak";
+  }
+
+  return {
+    tooltipText: "Info perhitungan metrik Quiz Budaya.",
+    modalTitle: "Statistik Quiz Budaya",
+    modalMetricName: "Penjelasan Metrik",
+    modalContent: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div>
+          <div style={{ fontWeight: 'bold', color: '#955c2e', marginBottom: '4px' }}>Eksplorasi Budaya</div>
+          <div style={{ fontSize: '0.9rem' }}>Persentase pulau yang sudah {sub} jelajahi melalui Kuis Budaya. Menunjukkan persentase pulau yang kuisnya sudah berhasil diselesaikan minimal satu kali.</div>
+        </div>
+        <div>
+          <div style={{ fontWeight: 'bold', color: '#955c2e', marginBottom: '4px' }}>XP Quiz Budaya</div>
+          <div style={{ fontSize: '0.9rem' }}>Setiap kali {sub} berhasil menamatkan sebuah kuis, {sub} akan mendapatkan XP khusus. Mengulang kuis yang sama juga memberi XP tambahan.</div>
+        </div>
+        <div>
+          <div style={{ fontWeight: 'bold', color: '#955c2e', marginBottom: '4px' }}>Peringkat Petualang</div>
+          <div style={{ fontSize: '0.9rem' }}>Gelar ditentukan dari progres level dan total aktivitas belajar. Semakin tinggi level kuis yang dicapai atau semakin aktif mengumpulkan XP, {gelar} dapat meningkat.</div>
+        </div>
+        <div>
+          <div style={{ fontWeight: 'bold', color: '#955c2e', marginBottom: '4px' }}>Rata-rata Nilai Quiz</div>
+          <div style={{ fontSize: '0.9rem' }}>Nilai rata-rata persentase dari seluruh percobaan Kuis Budaya. Semua percobaan kuis dihitung dengan bobot yang sama.</div>
+        </div>
+      </div>
+    )
+  };
+};
+
 export const PARENT_INFO = {
   peningkatanCerita: {
     tooltipText: "Rata-rata perkembangan pemahaman siswa setelah membaca materi.",
@@ -119,31 +158,6 @@ export const PARENT_INFO = {
         <div>
           <div style={{ fontWeight: 'bold', color: '#955c2e', marginBottom: '4px' }}>Rata-rata Post-Test</div>
           <div style={{ fontSize: '0.9rem' }}>Rata-rata nilai kuis setelah membaca dari cerita yang sudah diselesaikan. Mengulang cerita akan memberimu kesempatan memperbaiki rata-rata.</div>
-        </div>
-      </div>
-    )
-  },
-  statistikQuiz: {
-    tooltipText: "Info perhitungan metrik Quiz Budaya.",
-    modalTitle: "Statistik Quiz Budaya",
-    modalMetricName: "Penjelasan Metrik",
-    modalContent: (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <div>
-          <div style={{ fontWeight: 'bold', color: '#955c2e', marginBottom: '4px' }}>Eksplorasi Budaya</div>
-          <div style={{ fontSize: '0.9rem' }}>Persentase pulau yang sudah kamu jelajahi melalui Kuis Budaya. Menunjukkan persentase pulau yang kuisnya sudah berhasil diselesaikan minimal satu kali.</div>
-        </div>
-        <div>
-          <div style={{ fontWeight: 'bold', color: '#955c2e', marginBottom: '4px' }}>XP Quiz Budaya</div>
-          <div style={{ fontSize: '0.9rem' }}>Setiap kali kamu berhasil menamatkan sebuah kuis, kamu akan mendapatkan XP khusus. Mengulang kuis yang sama juga memberi XP tambahan.</div>
-        </div>
-        <div>
-          <div style={{ fontWeight: 'bold', color: '#955c2e', marginBottom: '4px' }}>Peringkat Petualang</div>
-          <div style={{ fontSize: '0.9rem' }}>Gelar ditentukan dari progres level dan total aktivitas belajar. Semakin tinggi level kuis yang dicapai atau semakin aktif mengumpulkan XP, gelarmu dapat meningkat.</div>
-        </div>
-        <div>
-          <div style={{ fontWeight: 'bold', color: '#955c2e', marginBottom: '4px' }}>Rata-rata Nilai Quiz</div>
-          <div style={{ fontSize: '0.9rem' }}>Nilai rata-rata persentase dari seluruh percobaan Kuis Budaya. Semua percobaan kuis dihitung dengan bobot yang sama.</div>
         </div>
       </div>
     )

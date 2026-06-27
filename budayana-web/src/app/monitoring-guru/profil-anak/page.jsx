@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Search } from "lucide-react";
+import { Search, ChevronUp, ChevronDown } from "lucide-react";
 import MonitoringSidebar from "../../../components/MonitoringSidebar";
 import { monitoringApi } from "../../../lib/api";
 import "../../../pages/Profile.css";
@@ -24,6 +24,7 @@ export default function MonitoringGuruProfilAnak() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedClass, setSelectedClass] = useState("");
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
   
   // Debounce search query
   useEffect(() => {
@@ -72,7 +73,60 @@ export default function MonitoringGuruProfilAnak() {
     };
   }, [selectedClass, debouncedSearch]);
 
-  const filteredStudents = students;
+  const handleSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const getSortedStudents = (studentsList) => {
+    if (!sortConfig.key) return studentsList;
+    
+    return [...studentsList].sort((a, b) => {
+      let aValue = a[sortConfig.key] || "";
+      let bValue = b[sortConfig.key] || "";
+      
+      if (typeof aValue === 'string') aValue = aValue.toLowerCase();
+      if (typeof bValue === 'string') bValue = bValue.toLowerCase();
+      
+      if (aValue < bValue) {
+        return sortConfig.direction === 'asc' ? -1 : 1;
+      }
+      if (aValue > bValue) {
+        return sortConfig.direction === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+  };
+
+  const renderSortIcon = (columnKey) => {
+    const isActive = sortConfig.key === columnKey;
+    return (
+      <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0px', marginLeft: '6px', transform: 'translateY(1px)' }}>
+        <ChevronUp 
+          size={12} 
+          strokeWidth={3} 
+          style={{ 
+            color: isActive && sortConfig.direction === 'asc' ? 'rgb(255, 224, 130)' : 'rgba(255, 255, 255, 0.4)', 
+            transition: 'color 0.2s', 
+            marginBottom: '-5px' 
+          }} 
+        />
+        <ChevronDown 
+          size={12} 
+          strokeWidth={3} 
+          style={{ 
+            color: isActive && sortConfig.direction === 'desc' ? 'rgb(255, 224, 130)' : 'rgba(255, 255, 255, 0.4)', 
+            transition: 'color 0.2s' 
+          }} 
+        />
+      </div>
+    );
+  };
+
+  const filteredStudents = getSortedStudents(students);
 
   return (
     <div className="flex bg-[#FEF6DF] min-h-screen w-full" style={{ fontFamily: "'Fredoka One', sans-serif" }}>
@@ -136,8 +190,19 @@ export default function MonitoringGuruProfilAnak() {
                 <div className="hidden md:block">
                   <div className="history-table-container" style={{ height: 'auto', minHeight: '500px', overflowX: 'auto', position: 'relative' }}>
                     <div className="history-header" style={{ display: 'grid', gridTemplateColumns: '1.8fr 1fr 0.8fr 1fr 2.6fr', backgroundColor: '#955C2E', color: 'white', padding: '16px 24px', alignItems: 'center', position: 'sticky', top: 0, zIndex: 10, borderTopLeftRadius: '17px', borderTopRightRadius: '17px', minWidth: '950px' }}>
-                      <div className="student-name-cell" style={{ paddingLeft: '24px' }}>Nama</div>
-                      <div style={{ textAlign: 'center' }}>Username</div>
+                      <div 
+                        className="student-name-cell" 
+                        style={{ paddingLeft: '24px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', userSelect: 'none', color: sortConfig.key === 'name' ? 'rgb(255, 224, 130)' : 'white' }}
+                        onClick={() => handleSort('name')}
+                      >
+                        Nama {renderSortIcon('name')}
+                      </div>
+                      <div 
+                        style={{ textAlign: 'center', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', userSelect: 'none', color: sortConfig.key === 'displayUsername' ? 'rgb(255, 224, 130)' : 'white' }}
+                        onClick={() => handleSort('displayUsername')}
+                      >
+                        Username {renderSortIcon('displayUsername')}
+                      </div>
                       <div style={{ textAlign: 'center' }}>Kelas</div>
                       <div style={{ textAlign: 'center' }}>Label Kelas</div>
                       <div style={{ textAlign: 'center' }}>Aksi</div>
