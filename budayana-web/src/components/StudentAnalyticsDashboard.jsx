@@ -299,72 +299,127 @@ function StoryAnalyticsPanel({ storyAnalytics, studentInfo }) {
 
       {/* Story History Table */}
       <section style={{ marginTop: '40px' }}>
-        <h2 className="results-section-title" style={{ fontSize: '1.2rem', marginBottom: '12px', color: '#7B4F2E' }}>Riwayat Cerita Rakyat</h2>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', padding: '0 4px' }}>
+          <h2 className="results-section-title" style={{ fontSize: '1.2rem', margin: 0, color: '#7B4F2E' }}>Riwayat Cerita Rakyat</h2>
+          <span style={{ fontSize: '15px', fontWeight: 600, color: '#7B4F2E' }}>{history ? history.length : 0} hasil</span>
+        </div>
         <div className="history-table-container" style={{ display: 'flex', flexDirection: 'column', height: '360px', overflowY: 'auto', overflowX: 'auto', position: 'relative' }}>
           <div className="history-header" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1.2fr 1.2fr 3fr', padding: '16px 24px', borderBottom: '1px solid #E8D9C0', backgroundColor: '#955c2e', color: 'white', alignItems: 'center', position: 'sticky', top: 0, zIndex: 10, borderTopLeftRadius: '17px', borderTopRightRadius: '17px', minWidth: '900px' }}>
             <div style={{ textAlign: 'left', fontWeight: 'bold' }}>Judul Cerita</div>
             <div style={{ textAlign: 'center', fontWeight: 'bold' }}>Pre-Test</div>
             <div style={{ textAlign: 'center', fontWeight: 'bold' }}>Post-Test</div>
             <div style={{ textAlign: 'center', fontWeight: 'bold' }}>XP</div>
-            <div style={{ textAlign: 'center', fontWeight: 'bold' }}>Tanggal</div>
             <div style={{ textAlign: 'center', fontWeight: 'bold' }}>Waktu</div>
+            <div style={{ textAlign: 'center', fontWeight: 'bold' }}>Tanggal</div>
             <div style={{ textAlign: 'left', fontWeight: 'bold' }}>Jawaban Esai</div>
           </div>
           <div className="history-body" style={{ overflowY: 'visible', flex: '1 1 0%' }}>
             {history && history.length > 0 ? (
-              history.map((item, index) => (
-                <div key={index} className="history-row" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1.2fr 1.2fr 3fr', padding: '16px 24px', borderBottom: '1px solid #E8D9C0', alignItems: 'center', minWidth: '900px' }}>
-                  <div style={{ textAlign: 'left', fontWeight: 'bold', color: '#7B4F2E' }}>{item.storyTitle}</div>
-                  <div style={{ textAlign: 'center', color: '#FF9800', fontWeight: 'bold' }}>{item.preTestScore !== null ? item.preTestScore : "-"}</div>
-                  <div style={{ textAlign: 'center', color: '#4CAF50', fontWeight: 'bold' }}>{item.postTestScore !== null ? item.postTestScore : "-"}</div>
-                  <div style={{ textAlign: 'center', color: '#9C27B0', fontWeight: 'bold' }}>+{item.xp}</div>
-                  <div style={{ textAlign: 'center' }}>{item.date}</div>
-                  <div style={{ textAlign: 'center' }}>{item.time}</div>
-                  <div style={{ textAlign: 'left', fontSize: '0.85rem', color: '#7B4F2E', maxHeight: '50px', overflowY: 'auto', paddingRight: '4px', wordBreak: 'break-word', whiteSpace: 'pre-wrap' }}>
-                    {item.essay ? (
-                      <button
-                        className="buka-esai-btn"
-                        style={{ display: 'inline-flex' }}
-                        onClick={() => {
-                          let rawTitle = item.storyTitle || "Cerita"
-                          if (rawTitle.toLowerCase().startsWith("cerita ")) {
-                            rawTitle = rawTitle.substring(7)
-                          }
-                          const lowerTitle = rawTitle.toLowerCase();
-                          const suffixesToRemove = [
-                            " sumatra",
-                            " sulawesi",
-                            " bali",
-                            " maluku",
-                            " nusa tenggara",
-                            " nusa-tenggara",
-                            " jawa",
-                            " kalimantan",
-                            " papua"
-                          ];
-                          for (const suffix of suffixesToRemove) {
-                            if (lowerTitle.endsWith(suffix)) {
-                              rawTitle = rawTitle.substring(0, rawTitle.length - suffix.length);
-                              break;
+              history.map((item, index) => {
+                let rawTitle = item.storyTitle || "Cerita";
+                let judulTanpaPulau = rawTitle;
+                if (judulTanpaPulau.toLowerCase().startsWith("cerita ")) {
+                  judulTanpaPulau = judulTanpaPulau.substring(7);
+                }
+                const lowerTitle = judulTanpaPulau.toLowerCase();
+                const suffixesToRemove = [
+                  " sumatra", " sulawesi", " bali", " maluku", " nusa tenggara", " nusa-tenggara", " jawa", " kalimantan", " papua"
+                ];
+                let namaPulau = "";
+                for (const suffix of suffixesToRemove) {
+                  if (lowerTitle.endsWith(suffix)) {
+                    judulTanpaPulau = judulTanpaPulau.substring(0, judulTanpaPulau.length - suffix.length);
+                    namaPulau = suffix.trim().replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    break;
+                  }
+                }
+                
+                const getScoreBadge = (score) => {
+                  if (score === null || score === undefined || score === "-") return { bg: "transparent", text: "inherit" };
+                  const num = Number(score);
+                  if (num < 50) return { bg: "#FCEBEB", text: "#791F1F" };
+                  if (num < 80) return { bg: "#FAEEDA", text: "#633806" };
+                  return { bg: "#EAF3DE", text: "#27500A" };
+                };
+                
+                const ISLAND_STYLE_MAP = {
+                  "Sumatra": { bg: "#E6ECFE", text: "#33437A", border: "#A8BFFB" },
+                  "Kalimantan": { bg: "#DDF7EC", text: "#176B4F", border: "#5AD9AD" },
+                  "Sulawesi": { bg: "#FFE6EF", text: "#993D5E", border: "#FFA6C9" },
+                  "Maluku": { bg: "#EBF8DC", text: "#4D6B26", border: "#9ED65D" },
+                  "Papua": { bg: "#FDEFC4", text: "#7A5A06", border: "#F6B80F" },
+                  "Nusa Tenggara": { bg: "#FDE3D8", text: "#8A3A1E", border: "#F7885E" },
+                  "Bali": { bg: "#FBF7DB", text: "#736B1F", border: "#F2E686" },
+                  "Jawa": { bg: "#EEE0F5", text: "#5F3878", border: "#C498DD" }
+                };
+
+                const islandColor = ISLAND_STYLE_MAP[namaPulau] || { bg: "#F1EFE8", text: "#5F5E5A", border: "#D5D5D5" };
+                const preTestStyle = getScoreBadge(item.preTestScore);
+                const postTestStyle = getScoreBadge(item.postTestScore);
+                const xpValue = item.xp > 0 ? `+${item.xp}` : item.xp;
+                
+                return (
+                  <div key={index} className="history-row" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1.2fr 1.2fr 3fr', padding: '16px 24px', borderBottom: '1px solid #E8D9C0', alignItems: 'center', minWidth: '900px' }}>
+                    <div style={{ textAlign: 'left' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <span style={{ fontSize: '14px', fontWeight: 500, color: '#333' }}>{judulTanpaPulau}</span>
+                        {namaPulau && (
+                          <span style={{ background: islandColor.bg, color: islandColor.text, border: `1px solid ${islandColor.border}`, fontSize: '12px', fontWeight: 600, padding: '2px 9px', borderRadius: '999px', whiteSpace: 'nowrap' }}>
+                            {namaPulau}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div style={{ textAlign: 'center' }}>
+                      <span style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '6px', fontSize: '13px', fontWeight: 600, background: preTestStyle.bg, color: preTestStyle.text }}>
+                        {item.preTestScore !== null ? item.preTestScore : "-"}
+                      </span>
+                    </div>
+                    <div style={{ textAlign: 'center' }}>
+                      <span style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '6px', fontSize: '13px', fontWeight: 600, background: postTestStyle.bg, color: postTestStyle.text }}>
+                        {item.postTestScore !== null ? item.postTestScore : "-"}
+                      </span>
+                    </div>
+                    <div style={{ textAlign: 'center', color: '#5F5E5A', fontWeight: '600' }}>
+                      {xpValue}
+                    </div>
+                    <div style={{ textAlign: 'center', color: '#5F5E5A', fontWeight: '600' }}>{item.time}</div>
+                    <div style={{ textAlign: 'center', color: '#5F5E5A', fontWeight: '600' }}>{item.date}</div>
+                    <div style={{ textAlign: 'left', fontSize: '0.85rem', color: '#7B4F2E', maxHeight: '50px', overflowY: 'auto', paddingRight: '4px', wordBreak: 'break-word', whiteSpace: 'pre-wrap' }}>
+                      {item.essay ? (
+                        <button
+                          className="buka-esai-btn"
+                          style={{ display: 'inline-flex', padding: '4px 14px', borderRadius: '999px', fontSize: '12px', fontWeight: 600, border: '1px solid #C9BFAE', background: 'transparent', color: 'rgb(123, 79, 46)' }}
+                          onClick={() => {
+                            let rawTitleClick = item.storyTitle || "Cerita";
+                            if (rawTitleClick.toLowerCase().startsWith("cerita ")) {
+                              rawTitleClick = rawTitleClick.substring(7);
                             }
-                          }
-                          const islandName = getIslandNameFromTitle(item.storyTitle);
-                          const essayQuestion = getEssayQuestion(islandName);
-                          setSelectedEssay({
-                            title: rawTitle,
-                            text: item.essay,
-                            question: essayQuestion,
-                          })
-                        }}
-                      >
-                        Buka Esai
-                      </button>
-                    ) : (
-                      <span style={{ color: '#aaa', fontStyle: 'italic' }}>Tidak ada esai</span>
-                    )}
+                            const lowerTitleClick = rawTitleClick.toLowerCase();
+                            for (const suffix of suffixesToRemove) {
+                              if (lowerTitleClick.endsWith(suffix)) {
+                                rawTitleClick = rawTitleClick.substring(0, rawTitleClick.length - suffix.length);
+                                break;
+                              }
+                            }
+                            const islandNameClick = getIslandNameFromTitle(item.storyTitle);
+                            const essayQuestion = getEssayQuestion(islandNameClick);
+                            setSelectedEssay({
+                              title: rawTitleClick,
+                              text: item.essay,
+                              question: essayQuestion,
+                            })
+                          }}
+                        >
+                          Buka Esai
+                        </button>
+                      ) : (
+                        <span style={{ fontSize: '12px', fontStyle: 'italic', color: '#8a8a8a' }}>Siswa belum menjawab esai</span>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))
+                );
+              })
             ) : (
               <div className="history-row" style={{ display: 'flex', justifyContent: 'center', padding: '24px', color: '#7B4F2E', fontStyle: 'italic', minWidth: '900px' }}>
                 Belum ada data untuk ditampilkan.
@@ -414,12 +469,31 @@ function QuizAnalyticsPanel({ quizAnalytics, studentInfo }) {
   const isParent = window.location.pathname.includes('/monitoring-ortu');
   const isEmptyState = (stats.totalXp || 0) === 0;
 
-  // Format score in history to make sure it renders beautifully as string or percentage
-  const formattedHistory = (history || []).map(item => ({
-    ...item,
-    score: typeof item.score === 'number' ? `${item.score}%` : item.score,
-    scorePercent: typeof item.score === 'number' ? item.score : parseFloat(item.score) || 0
-  }));
+  const getMaxScore = (level) => {
+    const levelStr = String(level).toLowerCase();
+    if (levelStr.includes('1')) return 5;
+    if (levelStr.includes('2')) return 4;
+    if (levelStr.includes('3')) return 3;
+    return 0;
+  };
+
+  const tableData = (history || []).map((item, index) => {
+    const maxScore = getMaxScore(item.level);
+    const scorePercent = typeof item.scorePercent === 'number' ? item.scorePercent : parseFloat(item.scorePercent) || 0;
+    const rawScore = Math.round((scorePercent / 100) * maxScore);
+    
+    return {
+      id: index,
+      island: item.island,
+      topic: item.topic,
+      level: item.level,
+      quizType: item.bloom,
+      score: rawScore,
+      maxScore: maxScore,
+      time: item.time,
+      date: item.date
+    };
+  });
 
   return (
     <div className="fade-in">
@@ -515,7 +589,7 @@ function QuizAnalyticsPanel({ quizAnalytics, studentInfo }) {
             </div>
           </div>
           <div className="chart-wrapper-responsive" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '280px' }}>
-            {hasRadarData && formattedHistory.length > 0 ? (
+            {hasRadarData && history && history.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
                 <RadarChart cx="50%" cy="50%" outerRadius="75%" data={radarLiteracy}>
                   <PolarGrid />
@@ -538,7 +612,7 @@ function QuizAnalyticsPanel({ quizAnalytics, studentInfo }) {
             Minat Budaya Terbesar <InfoIcon {...PARENT_INFO.minatBudaya} />
           </h3>
           <div className="chart-wrapper-responsive" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '260px' }}>
-            {hasInterestData && formattedHistory.length > 0 ? (
+            {hasInterestData && history && history.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={culturalInterest} margin={{ top: 20, right: 10, left: -20, bottom: 5 }}>
                   <XAxis dataKey="name" tick={{ fontSize: 10, fill: '#7B4F2E', fontWeight: 'bold' }} />
@@ -558,8 +632,11 @@ function QuizAnalyticsPanel({ quizAnalytics, studentInfo }) {
 
       {/* Quiz History Table */}
       <section style={{ marginTop: '40px' }}>
-        <h2 className="results-section-title" style={{ fontSize: '1.2rem', marginBottom: '12px', color: '#7B4F2E' }}>Riwayat Quiz Budaya</h2>
-        <ScoreTable history={formattedHistory} />
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', padding: '0 4px' }}>
+          <h2 className="results-section-title" style={{ fontSize: '1.2rem', margin: 0, color: '#7B4F2E' }}>Riwayat Quiz Budaya</h2>
+          <span style={{ fontSize: '15px', fontWeight: 600, color: '#7B4F2E' }}>{tableData.length} hasil</span>
+        </div>
+        <ScoreTable data={tableData} />
       </section>
     </div>
   );

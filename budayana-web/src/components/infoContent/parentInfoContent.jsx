@@ -22,7 +22,7 @@ export const getStatistikQuizInfo = (pov = 'siswa') => {
         </div>
         <div>
           <div style={{ fontWeight: 'bold', color: '#955c2e', marginBottom: '4px' }}>XP Quiz Budaya</div>
-          <div style={{ fontSize: '0.9rem' }}>Setiap kali {sub} berhasil menamatkan sebuah kuis, {sub} akan mendapatkan XP khusus. Mengulang kuis yang sama juga memberi XP tambahan.</div>
+          <div style={{ fontSize: '0.9rem' }}>XP diberikan saat {sub} pertama kali menyelesaikan sebuah level kuis. Jika {sub} mengulang level yang sudah pernah selesai (mode latihan), skor dan riwayat belajar tetap tersimpan, tapi XP tidak bertambah lagi — supaya XP benar-benar mencerminkan seberapa banyak level baru yang sudah {sub} kuasai.</div>
         </div>
         <div>
           <div style={{ fontWeight: 'bold', color: '#955c2e', marginBottom: '4px' }}>Peringkat Petualang</div>
