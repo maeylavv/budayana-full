@@ -159,6 +159,12 @@
     color: #A8A8A8;
   }
 
+  input:focus, select:focus {
+    outline: none;
+    border-color: #955C2E;
+    box-shadow: 0 0 0 3px rgba(149, 92, 46, 0.2);
+  }
+
   .password-wrapper {
     display: flex;
     align-items: center;

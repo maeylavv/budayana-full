@@ -244,14 +244,13 @@ export default function MonitoringLogin({ role }) {
 
           <div className='field'>
             <label htmlFor='password'>Password</label>
-            <div className='password-wrapper' style={{ position: 'relative' }}>
-              <input type={showPassword ? "text" : "password"} id='password' placeholder='Password Kamu (6+ Karakter)' value={formData.password} onChange={handleChange} required />
+            <div className='password-wrapper'>
+              <input type={showPassword ? "text" : "password"} id='password' placeholder='Password Kamu (6+ Karakter)' minLength="6" value={formData.password} onChange={handleChange} required />
               {formData.password && (
                 <button
                   type='button'
                   className='password-toggle'
                   onClick={() => setShowPassword((v) => !v)}
-                  style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)' }}
                 >
                   {showPassword ? "Sembunyikan" : "Lihat"}
                 </button>
