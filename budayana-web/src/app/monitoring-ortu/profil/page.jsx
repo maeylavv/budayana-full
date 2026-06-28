@@ -282,7 +282,7 @@ export default function MonitoringOrtuProfil() {
               <button 
                 onClick={handleDeleteClick}
                 style={{ backgroundColor: '#c53030', color: 'white', padding: '12px 30px', borderRadius: '999px', fontSize: '1.1rem', fontWeight: 'bold', border: 'none', cursor: 'pointer' }}>
-                Delete Profil
+                Hapus profil
               </button>
               <button 
                 onClick={handleUpdate}
