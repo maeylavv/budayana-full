@@ -1,40 +1,29 @@
-import { ISLAND_COLORS, TOPIC_ICONS } from "../lib/dummyData";
+import React from 'react';
 
-const LOCAL_TOPIC_ICONS = {
-  "Makanan Tradisional": "🍲",
-  "Rumah Adat": "🏠",
-  "Tarian & Alat Musik": "🎵",
-  "Senjata Tradisional": "⚔️",
-  "Pakaian Adat": "👚"
+
+
+const ISLAND_STYLE_MAP = {
+  "Sumatra": { bg: "#E6ECFE", text: "#33437A", border: "#A8BFFB" },
+  "Kalimantan": { bg: "#DDF7EC", text: "#176B4F", border: "#5AD9AD" },
+  "Sulawesi": { bg: "#FFE6EF", text: "#993D5E", border: "#FFA6C9" },
+  "Maluku": { bg: "#EBF8DC", text: "#4D6B26", border: "#9ED65D" },
+  "Papua": { bg: "#FDEFC4", text: "#7A5A06", border: "#F6B80F" },
+  "Nusa Tenggara": { bg: "#FDE3D8", text: "#8A3A1E", border: "#F7885E" },
+  "Bali": { bg: "#FBF7DB", text: "#736B1F", border: "#F2E686" },
+  "Jawa": { bg: "#EEE0F5", text: "#5F3878", border: "#C498DD" }
 };
 
-export default function ScoreTable({ history }) {
-  const getBloomColor = (bloom) => {
-    if (bloom === "Ingatan") return "text-blue-600 bg-blue-50";
-    if (bloom === "Analisis") return "text-purple-600 bg-purple-50";
-    if (bloom === "Pendapat") return "text-red-600 bg-red-50";
-    return "text-gray-600 bg-gray-50";
-  };
+const getScoreBadgeStyle = (score, maxScore) => {
+  if (!maxScore) return { bg: "#FCEBEB", text: "#791F1F" };
+  if (score === maxScore) return { bg: "#EAF3DE", text: "#27500A" }; // Sempurna -> hijau
+  if (score === 0) return { bg: "#FCEBEB", text: "#791F1F" }; // 0 -> merah
+  return { bg: "#FAEEDA", text: "#633806" }; // Selainnya -> kuning
+};
 
-  const getScoreColor = (score, maxScore) => {
-    if (!maxScore) return '#8C8C8C';
-    const percent = (score / maxScore) * 100;
-    if (percent >= 80) return '#32B65E';
-    if (percent >= 50) return '#F2B84B';
-    return '#E64B4B';
-  };
-
-  const getMaxScore = (level) => {
-    const levelStr = String(level).toLowerCase();
-    if (levelStr.includes('1')) return 5;
-    if (levelStr.includes('2')) return 4;
-    if (levelStr.includes('3')) return 3;
-    return 0; // fallback
-  };
-
+export default function ScoreTable({ data }) {
   return (
     <div className="history-table-container" style={{ display: 'flex', flexDirection: 'column', height: '400px', overflowY: 'auto', overflowX: 'auto', position: 'relative' }}>
-      <div className="history-header" style={{ display: 'grid', gridTemplateColumns: '1.5fr 2fr 1fr 1fr 1fr 1fr 1.5fr', padding: '16px 24px', borderBottom: '1px solid #E8D9C0', backgroundColor: '#955c2e', color: 'white', alignItems: 'center', position: 'sticky', top: 0, zIndex: 10, borderTopLeftRadius: '17px', borderTopRightRadius: '17px', minWidth: '850px' }}>
+      <div className="history-header quiz-history-grid" style={{ display: 'grid', gridTemplateColumns: '1.5fr 2fr 1fr 1fr 1fr 1fr 1.5fr', padding: '16px 24px', backgroundColor: 'rgb(149, 92, 46)', color: 'white', alignItems: 'center', position: 'sticky', top: 0, zIndex: 10, borderTopLeftRadius: '17px', borderTopRightRadius: '17px', minWidth: '850px' }}>
         <div style={{ textAlign: 'center', fontWeight: 'bold' }}>Pulau</div>
         <div style={{ textAlign: 'center', fontWeight: 'bold' }}>Topik</div>
         <div style={{ textAlign: 'center', fontWeight: 'bold' }}>Level</div>
@@ -44,45 +33,45 @@ export default function ScoreTable({ history }) {
         <div style={{ textAlign: 'center', fontWeight: 'bold' }}>Tanggal</div>
       </div>
       <div className="history-body" style={{ overflowY: 'visible', flex: '1 1 0%' }}>
-        {history.length > 0 ? (
-          history.map((item, index) => {
-            const rawScore = item.scorePercent; // The numerical score
-            const maxScore = getMaxScore(item.level);
-
+        {data && data.length > 0 ? (
+          data.map((item, index) => {
+            const islandStyle = ISLAND_STYLE_MAP[item.island] || { bg: "#F1EFE8", text: "#5F5E5A", border: "#D5D5D5" };
+            const scoreStyle = getScoreBadgeStyle(item.score, item.maxScore);
+            
             return (
-              <div key={index} className="history-row" style={{ display: 'grid', gridTemplateColumns: '1.5fr 2fr 1fr 1fr 1fr 1fr 1.5fr', padding: '16px 24px', borderBottom: '1px solid #E8D9C0', alignItems: 'center', minWidth: '850px' }}>
+              <div key={item.id || index} className="history-row quiz-history-grid" style={{ display: 'grid', gridTemplateColumns: '1.5fr 2fr 1fr 1fr 1fr 1fr 1.5fr', padding: '16px 24px', borderBottom: '1px solid #E8D9C0', alignItems: 'center', minWidth: '850px' }}>
                 <div style={{ textAlign: 'center' }}>
-                  <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${ISLAND_COLORS[item.island] || 'bg-gray-100'}`}>
+                  <span style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '999px', fontSize: '12px', fontWeight: '600', background: islandStyle.bg, color: islandStyle.text, border: `1px solid ${islandStyle.border}` }}>
                     {item.island}
                   </span>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-                  <span>{LOCAL_TOPIC_ICONS[item.topic] || TOPIC_ICONS[item.topic] || "📝"}</span>
-                  <span>{item.topic}</span>
+                <div style={{ textAlign: 'center', color: '#333', fontWeight: '600' }}>
+                  {item.topic}
                 </div>
-                <div style={{ textAlign: 'center' }}>{item.level}</div>
+                <div style={{ textAlign: 'center', color: '#5F5E5A', fontWeight: '500' }}>
+                  {item.level}
+                </div>
                 <div style={{ textAlign: 'center' }}>
-                  <span className={`px-2 py-1 rounded-md text-xs font-bold ${getBloomColor(item.bloom)}`}>
-                    {item.bloom}
+                  <span style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '6px', fontSize: '12px', fontWeight: '500', background: '#F1EFE8', color: '#5F5E5A' }}>
+                    {item.quizType}
                   </span>
                 </div>
-                <div
-                  className="quiz-score"
-                  style={{
-                    textAlign: 'center',
-                    color: getScoreColor(rawScore, maxScore),
-                    fontWeight: '700'
-                  }}
-                >
-                  {rawScore}/{maxScore}
+                <div style={{ textAlign: 'center' }}>
+                  <span style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '6px', fontSize: '13px', fontWeight: '600', background: scoreStyle.bg, color: scoreStyle.text }}>
+                    {item.score}/{item.maxScore}
+                  </span>
                 </div>
-                <div style={{ textAlign: 'center' }}>{item.time}</div>
-                <div style={{ textAlign: 'center' }}>{item.date}</div>
+                <div style={{ textAlign: 'center', color: '#5F5E5A', fontWeight: '500' }}>
+                  {item.time}
+                </div>
+                <div style={{ textAlign: 'center', color: '#5F5E5A', fontWeight: '500' }}>
+                  {item.date}
+                </div>
               </div>
             );
           })
         ) : (
-          <div className="empty-message" style={{ textAlign: 'center', padding: '20px', minWidth: '850px' }}>
+          <div className="empty-message" style={{ textAlign: 'center', padding: '20px', minWidth: '850px', color: '#5F5E5A' }}>
             Belum ada riwayat pengerjaan.
           </div>
         )}

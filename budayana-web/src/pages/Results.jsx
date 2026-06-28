@@ -7,6 +7,7 @@ import { islands } from "../data/islands"
 import { islandsApi } from "../lib/api"
 import { getJourneyContent } from "../utils/xpJourney"
 import InfoIcon from "../components/InfoIcon"
+import ScoreTable from "../components/ScoreTable"
 import { PARENT_INFO, getStatistikQuizInfo } from "../components/infoContent/parentInfoContent";
 import "./Results.css"
 
@@ -238,16 +239,30 @@ export default function Results() {
 
           {/* History Section */}
           <section>
-            <h2 className='results-section-title'>Riwayat Skor</h2>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', padding: '0 4px' }}>
+              <h2 className='results-section-title' style={{ margin: 0, color: 'rgb(123, 79, 46)', fontSize: '1.2rem' }}>Riwayat Skor</h2>
+              <span style={{ fontSize: '15px', fontWeight: 600, color: '#7B4F2E' }}>
+                {(() => {
+                  const filteredAttempts = attempts.filter((attempt) => {
+                    if (!attempt.finishedAt) return false;
+                    const title = (attempt.story?.title || "").toLowerCase();
+                    if (title.includes("pre-test")) return attempt.preTestScore !== null;
+                    if (title.includes("post-test")) return attempt.postTestScore !== null;
+                    return true;
+                  });
+                  return filteredAttempts.length;
+                })()} hasil
+              </span>
+            </div>
             <div className='history-table-container'>
               <div className='history-header'>
-                <div>Tahap</div>
+                <div>Judul Cerita</div>
                 <div>Pre-test</div>
                 <div>Post-test</div>
                 <div>XP</div>
-                <div>Tanggal</div>
                 <div>Waktu</div>
-                <div>Esai</div>
+                <div>Tanggal</div>
+                <div>Jawaban Esai</div>
               </div>
               <div className='history-body'>
                 {(() => {
@@ -302,52 +317,94 @@ export default function Results() {
                     )
                     const hasEssay = isInteractiveStory && (attempt.essayAnswer || essayLog?.userAnswerText)
 
-                    const islandName = attempt.story?.island?.islandName || getIslandName(attempt)
-                    const rowColor = getIslandTextColor(islandName)
+                    const islandNameRaw = attempt.story?.island?.islandName || getIslandName(attempt)
+                    
+                    let judulTanpaPulau = displayTitle;
+                    if (judulTanpaPulau.toLowerCase().startsWith("cerita ")) {
+                      judulTanpaPulau = judulTanpaPulau.substring(7);
+                    }
+                    const lowerTitle = judulTanpaPulau.toLowerCase();
+                    const suffixesToRemove = [ " sumatra", " sulawesi", " bali", " maluku", " nusa tenggara", " nusa-tenggara", " jawa", " kalimantan", " papua" ];
+                    let namaPulau = "";
+                    for (const suffix of suffixesToRemove) {
+                      if (lowerTitle.endsWith(suffix)) {
+                        judulTanpaPulau = judulTanpaPulau.substring(0, judulTanpaPulau.length - suffix.length);
+                        namaPulau = suffix.trim().replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
+                        break;
+                      }
+                    }
+                    if (!namaPulau && islandNameRaw) {
+                      namaPulau = islandNameRaw.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
+                      if (namaPulau === "Nusa-tenggara") namaPulau = "Nusa Tenggara";
+                    }
+
+                    const getScoreBadge = (score) => {
+                      if (score === null || score === undefined || score === "-") return { bg: "transparent", text: "inherit" };
+                      const num = Number(score);
+                      if (num < 50) return { bg: "#FCEBEB", text: "#791F1F" };
+                      if (num < 80) return { bg: "#FAEEDA", text: "#633806" };
+                      return { bg: "#EAF3DE", text: "#27500A" };
+                    };
+                    
+                    const ISLAND_STYLE_MAP = {
+                      "Sumatra": { bg: "#E6ECFE", text: "#33437A", border: "#A8BFFB" },
+                      "Kalimantan": { bg: "#DDF7EC", text: "#176B4F", border: "#5AD9AD" },
+                      "Sulawesi": { bg: "#FFE6EF", text: "#993D5E", border: "#FFA6C9" },
+                      "Maluku": { bg: "#EBF8DC", text: "#4D6B26", border: "#9ED65D" },
+                      "Papua": { bg: "#FDEFC4", text: "#7A5A06", border: "#F6B80F" },
+                      "Nusa Tenggara": { bg: "#FDE3D8", text: "#8A3A1E", border: "#F7885E" },
+                      "Bali": { bg: "#FBF7DB", text: "#736B1F", border: "#F2E686" },
+                      "Jawa": { bg: "#EEE0F5", text: "#5F3878", border: "#C498DD" }
+                    };
+
+                    const islandColor = ISLAND_STYLE_MAP[namaPulau] || { bg: "#F1EFE8", text: "#5F5E5A", border: "#D5D5D5" };
+                    const preTestStyle = getScoreBadge(attempt.preTestScore);
+                    const postTestStyle = getScoreBadge(attempt.postTestScore);
+                    const xpValue = displayXp > 0 ? `+${displayXp}` : displayXp;
 
                     return (
-                      <div key={attempt.id} className='history-row' style={{ color: rowColor, fontWeight: '600' }}>
-                        <div>{displayTitle}</div>
-                        <div>
-                          {attempt.preTestScore !== null
-                            ? Math.round(attempt.preTestScore)
-                            : "-"}
+                      <div key={attempt.id} className='history-row' style={{ color: '#7B4F2E', fontWeight: '600' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                          <span style={{ fontSize: '14px', fontWeight: 500, color: '#333' }}>{judulTanpaPulau}</span>
+                          {namaPulau && (
+                            <span style={{ background: islandColor.bg, color: islandColor.text, border: `1px solid ${islandColor.border}`, fontSize: '12px', fontWeight: 600, padding: '2px 9px', borderRadius: '999px', whiteSpace: 'nowrap' }}>
+                              {namaPulau}
+                            </span>
+                          )}
                         </div>
                         <div>
-                          {attempt.postTestScore !== null
-                            ? Math.round(attempt.postTestScore)
-                            : "-"}
+                          <span style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '6px', fontSize: '13px', fontWeight: 600, background: preTestStyle.bg, color: preTestStyle.text }}>
+                            {attempt.preTestScore !== null ? Math.round(attempt.preTestScore) : "-"}
+                          </span>
                         </div>
-                        <div>{displayXp}</div>
-                        <div>{formatDate(attempt.finishedAt)}</div>
-                        <div>{formatDuration(duration)}</div>
+                        <div>
+                          <span style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '6px', fontSize: '13px', fontWeight: 600, background: postTestStyle.bg, color: postTestStyle.text }}>
+                            {attempt.postTestScore !== null ? Math.round(attempt.postTestScore) : "-"}
+                          </span>
+                        </div>
+                        <div style={{ color: '#5F5E5A' }}>{xpValue}</div>
+                        <div style={{ color: '#5F5E5A' }}>{formatDuration(duration)}</div>
+                        <div style={{ color: '#5F5E5A' }}>{formatDate(attempt.finishedAt)}</div>
                         <div>
                           {hasEssay ? (
                             <button
                               className='buka-esai-btn'
+                              style={{ display: 'inline-flex', padding: '4px 14px', borderRadius: '999px', fontSize: '12px', fontWeight: 600, border: '1px solid #C9BFAE', background: 'transparent', color: 'rgb(123, 79, 46)' }}
                               onClick={() => {
-                                let rawTitle = attempt.story?.title || "Cerita"
-                                if (rawTitle.toLowerCase().startsWith("cerita ")) {
-                                  rawTitle = rawTitle.substring(7)
+                                let rawTitleClick = attempt.story?.title || "Cerita";
+                                if (rawTitleClick.toLowerCase().startsWith("cerita ")) {
+                                  rawTitleClick = rawTitleClick.substring(7);
                                 }
-                                const lowerTitle = rawTitle.toLowerCase();
-                                const suffixesToRemove = [
-                                  " sumatra",
-                                  " sulawesi",
-                                  " bali",
-                                  " maluku",
-                                  " nusa tenggara",
-                                  " nusa-tenggara"
-                                ];
+                                const lowerTitleClick = rawTitleClick.toLowerCase();
                                 for (const suffix of suffixesToRemove) {
-                                  if (lowerTitle.endsWith(suffix)) {
-                                    rawTitle = rawTitle.substring(0, rawTitle.length - suffix.length);
+                                  if (lowerTitleClick.endsWith(suffix)) {
+                                    rawTitleClick = rawTitleClick.substring(0, rawTitleClick.length - suffix.length);
                                     break;
                                   }
                                 }
-                                const essayQuestion = getEssayQuestion(islandName);
+                                const essayQuestion = getEssayQuestion(islandNameRaw);
                                 setSelectedEssay({
-                                  title: rawTitle,
+                                  title: rawTitleClick,
                                   text: attempt.essayAnswer || essayLog?.userAnswerText,
                                   question: essayQuestion,
                                 })
@@ -355,7 +412,9 @@ export default function Results() {
                             >
                               Buka Esai
                             </button>
-                          ) : ""}
+                          ) : (
+                            <span style={{ fontSize: '12px', fontStyle: 'italic', color: '#8a8a8a' }}>Siswa belum menjawab esai</span>
+                          )}
                         </div>
                       </div>
                     )
@@ -423,50 +482,25 @@ export default function Results() {
 
           {/* Quiz History Section */}
           <section>
-            <h2 className='results-section-title'>Riwayat Skor Quiz</h2>
-            <div className='history-table-container'>
-              <div className='history-header quiz-history-grid'>
-                <div>Pulau</div>
-                <div>Topik</div>
-                <div>Level</div>
-                <div>Tipe Kuis</div>
-                <div>Skor</div>
-                <div>Waktu</div>
-                <div>Tanggal</div>
-              </div>
-              <div className='history-body'>
-                {quizAttempts.length === 0 ? (
-                  <div className='empty-message'>
-                    Belum ada riwayat Quiz Budaya. Ayo mulai petualanganmu! 🗺️
-                  </div>
-                ) : (
-                  [...quizAttempts]
-                    .sort(
-                      (a, b) =>
-                        new Date(b.finishedAt || b.startedAt) -
-                        new Date(a.finishedAt || a.startedAt)
-                    )
-                    .map((attempt) => {
-                      const rowColor = getIslandTextColor(attempt.islandName)
-                      return (
-                        <div
-                          key={attempt.id}
-                          className='history-row quiz-history-grid'
-                          style={{ color: rowColor, fontWeight: '600' }}
-                        >
-                          <div>{attempt.islandName}</div>
-                          <div>{attempt.topicName}</div>
-                          <div>{attempt.levelId}</div>
-                          <div>{attempt.quizTypeName}</div>
-                          <div>{attempt.score}/{attempt.totalQuestions}</div>
-                          <div>{formatDuration(attempt.totalTimeSeconds)}</div>
-                          <div>{formatDate(attempt.finishedAt)}</div>
-                        </div>
-                      )
-                    })
-                )}
-              </div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+              <h2 className='results-section-title' style={{ margin: 0, color: 'rgb(123, 79, 46)', fontSize: '1.2rem' }}>Riwayat Skor Quiz</h2>
+              <span style={{ fontSize: '15px', fontWeight: 600, color: '#7B4F2E' }}>{quizAttempts.length} hasil</span>
             </div>
+            
+            <ScoreTable data={[...quizAttempts]
+              .sort((a, b) => new Date(b.finishedAt || b.startedAt) - new Date(a.finishedAt || a.startedAt))
+              .map(attempt => ({
+                id: attempt.id,
+                island: attempt.islandName,
+                topic: attempt.topicName,
+                level: attempt.levelId,
+                quizType: attempt.quizTypeName,
+                score: attempt.score,
+                maxScore: attempt.totalQuestions,
+                time: formatDuration(attempt.totalTimeSeconds),
+                date: formatDate(attempt.finishedAt)
+              }))} 
+            />
           </section>
         </>
       )}
