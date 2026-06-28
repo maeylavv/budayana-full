@@ -93,8 +93,8 @@
   background-color: #955c2e;
   color: #ffffff;
   display: grid;
-  /* Columns: Tahap (flex), Pre, Post, XP, Date, Time, Esai */
-  grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr 1fr 1fr;
+  /* Columns: Judul Cerita, Pre-test, Post-test, XP, Waktu, Tanggal, Jawaban Esai */
+  grid-template-columns: 2fr 1.2fr 1.2fr 1.2fr 1.2fr 1.4fr 1.6fr;
   padding: 21px 24px;
   font-weight: 600;
   font-size: 1rem;
@@ -130,7 +130,7 @@
 
 .history-row {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr 1fr 1fr;
+  grid-template-columns: 2fr 1.2fr 1.2fr 1.2fr 1.2fr 1.4fr 1.6fr;
   padding: 20px 24px;
   border-bottom: 2px solid #ecdac4;
   align-items: center;
@@ -297,14 +297,14 @@
 
 /* Essay Button */
 .buka-esai-btn {
-  background-color: transparent;
-  color: rgb(123, 79, 46) !important;
-  border: 1px solid #C9BFAE;
+  background-color: #FEF6DF;
+  color: #955C2E !important;
+  border: 2px solid #955C2E;
   border-radius: 999px;
-  padding: 4px 14px;
+  padding: 4px 16px;
   font-family: 'Fredoka One', sans-serif;
-  font-weight: 500;
-  font-size: 12px;
+  font-weight: 600;
+  font-size: 1rem;
   line-height: 1.2;
   cursor: pointer;
   transition: background-color 0.2s, transform 0.1s;
@@ -314,7 +314,7 @@
 }
 
 .buka-esai-btn:hover {
-  background-color: rgba(123, 79, 46, 0.08);
+  background-color: #F7E4B2;
   transform: translateY(-1px);
 }
 

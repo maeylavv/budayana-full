@@ -363,25 +363,33 @@ export default function Results() {
                     const xpValue = displayXp > 0 ? `+${displayXp}` : displayXp;
 
                     return (
-                      <div key={attempt.id} className='history-row' style={{ color: '#7B4F2E', fontWeight: '600' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                          <span style={{ fontSize: '14px', fontWeight: 500, color: '#333' }}>{judulTanpaPulau}</span>
-                          {namaPulau && (
-                            <span style={{ background: islandColor.bg, color: islandColor.text, border: `1px solid ${islandColor.border}`, fontSize: '12px', fontWeight: 600, padding: '2px 9px', borderRadius: '999px', whiteSpace: 'nowrap' }}>
-                              {namaPulau}
+                        <div key={attempt.id} className='history-row' style={{ color: '#7B4F2E', fontWeight: '600' }}>
+                          <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <span style={{ 
+                              background: islandColor.bg, 
+                              color: islandColor.text, 
+                              border: `1px solid ${islandColor.border}`, 
+                              fontSize: '14px', 
+                              fontWeight: 600, 
+                              padding: '5px 14px', 
+                              borderRadius: '999px', 
+                              display: 'inline-block', 
+                              fontFamily: "'Fredoka One', sans-serif",
+                              whiteSpace: 'nowrap'
+                            }}>
+                              {judulTanpaPulau}{namaPulau ? ` ${namaPulau}` : ''}
                             </span>
-                          )}
-                        </div>
-                        <div>
-                          <span style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '6px', fontSize: '13px', fontWeight: 600, background: preTestStyle.bg, color: preTestStyle.text }}>
-                            {attempt.preTestScore !== null ? Math.round(attempt.preTestScore) : "-"}
-                          </span>
-                        </div>
-                        <div>
-                          <span style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '6px', fontSize: '13px', fontWeight: 600, background: postTestStyle.bg, color: postTestStyle.text }}>
-                            {attempt.postTestScore !== null ? Math.round(attempt.postTestScore) : "-"}
-                          </span>
-                        </div>
+                          </div>
+                         <div>
+                           <span style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '6px', fontSize: '14px', fontWeight: 600, background: preTestStyle.bg, color: preTestStyle.text }}>
+                             {attempt.preTestScore !== null ? Math.round(attempt.preTestScore) : "-"}
+                           </span>
+                         </div>
+                         <div>
+                           <span style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '6px', fontSize: '14px', fontWeight: 600, background: postTestStyle.bg, color: postTestStyle.text }}>
+                             {attempt.postTestScore !== null ? Math.round(attempt.postTestScore) : "-"}
+                           </span>
+                         </div>
                         <div style={{ color: '#5F5E5A' }}>{xpValue}</div>
                         <div style={{ color: '#5F5E5A' }}>{formatDuration(duration)}</div>
                         <div style={{ color: '#5F5E5A' }}>{formatDate(attempt.finishedAt)}</div>
@@ -389,7 +397,6 @@ export default function Results() {
                           {hasEssay ? (
                             <button
                               className='buka-esai-btn'
-                              style={{ display: 'inline-flex', padding: '4px 14px', borderRadius: '999px', fontSize: '12px', fontWeight: 600, border: '1px solid #C9BFAE', background: 'transparent', color: 'rgb(123, 79, 46)' }}
                               onClick={() => {
                                 let rawTitleClick = attempt.story?.title || "Cerita";
                                 if (rawTitleClick.toLowerCase().startsWith("cerita ")) {
