@@ -53,7 +53,12 @@ export const PARENT_INFO = {
         </div>
       </div>
     ),
-    exampleBox: "Nilai awal = 60, Nilai akhir = 80. Formula: ((80−60)/(100−60)) × 100 = 50%."
+    exampleBox: (
+      <div>
+        <div style={{ marginBottom: '4px' }}>Nilai awal (Pre-Test) = 60, Nilai akhir (Post-Test) = 80.</div>
+        <div>Formula: ((80−60)/(100−60)) × 100 = 50%.</div>
+      </div>
+    )
   },
   penyelesaianPulau: {
     tooltipText: "Persentase penyelesaian Cerita dan Kuis pada tiap pulau.",
@@ -104,8 +109,8 @@ export const PARENT_INFO = {
     ),
     exampleBox: (
       <div>
-        <div style={{ marginBottom: '4px' }}>Sangkuriang diselesaikan 3 kali → batang = 3</div>
-        <div>Malin Kundang diselesaikan 1 kali → batang = 1</div>
+        <div style={{ marginBottom: '4px' }}>Cerita Nenek Pakande diselesaikan 3 kali → batang = 3</div>
+        <div>Cerita Malin Kundang diselesaikan 1 kali → batang = 1</div>
       </div>
     ),
     noteText: "Ini adalah rekam jejak individual siswa, bukan popularitas antar kelas."

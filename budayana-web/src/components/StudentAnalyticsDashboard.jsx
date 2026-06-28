@@ -352,6 +352,10 @@ function StoryAnalyticsPanel({ storyAnalytics, studentInfo }) {
                   }
                 }
                 
+                const isInteractiveStory = ["sumatra", "sulawesi", "bali", "maluku", "nusa tenggara", "nusa-tenggara"].some(
+                  i => rawTitle.toLowerCase().includes(i)
+                );
+                
                 const getScoreBadge = (score) => {
                   if (score === null || score === undefined || score === "-") return { bg: "transparent", text: "inherit" };
                   const num = Number(score);
@@ -438,8 +442,10 @@ function StoryAnalyticsPanel({ storyAnalytics, studentInfo }) {
                         >
                           Buka Esai
                         </button>
-                      ) : (
+                      ) : isInteractiveStory ? (
                         <span style={{ fontSize: '12px', fontStyle: 'italic', color: '#8a8a8a' }}>Siswa belum menjawab esai</span>
+                      ) : (
+                        <span style={{ fontSize: '12px', fontStyle: 'italic', color: '#8a8a8a' }}>Tidak ada esai pada cerita</span>
                       )}
                     </div>
                   </div>
