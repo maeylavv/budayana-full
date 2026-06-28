@@ -14,7 +14,13 @@ export const GURU_INFO = {
         </div>
       </div>
     ),
-    exampleBox: "Nilai awal = 60, Nilai akhir = 80. Formula: ((80−60)/(100−60)) × 100 = 50%. Keterangan: angka pada dashboard merupakan rata-rata seluruh siswa.",
+    exampleBox: (
+      <div>
+        <div style={{ marginBottom: '4px' }}>Nilai awal (Pre-Test) = 60, Nilai akhir (Post-Test) = 80.</div>
+        <div style={{ marginBottom: '4px' }}>Formula: ((80−60)/(100−60)) × 100 = 50%.</div>
+        <div style={{ fontStyle: 'italic', fontSize: '11px', color: '#7b5c3d' }}>Keterangan: angka pada dashboard merupakan rata-rata seluruh siswa.</div>
+      </div>
+    ),
     noteText: "Persentase ini bukan kenaikan nilai langsung."
   },
   siswaAktif: {

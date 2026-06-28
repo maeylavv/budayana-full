@@ -419,8 +419,10 @@ export default function Results() {
                             >
                               Buka Esai
                             </button>
-                          ) : (
+                          ) : isInteractiveStory ? (
                             <span style={{ fontSize: '12px', fontStyle: 'italic', color: '#8a8a8a' }}>Siswa belum menjawab esai</span>
+                          ) : (
+                            <span style={{ fontSize: '12px', fontStyle: 'italic', color: '#8a8a8a' }}>Tidak ada esai pada cerita</span>
                           )}
                         </div>
                       </div>
