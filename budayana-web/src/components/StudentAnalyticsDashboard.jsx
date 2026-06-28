@@ -12,6 +12,24 @@ import InfoIcon from "./InfoIcon";
 import { PARENT_INFO, getStatistikQuizInfo } from "./infoContent/parentInfoContent";
 import { getJourneyContent } from "../utils/xpJourney";
 
+const ISLAND_TEXT_COLORS = {
+  "sumatra": "#5e79bfff",          
+  "jawa": "#9663b4ff",            
+  "kalimantan": "#2fa37bff",      
+  "sulawesi": "#bc5d83ff",       
+  "papua": "#ab7e02ff",            
+  "bali": "#918423ff",           
+  "maluku": "#64952cff",           
+  "nusa tenggara": "#cc643eff",    
+  "nusa-tenggara": "#cc643eff",
+};
+
+const getIslandTextColor = (islandName) => {
+  if (!islandName) return "#5b4631";
+  const key = islandName.toLowerCase().trim();
+  return ISLAND_TEXT_COLORS[key] || "#5b4631";
+};
+
 // Half Pie/Donut Chart Colors
 const GAUGE_COLORS = ["#4CAF50", "#E8D9C0"];
 
@@ -304,7 +322,7 @@ function StoryAnalyticsPanel({ storyAnalytics, studentInfo }) {
           <span style={{ fontSize: '15px', fontWeight: 600, color: '#7B4F2E' }}>{history ? history.length : 0} hasil</span>
         </div>
         <div className="history-table-container" style={{ display: 'flex', flexDirection: 'column', height: '360px', overflowY: 'auto', overflowX: 'auto', position: 'relative' }}>
-          <div className="history-header" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1.2fr 1.2fr 3fr', padding: '16px 24px', borderBottom: '1px solid #E8D9C0', backgroundColor: '#955c2e', color: 'white', alignItems: 'center', position: 'sticky', top: 0, zIndex: 10, borderTopLeftRadius: '17px', borderTopRightRadius: '17px', minWidth: '900px' }}>
+          <div className="history-header" style={{ display: 'grid', gridTemplateColumns: '2fr 1.2fr 1.2fr 1.2fr 1.2fr 1.4fr 1.6fr', padding: '16px 24px', borderBottom: '1px solid #E8D9C0', backgroundColor: '#955c2e', color: 'white', alignItems: 'center', position: 'sticky', top: 0, zIndex: 10, borderTopLeftRadius: '17px', borderTopRightRadius: '17px', minWidth: '900px' }}>
             <div style={{ textAlign: 'left', fontWeight: 'bold' }}>Judul Cerita</div>
             <div style={{ textAlign: 'center', fontWeight: 'bold' }}>Pre-Test</div>
             <div style={{ textAlign: 'center', fontWeight: 'bold' }}>Post-Test</div>
@@ -359,24 +377,32 @@ function StoryAnalyticsPanel({ storyAnalytics, studentInfo }) {
                 const xpValue = item.xp > 0 ? `+${item.xp}` : item.xp;
                 
                 return (
-                  <div key={index} className="history-row" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1.2fr 1.2fr 3fr', padding: '16px 24px', borderBottom: '1px solid #E8D9C0', alignItems: 'center', minWidth: '900px' }}>
+                  <div key={index} className="history-row" style={{ display: 'grid', gridTemplateColumns: '2fr 1.2fr 1.2fr 1.2fr 1.2fr 1.4fr 1.6fr', padding: '16px 24px', borderBottom: '1px solid #E8D9C0', alignItems: 'center', minWidth: '900px' }}>
                     <div style={{ textAlign: 'left' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <span style={{ fontSize: '14px', fontWeight: 500, color: '#333' }}>{judulTanpaPulau}</span>
-                        {namaPulau && (
-                          <span style={{ background: islandColor.bg, color: islandColor.text, border: `1px solid ${islandColor.border}`, fontSize: '12px', fontWeight: 600, padding: '2px 9px', borderRadius: '999px', whiteSpace: 'nowrap' }}>
-                            {namaPulau}
-                          </span>
-                        )}
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <span style={{ 
+                          background: islandColor.bg, 
+                          color: islandColor.text, 
+                          border: `1px solid ${islandColor.border}`, 
+                          fontSize: '14px', 
+                          fontWeight: 600, 
+                          padding: '5px 14px', 
+                          borderRadius: '999px', 
+                          display: 'inline-block', 
+                          fontFamily: "'Fredoka One', sans-serif",
+                          whiteSpace: 'nowrap'
+                        }}>
+                          {judulTanpaPulau}{namaPulau ? ` ${namaPulau}` : ''}
+                        </span>
                       </div>
                     </div>
                     <div style={{ textAlign: 'center' }}>
-                      <span style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '6px', fontSize: '13px', fontWeight: 600, background: preTestStyle.bg, color: preTestStyle.text }}>
+                      <span style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '6px', fontSize: '14px', fontWeight: 600, background: preTestStyle.bg, color: preTestStyle.text }}>
                         {item.preTestScore !== null ? item.preTestScore : "-"}
                       </span>
                     </div>
                     <div style={{ textAlign: 'center' }}>
-                      <span style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '6px', fontSize: '13px', fontWeight: 600, background: postTestStyle.bg, color: postTestStyle.text }}>
+                      <span style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '6px', fontSize: '14px', fontWeight: 600, background: postTestStyle.bg, color: postTestStyle.text }}>
                         {item.postTestScore !== null ? item.postTestScore : "-"}
                       </span>
                     </div>
@@ -389,7 +415,6 @@ function StoryAnalyticsPanel({ storyAnalytics, studentInfo }) {
                       {item.essay ? (
                         <button
                           className="buka-esai-btn"
-                          style={{ display: 'inline-flex', padding: '4px 14px', borderRadius: '999px', fontSize: '12px', fontWeight: 600, border: '1px solid #C9BFAE', background: 'transparent', color: 'rgb(123, 79, 46)' }}
                           onClick={() => {
                             let rawTitleClick = item.storyTitle || "Cerita";
                             if (rawTitleClick.toLowerCase().startsWith("cerita ")) {
