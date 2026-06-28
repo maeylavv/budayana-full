@@ -348,7 +348,7 @@ export default function SignIn() {
                   className='register'
                   onClick={handleNextStep1}
                 >
-                  Lanjut &rarr;
+                  Lanjut
                 </button>
               </div>
             </>
@@ -449,7 +449,7 @@ export default function SignIn() {
                   onClick={handleNextStep2}
                   style={{ width: '180px' }}
                 >
-                  Lanjut &rarr;
+                  Lanjut
                 </button>
               </div>
             </>
