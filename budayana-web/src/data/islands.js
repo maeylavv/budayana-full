@@ -124,7 +124,7 @@ export const islands = [
     slug: "nusa-tenggara",
     name: "Nusa Tenggara",
     storyTitle: "Cerita Watu Maladong",
-    unlockOrder: 6,
+    unlockOrder: 7,
     isLockedDefault: true,
     stages: ["pre-test", "story", "game", "post-test"],
     theme: {
@@ -147,7 +147,7 @@ export const islands = [
     slug: "maluku",
     name: "Maluku",
     storyTitle: "Cerita Legenda Telaga Biru",
-    unlockOrder: 7,
+    unlockOrder: 6,
     isLockedDefault: true,
     stages: ["pre-test", "story", "game", "post-test"],
     theme: {
