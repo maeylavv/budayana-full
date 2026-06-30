@@ -234,50 +234,16 @@ export default function Home() {
       })
     }
 
-    // First map the staticIslands with their isCompleted status from progressData
-    const mappedIslands = staticIslands.map((staticIsland) => {
+    // Map the staticIslands with their completion and unlock status from progressData
+    return staticIslands.map((staticIsland) => {
       const progressItem = progressMap.get(staticIsland.slug)
+      const defaultUnlocked = staticIsland.id === "sumatra"
+
       return {
         ...staticIsland,
         isCompleted: progressItem ? progressItem.isCompleted : false,
+        isUnlocked: progressItem ? progressItem.isUnlocked : defaultUnlocked,
         apiIslandId: progressItem ? progressItem.islandId : null,
-      }
-    })
-
-    // Sort by unlockOrder to compute isUnlocked sequentially
-    const sortedIslands = [...mappedIslands].sort((a, b) => a.unlockOrder - b.unlockOrder)
-
-    // Compute isUnlocked dynamically based on previous island completion
-    const processedIslands = sortedIslands.map((island, idx) => {
-      /*
-      ========================
-      TEMP TESTING MODE
-      RESTORE LOCK AFTER TEST
-      ========================
-      let isUnlocked = false
-      if (island.unlockOrder === 1) {
-        // First island (Sumatra) is unlocked by default
-        isUnlocked = true
-      } else {
-        const prevIsland = sortedIslands[idx - 1]
-        isUnlocked = prevIsland ? prevIsland.isCompleted : false
-      }
-      */
-      let isUnlocked = true
-
-      return {
-        ...island,
-        isUnlocked,
-      }
-    })
-
-    // Map back to original staticIslands order to maintain MapUI layout positions
-    return staticIslands.map((staticIsland) => {
-      return processedIslands.find((i) => i.id === staticIsland.id) || {
-        ...staticIsland,
-        isUnlocked: false,
-        isCompleted: false,
-        apiIslandId: null,
       }
     })
   }, [progressData])
@@ -305,7 +271,7 @@ export default function Home() {
       const matchedIsland = allIslands.find(
         (i) => i.slug === islandParam || i.id === islandParam
       )
-      if (matchedIsland) {
+      if (matchedIsland && matchedIsland.isUnlocked) {
         // Use setTimeout to avoid synchronous setState in effect warning
         setTimeout(() => setActiveIsland(matchedIsland), 0)
       }
@@ -317,6 +283,24 @@ export default function Home() {
   // Handle island popup open/close with URL sync
   const handleOpenIsland = (island) => {
     sessionStorage.removeItem("hasPromptedStoryResume")
+
+    if (!island.isUnlocked) {
+      const sequenceNames = [
+        "Sumatra",
+        "Jawa",
+        "Bali",
+        "Kalimantan",
+        "Sulawesi",
+        "Maluku",
+        "Nusa Tenggara",
+        "Papua"
+      ]
+      const currentIdx = sequenceNames.findIndex(name => name.toLowerCase() === island.name.toLowerCase())
+      const prevIslandName = currentIdx > 0 ? sequenceNames[currentIdx - 1] : "Sumatra"
+      setLockedIslandWarning(prevIslandName)
+      return
+    }
+
     setActiveIsland(island)
     setSearchParams({ island: island.slug }, { replace: true })
   }
@@ -846,14 +830,7 @@ function StoryIslandCardsList({ islands, onIslandClick }) {
   return (
     <div className="story-island-cards-container">
       {islands.map((island) => {
-        /*
-        ========================
-        TEMP TESTING MODE
-        RESTORE LOCK AFTER TEST
-        ========================
         const isLocked = !island.isUnlocked;
-        */
-        const isLocked = false;
         return (
           <div
             key={island.id || island.slug}
@@ -866,12 +843,7 @@ function StoryIslandCardsList({ islands, onIslandClick }) {
                 alt={island.name}
                 className="story-island-card-image"
               />
-              {/*
-              ========================
-              TEMP TESTING MODE
-              RESTORE LOCK AFTER TEST
-              ========================
-              isLocked && (
+              {isLocked && (
                 <div className="story-island-card-lock-overlay">
                   <img
                     src='/assets/budayana/islands/padlock.png'
@@ -879,8 +851,7 @@ function StoryIslandCardsList({ islands, onIslandClick }) {
                     className="story-island-card-lock-icon"
                   />
                 </div>
-              )
-              */}
+              )}
             </div>
             <div className="story-island-card-info">
               <h3 className="story-island-card-title">{island.name}</h3>

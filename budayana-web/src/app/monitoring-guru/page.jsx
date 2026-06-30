@@ -569,7 +569,7 @@ export default function MonitoringGuruDashboard() {
             
             <div className="history-table-wrapper" style={{ overflowX: 'auto', width: '100%' }}>
               <div className="history-table-container" style={{ display: 'flex', flexDirection: 'column', minWidth: '900px', height: 'auto', overflowY: 'visible' }}>
-                    <div className="history-header" style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr 1.5fr 1.5fr 1.2fr', backgroundColor: '#955C2E', color: 'white', padding: '16px 24px', alignItems: 'center', fontSize: '3rem' }}>                  {/* Column Nama (Sortable) */}
+                    <div className="history-header" style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr 1.5fr 1.5fr 1.2fr', backgroundColor: '#955C2E', color: 'white', padding: '16px 24px', alignItems: 'center', fontSize: '1.1rem' }}>                  {/* Column Nama (Sortable) */}
                   <div 
                     onClick={() => {
                       if (sortField === "name") {

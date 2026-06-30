@@ -60,13 +60,27 @@ export default function StoryPage() {
   // Component state
   const [timeElapsed, setTimeElapsed] = useState(0)
   const [timerRunning, setTimerRunning] = useState(true)
-  const [xp, setXp] = useState(0)
+  const [xp, setXp] = useState(() => {
+    try {
+      const savedXp = localStorage.getItem(`budayana_story_${storyId}_xp`)
+      return savedXp ? parseFloat(savedXp) : 0
+    } catch {
+      return 0
+    }
+  })
   const [showExitWarning, setShowExitWarning] = useState(false)
   const [scale, setScale] = useState(1)
   const [attemptId, setAttemptId] = useState(null)
   const [attemptStartedAt, setAttemptStartedAt] = useState(null)
   const [xpHighlight, setXpHighlight] = useState(false)
-  const [pagesReadArray, setPagesReadArray] = useState([1]) // Use array instead of Set for stable dependencies
+  const [pagesReadArray, setPagesReadArray] = useState(() => {
+    try {
+      const savedPages = localStorage.getItem(`budayana_story_${storyId}_pagesRead`)
+      return savedPages ? JSON.parse(savedPages) : [1]
+    } catch {
+      return [1]
+    }
+  })
   const [showResults, setShowResults] = useState(false)
 
   // book ref and sizing
@@ -75,67 +89,39 @@ export default function StoryPage() {
   const initRef = useRef(false)
   const lastPageRef = useRef(1) // Use ref instead of state to avoid dependency issues
 
+  // Set reference for pages read to prevent stale closures in event bindings
+  const readPagesRef = useRef(new Set(pagesReadArray))
+
+  // Update readPagesRef whenever pagesReadArray changes
+  useEffect(() => {
+    readPagesRef.current = new Set(pagesReadArray)
+  }, [pagesReadArray])
+
   // Get total pages from staticSlides
   const totalPages = story?.staticSlides?.length || 0
   // xpPerPage should calculate xp based on totalPages minus 1 (cover page)
   const xpPerPage = totalPages > 1 ? 100 / (totalPages - 1) : 0
 
-  // Convert array to Set for efficient lookups
-  const pagesRead = useMemo(() => new Set(pagesReadArray), [pagesReadArray])
-
-  // LocalStorage helpers
-  const getStorageKey = (key) => `budayana_story_${storyId}_${key}`
-
-  const saveToStorage = () => {
-    if (!storyId) return
-    try {
-      localStorage.setItem(getStorageKey("xp"), xp.toString())
-      localStorage.setItem(
-        getStorageKey("pagesRead"),
-        JSON.stringify(pagesReadArray)
-      )
-    } catch (e) {
-      console.warn("Failed to save to localStorage:", e)
-    }
-  }
-
-  const loadFromStorage = () => {
-    if (!storyId) return
-    try {
-      const savedXp = localStorage.getItem(getStorageKey("xp"))
-      const savedPages = localStorage.getItem(getStorageKey("pagesRead"))
-
-      if (savedXp) setXp(parseFloat(savedXp))
-      if (savedPages) {
-        const pages = JSON.parse(savedPages)
-        setPagesReadArray(pages)
-      }
-    } catch (e) {
-      console.warn("Failed to load from localStorage:", e)
-    }
-  }
-
   const clearStorage = () => {
     if (!storyId) return
     try {
-      localStorage.removeItem(getStorageKey("xp"))
-      localStorage.removeItem(getStorageKey("pagesRead"))
+      localStorage.removeItem(`budayana_story_${storyId}_xp`)
+      localStorage.removeItem(`budayana_story_${storyId}_pagesRead`)
     } catch (e) {
       console.warn("Failed to clear localStorage:", e)
     }
   }
 
-  // Load from localStorage on mount
-  useEffect(() => {
-    loadFromStorage()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [storyId])
-
   // Save to localStorage whenever XP or pagesRead changes
   useEffect(() => {
-    saveToStorage()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [xp, pagesReadArray])
+    if (!storyId) return
+    try {
+      localStorage.setItem(`budayana_story_${storyId}_xp`, xp.toString())
+      localStorage.setItem(`budayana_story_${storyId}_pagesRead`, JSON.stringify(pagesReadArray))
+    } catch (e) {
+      console.warn("Failed to save to localStorage:", e)
+    }
+  }, [xp, pagesReadArray, storyId])
 
   // Start Attempt
   const startAttemptRef = useRef(false)
@@ -245,15 +231,15 @@ export default function StoryPage() {
 
       b.bind("turned", (event, page) => {
         const lastPage = lastPageRef.current
-        const isForward = page > lastPage
         lastPageRef.current = page
 
         // Update URL
         setCurrentPageUrl(page)
 
-        // Only add XP when navigating forward AND haven't read this page yet
-        if (isForward && !pagesRead.has(page)) {
-          setPagesReadArray((prev) => [...prev, page])
+        // Only add XP when we haven't read this page yet AND it's a content page (page > 1)
+        if (page > 1 && !readPagesRef.current.has(page)) {
+          readPagesRef.current.add(page)
+          setPagesReadArray(Array.from(readPagesRef.current))
           setXp((prevXp) => Math.min(100, prevXp + xpPerPage))
           setXpHighlight(true)
         }
@@ -274,8 +260,6 @@ export default function StoryPage() {
   }, [
     totalPages,
     story,
-    currentPageFromUrl,
-    pagesRead,
     xpPerPage,
     setCurrentPageUrl,
   ])
@@ -488,7 +472,7 @@ export default function StoryPage() {
         <div className='flex justify-center'>
           <div className='bg-white/90 backdrop-blur-sm px-6 py-2.5 rounded-full border-2 border-[#2c2c2c] shadow-md'>
             <span className='text-[#2c2c2c] font-bold text-xl'>
-              {currentPageFromUrl} / {totalPages}
+              {totalPages > 0 ? currentPageFromUrl - 1 : 0} / {totalPages > 0 ? totalPages - 1 : 0}
             </span>
           </div>
         </div>
@@ -558,7 +542,7 @@ export default function StoryPage() {
                     <div className='text-3xl font-medium leading-relaxed text-justify text-[#2c2c2c] font-serif px-4 whitespace-pre-wrap'>
                       {slide.contentText}
                     </div>
-                    <div className='page-number'>{idx + 1}</div>
+                    <div className='page-number'>{idx}</div>
                   </div>
                 )}
               </div>

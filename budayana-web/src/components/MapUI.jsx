@@ -5,14 +5,7 @@ import BackgroundAssets from './BackgroundAssets';
 
 // Island component with locked/unlocked visual states
 export function IslandImage({ island, position, onClick }) {
-  /*
-  ========================
-  TEMP TESTING MODE
-  RESTORE LOCK AFTER TEST
-  ========================
   const isLocked = !island.isUnlocked;
-  */
-  const isLocked = false;
 
   return (
     <div
@@ -37,12 +30,7 @@ export function IslandImage({ island, position, onClick }) {
           transition: 'filter 0.3s ease',
         }}
       />
-      {/*
-      ========================
-      TEMP TESTING MODE
-      RESTORE LOCK AFTER TEST
-      ========================
-      isLocked && (
+      {isLocked && (
         <div
           className='island-lock-overlay'
           style={{
@@ -63,8 +51,7 @@ export function IslandImage({ island, position, onClick }) {
             }}
           />
         </div>
-      )
-      */}
+      )}
     </div>
   );
 }
