@@ -9,8 +9,8 @@ import './QuizIslandPage.css';
 // Static Data definitions
 const TOPICS = [
   { id: 'rumah', title: 'Rumah Adat', icon: '🏠', totalXp: 300, color: '#ffb3c6' },
-  { id: 'makanan', title: 'Makanan Tradisional', icon: '🍛', totalXp: 300, color: '#97d2ec' },
-  { id: 'tarian', title: 'Tarian & Alat Musik', icon: '🎭', totalXp: 300, color: '#a7e4c0' }
+  { id: 'makanan', title: 'Makanan\nTradisional', icon: '🍛', totalXp: 300, color: '#97d2ec' },
+  { id: 'tarian', title: 'Tarian &\nAlat Musik', icon: '🎭', totalXp: 300, color: '#a7e4c0' }
 ];
 
 export default function QuizIslandPage() {
@@ -517,9 +517,9 @@ function TopicCard({ topic, progressMap = {}, completedAttempts = [], onLevelCli
         <div className='quiz-topic-icon' style={{ backgroundColor: topic.color }}>
           {topic.icon}
         </div>
-        <div className='quiz-topic-info' style={{ flex: 1 }}>
-          <h3 style={{ margin: 0, color: '#5C3A1E', fontFamily: 'Fredoka, sans-serif' }}>{topic.title}</h3>
-          <p style={{ margin: 0, fontSize: '14px', color: '#5C3A1E', opacity: 0.8 }}>3 Level - {topic.totalXp} XP</p>
+        <div className='quiz-topic-info' style={{ flex: 1, minWidth: 0 }}>
+          <h3 style={{ margin: 0, color: '#5C3A1E', fontFamily: 'Fredoka, sans-serif', whiteSpace: 'pre-line', wordBreak: 'break-word', lineHeight: '1.2' }}>{topic.title}</h3>
+          <p style={{ margin: '4px 0 0 0', fontSize: '14px', color: '#5C3A1E', opacity: 0.8, whiteSpace: 'nowrap' }}>3 Level - {topic.totalXp} XP</p>
         </div>
         
         {attemptCount >= 1 && (
