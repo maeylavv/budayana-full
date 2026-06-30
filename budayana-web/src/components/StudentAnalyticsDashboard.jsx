@@ -124,12 +124,7 @@ export default function StudentAnalyticsDashboard({
             {/* Custom child selector (for Ortu dashboard) */}
             {childSelector}
 
-            {/* Back button (for Teacher dashboard) */}
-            {backLink && (
-              <Link to={backLink} className="no-wrap-btn student-badge-btn" style={{ backgroundColor: '#955C2E', color: 'white', textDecoration: 'none', transition: 'background-color 0.2s' }}>
-                Kembali
-              </Link>
-            )}
+            {/* Back button removed per user request */}
           </div>
         </div>
       </section>

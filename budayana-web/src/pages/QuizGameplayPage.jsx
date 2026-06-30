@@ -8,6 +8,7 @@ import ProgressBar from '../components/quiz/ProgressBar';
 import HeartEmptyPopup from '../components/quiz/HeartEmptyPopup';
 import confetti from 'canvas-confetti';
 import { useSound } from '../hooks/useSound';
+import { getLiteracyPages, highlightKeywords } from '../utils/literacyParser';
 import './QuizGameplayPage.css';
 
 export default function QuizGameplayPage() {
@@ -46,8 +47,15 @@ export default function QuizGameplayPage() {
   const [attemptResult, setAttemptResult] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
+  const [literacyPageIndex, setLiteracyPageIndex] = useState(0);
+  
   // Track if attempt has been submitted to prevent double-submit on re-render
   const attemptSubmittedRef = useRef(false);
+
+  // Reset literacy page when level changes
+  useEffect(() => {
+    setLiteracyPageIndex(0);
+  }, [islandSlug, topicId, levelId]);
   
   // Save state whenever relevant values change
   useEffect(() => {
@@ -293,11 +301,16 @@ export default function QuizGameplayPage() {
 
   // Helper formatting for Results time
   const getFormattedTime = () => {
-    if (!endTime) return "0s";
+    if (!endTime) return "0d";
     const diff = Math.floor((endTime - startTime) / 1000);
-    const m = Math.floor(diff / 60);
+    const h = Math.floor(diff / 3600);
+    const m = Math.floor((diff % 3600) / 60);
     const s = diff % 60;
-    return m > 0 ? `${m}m ${s}s` : `${s}s`;
+    
+    if (h > 0) {
+      return `${h}j ${m}m`;
+    }
+    return m > 0 ? `${m}m ${s}d` : `${s}d`;
   };
 
   const totalXP = questions.reduce((acc, q) => acc + q.xp, 0);
@@ -385,23 +398,62 @@ export default function QuizGameplayPage() {
         </div>
       )}
 
-      {gameState === 'literacy' && (
-        <div className='gameplay-literacy-view'>
-          <div className='literacy-image-container'>
-            <img src={literacy.image || ' '} alt='Intro' onError={e => e.target.style.display = 'none'} className='literacy-img' />
+      {gameState === 'literacy' && (() => {
+        const pages = getLiteracyPages(literacy.text || '');
+        const currentPage = pages[literacyPageIndex] || '';
+        
+        return (
+          <div className='gameplay-literacy-view'>
+            <div className='literacy-image-container'>
+              <img src={literacy.image || ' '} alt='Intro' onError={e => e.target.style.display = 'none'} className='literacy-img' />
+            </div>
+            
+            {pages.length > 1 && (
+              <div className="literacy-story-indicators">
+                {pages.map((_, idx) => (
+                  <div 
+                    key={idx} 
+                    className={`story-indicator-bar ${idx < literacyPageIndex ? 'completed' : idx === literacyPageIndex ? 'active' : ''}`}
+                  />
+                ))}
+              </div>
+            )}
+
+            <div className='literacy-text-container'>
+              <p className='literacy-text'>
+                {highlightKeywords(currentPage)}
+              </p>
+            </div>
+            
+            <div className='literacy-navigation'>
+              <button 
+                className='literacy-nav-btn secondary' 
+                onClick={() => { playClick(); setLiteracyPageIndex(prev => Math.max(0, prev - 1)); }}
+                disabled={literacyPageIndex === 0}
+                style={{ visibility: literacyPageIndex === 0 ? 'hidden' : 'visible' }}
+              >
+                <span aria-hidden="true">&larr;</span>
+                <span>Sebelumnya</span>
+              </button>
+              
+              {literacyPageIndex < pages.length - 1 ? (
+                <button 
+                  className='literacy-nav-btn primary' 
+                  onClick={() => { playClick(); setLiteracyPageIndex(prev => Math.min(pages.length - 1, prev + 1)); }}
+                >
+                  <span>Selanjutnya</span>
+                  <span aria-hidden="true">&rarr;</span>
+                </button>
+              ) : (
+                <button className='literacy-nav-btn primary' onClick={() => { playClick(); setGameState('question'); }}>
+                  <span>Lanjut ke Quiz</span>
+                  <span aria-hidden="true">&rarr;</span>
+                </button>
+              )}
+            </div>
           </div>
-          <div className='literacy-text-container'>
-            <p className='literacy-text'>
-              {literacy.text}
-            </p>
-          </div>
-          <div className='literacy-action'>
-            <button className='quiz-action-btn primary mt-4' onClick={() => { playClick(); setGameState('question'); }} style={{ marginTop: '2px' }}>
-              Lanjut ke Quiz &rarr;
-            </button>
-          </div>
-        </div>
-      )}
+        );
+      })()}
 
       {(gameState === 'question' || gameState === 'wrong') && (
         <div className={`gameplay-question-view${levelId === '3' ? ' level-3' : levelId === '2' ? ' level-2' : ''}`}>
@@ -436,48 +488,59 @@ export default function QuizGameplayPage() {
           />
 
           {/* Navigation logic placed identically at the bottom under the blue border boundary! */}
+          <div style={{ textAlign: 'center', marginTop: '30px', marginBottom: '20px' }}>
+            <div className="baca-lagi-wrapper">
+              <button
+                className='baca-lagi-btn'
+                onClick={() => { playClick(); setLiteracyPageIndex(0); setGameState('literacy'); }}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#1b8599',
+                  fontSize: '1rem',
+                  fontFamily: "'Fredoka One', 'Fredoka', sans-serif",
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  textDecoration: 'underline',
+                  padding: 0,
+                }}
+              >
+                📖 Lupa? Baca lagi!
+              </button>
+              <div className="baca-lagi-tooltip">
+                <div className="tooltip-content">
+                  Kembali ke cerita di awal untuk cari petunjuk jawaban! 🕵️
+                </div>
+                <div className="tooltip-arrow-down"></div>
+              </div>
+            </div>
+          </div>
+          
           <div className='quiz-nav-buttons'>
             <button 
               className='quiz-nav-btn back-btn' 
               onClick={handleKembali}
             >
-              &larr; Kembali
+              <span aria-hidden="true">&larr;</span>
+              <span>Kembali</span>
             </button>
-
-            <div style={{ textAlign: 'center', marginTop: '14px' }}>
-              <div className="baca-lagi-wrapper">
-                <button
-                  className='quiz-nav-btn back-btn'
-                  onClick={() => { playClick(); setGameState('literacy'); }}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: '#1b8599',
-                    fontSize: '1rem',
-                    fontFamily: "'Fredoka One', 'Fredoka', sans-serif",
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    textDecoration: 'underline',
-                    padding: 0,
-                  }}
-                >
-                  📖 Lupa? Baca lagi!
-                </button>
-                <div className="baca-lagi-tooltip">
-                  <div className="tooltip-content">
-                    Kembali ke cerita di awal untuk cari petunjuk jawaban! 🕵️
-                  </div>
-                  <div className="tooltip-arrow-down"></div>
-                </div>
-              </div>
-            </div>
             
             <button 
               className='quiz-nav-btn next-btn' 
               onClick={handleSelanjutnya}
               disabled={answers[safeQuestionIndex]?.isCorrect !== true}
             >
-              {safeQuestionIndex === questions.length - 1 ? 'Selesai \u2714' : 'Selanjutnya \u2192'}
+              {safeQuestionIndex === questions.length - 1 ? (
+                <>
+                  <span>Selesai</span>
+                  <span aria-hidden="true">&#10004;</span>
+                </>
+              ) : (
+                <>
+                  <span>Selanjutnya</span>
+                  <span aria-hidden="true">&rarr;</span>
+                </>
+              )}
             </button>
           </div>
           {/* Persistent link to jump back to literacy from any question */}

@@ -226,18 +226,10 @@ export default function MonitoringGuruProfilAnakDetail() {
           </div>
           <div className="profile-top-text">
             <h1 className="profile-name" style={{ color: '#7B4F2E', fontWeight: '800', margin: 0 }}>{formData.nama}</h1>
-            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '12px' }}>
-              <div className="profile-grade-badge student-badge-btn" style={{ backgroundColor: '#f3a64c', color: 'white' }}>
+            <div className="flex flex-row items-center justify-center md:justify-start gap-3" style={{ flexWrap: 'nowrap' }}>
+              <div className="profile-grade-badge student-badge-btn" style={{ backgroundColor: '#f3a64c', color: 'white', width: 'fit-content', alignSelf: 'center' }}>
                 Kelas {formData.kelas}
               </div>
-              <button 
-                onClick={() => navigate('/monitoring-guru/profil-anak')} 
-                className="no-wrap-btn student-badge-btn"
-                style={{ backgroundColor: '#955C2E', color: 'white', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', textDecoration: 'none' }}
-              >
-                <ChevronLeft size={16} />
-                Kembali
-              </button>
             </div>
           </div>
         </section>
