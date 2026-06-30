@@ -1,51 +1,26 @@
 import prisma from "./lib/db"
+import { getUserProgress } from "./routes/progress/service"
 
 async function main() {
-  console.log("=== CHECKING USER PROGRESS ===")
-  const newestUser = await prisma.user.findFirst({
-    orderBy: { createdAt: "desc" }
+  const user = await prisma.user.findFirst({
+    where: { name: "elvademo" }
   })
-
-  if (!newestUser) {
-    console.log("No users found")
+  if (!user) {
+    console.log("User elvademo not found")
     return
   }
 
-  console.log(`Newest User ID: ${newestUser.id}`)
-  console.log(`Name: ${newestUser.name} (${newestUser.email})`)
+  console.log(`Triggering getUserProgress service for user: ${user.name}`)
+  await getUserProgress(user.id, {})
 
   const progress = await prisma.userProgress.findMany({
-    where: { userId: newestUser.id },
-    include: {
-      island: true
-    }
+    where: { userId: user.id },
+    include: { island: true }
   })
 
-  console.log(`Progress records: ${progress.length}`)
+  console.log("=== RESULTS AFTER SERVICE EXECUTION ===")
   for (const p of progress) {
-    console.log(`  - Island: ${p.island.islandName} (${p.island.slug})`)
-    console.log(`    isUnlocked: ${p.isUnlocked}`)
-    console.log(`    isCompleted: ${p.isCompleted}`)
-    console.log(`    cycleCount: ${p.cycleCount}`)
-  }
-
-  // Also count finished attempts for Sumatra main story
-  const sumatraStory = await prisma.story.findFirst({
-    where: { title: "Cerita Malin Kundang" }
-  })
-  
-  if (sumatraStory) {
-    const finishedAttempts = await prisma.storyAttempt.findMany({
-      where: {
-        userId: newestUser.id,
-        storyId: sumatraStory.id,
-        finishedAt: { not: null }
-      }
-    })
-    console.log(`Finished attempts for Sumatra main story (${sumatraStory.id}): ${finishedAttempts.length}`)
-    for (const a of finishedAttempts) {
-      console.log(`    - ID: ${a.id}, FinishedAt: ${a.finishedAt}`)
-    }
+    console.log(`${p.island.islandName} (${p.island.slug}): isUnlocked=${p.isUnlocked}, isCompleted=${p.isCompleted}, cycleCount=${p.cycleCount}`)
   }
 }
 

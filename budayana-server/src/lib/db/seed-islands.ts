@@ -13,27 +13,27 @@ function slugify(text: string) {
 
 const islands = [
   {
-    islandName: "Sulawesi",
+    islandName: "Sumatra",
     unlockOrder: 1,
     isLockedDefault: false,
   },
   {
-    islandName: "Sumatra",
-    unlockOrder: 2,
-    isLockedDefault: false,
-  },
-  {
     islandName: "Jawa",
-    unlockOrder: 3,
-    isLockedDefault: false,
+    unlockOrder: 2,
+    isLockedDefault: true,
   },
   {
-    islandName: "Papua",
-    unlockOrder: 4,
-    isLockedDefault: false,
+    islandName: "Bali",
+    unlockOrder: 3,
+    isLockedDefault: true,
   },
   {
     islandName: "Kalimantan",
+    unlockOrder: 4,
+    isLockedDefault: true,
+  },
+  {
+    islandName: "Sulawesi",
     unlockOrder: 5,
     isLockedDefault: true,
   },
@@ -43,12 +43,12 @@ const islands = [
     isLockedDefault: true,
   },
   {
-    islandName: "Bali",
+    islandName: "Nusa Tenggara",
     unlockOrder: 7,
     isLockedDefault: true,
   },
   {
-    islandName: "Nusa Tenggara",
+    islandName: "Papua",
     unlockOrder: 8,
     isLockedDefault: true,
   },
