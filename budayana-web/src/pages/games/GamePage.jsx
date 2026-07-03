@@ -1292,7 +1292,7 @@ export default function GamePage() {
             className='mx-auto mb-4 max-w-[140px] md:max-w-[180px] rounded-md'
           />
           <p className='text-lg font-semibold text-[#2f2f2f] mb-4'>
-            Kamu yakin mau keluar?
+            Kamu yakin mau keluar? Kalau keluar sekarang, progress pada level ini akan hilang dan kamu harus mengulang lagi.
           </p>
           <button
             onClick={() => setShowExitWarning(false)}

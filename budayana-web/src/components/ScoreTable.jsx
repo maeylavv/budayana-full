@@ -72,7 +72,7 @@ export default function ScoreTable({ data }) {
           })
         ) : (
           <div className="empty-message" style={{ textAlign: 'center', padding: '20px', minWidth: '850px', color: '#5F5E5A' }}>
-            Belum ada riwayat pengerjaan.
+            Belum ada riwayat Quiz Budaya. Ayo mulai petualanganmu! 🗺️
           </div>
         )}
       </div>

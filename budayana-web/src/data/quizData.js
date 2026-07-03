@@ -1267,7 +1267,7 @@ export const QUIZ_DATA = {
             "options": [
               "Di dalam kamar pribadi masing-masing",
               "Di hutan belakang rumah",
-              "di ruang bersama bagian depan",
+              "Di ruang bersama bagian depan",
               "Di bawah tiang rumah"
             ],
             "correctIndex": 2,
@@ -1622,7 +1622,7 @@ export const QUIZ_DATA = {
               },
               {
                 "id": "d3",
-                "text": "Siraman Kuah Panas",
+                "text": "Siraman Kuah",
                 "color": "#ffb2d8"
               }
             ],
@@ -1794,11 +1794,11 @@ export const QUIZ_DATA = {
             "correctPairs": [
               {
                 "opinionId": "op1",
-                "reasonId": "r1"
+                "reasonId": ["r3", "r4"]
               },
               {
                 "opinionId": "op2",
-                "reasonId": "r2"
+                "reasonId": ["r1", "r2"]
               }
             ],
             "xp": 30
