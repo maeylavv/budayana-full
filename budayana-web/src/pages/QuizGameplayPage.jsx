@@ -587,7 +587,7 @@ export default function QuizGameplayPage() {
               onError={e => e.target.style.display = 'none'}
             />
             <p className='quit-title'>
-              Kamu yakin mau keluar?
+              Kamu yakin mau keluar? Kalau keluar sekarang, progress pada level ini akan hilang dan kamu harus mengulang lagi.
             </p>
             <button className='btn-continue-pill' onClick={() => { playClick(); setShowQuitPopup(false); }}>
               Lanjutkan Belajar

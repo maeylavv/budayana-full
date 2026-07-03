@@ -34,12 +34,12 @@ export default function HeartEmptyPopup({ isOpen, onRetry, onBack, mascotSrc }) 
         {/* Title */}
         <div className="heart-popup-header">
           <span className="heart-icon">💔</span>
-          <h2 className="heart-popup-title">Heart Habis!</h2>
+          <h2 className="heart-popup-title">Nyawa Habis!</h2>
         </div>
 
         {/* Warmup message box */}
         <div className="heart-message-box">
-          <p className="heart-message-main">Yahh, heart kamu sudah habis 😢</p>
+          <p className="heart-message-main">Yah, nyawa kamu sudah habis 😢</p>
           <p className="heart-message-sub">
             Yuk coba lagi dari awal ya!<br />
             Semangat penjelajah budaya! 🌟
