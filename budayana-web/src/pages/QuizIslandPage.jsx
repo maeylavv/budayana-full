@@ -4,6 +4,7 @@ import { ChevronLeft, Lock, Play, Check, Star, Info, Lightbulb } from 'lucide-re
 import { authClient } from '../lib/auth-client';
 import { useSound } from '../hooks/useSound';
 import { quizAttemptsApi } from '../lib/api';
+import { useQuizResults } from '../hooks/useQuizResults';
 import './QuizIslandPage.css';
 
 // Static Data definitions
@@ -21,9 +22,52 @@ export default function QuizIslandPage() {
   const userId = session?.user?.id || 'guest';
   const { playClick } = useSound();
 
+  const { quizStats, isLoading: statsLoading } = useQuizResults();
+
   const [entryPopup, setEntryPopup] = useState(null);
   const [completedAttempts, setCompletedAttempts] = useState([]);
   const [loadingAttempts, setLoadingAttempts] = useState(true);
+
+  // Security route guard: Redirect if user manually navigates to a locked island
+  useEffect(() => {
+    if (loadingAttempts || statsLoading || !userId || userId === 'guest') return;
+
+    const explorationMap = new Map();
+    const hasAttemptsMap = new Map();
+    
+    if (quizStats?.islandExploration) {
+      quizStats.islandExploration.forEach((exp) => {
+        explorationMap.set(exp.islandSlug, exp);
+        if (exp.levelsCompleted > 0) {
+          hasAttemptsMap.set(exp.islandSlug, true);
+        }
+      });
+    }
+
+    const lockSequence = [
+      "sumatra",
+      "jawa",
+      "bali",
+      "kalimantan",
+      "sulawesi",
+      "maluku",
+      "nusa-tenggara",
+      "papua"
+    ];
+
+    const idx = lockSequence.indexOf(islandSlug);
+    if (idx > 0) {
+      const hasAttempts = hasAttemptsMap.get(islandSlug) || false;
+      const prevSlug = lockSequence[idx - 1];
+      const prevExp = explorationMap.get(prevSlug);
+      const prevCompleted = prevExp ? prevExp.isFullyCompleted : false;
+      const isUnlocked = hasAttempts || prevCompleted;
+
+      if (!isUnlocked) {
+        navigate('/quiz', { replace: true });
+      }
+    }
+  }, [loadingAttempts, statsLoading, quizStats, islandSlug, userId, navigate]);
   const [infoPopup, setInfoPopup] = useState(null);
   const [replaySelectionPopup, setReplaySelectionPopup] = useState(null);
   const [replayConfirmPopup, setReplayConfirmPopup] = useState(null);
@@ -211,7 +255,7 @@ export default function QuizIslandPage() {
     3: "/assets/budayana/islands/Harimau.png",
   };
 
-  if (loadingAttempts) {
+  if (loadingAttempts || statsLoading) {
     return (
       <div className='quiz-detail-page-loading' style={{
         minHeight: '100vh',

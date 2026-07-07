@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { useNavigate } from "react-router-dom"
 import "./QuizKulturPage.css"
 import ToggleMenu from "../components/ToggleMenu"
@@ -54,6 +54,8 @@ export default function QuizKulturPage() {
   const [currentStep, setCurrentStep] = useState(1)
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
 
+  const [lockedIslandWarning, setLockedIslandWarning] = useState(null)
+
   const { quizStats } = useQuizResults()
 
   const [showXpJourneyModal, setShowXpJourneyModal] = useState(false)
@@ -68,29 +70,90 @@ export default function QuizKulturPage() {
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
-  // Use the static islands directly, assuming they are unlocked/open for now
-  const allIslands = staticIslands.map((island) => ({
-    ...island,
-    isUnlocked: true, // We can keep them conceptually unlocked for the quiz
-  }))
+  // Compute lock/unlock and completion status sequentially
+  const allIslands = useMemo(() => {
+    const explorationMap = new Map()
+    const hasAttemptsMap = new Map()
+    
+    if (quizStats?.islandExploration) {
+      quizStats.islandExploration.forEach((exp) => {
+        explorationMap.set(exp.islandSlug, exp)
+        if (exp.levelsCompleted > 0) {
+          hasAttemptsMap.set(exp.islandSlug, true)
+        }
+      })
+    }
 
-  // Reorder allIslands based on orderedIslandIds for Tablet/Mobile rendering
-  const orderedIslandIds = [
-    "sulawesi",
-    "sumatra",
-    "jawa",
-    "papua",
-    "kalimantan",
-    "maluku",
-    "bali",
-    "nusa-tenggara"
-  ]
+    const lockSequence = [
+      "sumatra",
+      "jawa",
+      "bali",
+      "kalimantan",
+      "sulawesi",
+      "maluku",
+      "nusa-tenggara",
+      "papua"
+    ]
 
-  const orderedIslands = [...allIslands].sort((a, b) => {
-    return orderedIslandIds.indexOf(a.id) - orderedIslandIds.indexOf(b.id)
-  })
+    return staticIslands.map((staticIsland) => {
+      const idx = lockSequence.indexOf(staticIsland.slug)
+      let isUnlocked = false
+      
+      if (idx === 0) {
+        isUnlocked = true
+      } else {
+        const hasAttempts = hasAttemptsMap.get(staticIsland.slug) || false
+        const prevSlug = lockSequence[idx - 1]
+        const prevExp = explorationMap.get(prevSlug)
+        const prevCompleted = prevExp ? prevExp.isFullyCompleted : false
+
+        isUnlocked = hasAttempts || prevCompleted
+      }
+
+      const exp = explorationMap.get(staticIsland.slug)
+      const isCompleted = exp ? exp.isFullyCompleted : false
+
+      return {
+        ...staticIsland,
+        isCompleted,
+        isUnlocked,
+      }
+    })
+  }, [quizStats])
+
+  const orderedIslands = useMemo(() => {
+    const orderedIslandIds = [
+      "sulawesi",
+      "sumatra",
+      "jawa",
+      "papua",
+      "kalimantan",
+      "maluku",
+      "bali",
+      "nusa-tenggara"
+    ]
+    return [...allIslands].sort((a, b) => {
+      return orderedIslandIds.indexOf(a.id) - orderedIslandIds.indexOf(b.id)
+    })
+  }, [allIslands])
 
   const handleOpenIsland = (island) => {
+    if (!island.isUnlocked) {
+      const sequenceNames = [
+        "Sumatra",
+        "Jawa",
+        "Bali",
+        "Kalimantan",
+        "Sulawesi",
+        "Maluku",
+        "Nusa Tenggara",
+        "Papua"
+      ]
+      const currentIdx = sequenceNames.findIndex(name => name.toLowerCase() === island.name.toLowerCase())
+      const prevIslandName = currentIdx > 0 ? sequenceNames[currentIdx - 1] : "Sumatra"
+      setLockedIslandWarning(prevIslandName)
+      return
+    }
     navigate(`/islands/${island.slug || island.id}/quiz`)
   }
 
@@ -326,6 +389,35 @@ export default function QuizKulturPage() {
           </div>
         );
       })()}
+
+      {/* LOCKED ISLAND WARNING POPUP */}
+      {lockedIslandWarning && (
+        <div className='popup-overlay' style={{ zIndex: 2000 }}>
+          <div className='popup popup-locked' style={{ position: 'relative', border: '3px solid #955c2e', backgroundColor: '#fff4d6', padding: '40px', borderRadius: '32px', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '420px', maxWidth: '90vw' }}>
+            <button className='popup-close' onClick={() => setLockedIslandWarning(null)} style={{ position: 'absolute', top: '15px', right: '15px', border: 'none', background: 'transparent', cursor: 'pointer' }}>
+              <img 
+                src='/assets/budayana/islands/close button.png' 
+                alt='close' 
+                style={{ width: '40px', height: '40px' }} 
+              />
+            </button>
+            <div className='lockedpopup' style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <img
+                src='/assets/budayana/islands/bocah.png'
+                className='notif-kid'
+                alt='Explorer'
+                style={{ width: '130px', height: 'auto', marginBottom: '10px' }}
+              />
+              <p className='locked-msg' style={{ color: '#5c3a1e', textAlign: 'center', fontSize: '18px', margin: '15px 0', lineHeight: '1.5', fontFamily: "'Fredoka One', sans-serif" }}>
+                Mohon selesaikan semua tahapan di {lockedIslandWarning} terlebih dahulu!
+              </p>
+              <button className='quiz-ok-btn' onClick={() => setLockedIslandWarning(null)}>
+                Oke!
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -334,25 +426,11 @@ function QuizIslandCardsList({ islands, onIslandClick }) {
   return (
     <div className="quiz-island-cards-container">
       {islands.map((island) => {
-        /*
-        ========================
-        TEMP TESTING MODE
-        RESTORE LOCK AFTER TEST
-        ========================
         const isLocked = !island.isUnlocked;
-        */
-        const isLocked = false;
         return (
           <div
             key={island.id || island.slug}
             className={`quiz-island-card ${isLocked ? 'locked' : ''}`}
-            /*
-            ========================
-            TEMP TESTING MODE
-            RESTORE LOCK AFTER TEST
-            ========================
-            onClick={() => !isLocked && onIslandClick(island)}
-            */
             onClick={() => onIslandClick(island)}
           >
             <div className="quiz-island-card-image-wrapper">
@@ -361,12 +439,7 @@ function QuizIslandCardsList({ islands, onIslandClick }) {
                 alt={island.name}
                 className="quiz-island-card-image"
               />
-              {/*
-              ========================
-              TEMP TESTING MODE
-              RESTORE LOCK AFTER TEST
-              ========================
-              isLocked && (
+              {isLocked && (
                 <div className="quiz-island-card-lock-overlay">
                   <img
                     src='/assets/budayana/islands/padlock.png'
@@ -374,8 +447,7 @@ function QuizIslandCardsList({ islands, onIslandClick }) {
                     className="quiz-island-card-lock-icon"
                   />
                 </div>
-              )
-              */}
+              )}
             </div>
             <div className="quiz-island-card-info">
               <h3 className="quiz-island-card-title">{island.name}</h3>
