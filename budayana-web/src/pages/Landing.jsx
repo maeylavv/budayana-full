@@ -190,7 +190,7 @@ export default function Landing() {
                         className={`lnd-feature-toggle-btn ${activeFeature === 'quiz-kultur' ? 'active' : ''}`}
                         onClick={() => setActiveFeature('quiz-kultur')}
                     >
-                        Quiz Kultur
+                        Quiz Budaya
                     </button>
                 </div>
 
