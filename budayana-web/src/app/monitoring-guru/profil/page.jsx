@@ -252,7 +252,7 @@ export default function MonitoringGuruProfil() {
               <button 
                 onClick={handleUpdate}
                 style={{ backgroundColor: '#955C2E', color: 'white', padding: '12px 30px', borderRadius: '999px', fontSize: '1.1rem', fontWeight: 'bold', border: 'none', cursor: 'pointer' }}>
-                {isEditing ? 'Save Changes' : 'Ubah Data'}
+                {isEditing ? 'Simpan Perubahan' : 'Ubah Data'}
               </button>
             </div>
           </section>
