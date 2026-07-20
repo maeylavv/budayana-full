@@ -67,6 +67,38 @@ export default function GamePage() {
 
   // Drag-drop state: { questionId: [itemId1, itemId2, ...] }
   const [dragDropOrder, setDragDropOrder] = useState({})
+  const [touchDragState, setTouchDragState] = useState(null)
+  const autoScrollRef = useRef(null)
+
+  const stopAutoScroll = () => {
+    if (autoScrollRef.current) {
+      cancelAnimationFrame(autoScrollRef.current)
+      autoScrollRef.current = null
+    }
+  }
+
+  const startAutoScroll = (clientY) => {
+    stopAutoScroll()
+    const edgeThreshold = 140
+    const maxSpeed = 18
+
+    let speed = 0
+    if (clientY < edgeThreshold) {
+      const ratio = (edgeThreshold - clientY) / edgeThreshold
+      speed = -Math.max(4, Math.round(ratio * maxSpeed))
+    } else if (clientY > window.innerHeight - edgeThreshold) {
+      const ratio = (clientY - (window.innerHeight - edgeThreshold)) / edgeThreshold
+      speed = Math.max(4, Math.round(ratio * maxSpeed))
+    }
+
+    if (speed !== 0) {
+      const scrollStep = () => {
+        window.scrollBy(0, speed)
+        autoScrollRef.current = requestAnimationFrame(scrollStep)
+      }
+      autoScrollRef.current = requestAnimationFrame(scrollStep)
+    }
+  }
 
   // Helper to map API slideType to internal type
   const getInternalType = (slide) => {
@@ -779,7 +811,7 @@ export default function GamePage() {
           <img
             src={pageData.imageUrl}
             alt='Interactive Story'
-            className='w-full max-h-[190px] md:max-h-[630px] object-contain'
+            className='w-full max-h-[520px] sm:max-h-[650px] md:max-h-[800px] object-contain mx-auto'
           />
         ) : (
           <div className='text-center p-8 text-gray-400'>
@@ -826,6 +858,39 @@ export default function GamePage() {
       (item) => !currentOrder.includes(item.id)
     )
 
+    const handleItemClick = (itemId) => {
+      if (isLocked || isPending) return
+      setDragDropOrder((prev) => {
+        const order = [...(prev[questionId] || Array(items.length).fill(null))]
+        if (order.includes(itemId)) return prev
+        const firstEmptyIndex = order.findIndex((slot) => slot === null)
+        if (firstEmptyIndex !== -1) {
+          order[firstEmptyIndex] = itemId
+          setTimeout(() => {
+            const slotEl = document.querySelector(`[data-slot-index="${firstEmptyIndex}"]`)
+            if (slotEl) {
+              slotEl.scrollIntoView({ behavior: "smooth", block: "center" })
+            }
+          }, 50)
+        }
+        return { ...prev, [questionId]: order }
+      })
+    }
+
+    const handlePlaceInSlot = (sourceId, targetIndex) => {
+      if (isLocked || isPending) return
+      setDragDropOrder((prev) => {
+        const order = [...(prev[questionId] || Array(items.length).fill(null))]
+        const existingIndex = order.indexOf(sourceId)
+        if (existingIndex !== -1) {
+          const targetItem = order[targetIndex]
+          order[existingIndex] = targetItem
+        }
+        order[targetIndex] = sourceId
+        return { ...prev, [questionId]: order }
+      })
+    }
+
     const handleDragStart = (e, itemId) => {
       e.dataTransfer.setData("text/plain", itemId)
     }
@@ -839,29 +904,76 @@ export default function GamePage() {
       e.preventDefault()
       const sourceId = e.dataTransfer.getData("text/plain")
       if (!sourceId) return
-
-      setDragDropOrder((prev) => {
-        const order = [...(prev[questionId] || Array(items.length).fill(null))]
-
-        // If dropping from available items (not already in slots)
-        const existingIndex = order.indexOf(sourceId)
-        if (existingIndex !== -1) {
-          // Swap if target already has an item
-          const targetItem = order[targetIndex]
-          order[existingIndex] = targetItem
-        }
-        order[targetIndex] = sourceId
-
-        return { ...prev, [questionId]: order }
-      })
+      handlePlaceInSlot(sourceId, targetIndex)
     }
 
     const handleRemoveFromSlot = (index) => {
+      if (isLocked || isPending) return
       setDragDropOrder((prev) => {
         const order = [...(prev[questionId] || [])]
         order[index] = null
         return { ...prev, [questionId]: order }
       })
+    }
+
+    const handleTouchStart = (e, item, color) => {
+      if (isLocked || isPending) return
+      const touch = e.touches[0]
+      setTouchDragState({
+        itemId: item.id,
+        label: item.label,
+        color: color,
+        startX: touch.clientX,
+        startY: touch.clientY,
+        x: touch.clientX,
+        y: touch.clientY,
+        moved: false,
+      })
+    }
+
+    const handleTouchMove = (e) => {
+      if (!touchDragState) return
+      const touch = e.touches[0]
+      const dist = Math.hypot(
+        touch.clientX - touchDragState.startX,
+        touch.clientY - touchDragState.startY
+      )
+
+      startAutoScroll(touch.clientY)
+
+      setTouchDragState((prev) =>
+        prev
+          ? {
+              ...prev,
+              x: touch.clientX,
+              y: touch.clientY,
+              moved: prev.moved || dist > 8,
+            }
+          : null
+      )
+    }
+
+    const handleTouchEnd = () => {
+      stopAutoScroll()
+      if (!touchDragState) return
+      const { itemId, x, y, moved } = touchDragState
+      setTouchDragState(null)
+
+      if (!moved) {
+        // Simple tap: place in first empty slot
+        handleItemClick(itemId)
+        return
+      }
+
+      // Dragged: check element under touch release point
+      const element = document.elementFromPoint(x, y)
+      const dropZone = element?.closest("[data-slot-index]")
+      if (dropZone) {
+        const targetIndex = parseInt(dropZone.getAttribute("data-slot-index"), 10)
+        if (!isNaN(targetIndex)) {
+          handlePlaceInSlot(itemId, targetIndex)
+        }
+      }
     }
 
     const handleCheckAnswer = async () => {
@@ -982,25 +1094,34 @@ export default function GamePage() {
                 return (
                   <div
                     key={index}
+                    data-slot-index={index}
                     onDragOver={handleDragOver}
                     onDrop={(e) => handleDrop(e, index)}
+                    onClick={() => {
+                      if (item && !isLocked && !isPending) {
+                        handleRemoveFromSlot(index)
+                      }
+                    }}
                     className={`relative min-h-[100px] md:min-h-[120px] rounded-xl border-2 flex flex-col items-center justify-center p-3 transition ${item
-                      ? "border-solid border-[#2c2c2c]"
+                      ? "border-solid border-[#2c2c2c] cursor-pointer"
                       : "border-dashed border-gray-300"
                       } ${ringClass}`}
                     style={bgStyle}
                   >
-                    <div className='text-xs font-bold text-gray-500 mb-2'>
+                    <div className='text-xs font-bold text-gray-500 mb-2 select-none'>
                       {index + 1}
                     </div>
                     {item ? (
                       <div className='flex flex-col items-center gap-2 w-full'>
-                        <span className='text-base font-semibold text-[#1f1f1f] text-center px-2'>
+                        <span className='text-base font-semibold text-[#1f1f1f] text-center px-2 select-none'>
                           {item.label}
                         </span>
                         {!isLocked && (
                           <button
-                            onClick={() => handleRemoveFromSlot(index)}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              handleRemoveFromSlot(index)
+                            }}
                             className='absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center transition'
                           >
                             ×
@@ -1008,8 +1129,8 @@ export default function GamePage() {
                         )}
                       </div>
                     ) : (
-                      <span className='text-xs text-gray-400 text-center'>
-                        Drop di sini
+                      <span className='text-xs text-gray-400 text-center select-none'>
+                        Drop / Sentuh di sini
                       </span>
                     )}
                   </div>
@@ -1032,11 +1153,11 @@ export default function GamePage() {
           )}
         </div>
 
-        {/* Available items to drag */}
+        {/* Available items to drag or tap */}
         {availableItems.length > 0 && !isLocked && (
           <div>
             <p className='text-base md:text-lg font-semibold text-[#2c2c2c] mb-3'>
-              Pilih kejadian:
+              Pilih / sentuh kejadian di bawah:
             </p>
             <div className='grid grid-cols-2 md:grid-cols-5 gap-2 md:gap-3'>
               {availableItems.map((item) => {
@@ -1047,7 +1168,11 @@ export default function GamePage() {
                     key={item.id}
                     draggable
                     onDragStart={(e) => handleDragStart(e, item.id)}
-                    className='rounded-xl px-3 py-4 md:px-4 md:py-3 shadow text-center font-semibold cursor-move text-[#1f1f1f] transition hover:scale-105 text-base border-2 border-[#2c2c2c]'
+                    onTouchStart={(e) => handleTouchStart(e, item, color)}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
+                    onClick={() => handleItemClick(item.id)}
+                    className='rounded-xl px-3 py-4 md:px-4 md:py-3 shadow text-center font-semibold cursor-pointer text-[#1f1f1f] transition hover:scale-105 active:scale-95 text-base border-2 border-[#2c2c2c] select-none touch-none'
                     style={{ backgroundColor: color }}
                   >
                     {item.label}
@@ -1143,7 +1268,7 @@ export default function GamePage() {
               <img
                 src={pageData.imageUrl}
                 alt='Question'
-                className='w-full max-h-[220px] md:max-h-[400px] object-contain mx-auto mb-4 rounded-lg'
+                className='w-full max-h-[350px] md:max-h-[500px] object-contain mx-auto mb-4 rounded-lg'
               />
             )}
             {/* <p className='text-base md:text-lg font-semibold text-[#2c2c2c] leading-relaxed'>
@@ -1212,23 +1337,35 @@ export default function GamePage() {
         : 0
 
     return (
-      <div className='w-full max-w-5xl mx-auto px-2 mb-6 flex justify-between items-center'>
+      <div className='w-full max-w-5xl mx-auto px-2 mb-6 flex items-center justify-between gap-2'>
+        {/* Keluar Button */}
         <button
           onClick={() => setShowExitWarning(true)}
-          className='px-4 py-2 bg-white/80 border-2 border-[#2c2c2c] rounded-full flex gap-2 items-center font-semibold hover:bg-gray-100'
+          className='w-10 h-10 md:w-auto md:px-5 md:py-2.5 bg-white/85 border-2 border-[#1f1f1f] rounded-full flex gap-2 items-center justify-center font-bold hover:bg-gray-100 shrink-0 text-sm md:text-base'
         >
-          <ArrowLeft size={18} /> Keluar
+          <ArrowLeft className='w-5 h-5 md:w-4.5 md:h-4.5' />
+          <span className='hidden md:inline'>Keluar</span>
         </button>
-        <div className='flex gap-2'>
-          <div className='flex gap-2 bg-white/70 px-4 py-2 rounded-full border-2 border-[#2c2c2c] shadow-sm'>
-            <span className='font-bold text-[#E4AE28]'>XP</span>
-            <span className='font-semibold'>
+
+        {/* Center spacing */}
+        <div className='flex-1'></div>
+
+        {/* Stats and Timer Row */}
+        <div className='flex items-center gap-1.5 md:gap-2 shrink-0'>
+          {/* XP Badge */}
+          <div className='flex items-center gap-1 bg-white/70 px-2.5 py-1.5 md:px-4 md:py-2 rounded-full border-2 border-[#2c2c2c] shadow-sm shrink-0'>
+            <span className='font-black text-xs sm:text-sm md:text-base text-[#E4AE28]'>XP</span>
+            <span className='font-bold text-xs sm:text-sm md:text-base text-[#2c2c2c]'>
               {currentXP}/{totalQuestions > 0 ? "100" : "0"}
             </span>
           </div>
-          <div className='flex gap-2 bg-white/70 px-4 py-2 rounded-full border-2 border-[#2c2c2c] shadow-sm'>
-            <Clock size={20} />
-            <span className='font-semibold'>{formatTime(timeElapsed)}</span>
+
+          {/* Timer Badge */}
+          <div className='flex items-center gap-1 bg-white/70 px-2.5 py-1.5 md:px-4 md:py-2 rounded-full border-2 border-[#2c2c2c] shadow-sm shrink-0'>
+            <Clock className='w-4 h-4 md:w-5 md:h-5 text-[#2c2c2c]' />
+            <span className='font-bold text-xs sm:text-sm md:text-base text-[#2c2c2c] tracking-wider md:tracking-[0.12em]'>
+              {formatTime(timeElapsed)}
+            </span>
           </div>
         </div>
       </div>
@@ -1367,18 +1504,18 @@ export default function GamePage() {
       </div>
 
       {!isResultsPage && (
-        <div className='w-full max-w-5xl mx-auto mt-6 flex justify-between lg:hidden'>
+        <div className='w-full max-w-5xl mx-auto mt-6 flex justify-between gap-3 lg:hidden'>
           <button
             onClick={goPrev}
             disabled={currentPageIndex === 0}
-            className='flex items-center gap-2 px-6 py-3 rounded-full text-white font-semibold transition disabled:opacity-50 disabled:bg-[#ccc] disabled:cursor-not-allowed bg-[#f27f68] hover:bg-[#d96750] cursor-pointer'
+            className='flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full text-white font-bold transition disabled:opacity-50 disabled:bg-[#ccc] disabled:cursor-not-allowed bg-[#f27f68] hover:bg-[#d96750] cursor-pointer text-sm'
           >
-            <ArrowLeft size={20} /> Sebelumnya
+            <ArrowLeft size={18} /> Sebelumnya
           </button>
           <button
             onClick={goNext}
             disabled={(isQuestion && answers[currentPageData?.question?.id]?.isCorrect !== true) || isSubmitting}
-            className={`flex items-center gap-2 px-6 py-3 rounded-full text-white font-semibold transition ${(isQuestion && answers[currentPageData?.question?.id]?.isCorrect !== true) || isSubmitting
+            className={`flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full text-white font-bold transition text-sm ${(isQuestion && answers[currentPageData?.question?.id]?.isCorrect !== true) || isSubmitting
               ? "bg-gray-400 cursor-not-allowed opacity-70"
               : "bg-[#4fb986] hover:bg-[#3ea572] cursor-pointer"
               }`}
@@ -1389,7 +1526,7 @@ export default function GamePage() {
               "Menyimpan..."
             ) : (
               <>
-                {isLastPage ? "Selesai" : "Berikutnya"} <ArrowRight size={20} />
+                {isLastPage ? "Selesai" : "Berikutnya"} <ArrowRight size={18} />
               </>
             )}
           </button>
@@ -1398,6 +1535,26 @@ export default function GamePage() {
 
       {renderIncorrectPopup()}
       {renderExitWarning()}
+
+      {/* Floating Touch Drag Preview for Mobile */}
+      {touchDragState && (
+        <div
+          style={{
+            position: 'fixed',
+            left: `${touchDragState.x}px`,
+            top: `${touchDragState.y}px`,
+            transform: 'translate(-50%, -50%)',
+            backgroundColor: touchDragState.color,
+            zIndex: 99999,
+            pointerEvents: 'none',
+            boxShadow: '0 10px 25px rgba(0,0,0,0.35)',
+            width: '160px',
+          }}
+          className='rounded-xl px-3 py-3 text-center font-semibold text-[#1f1f1f] text-sm border-2 border-[#2c2c2c] opacity-90'
+        >
+          {touchDragState.label}
+        </div>
+      )}
     </div>
   )
 }

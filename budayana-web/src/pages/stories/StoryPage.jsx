@@ -26,6 +26,22 @@ const formatTime = (seconds) => {
   return `${mins} : ${secs}`
 }
 
+const getIslandDisplayName = (slug) => {
+  if (!slug) return ""
+  const slugMap = {
+    sumatra: "Sumatra",
+    jawa: "Jawa",
+    bali: "Bali",
+    kalimantan: "Kalimantan",
+    sulawesi: "Sulawesi",
+    maluku: "Maluku",
+    nusa_tenggara: "Nusa Tenggara",
+    "nusa-tenggara": "Nusa Tenggara",
+    papua: "Papua"
+  }
+  return slugMap[slug.toLowerCase()] || slug.charAt(0).toUpperCase() + slug.slice(1)
+}
+
 /**
  * Unified Story Page Component (Flipbook)
  * Dynamically loads story data from API based on storyId
@@ -188,8 +204,9 @@ export default function StoryPage() {
       const h = window.innerHeight
       const baseWidth = 1100
       const baseHeight = 700
-      const maxWidth = w - 180
-      const maxHeight = h - 80
+      const isMobile = w < 768
+      const maxWidth = isMobile ? w - 24 : w - 180
+      const maxHeight = isMobile ? h - 180 : h - 120
       const scaleX = maxWidth / baseWidth
       const scaleY = maxHeight / baseHeight
       setScale(Math.min(scaleX, scaleY, 1))
@@ -211,7 +228,6 @@ export default function StoryPage() {
   useLayoutEffect(() => {
     if (!containerRef.current || !story || !$ || totalPages === 0) return
 
-    // Capture ref value at start of effect for cleanup
     const currentBook = bookRef.current
 
     if (currentBook && !initRef.current) {
@@ -429,9 +445,9 @@ export default function StoryPage() {
         </div>
       )}
 
-      {/* Floating arrows */}
-      <div className='absolute inset-0 flex items-center justify-center pointer-events-none z-20'>
-        <div className='w-full max-w-[95%] md:max-w-[92%] lg:max-w-350 flex justify-between px-2'>
+      {/* Floating arrows (Desktop only) */}
+      <div className='hidden lg:flex absolute inset-0 items-center justify-center pointer-events-none z-20'>
+        <div className='w-full max-w-[92%] lg:max-w-350 flex justify-between px-2'>
           <button
             onClick={() => { playClick(); $(bookRef.current).turn("previous"); }}
             disabled={currentPageFromUrl === 1}
@@ -459,41 +475,80 @@ export default function StoryPage() {
         </div>
       </div>
 
-      {/* Header */}
-      <div className='w-full max-w-[95%] md:max-w-[92%] lg:max-w-[1100px] grid grid-cols-3 items-center absolute top-6 z-30 px-4'>
-        <div className='flex justify-start'>
+      {/* Mobile Bottom Navigation (Under the book) */}
+      <div className='w-full max-w-[95%] mx-auto px-4 absolute bottom-8 z-30 flex justify-between lg:hidden pointer-events-none'>
+        <button
+          onClick={() => { playClick(); $(bookRef.current).turn("previous"); }}
+          disabled={currentPageFromUrl === 1}
+          className='pointer-events-auto bg-white/95 backdrop-blur-sm text-[#2c2c2c] px-6 py-3 rounded-full flex items-center gap-2 shadow-lg border-2 border-[#2c2c2c] disabled:opacity-40 disabled:cursor-not-allowed font-bold text-sm'
+        >
+          <ArrowLeft size={18} strokeWidth={2.5} />
+          Sebelumnya
+        </button>
+
+        {currentPageFromUrl >= totalPages ? (
           <button
-            onClick={() => { playClick(); setShowExitWarning(true); }}
-            className='px-5 py-2.5 bg-white/90 backdrop-blur-sm border-2 border-[#2c2c2c] flex items-center gap-2 rounded-full shadow-md hover:bg-white hover:scale-105 transition-all font-semibold text-sm md:text-base'
+            onClick={handleFinish}
+            disabled={isSubmitting}
+            className={`pointer-events-auto bg-gradient-to-r from-[#E4AE28] to-[#F7C951] text-white px-6 py-3 rounded-full flex items-center gap-2 shadow-xl font-bold text-sm border-2 border-[#c79620] ${isSubmitting ? "opacity-70 cursor-not-allowed" : ""}`}
           >
-            <ArrowLeft size={18} /> Keluar
+            <Sparkles size={16} />
+            {isSubmitting ? "Menyimpan..." : "Selesai"}
           </button>
-        </div>
-        <div className='flex justify-center'>
-          <div className='bg-white/90 backdrop-blur-sm px-6 py-2.5 rounded-full border-2 border-[#2c2c2c] shadow-md'>
-            <span className='text-[#2c2c2c] font-bold text-xl'>
+        ) : (
+          <button
+            onClick={() => { playClick(); $(bookRef.current).turn("next"); }}
+            className='pointer-events-auto bg-white/95 backdrop-blur-sm text-[#2c2c2c] px-6 py-3 rounded-full flex items-center gap-2 shadow-lg border-2 border-[#2c2c2c] font-bold text-sm'
+          >
+            Berikutnya
+            <ArrowRight size={18} strokeWidth={2.5} />
+          </button>
+        )}
+      </div>
+
+      {/* Header */}
+      <div className='w-full max-w-[95%] md:max-w-[92%] lg:max-w-[1100px] flex items-center justify-between gap-1.5 absolute top-6 z-30 px-2 md:px-4'>
+        {/* Keluar Button */}
+        <button
+          onClick={() => { playClick(); setShowExitWarning(true); }}
+          className='w-10 h-10 md:w-auto md:h-12 md:px-5 bg-white/90 backdrop-blur-sm border-2 border-[#2c2c2c] flex items-center justify-center gap-2 rounded-full shadow-md hover:bg-white hover:scale-105 transition-all font-bold shrink-0 text-sm md:text-base'
+        >
+          <ArrowLeft size={18} />
+          <span className='hidden md:inline'>Keluar</span>
+        </button>
+
+        {/* Spacing */}
+        <div className='flex-1'></div>
+
+        {/* Stats Row */}
+        <div className='flex items-center gap-1 sm:gap-2 shrink-0'>
+          {/* Page Badge */}
+          <div className='h-10 md:h-12 px-3 md:px-5 bg-white/90 backdrop-blur-sm rounded-full border-2 border-[#2c2c2c] shadow-md flex items-center justify-center shrink-0'>
+            <span className='text-[#2c2c2c] font-extrabold text-xs sm:text-sm md:text-base'>
               {totalPages > 0 ? currentPageFromUrl - 1 : 0} / {totalPages > 0 ? totalPages - 1 : 0}
             </span>
           </div>
-        </div>
-        <div className='flex justify-end items-center gap-3'>
-          <div className='flex items-center gap-2 bg-white/90 backdrop-blur-sm px-4 py-2.5 rounded-full shadow-md border-2 border-[#2c2c2c]'>
-            <Clock size={20} className='text-[#2c2c2c]' />
-            <span className='text-[#2c2c2c] font-semibold tracking-wide'>
+
+          {/* Timer Badge */}
+          <div className='h-10 md:h-12 px-3 md:px-4 bg-white/90 backdrop-blur-sm rounded-full shadow-md border-2 border-[#2c2c2c] flex items-center justify-center gap-1.5 shrink-0'>
+            <Clock size={16} className='text-[#2c2c2c] w-4 h-4 md:w-5 md:h-5' />
+            <span className='text-[#2c2c2c] font-bold text-xs sm:text-sm md:text-base tracking-wider md:tracking-wide'>
               {formatTime(timeElapsed)}
             </span>
           </div>
+
+          {/* XP Badge */}
           <div
-            className={`px-4 py-2.5 bg-white/90 backdrop-blur-sm rounded-full flex gap-2 items-center shadow-md text-base border-2 transition-all duration-300 ${xpHighlight
-              ? "border-green-500 scale-110 bg-green-50"
+            className={`h-10 md:h-12 px-3 md:px-4 bg-white/90 backdrop-blur-sm rounded-full flex gap-1 items-center justify-center shadow-md border-2 transition-all duration-300 shrink-0 ${xpHighlight
+              ? "border-green-500 scale-105 bg-green-50"
               : "border-[#2c2c2c]"
               }`}
           >
-            <span className='font-bold' style={{ color: "#E4AE28" }}>
+            <span className='font-black text-xs sm:text-sm md:text-base' style={{ color: "#E4AE28" }}>
               XP
             </span>
             <span
-              className={`font-bold transition-colors duration-300 ${xpHighlight ? "text-green-600" : "text-[#2c2c2c]"
+              className={`font-bold text-xs sm:text-sm md:text-base transition-colors duration-300 ${xpHighlight ? "text-green-600" : "text-[#2c2c2c]"
                 }`}
             >
               {Math.round(xp)}/100
@@ -504,8 +559,13 @@ export default function StoryPage() {
 
       {/* Flipbook container */}
       <div
-        className='flex items-center justify-center relative transform-gpu transition-transform duration-300 origin-top mt-24 md:mt-28'
-        style={{ transform: `scale(${scale})`, width: 1100, height: 650 }}
+        className='flex items-center justify-center relative origin-center transform-gpu'
+        style={{
+          transform: `scale(${scale}) translateZ(0)`,
+          WebkitTransform: `scale(${scale}) translateZ(0)`,
+          width: 1100,
+          height: 650,
+        }}
       >
         <div id='book' ref={bookRef} className='flipbook shadow-2xl'>
           {story.staticSlides.map((slide, idx) => {
@@ -517,15 +577,29 @@ export default function StoryPage() {
                 className={`page ${isCover ? "cover-page" : "story-page"}`}
               >
                 {isCover ? (
-                  <div className='cover-full'>
+                  <div className='cover-full flex flex-col items-center justify-center p-8 bg-gradient-to-br from-[#fffef9] to-[#fff9e8] h-full w-full border-[6px] border-[#8b7355]/20 rounded-2xl relative shadow-inner overflow-hidden'>
+                    {/* Cover image background */}
                     <img
-                      src={slide.imageUrl || story.coverImage}
-                      alt={story.title}
-                      className='cover-image'
+                      src={slide.imageUrl || story.coverImage || `/assets/budayana/islands/cover book ${islandSlug?.toLowerCase()}.png`}
+                      className='cover-image absolute inset-0 w-full h-full object-cover z-0'
+                      alt='Cover'
+                      decoding='async'
+                      loading='eager'
+                      onError={(e) => {
+                        e.target.style.display = 'none'
+                      }}
                     />
-                    <div className='cover-overlay'>
-                      <h1 className='cover-title'>{story.title}</h1>
-                      <p className='cover-sub'>{story.subtitle}</p>
+                    <div className='absolute inset-4 border border-[#8b7355]/10 rounded-lg pointer-events-none z-10'></div>
+                    <div className='cover-overlay flex flex-col items-center justify-center text-center z-20 px-4 md:px-8 relative max-w-[700px] mx-auto'>
+                      <h1 className='text-3xl sm:text-4xl md:text-4xl lg:text-5xl font-black text-[#4A3836] leading-tight mb-3 tracking-tight drop-shadow-md max-w-[620px] mx-auto'>
+                        {story.title.toLowerCase().startsWith("cerita")
+                          ? story.title
+                          : `Cerita ${story.title}`}
+                      </h1>
+                      <div className='w-24 h-1 bg-[#8b7355] my-3 rounded-full shadow-xs'></div>
+                      <p className='text-lg sm:text-xl md:text-xl lg:text-2xl font-bold text-[#955C2E] uppercase tracking-widest drop-shadow-sm max-w-[500px] mx-auto'>
+                        Legenda Rakyat {getIslandDisplayName(islandSlug)}
+                      </p>
                     </div>
                   </div>
                 ) : (
@@ -535,6 +609,7 @@ export default function StoryPage() {
                         <img
                           src={slide.imageUrl}
                           alt='Story'
+                          decoding='async'
                           className='max-h-80 max-w-full object-contain rounded-xl shadow-lg'
                         />
                       </div>

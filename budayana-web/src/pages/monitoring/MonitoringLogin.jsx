@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { authClient } from "../../lib/auth-client";
 import "../../pages/auth/Sign_Up.css"; // Reuse the sign-up styling
 import PortalRedirectPopup from "../../components/PortalRedirectPopup";
+import MusicToggleButton from "../../components/MusicToggleButton.jsx";
 
 export default function MonitoringLogin({ role }) {
   const navigate = useNavigate();
@@ -166,12 +167,15 @@ export default function MonitoringLogin({ role }) {
 
   return (
     <div className='signin_page'>
-      <button className='back_button' onClick={() => navigate("/")}>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M19 12H5M12 19l-7-7 7-7" />
-        </svg>
-        Kembali
-      </button>
+      <div className="auth-header-controls">
+        <button className='back_button' onClick={() => navigate("/")}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+          Kembali
+        </button>
+        <MusicToggleButton />
+      </div>
 
       <div className='redirect'>
         <p>{isLoginMode ? "Belum punya akun?" : "Sudah punya akun?"}</p>
@@ -186,7 +190,7 @@ export default function MonitoringLogin({ role }) {
         <h1>Selamat Datang di</h1>
         <img src='/assets/budayana/islands/Game Name.png' alt='Budayana'></img>
         <h2>Dashboard {isGuru ? "Guru" : "Orang Tua"}</h2>
-        <p style={{ fontFamily: 'Fredoka One', color: '#955C2E', marginTop: '-10px', marginBottom: '20px', fontWeight: 'bold' }}>
+        <p style={{ fontFamily: 'Fredoka One', color: '#955C2E', marginTop: '8px', marginBottom: '20px', fontWeight: 'bold' }}>
           {isLoginMode ? "Masuk ke akunmu yuk!" : "Daftar akunmu dulu yuk!"}
         </p>
       </div>

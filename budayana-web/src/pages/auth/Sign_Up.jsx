@@ -221,53 +221,80 @@ export default function SignIn() {
         <div className="progress-indicator" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', margin: '20px auto 10px auto', fontFamily: "'Fredoka One', sans-serif" }}>
           {/* Step 1 */}
           <div 
+            className="progress-indicator-step"
             onClick={() => handleStepClick(1)}
             style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: step > 1 ? 'pointer' : 'default' }}
           >
-            <span style={{
-              width: '32px', height: '32px', borderRadius: '50%',
-              backgroundColor: step >= 1 ? '#955C2E' : '#FFFFFF',
-              border: '2px solid #955C2E',
-              color: step >= 1 ? '#FFFFFF' : '#955C2E',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', fontWeight: 'bold'
-            }}>1</span>
-            <span style={{ color: step >= 1 ? '#5C3A1E' : '#967C66', fontWeight: 'bold', fontSize: '0.95rem' }}>Identitas</span>
+            <span
+              className="step-num"
+              style={{
+                width: '32px', height: '32px', borderRadius: '50%',
+                backgroundColor: step >= 1 ? '#955C2E' : '#FFFFFF',
+                border: '2px solid #955C2E',
+                color: step >= 1 ? '#FFFFFF' : '#955C2E',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', fontWeight: 'bold'
+              }}
+            >1</span>
+            <span
+              className="step-label"
+              style={{ color: step >= 1 ? '#5C3A1E' : '#967C66', fontWeight: 'bold', fontSize: '0.95rem' }}
+            >Identitas</span>
           </div>
           
-          <div style={{ width: '30px', height: '2px', backgroundColor: step >= 2 ? '#955C2E' : '#CCCCCC' }} />
+          <div
+            className="progress-indicator-divider"
+            style={{ width: '30px', height: '2px', backgroundColor: step >= 2 ? '#955C2E' : '#CCCCCC' }}
+          />
           
           {/* Step 2 */}
           <div 
+            className="progress-indicator-step"
             onClick={() => handleStepClick(2)}
             style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: step > 2 ? 'pointer' : 'default' }}
           >
-            <span style={{
-              width: '32px', height: '32px', borderRadius: '50%',
-              backgroundColor: step >= 2 ? '#955C2E' : '#FFFFFF',
-              border: '2px solid',
-              borderColor: step >= 2 ? '#955C2E' : '#CCCCCC',
-              color: step >= 2 ? '#FFFFFF' : '#888888',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', fontWeight: 'bold'
-            }}>2</span>
-            <span style={{ color: step >= 2 ? '#5C3A1E' : '#888888', fontWeight: 'bold', fontSize: '0.95rem' }}>Akun</span>
+            <span
+              className="step-num"
+              style={{
+                width: '32px', height: '32px', borderRadius: '50%',
+                backgroundColor: step >= 2 ? '#955C2E' : '#FFFFFF',
+                border: '2px solid',
+                borderColor: step >= 2 ? '#955C2E' : '#CCCCCC',
+                color: step >= 2 ? '#FFFFFF' : '#888888',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', fontWeight: 'bold'
+              }}
+            >2</span>
+            <span
+              className="step-label"
+              style={{ color: step >= 2 ? '#5C3A1E' : '#888888', fontWeight: 'bold', fontSize: '0.95rem' }}
+            >Akun</span>
           </div>
           
-          <div style={{ width: '30px', height: '2px', backgroundColor: step >= 3 ? '#955C2E' : '#CCCCCC' }} />
+          <div
+            className="progress-indicator-divider"
+            style={{ width: '30px', height: '2px', backgroundColor: step >= 3 ? '#955C2E' : '#CCCCCC' }}
+          />
           
           {/* Step 3 */}
           <div 
+            className="progress-indicator-step"
             onClick={() => handleStepClick(3)}
             style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: step > 3 ? 'pointer' : 'default' }}
           >
-            <span style={{
-              width: '32px', height: '32px', borderRadius: '50%',
-              backgroundColor: step >= 3 ? '#955C2E' : '#FFFFFF',
-              border: '2px solid',
-              borderColor: step >= 3 ? '#955C2E' : '#CCCCCC',
-              color: step >= 3 ? '#FFFFFF' : '#888888',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', fontWeight: 'bold'
-            }}>3</span>
-            <span style={{ color: step >= 3 ? '#5C3A1E' : '#888888', fontWeight: 'bold', fontSize: '0.95rem' }}>Email wali</span>
+            <span
+              className="step-num"
+              style={{
+                width: '32px', height: '32px', borderRadius: '50%',
+                backgroundColor: step >= 3 ? '#955C2E' : '#FFFFFF',
+                border: '2px solid',
+                borderColor: step >= 3 ? '#955C2E' : '#CCCCCC',
+                color: step >= 3 ? '#FFFFFF' : '#888888',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', fontWeight: 'bold'
+              }}
+            >3</span>
+            <span
+              className="step-label"
+              style={{ color: step >= 3 ? '#5C3A1E' : '#888888', fontWeight: 'bold', fontSize: '0.95rem' }}
+            >Email wali</span>
           </div>
         </div>
       </div>

@@ -673,21 +673,24 @@ export default function TestPage({ testType = "pre" }) {
     <div className='min-h-screen bg-[#fdf4d7] flex items-center justify-center px-4 py-10'>
       <div className='w-full max-w-6xl'>
         {/* HEADER */}
-        <div className='relative flex items-center justify-between mb-6'>
+        <div className='w-full flex items-center justify-between gap-2 mb-6'>
+          {/* Back button */}
           <button
             onClick={handleExit}
-            className='w-12 h-12 rounded-full border-2 bg-white/85 border-[#1f1f1f] flex items-center justify-center transition hover:bg-black/5'
+            className='w-10 h-10 md:w-12 md:h-12 rounded-full border-2 bg-white/85 border-[#1f1f1f] flex items-center justify-center transition hover:bg-black/5 shrink-0'
           >
-            <ArrowLeft size={22} />
+            <ArrowLeft className='w-5 h-5 md:w-6 md:h-6' />
           </button>
 
-          <div className='absolute left-1/2 -translate-x-1/2 text-4xl font-semibold text-[#2f2f2f]'>
+          {/* Title */}
+          <h1 className='text-base sm:text-xl md:text-3xl lg:text-4xl font-extrabold text-[#2f2f2f] text-center flex-1 px-1 leading-tight min-w-0'>
             {testTitle} {displayName}
-          </div>
+          </h1>
 
-          <div className='flex items-center gap-2 bg-white/70 px-4 py-2 rounded-full shadow-sm border-2 border-[#2c2c2c]'>
-            <Clock size={20} className='text-[#2c2c2c]' />
-            <span className='text-[#2c2c2c] font-semibold tracking-[0.12em]'>
+          {/* Timer */}
+          <div className='flex items-center gap-1.5 md:gap-2 bg-white/70 px-2.5 py-1.5 md:px-4 md:py-2 rounded-full shadow-sm border-2 border-[#2c2c2c] shrink-0'>
+            <Clock className='w-4 h-4 md:w-5 md:h-5 text-[#2c2c2c]' />
+            <span className='text-[#2c2c2c] font-bold text-xs sm:text-sm md:text-base tracking-wider md:tracking-[0.12em]'>
               {formatTime(timeElapsed)}
             </span>
           </div>
@@ -710,7 +713,7 @@ export default function TestPage({ testType = "pre" }) {
           >
             <div className='flex items-center gap-4 mb-8'>
               <div
-                className='w-11 h-11 rounded-full text-white font-bold flex items-center justify-center shadow-inner'
+                className='w-11 h-11 rounded-full text-white font-bold flex items-center justify-center shadow-inner shrink-0'
                 style={{ backgroundColor: accent }}
               >
                 {currentQuestion + 1}
@@ -746,48 +749,55 @@ export default function TestPage({ testType = "pre" }) {
           </div>
 
           {/* FOOTER NAVIGATION */}
-          <div className='mt-6 flex items-center justify-between'>
-            <button
-              onClick={handlePrevQuestion}
-              disabled={currentQuestion === 0}
-              className={`flex items-center gap-2 px-6 py-3 rounded-full text-white font-semibold shadow-md transition ${currentQuestion === 0
-                ? "bg-[#f2c3c3] cursor-not-allowed"
-                : "bg-[#e76964] hover:bg-[#d95e59] cursor-pointer"
-                }`}
-            >
-              <ArrowLeft size={20} />
-              Sebelumnya
-            </button>
- 
-            <div className='text-sm font-semibold text-[#5a5a5a]'>
+          <div className='mt-6 grid grid-cols-2 gap-4 sm:flex sm:items-center sm:justify-between sm:gap-0 relative'>
+            {/* Page Indicator */}
+            <div className='col-span-2 text-center sm:absolute sm:left-1/2 sm:-translate-x-1/2 text-sm font-bold text-[#5a5a5a] order-1 sm:order-2'>
               Halaman {currentQuestion + 1} dari {questions.length}
             </div>
  
-            {isLastQuestion ? (
+            {/* Previous Button */}
+            <div className='col-start-1 flex justify-start order-2 sm:order-1'>
               <button
-                onClick={handleFinish}
-                disabled={answers[currentQuestion] === undefined || isSubmitting}
-                className={`flex items-center gap-2 px-6 py-3 rounded-full text-white font-semibold shadow-md transition ${answers[currentQuestion] === undefined || isSubmitting
-                  ? "bg-gray-300 cursor-not-allowed opacity-50"
-                  : "bg-[#19758E] hover:bg-[#126278] cursor-pointer"
+                onClick={handlePrevQuestion}
+                disabled={currentQuestion === 0}
+                className={`w-full sm:w-auto flex items-center justify-center gap-1.5 px-4 py-2.5 sm:px-6 sm:py-3 rounded-full text-white font-bold shadow-md transition text-sm sm:text-base ${currentQuestion === 0
+                  ? "bg-[#f2c3c3] cursor-not-allowed"
+                  : "bg-[#e76964] hover:bg-[#d95e59] cursor-pointer"
                   }`}
               >
-                {isSubmitting ? "Menyimpan..." : "Selesai"}
-                {!isSubmitting && <ArrowRight size={20} />}
+                <ArrowLeft size={18} />
+                Sebelumnya
               </button>
-            ) : (
-              <button
-                onClick={handleNext}
-                disabled={answers[currentQuestion] === undefined}
-                className={`flex items-center gap-2 px-6 py-3 rounded-full text-white font-semibold shadow-md transition ${answers[currentQuestion] === undefined
-                  ? "bg-gray-300 cursor-not-allowed opacity-50"
-                  : "bg-[#19758E] hover:bg-[#126278] cursor-pointer"
-                  }`}
-              >
-                Berikutnya
-                <ArrowRight size={20} />
-              </button>
-            )}
+            </div>
+
+            {/* Next/Finish Button */}
+            <div className='col-start-2 flex justify-end order-3 sm:order-3'>
+              {isLastQuestion ? (
+                <button
+                  onClick={handleFinish}
+                  disabled={answers[currentQuestion] === undefined || isSubmitting}
+                  className={`w-full sm:w-auto flex items-center justify-center gap-1.5 px-4 py-2.5 sm:px-6 sm:py-3 rounded-full text-white font-bold shadow-md transition text-sm sm:text-base ${answers[currentQuestion] === undefined || isSubmitting
+                    ? "bg-gray-300 cursor-not-allowed opacity-50"
+                    : "bg-[#19758E] hover:bg-[#126278] cursor-pointer"
+                    }`}
+                >
+                  {isSubmitting ? "Menyimpan..." : "Selesai"}
+                  {!isSubmitting && <ArrowRight size={18} />}
+                </button>
+              ) : (
+                <button
+                  onClick={handleNext}
+                  disabled={answers[currentQuestion] === undefined}
+                  className={`w-full sm:w-auto flex items-center justify-center gap-1.5 px-4 py-2.5 sm:px-6 sm:py-3 rounded-full text-white font-bold shadow-md transition text-sm sm:text-base ${answers[currentQuestion] === undefined
+                    ? "bg-gray-300 cursor-not-allowed opacity-50"
+                    : "bg-[#19758E] hover:bg-[#126278] cursor-pointer"
+                    }`}
+                >
+                  Berikutnya
+                  <ArrowRight size={18} />
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>

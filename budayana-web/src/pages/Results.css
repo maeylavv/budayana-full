@@ -177,16 +177,45 @@
   font-style: italic;
 }
 
-/* Responsive */
 /* Responsive adjustments for Tablet + Mobile (<= 1024px) */
 @media (max-width: 1024px) {
+  .history-table-container {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+
+  .history-body {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    width: 100% !important;
+  }
+
   .history-header,
-  .history-row,
-  .quiz-history-grid {
+  .history-row {
     display: grid !important;
-    grid-template-columns: 1.2fr 1.6fr 0.7fr 1.2fr 0.7fr 1fr 1.2fr !important;
+    grid-template-columns: 180px 85px 85px 75px 85px 110px 140px !important;
     align-items: center !important;
-    gap: 4px !important;
+    gap: 8px !important;
+    width: max-content !important;
+    min-width: 760px !important;
+    padding: 14px 16px !important;
+    box-sizing: border-box !important;
+  }
+
+  .history-header {
+    background-color: #955c2e !important;
+    color: #ffffff !important;
+    position: relative !important;
+  }
+
+  .quiz-history-grid {
+    grid-template-columns: 110px 170px 80px 110px 90px 90px 110px !important;
+    width: max-content !important;
+    min-width: 100% !important;
   }
 
   .history-header > div,
@@ -195,45 +224,42 @@
     align-items: center !important;
     justify-content: center !important;
     text-align: center !important;
-    min-height: 52px !important;
-    padding: 10px 6px !important;
+    min-height: 44px !important;
+    padding: 4px 2px !important;
     box-sizing: border-box !important;
+    white-space: nowrap !important;
+  }
+
+  .history-header > div:first-child,
+  .history-row > div:first-child {
+    justify-content: center !important;
+    text-align: center !important;
+  }
+
+  .history-row > div:first-child span {
+    white-space: normal !important;
+    text-align: center !important;
+    line-height: 1.35 !important;
+    word-break: break-word !important;
   }
 
   .history-header div {
+    font-size: 13px !important;
+    font-weight: 700 !important;
     white-space: nowrap !important;
     word-break: keep-all !important;
-    overflow-wrap: normal !important;
-    font-size: 12px !important;
-    line-height: 1.3 !important;
+    color: #ffffff !important;
   }
 
-  .history-row div {
-    white-space: normal !important;
-    word-break: break-word !important;
-    line-height: 1.4 !important;
-    font-size: 12px !important;
-  }
-}
-
-/* Tablet header typography and padding (768px - 1024px) */
-@media (min-width: 769px) and (max-width: 1024px) {
-  .history-header > div,
-  .history-header div {
-    font-size: 14px !important;
-    font-weight: 700 !important;
-    line-height: 1.35 !important;
-    white-space: nowrap !important;
-    padding: 12px 8px !important;
-    min-height: 56px !important;
-  }
-
-  .history-row > div,
   .history-row div {
     font-size: 13px !important;
-    line-height: 1.45 !important;
-    padding: 12px 8px !important;
-    
+    white-space: nowrap !important;
+  }
+
+  .buka-esai-btn {
+    font-size: 0.85rem !important;
+    padding: 4px 12px !important;
+    white-space: nowrap !important;
   }
 }
 
@@ -261,31 +287,6 @@
 @media (max-width: 768px) {
   .stats-grid {
     grid-template-columns: 1fr 1fr;
-  }
-
-  .history-table-container {
-    overflow-x: auto;
-  }
-
-  .history-header,
-  .history-row,
-  .quiz-history-grid {
-    min-width: 650px;
-  }
-
-  /* Make sure the second-to-last column (Time) remains visible so columns don't break */
-  .history-header > div:nth-last-child(2),
-  .history-row > div:nth-last-child(2) {
-    display: flex !important;
-  }
-
-  .history-header > div,
-  .history-row > div,
-  .history-header div,
-  .history-row div {
-    font-size: 11px !important;
-    padding: 10px 4px !important;
-    min-height: 48px !important;
   }
 }
 

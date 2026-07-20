@@ -23305,14 +23305,53 @@ async function getUserProgress(userId, pagination, filters = {}) {
 					finishedAt: { not: null }
 				} });
 				if (finishedAttemptsCount > 0) {
-					if (!record.isCompleted || record.cycleCount !== finishedAttemptsCount) await prisma.userProgress.update({
-						where: { id: record.id },
-						data: {
-							isCompleted: true,
-							cycleCount: finishedAttemptsCount
-						}
-					});
+					if (!record.isCompleted || record.cycleCount !== finishedAttemptsCount) {
+						await prisma.userProgress.update({
+							where: { id: record.id },
+							data: {
+								isCompleted: true,
+								cycleCount: finishedAttemptsCount
+							}
+						});
+						record.isCompleted = true;
+						record.cycleCount = finishedAttemptsCount;
+					}
 				}
+			}
+		}
+		const lockSequence = [
+			"sumatra",
+			"jawa",
+			"bali",
+			"kalimantan",
+			"sulawesi",
+			"maluku",
+			"nusa-tenggara",
+			"papua"
+		];
+		const sortedRecords = [...userProgressRecords].sort((a, b) => {
+			return lockSequence.indexOf(a.island.slug) - lockSequence.indexOf(b.island.slug);
+		});
+		for (let i = 0; i < sortedRecords.length; i++) {
+			const record = sortedRecords[i];
+			let isUnlocked = false;
+			if (i === 0) isUnlocked = true;
+			else {
+				const storyIds = record.island.stories.map((s) => s.id);
+				const hasAttempts = await prisma.storyAttempt.count({ where: {
+					userId,
+					storyId: { in: storyIds }
+				} }) > 0;
+				const prevRecord = sortedRecords[i - 1];
+				const prevCompleted = prevRecord ? prevRecord.isCompleted : false;
+				isUnlocked = hasAttempts || prevCompleted;
+			}
+			if (record.isUnlocked !== isUnlocked) {
+				await prisma.userProgress.update({
+					where: { id: record.id },
+					data: { isUnlocked }
+				});
+				record.isUnlocked = isUnlocked;
 			}
 		}
 	} catch (error) {
@@ -24224,13 +24263,17 @@ const calculateNGain = (pre, post) => {
 /**
 * Get students filtered by grade
 */
-const getStudentsByGrade = async (grade, classLabel, search) => {
+const getStudentsByGrade = async (grade, classLabel, search, gender) => {
 	return (await prisma.user.findMany({
 		where: {
 			grade,
 			role: "STUDENT",
 			...classLabel ? { classLabel: {
 				equals: classLabel,
+				mode: "insensitive"
+			} } : {},
+			...gender ? { gender: {
+				equals: gender,
 				mode: "insensitive"
 			} } : {},
 			...search ? { OR: [{ name: {
@@ -24499,13 +24542,17 @@ function deriveStudentTitle(totalXp, maxLevelCompleted) {
 /**
 * Get class-wide analytics summary for teachers
 */
-const getClassSummary = async (grade, classLabel) => {
+const getClassSummary = async (grade, classLabel, gender) => {
 	const students = await prisma.user.findMany({
 		where: {
 			role: "STUDENT",
 			grade,
 			...classLabel ? { classLabel: {
 				equals: classLabel,
+				mode: "insensitive"
+			} } : {},
+			...gender ? { gender: {
+				equals: gender,
 				mode: "insensitive"
 			} } : {}
 		},
@@ -24643,6 +24690,10 @@ const getClassSummary = async (grade, classLabel) => {
 				...classLabel ? { classLabel: {
 					equals: classLabel,
 					mode: "insensitive"
+				} } : {},
+				...gender ? { gender: {
+					equals: gender,
+					mode: "insensitive"
 				} } : {}
 			},
 			startedAt: { gte: activityThreshold },
@@ -24657,6 +24708,10 @@ const getClassSummary = async (grade, classLabel) => {
 				grade,
 				...classLabel ? { classLabel: {
 					equals: classLabel,
+					mode: "insensitive"
+				} } : {},
+				...gender ? { gender: {
+					equals: gender,
 					mode: "insensitive"
 				} } : {}
 			},
@@ -24674,6 +24729,10 @@ const getClassSummary = async (grade, classLabel) => {
 				grade,
 				...classLabel ? { classLabel: {
 					equals: classLabel,
+					mode: "insensitive"
+				} } : {},
+				...gender ? { gender: {
+					equals: gender,
 					mode: "insensitive"
 				} } : {}
 			},
@@ -24694,6 +24753,10 @@ const getClassSummary = async (grade, classLabel) => {
 				grade,
 				...classLabel ? { classLabel: {
 					equals: classLabel,
+					mode: "insensitive"
+				} } : {},
+				...gender ? { gender: {
+					equals: gender,
 					mode: "insensitive"
 				} } : {}
 			},
@@ -24774,6 +24837,10 @@ const getClassSummary = async (grade, classLabel) => {
 				...classLabel ? { classLabel: {
 					equals: classLabel,
 					mode: "insensitive"
+				} } : {},
+				...gender ? { gender: {
+					equals: gender,
+					mode: "insensitive"
 				} } : {}
 			},
 			startedAt: { gte: activityThreshold }
@@ -24790,6 +24857,10 @@ const getClassSummary = async (grade, classLabel) => {
 				grade,
 				...classLabel ? { classLabel: {
 					equals: classLabel,
+					mode: "insensitive"
+				} } : {},
+				...gender ? { gender: {
+					equals: gender,
 					mode: "insensitive"
 				} } : {}
 			},
@@ -24822,6 +24893,10 @@ const getClassSummary = async (grade, classLabel) => {
 				grade,
 				...classLabel ? { classLabel: {
 					equals: classLabel,
+					mode: "insensitive"
+				} } : {},
+				...gender ? { gender: {
+					equals: gender,
 					mode: "insensitive"
 				} } : {}
 			},
@@ -25338,10 +25413,11 @@ const monitoringRoutes = new Elysia({ prefix: "/monitoring" }).get("/", () => ({
 	let students = [];
 	const classLabel = query.classLabel;
 	const search = query.search;
+	const gender = query.gender;
 	if (user.role === "TEACHER") {
 		const targetGrade = Number(user.grade);
-		console.log(`[Monitoring] Fetching students for grade: ${targetGrade}, classLabel: ${classLabel}, search: ${search}`);
-		students = await getStudentsByGrade(targetGrade, classLabel, search);
+		console.log(`[Monitoring] Fetching students for grade: ${targetGrade}, classLabel: ${classLabel}, search: ${search}, gender: ${gender}`);
+		students = await getStudentsByGrade(targetGrade, classLabel, search, gender);
 	} else if (user.role === "PARENT") {
 		console.log(`[Monitoring] Fetching children for parent: ${user.email}, search: ${search}`);
 		students = await getStudentsByGuardianEmail(user.email, search);
@@ -25355,7 +25431,8 @@ const monitoringRoutes = new Elysia({ prefix: "/monitoring" }).get("/", () => ({
 	},
 	query: t.Object({
 		classLabel: t.Optional(t.String()),
-		search: t.Optional(t.String())
+		search: t.Optional(t.String()),
+		gender: t.Optional(t.String())
 	}),
 	response: {
 		200: StudentListResponseSchema,
@@ -25491,6 +25568,28 @@ const monitoringRoutes = new Elysia({ prefix: "/monitoring" }).get("/", () => ({
 		403: ErrorResponseSchema,
 		404: ErrorResponseSchema
 	}
+}).delete("/profile", async ({ user, set }) => {
+	if (!user) {
+		set.status = 401;
+		return {
+			error: "Unauthorized",
+			code: "UNAUTHORIZED"
+		};
+	}
+	await deleteStudent(user.id);
+	return {
+		success: true,
+		message: "Account deleted successfully"
+	};
+}, {
+	detail: {
+		tags: ["Monitoring"],
+		summary: "Delete own profile account"
+	},
+	response: {
+		200: SuccessResponseSchema,
+		401: ErrorResponseSchema
+	}
 }).get("/analytics/class-summary", async ({ user, query, set }) => {
 	if (!user) {
 		set.status = 401;
@@ -25508,13 +25607,17 @@ const monitoringRoutes = new Elysia({ prefix: "/monitoring" }).get("/", () => ({
 	}
 	const targetGrade = Number(user.grade);
 	const classLabel = query.classLabel;
-	return await getClassSummary(targetGrade, classLabel);
+	const gender = query.gender;
+	return await getClassSummary(targetGrade, classLabel, gender);
 }, {
 	detail: {
 		tags: ["Monitoring Analytics"],
 		summary: "Get class-wide aggregated analytics"
 	},
-	query: t.Object({ classLabel: t.Optional(t.String()) }),
+	query: t.Object({
+		classLabel: t.Optional(t.String()),
+		gender: t.Optional(t.String())
+	}),
 	response: {
 		200: ClassSummaryResponseSchema,
 		401: ErrorResponseSchema,
