@@ -380,7 +380,7 @@ body { margin: 0; min-height: 100vh; overflow-x: hidden; font-family: 'Fredoka O
 }
 .lnd-kontak {
     background-color: #5c4333;
-    padding: 40px 20px 80px;
+    padding: 40px 20px 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -535,3 +535,90 @@ body { margin: 0; min-height: 100vh; overflow-x: hidden; font-family: 'Fredoka O
         align-self: center;
     }
 }
+
+/* Footer Bottom Section */
+.lnd-footer-bottom {
+    border-top: 1px solid rgba(253, 245, 230, 0.15);
+    width: 90%;
+    max-width: 1100px;
+    margin-top: 60px;
+    padding-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: rgba(253, 245, 230, 0.7);
+    font-family: 'Fredoka One', sans-serif;
+    font-size: 0.95rem;
+}
+
+.lnd-footer-copyright-section {
+    font-weight: 500;
+}
+
+.lnd-footer-creators {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.lnd-footer-creators span {
+    font-weight: 500;
+}
+
+.lnd-creator-badges {
+    display: flex;
+    align-items: center;
+}
+
+.lnd-badge-ea, .lnd-badge-mf {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-decoration: none;
+    user-select: none;
+    font-family: 'Fredoka One', sans-serif;
+    transition: transform 0.2s, filter 0.2s, z-index 0.2s;
+}
+
+.lnd-badge-mf {
+    background-color: #ffaa00; /* Yellowish gold brand color */
+    position: relative;
+    z-index: 2; /* MF on top (left) */
+}
+
+.lnd-badge-ea {
+    background-color: #BE6E3A; /* Reddish orange brand color */
+    margin-left: -8px; /* overlap */
+    position: relative;
+    z-index: 1; /* EA underneath (right) */
+}
+
+.lnd-badge-mf:hover {
+    z-index: 3;
+    transform: scale(1.1);
+    filter: brightness(1.1);
+}
+
+.lnd-badge-ea:hover {
+    z-index: 3;
+    transform: scale(1.1);
+    filter: brightness(1.1);
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    .lnd-footer-bottom {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+        margin-top: 40px;
+        padding-top: 20px;
+    }
+}
+
