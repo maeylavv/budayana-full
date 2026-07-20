@@ -105,6 +105,7 @@ export default function Landing() {
                 <img src="/assets/budayana/islands/Landing Group.png" alt="Mascot Group" className="lnd-hero-mascots" />
                 <div className="lnd-hero-text">
                     <img src="/assets/budayana/islands/Game Name.png" alt="Banner" className="lnd-banner" />
+                    <span className="lnd-version-badge">v1.0</span>
                     <h2 className="lnd-hero-sub">Platform Literasi<br />Budaya untuk Siswa</h2>
                     <div className="relative inline-block group register-dropdown-wrapper">
                         <button
