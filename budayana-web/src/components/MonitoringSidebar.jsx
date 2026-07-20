@@ -226,11 +226,43 @@ export default function MonitoringSidebar({ role }) {
             border-radius: 12px !important;
             border-bottom: 4px solid #f3a64c !important;
             -webkit-overflow-scrolling: touch;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: flex-start !important;
+          }
+
+          .history-body {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            width: 100% !important;
           }
 
           .history-header,
           .history-row {
-            min-width: 680px !important;
+            width: max-content !important;
+            min-width: 760px !important;
+            box-sizing: border-box !important;
+          }
+
+          .history-header {
+            position: relative !important;
+          }
+
+          .history-header > div,
+          .history-row > div {
+            white-space: nowrap !important;
+            word-break: keep-all !important;
+            padding: 8px 12px !important;
+            box-sizing: border-box !important;
+          }
+
+          .history-row > div:first-child,
+          .history-row > .student-name-cell,
+          .student-name-cell {
+            white-space: normal !important;
+            word-break: break-word !important;
+            line-height: 1.35 !important;
           }
 
           /* Responsive visual charts width safety */

@@ -372,34 +372,39 @@ export default function Results() {
                               background: islandColor.bg, 
                               color: islandColor.text, 
                               border: `1px solid ${islandColor.border}`, 
-                              fontSize: '14px', 
+                              fontSize: '13px', 
                               fontWeight: 600, 
-                              padding: '5px 14px', 
-                              borderRadius: '999px', 
+                              padding: '6px 12px', 
+                              borderRadius: '16px', 
                               display: 'inline-block', 
                               fontFamily: "'Fredoka One', sans-serif",
-                              whiteSpace: 'nowrap'
+                              whiteSpace: 'normal',
+                              textAlign: 'center',
+                              lineHeight: '1.35',
+                              maxWidth: '100%',
+                              wordBreak: 'break-word'
                             }}>
                               {judulTanpaPulau}{namaPulau ? ` ${namaPulau}` : ''}
                             </span>
                           </div>
                          <div>
-                           <span style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '6px', fontSize: '14px', fontWeight: 600, background: preTestStyle.bg, color: preTestStyle.text }}>
+                           <span style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '6px', fontSize: '14px', fontWeight: 600, background: preTestStyle.bg, color: preTestStyle.text, whiteSpace: 'nowrap' }}>
                              {attempt.preTestScore !== null ? Math.round(attempt.preTestScore) : "-"}
                            </span>
                          </div>
                          <div>
-                           <span style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '6px', fontSize: '14px', fontWeight: 600, background: postTestStyle.bg, color: postTestStyle.text }}>
+                           <span style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '6px', fontSize: '14px', fontWeight: 600, background: postTestStyle.bg, color: postTestStyle.text, whiteSpace: 'nowrap' }}>
                              {attempt.postTestScore !== null ? Math.round(attempt.postTestScore) : "-"}
                            </span>
                          </div>
-                        <div style={{ color: '#5F5E5A' }}>{xpValue}</div>
-                        <div style={{ color: '#5F5E5A' }}>{formatDuration(duration)}</div>
-                        <div style={{ color: '#5F5E5A' }}>{formatDate(attempt.finishedAt)}</div>
+                        <div style={{ color: '#5F5E5A', whiteSpace: 'nowrap' }}>{xpValue}</div>
+                        <div style={{ color: '#5F5E5A', whiteSpace: 'nowrap' }}>{formatDuration(duration)}</div>
+                        <div style={{ color: '#5F5E5A', whiteSpace: 'nowrap' }}>{formatDate(attempt.finishedAt)}</div>
                         <div>
                           {hasEssay ? (
                             <button
                               className='buka-esai-btn'
+                              style={{ whiteSpace: 'nowrap' }}
                               onClick={() => {
                                 let rawTitleClick = attempt.story?.title || "Cerita";
                                 if (rawTitleClick.toLowerCase().startsWith("cerita ")) {

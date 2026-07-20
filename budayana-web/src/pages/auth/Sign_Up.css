@@ -331,7 +331,7 @@ input:focus, select:focus {
     margin-bottom: 20px;
     font-size: 1rem;
     gap: 10px;
-    margin-top: 45px;
+    margin-top: 55px;
   }
 
   .back_button {
@@ -487,5 +487,33 @@ input:focus, select:focus {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* Stepper Responsiveness for Mobile */
+@media (max-width: 600px) {
+  .progress-indicator {
+    gap: 6px !important;
+  }
+
+  .progress-indicator-step {
+    gap: 4px !important;
+  }
+
+  .progress-indicator-step span.step-label {
+    font-size: 0.82rem !important;
+    white-space: nowrap !important;
+  }
+
+  .progress-indicator-step span.step-num {
+    width: 26px !important;
+    height: 26px !important;
+    font-size: 0.85rem !important;
+    flex-shrink: 0 !important;
+  }
+
+  .progress-indicator-divider {
+    width: 14px !important;
+    flex-shrink: 0 !important;
   }
 }

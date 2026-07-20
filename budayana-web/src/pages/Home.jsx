@@ -128,14 +128,16 @@ function StageCard({ stage, status, index, onClick, activeAttempt, latestFinishe
         {/* Text content overlay on left */}
         <div className='stage-mobile-content'>
           <p className='stage-mobile-title'>{stage.title}</p>
-          <div className={`stage-mobile-badge tahap-${index + 1}`} style={{ color: cardColor }}>
-            Tahap {index + 1}
-          </div>
-          {isCompleted && (
-            <div className='stage-mobile-check'>
-              <Check size={14} strokeWidth={3} color='#ffffff' />
+          <div className='stage-mobile-badge-row'>
+            <div className={`stage-mobile-badge tahap-${index + 1}`} style={{ color: cardColor }}>
+              Tahap {index + 1}
             </div>
-          )}
+            {isCompleted && (
+              <div className='stage-mobile-check'>
+                <Check size={14} strokeWidth={3} color='#ffffff' />
+              </div>
+            )}
+          </div>
           {value !== null && label && (
             <div className='stage-mobile-score'>
               {label}: {value}

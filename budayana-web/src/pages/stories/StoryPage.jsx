@@ -228,7 +228,6 @@ export default function StoryPage() {
   useLayoutEffect(() => {
     if (!containerRef.current || !story || !$ || totalPages === 0) return
 
-    // Capture ref value at start of effect for cleanup
     const currentBook = bookRef.current
 
     if (currentBook && !initRef.current) {
@@ -512,7 +511,7 @@ export default function StoryPage() {
         {/* Keluar Button */}
         <button
           onClick={() => { playClick(); setShowExitWarning(true); }}
-          className='w-10 h-10 md:h-12 md:px-5 bg-white/90 backdrop-blur-sm border-2 border-[#2c2c2c] flex items-center justify-center gap-2 rounded-full shadow-md hover:bg-white hover:scale-105 transition-all font-bold shrink-0 text-sm md:text-base'
+          className='w-10 h-10 md:w-auto md:h-12 md:px-5 bg-white/90 backdrop-blur-sm border-2 border-[#2c2c2c] flex items-center justify-center gap-2 rounded-full shadow-md hover:bg-white hover:scale-105 transition-all font-bold shrink-0 text-sm md:text-base'
         >
           <ArrowLeft size={18} />
           <span className='hidden md:inline'>Keluar</span>
@@ -560,8 +559,13 @@ export default function StoryPage() {
 
       {/* Flipbook container */}
       <div
-        className='flex items-center justify-center relative transform-gpu transition-transform duration-300 origin-center'
-        style={{ transform: `scale(${scale})`, width: 1100, height: 650 }}
+        className='flex items-center justify-center relative origin-center transform-gpu'
+        style={{
+          transform: `scale(${scale}) translateZ(0)`,
+          WebkitTransform: `scale(${scale}) translateZ(0)`,
+          width: 1100,
+          height: 650,
+        }}
       >
         <div id='book' ref={bookRef} className='flipbook shadow-2xl'>
           {story.staticSlides.map((slide, idx) => {
@@ -573,16 +577,27 @@ export default function StoryPage() {
                 className={`page ${isCover ? "cover-page" : "story-page"}`}
               >
                 {isCover ? (
-                  <div className='cover-full flex flex-col items-center justify-center p-8 bg-gradient-to-br from-[#fffef9] to-[#fff9e8] h-full w-full border-[6px] border-[#8b7355]/20 rounded-2xl relative shadow-inner'>
-                    <div className='absolute inset-4 border border-[#8b7355]/10 rounded-lg pointer-events-none'></div>
-                    <div className='cover-overlay flex flex-col items-center justify-center text-center z-10 px-6'>
-                      <h1 className='text-3xl sm:text-4xl md:text-5xl font-black text-[#4A3836] leading-tight mb-4 tracking-tight drop-shadow-xs'>
+                  <div className='cover-full flex flex-col items-center justify-center p-8 bg-gradient-to-br from-[#fffef9] to-[#fff9e8] h-full w-full border-[6px] border-[#8b7355]/20 rounded-2xl relative shadow-inner overflow-hidden'>
+                    {/* Cover image background */}
+                    <img
+                      src={slide.imageUrl || story.coverImage || `/assets/budayana/islands/cover book ${islandSlug?.toLowerCase()}.png`}
+                      className='cover-image absolute inset-0 w-full h-full object-cover z-0'
+                      alt='Cover'
+                      decoding='async'
+                      loading='eager'
+                      onError={(e) => {
+                        e.target.style.display = 'none'
+                      }}
+                    />
+                    <div className='absolute inset-4 border border-[#8b7355]/10 rounded-lg pointer-events-none z-10'></div>
+                    <div className='cover-overlay flex flex-col items-center justify-center text-center z-20 px-4 md:px-8 relative max-w-[700px] mx-auto'>
+                      <h1 className='text-3xl sm:text-4xl md:text-4xl lg:text-5xl font-black text-[#4A3836] leading-tight mb-3 tracking-tight drop-shadow-md max-w-[620px] mx-auto'>
                         {story.title.toLowerCase().startsWith("cerita")
                           ? story.title
                           : `Cerita ${story.title}`}
                       </h1>
-                      <div className='w-24 h-1 bg-[#8b7355] my-6 rounded-full'></div>
-                      <p className='text-lg sm:text-xl md:text-2xl font-bold text-[#955C2E] uppercase tracking-widest'>
+                      <div className='w-24 h-1 bg-[#8b7355] my-3 rounded-full shadow-xs'></div>
+                      <p className='text-lg sm:text-xl md:text-xl lg:text-2xl font-bold text-[#955C2E] uppercase tracking-widest drop-shadow-sm max-w-[500px] mx-auto'>
                         Legenda Rakyat {getIslandDisplayName(islandSlug)}
                       </p>
                     </div>
@@ -594,6 +609,7 @@ export default function StoryPage() {
                         <img
                           src={slide.imageUrl}
                           alt='Story'
+                          decoding='async'
                           className='max-h-80 max-w-full object-contain rounded-xl shadow-lg'
                         />
                       </div>

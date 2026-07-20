@@ -316,8 +316,8 @@ function StoryAnalyticsPanel({ storyAnalytics, studentInfo }) {
           <h2 className="results-section-title" style={{ fontSize: '1.2rem', margin: 0, color: '#7B4F2E' }}>Riwayat Cerita Rakyat</h2>
           <span style={{ fontSize: '15px', fontWeight: 600, color: '#7B4F2E' }}>{history ? history.length : 0} hasil</span>
         </div>
-        <div className="history-table-container" style={{ display: 'flex', flexDirection: 'column', height: '360px', overflowY: 'auto', overflowX: 'auto', position: 'relative' }}>
-          <div className="history-header" style={{ display: 'grid', gridTemplateColumns: '2fr 1.2fr 1.2fr 1.2fr 1.2fr 1.4fr 1.6fr', padding: '16px 24px', borderBottom: '1px solid #E8D9C0', backgroundColor: '#955c2e', color: 'white', alignItems: 'center', position: 'sticky', top: 0, zIndex: 10, borderTopLeftRadius: '17px', borderTopRightRadius: '17px', minWidth: '900px' }}>
+        <div className="history-table-container" style={{ height: '360px' }}>
+          <div className="history-header">
             <div style={{ textAlign: 'left', fontWeight: 'bold' }}>Judul Cerita</div>
             <div style={{ textAlign: 'center', fontWeight: 'bold' }}>Pre-Test</div>
             <div style={{ textAlign: 'center', fontWeight: 'bold' }}>Post-Test</div>
@@ -376,44 +376,49 @@ function StoryAnalyticsPanel({ storyAnalytics, studentInfo }) {
                 const xpValue = item.xp > 0 ? `+${item.xp}` : item.xp;
                 
                 return (
-                  <div key={index} className="history-row" style={{ display: 'grid', gridTemplateColumns: '2fr 1.2fr 1.2fr 1.2fr 1.2fr 1.4fr 1.6fr', padding: '16px 24px', borderBottom: '1px solid #E8D9C0', alignItems: 'center', minWidth: '900px' }}>
+                  <div key={index} className="history-row">
                     <div style={{ textAlign: 'left' }}>
                       <div style={{ display: 'flex', alignItems: 'center' }}>
                         <span style={{ 
                           background: islandColor.bg, 
                           color: islandColor.text, 
                           border: `1px solid ${islandColor.border}`, 
-                          fontSize: '14px', 
+                          fontSize: '13px', 
                           fontWeight: 600, 
-                          padding: '5px 14px', 
-                          borderRadius: '999px', 
+                          padding: '6px 12px', 
+                          borderRadius: '16px', 
                           display: 'inline-block', 
                           fontFamily: "'Fredoka One', sans-serif",
-                          whiteSpace: 'nowrap'
+                          whiteSpace: 'normal',
+                          textAlign: 'center',
+                          lineHeight: '1.35',
+                          maxWidth: '100%',
+                          wordBreak: 'break-word'
                         }}>
                           {judulTanpaPulau}{namaPulau ? ` ${namaPulau}` : ''}
                         </span>
                       </div>
                     </div>
                     <div style={{ textAlign: 'center' }}>
-                      <span style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '6px', fontSize: '14px', fontWeight: 600, background: preTestStyle.bg, color: preTestStyle.text }}>
+                      <span style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '6px', fontSize: '14px', fontWeight: 600, background: preTestStyle.bg, color: preTestStyle.text, whiteSpace: 'nowrap' }}>
                         {item.preTestScore !== null ? item.preTestScore : "-"}
                       </span>
                     </div>
                     <div style={{ textAlign: 'center' }}>
-                      <span style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '6px', fontSize: '14px', fontWeight: 600, background: postTestStyle.bg, color: postTestStyle.text }}>
+                      <span style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '6px', fontSize: '14px', fontWeight: 600, background: postTestStyle.bg, color: postTestStyle.text, whiteSpace: 'nowrap' }}>
                         {item.postTestScore !== null ? item.postTestScore : "-"}
                       </span>
                     </div>
-                    <div style={{ textAlign: 'center', color: '#5F5E5A', fontWeight: '600' }}>
+                    <div style={{ textAlign: 'center', color: '#5F5E5A', fontWeight: '600', whiteSpace: 'nowrap' }}>
                       {xpValue}
                     </div>
-                    <div style={{ textAlign: 'center', color: '#5F5E5A', fontWeight: '600' }}>{item.time}</div>
-                    <div style={{ textAlign: 'center', color: '#5F5E5A', fontWeight: '600' }}>{item.date}</div>
-                    <div style={{ textAlign: 'left', fontSize: '0.85rem', color: '#7B4F2E', maxHeight: '50px', overflowY: 'auto', paddingRight: '4px', wordBreak: 'break-word', whiteSpace: 'pre-wrap' }}>
+                    <div style={{ textAlign: 'center', color: '#5F5E5A', fontWeight: '600', whiteSpace: 'nowrap' }}>{item.time}</div>
+                    <div style={{ textAlign: 'center', color: '#5F5E5A', fontWeight: '600', whiteSpace: 'nowrap' }}>{item.date}</div>
+                    <div style={{ textAlign: 'left', fontSize: '0.85rem', color: '#7B4F2E' }}>
                       {item.essay ? (
                         <button
                           className="buka-esai-btn"
+                          style={{ whiteSpace: 'nowrap' }}
                           onClick={() => {
                             let rawTitleClick = item.storyTitle || "Cerita";
                             if (rawTitleClick.toLowerCase().startsWith("cerita ")) {
