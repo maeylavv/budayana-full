@@ -204,7 +204,10 @@ export default function Results() {
         <>
           {/* Statistics Section */}
           <section>
-            <h2 className='results-section-title'>Statistik</h2>
+            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '16px', gap: '8px' }}>
+              <h2 className='results-section-title' style={{ margin: 0 }}>Statistik Cerita Rakyat</h2>
+              <InfoIcon {...PARENT_INFO.statistikCerita} />
+            </div>
             <div className='stats-grid'>
               <div className='stat-card green' style={{ borderRadius: '24px' }}>
                 <div className='stat-value'>{stats?.storiesCompleted || 0}</div>

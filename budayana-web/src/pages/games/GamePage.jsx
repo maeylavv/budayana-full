@@ -779,7 +779,7 @@ export default function GamePage() {
           <img
             src={pageData.imageUrl}
             alt='Interactive Story'
-            className='w-full max-h-[190px] md:max-h-[630px] object-contain'
+            className='w-full max-h-[520px] sm:max-h-[650px] md:max-h-[800px] object-contain mx-auto'
           />
         ) : (
           <div className='text-center p-8 text-gray-400'>
@@ -1143,7 +1143,7 @@ export default function GamePage() {
               <img
                 src={pageData.imageUrl}
                 alt='Question'
-                className='w-full max-h-[220px] md:max-h-[400px] object-contain mx-auto mb-4 rounded-lg'
+                className='w-full max-h-[350px] md:max-h-[500px] object-contain mx-auto mb-4 rounded-lg'
               />
             )}
             {/* <p className='text-base md:text-lg font-semibold text-[#2c2c2c] leading-relaxed'>
@@ -1212,23 +1212,35 @@ export default function GamePage() {
         : 0
 
     return (
-      <div className='w-full max-w-5xl mx-auto px-2 mb-6 flex justify-between items-center'>
+      <div className='w-full max-w-5xl mx-auto px-2 mb-6 flex items-center justify-between gap-2'>
+        {/* Keluar Button */}
         <button
           onClick={() => setShowExitWarning(true)}
-          className='px-4 py-2 bg-white/80 border-2 border-[#2c2c2c] rounded-full flex gap-2 items-center font-semibold hover:bg-gray-100'
+          className='w-10 h-10 md:w-auto md:px-5 md:py-2.5 bg-white/85 border-2 border-[#1f1f1f] rounded-full flex gap-2 items-center justify-center font-bold hover:bg-gray-100 shrink-0 text-sm md:text-base'
         >
-          <ArrowLeft size={18} /> Keluar
+          <ArrowLeft className='w-5 h-5 md:w-4.5 md:h-4.5' />
+          <span className='hidden md:inline'>Keluar</span>
         </button>
-        <div className='flex gap-2'>
-          <div className='flex gap-2 bg-white/70 px-4 py-2 rounded-full border-2 border-[#2c2c2c] shadow-sm'>
-            <span className='font-bold text-[#E4AE28]'>XP</span>
-            <span className='font-semibold'>
+
+        {/* Center spacing */}
+        <div className='flex-1'></div>
+
+        {/* Stats and Timer Row */}
+        <div className='flex items-center gap-1.5 md:gap-2 shrink-0'>
+          {/* XP Badge */}
+          <div className='flex items-center gap-1 bg-white/70 px-2.5 py-1.5 md:px-4 md:py-2 rounded-full border-2 border-[#2c2c2c] shadow-sm shrink-0'>
+            <span className='font-black text-xs sm:text-sm md:text-base text-[#E4AE28]'>XP</span>
+            <span className='font-bold text-xs sm:text-sm md:text-base text-[#2c2c2c]'>
               {currentXP}/{totalQuestions > 0 ? "100" : "0"}
             </span>
           </div>
-          <div className='flex gap-2 bg-white/70 px-4 py-2 rounded-full border-2 border-[#2c2c2c] shadow-sm'>
-            <Clock size={20} />
-            <span className='font-semibold'>{formatTime(timeElapsed)}</span>
+
+          {/* Timer Badge */}
+          <div className='flex items-center gap-1 bg-white/70 px-2.5 py-1.5 md:px-4 md:py-2 rounded-full border-2 border-[#2c2c2c] shadow-sm shrink-0'>
+            <Clock className='w-4 h-4 md:w-5 md:h-5 text-[#2c2c2c]' />
+            <span className='font-bold text-xs sm:text-sm md:text-base text-[#2c2c2c] tracking-wider md:tracking-[0.12em]'>
+              {formatTime(timeElapsed)}
+            </span>
           </div>
         </div>
       </div>
@@ -1367,18 +1379,18 @@ export default function GamePage() {
       </div>
 
       {!isResultsPage && (
-        <div className='w-full max-w-5xl mx-auto mt-6 flex justify-between lg:hidden'>
+        <div className='w-full max-w-5xl mx-auto mt-6 flex justify-between gap-3 lg:hidden'>
           <button
             onClick={goPrev}
             disabled={currentPageIndex === 0}
-            className='flex items-center gap-2 px-6 py-3 rounded-full text-white font-semibold transition disabled:opacity-50 disabled:bg-[#ccc] disabled:cursor-not-allowed bg-[#f27f68] hover:bg-[#d96750] cursor-pointer'
+            className='flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full text-white font-bold transition disabled:opacity-50 disabled:bg-[#ccc] disabled:cursor-not-allowed bg-[#f27f68] hover:bg-[#d96750] cursor-pointer text-sm'
           >
-            <ArrowLeft size={20} /> Sebelumnya
+            <ArrowLeft size={18} /> Sebelumnya
           </button>
           <button
             onClick={goNext}
             disabled={(isQuestion && answers[currentPageData?.question?.id]?.isCorrect !== true) || isSubmitting}
-            className={`flex items-center gap-2 px-6 py-3 rounded-full text-white font-semibold transition ${(isQuestion && answers[currentPageData?.question?.id]?.isCorrect !== true) || isSubmitting
+            className={`flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full text-white font-bold transition text-sm ${(isQuestion && answers[currentPageData?.question?.id]?.isCorrect !== true) || isSubmitting
               ? "bg-gray-400 cursor-not-allowed opacity-70"
               : "bg-[#4fb986] hover:bg-[#3ea572] cursor-pointer"
               }`}
@@ -1389,7 +1401,7 @@ export default function GamePage() {
               "Menyimpan..."
             ) : (
               <>
-                {isLastPage ? "Selesai" : "Berikutnya"} <ArrowRight size={20} />
+                {isLastPage ? "Selesai" : "Berikutnya"} <ArrowRight size={18} />
               </>
             )}
           </button>
