@@ -100,7 +100,21 @@ body { margin: 0; min-height: 100vh; overflow-x: hidden; font-family: 'Fredoka O
     padding-bottom: 80px;
     margin-left: -60px; /* Shift slightly left on desktop */
 }
-.lnd-banner { width: 420px; margin-bottom: 20px; }
+.lnd-banner { width: 420px; margin-bottom: 8px; display: block; }
+
+.lnd-version-badge {
+    background: #fdf5e6;
+    border: 1.5px solid #E8D9C0;
+    border-radius: 6px;
+    padding: 2px 10px;
+    font-family: 'Fredoka One', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: #955C2E;
+    letter-spacing: 0.3px;
+    margin-bottom: 12px;
+    z-index: 3;
+}
 .lnd-hero-sub {
     font-family: 'Fredoka One', sans-serif;
     color: #955C2E;
@@ -463,6 +477,7 @@ body { margin: 0; min-height: 100vh; overflow-x: hidden; font-family: 'Fredoka O
     /* General mobile layout adjustments below 900px, hero will be overridden by more specific queries */
     .lnd-hero { flex-direction: column; padding-top: 80px !important; align-items: center; gap: 0; }
     .lnd-hero-text { order: 1; padding-bottom: 50px; margin-left: 0; }
+    .lnd-version-badge { font-size: 9.5px; padding: 2px 8px; }
     .lnd-hero-mascots { order: 2; width: 95%; margin-bottom: -20px; transform:translateY(18px); }
     .lnd-ground-wave { margin-top: -2%; }
     .lnd-grid-islands { grid-template-columns: repeat(2, 1fr); padding: 0 10px; }
@@ -525,6 +540,7 @@ body { margin: 0; min-height: 100vh; overflow-x: hidden; font-family: 'Fredoka O
     .lnd-banner {
         width: 380px;
         max-width: 100%;
+        display: block;
     }
     .lnd-hero-sub {
         font-size: 1.3rem;
