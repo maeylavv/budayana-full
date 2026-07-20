@@ -225,6 +225,31 @@ export default function Landing() {
                         <span>budayana3ra@gmail.com</span>
                     </a>
                 </div>
+
+                <div className="lnd-footer-bottom">
+                    <div className="lnd-footer-copyright-section">
+                        &copy; 2026 Budayana Team &middot; Versi 1.0.0
+                    </div>
+                    <div className="lnd-footer-creators">
+                        <span>Dibuat oleh</span>
+                        <div className="lnd-creator-badges">
+                            <a 
+                                href="mailto:budayana3ra@gmail.com" 
+                                title="Mayla Fatima Putri Indra Yuana" 
+                                className="lnd-badge-mf"
+                            >
+                                MF
+                            </a>
+                            <a 
+                                href="mailto:budayana3ra@gmail.com" 
+                                title="Elvaretta Alexandra" 
+                                className="lnd-badge-ea"
+                            >
+                                EA
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );
